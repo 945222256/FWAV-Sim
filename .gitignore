@@ -138,3 +138,8 @@ venv/
 # Historical local acceptance helper embeds a live login credential.
 # Keep locally until its authentication is migrated to external configuration.
 /tools/accept_dynamic.py
+
+# Interview drafts stay local and are excluded from future backup snapshots.
+/讲稿_二面*.md
+/防御问答_二面.md
+/rl/README_面试备答.md
