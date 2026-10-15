@@ -1,0 +1,68 @@
+{
+ "probe": "F04 诊断日志失败跳过尾舵更新",
+ "entry": "modules.wing_actuation._drive_wing_joints（诊断分支 241-254 行）",
+ "production_reachability": {
+  "LOG_DIR_config": "config/sim_config.py:91（仓库 logs/）",
+  "created_at_startup": "main_sim.py:143 os.makedirs(LOG_DIR) 模块导入期执行",
+  "失效可达条件": [
+   "运行中目录被删或改名",
+   "权限变更或磁盘满",
+   "LOG_DIR 配置为只读位置",
+   "导入后配置再改路径（模块缓存旧值）"
+  ],
+  "触发密度": "每 120 步驱动一次（_DRIVE_N % 120 == 1）"
+ },
+ "scenarios": {
+  "C0_正常目录": {
+   "returned": "None",
+   "joint_writes": 1,
+   "tail_writes": 1,
+   "diag_file_lines": 1,
+   "logs": []
+  },
+  "W1_诊断写失败": {
+   "returned": "None",
+   "joint_writes": 1,
+   "tail_writes": 0,
+   "joint_written_before_tail_skip": true,
+   "logs": [
+    {
+     "logger": "main_sim",
+     "level": "WARNING",
+     "msg": "拍动驱动异常: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Anni\\\\AppData\\\\Local\\\\Temp\\\\i209_f04_mxlo7i9v\\\\blocker.txt\\\\sub\\\\drive_diag.txt'"
+    }
+   ]
+  },
+  "W2_诊断读失败": {
+   "returned": "None",
+   "joint_writes": 1,
+   "tail_writes": 0,
+   "joint_written_before_tail_skip": true,
+   "logs": [
+    {
+     "logger": "main_sim",
+     "level": "WARNING",
+     "msg": "拍动驱动异常: 注入：关节位置读取失败"
+    }
+   ]
+  },
+  "C1_失效节奏": {
+   "note": "同一失效目录下连续 4 步，仅诊断步（1%120==1）缺尾舵更新",
+   "tail_writes_total": 3,
+   "joint_writes_total": 4,
+   "per_step_tail_writes_approx": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "logs": [
+    {
+     "logger": "main_sim",
+     "level": "WARNING",
+     "msg": "拍动驱动异常: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Anni\\\\AppData\\\\Local\\\\Temp\\\\i209_f04_mxlo7i9v\\\\blocker.txt\\\\sub\\\\drive_diag.txt'"
+    }
+   ]
+  }
+ }
+}

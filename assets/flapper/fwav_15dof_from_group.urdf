@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<!-- ============================================================
+  扑翼虚拟样机 · 15自由度 (FWAV virtual prototype)
+  坐标系: REP-103  x前 y左 z上
+  自由度账目: 机体浮动6 + 每翼3(拍动/扭转/折叠)×2 + 尾翼3(偏航1+差动俯仰2) = 15
+  关节命名(驱动脚本按此接线):
+    flap_L / flap_R      拍动, 轴=x, 左右正方向对称(驱动脚本自己带符号)
+    twist_L / twist_R    扭转(攻角), 轴=展向y
+    fold_L / fold_R      折叠, 轴=翼面法向z, L限位[0,1.2], R限位[-1.2,0]
+    tail_yaw             尾整体偏航, 轴=z
+    tail_L / tail_R      尾左右舵面, 轴=y; 同向=升降舵, 差动=滚转
+  惯量=几何法重算(体素合成+平行轴转移至声明质心) 2026-09-30 I-002, 工具 tools/inertia_geometric_recalc.py, 运行时覆写已删除
+  I-114 主翼视觉对齐气动表:面板覆盖展向 0 至 0.32,盒弦取梯形弦在段中点的值,
+    双翼面积 0.1088 平方米与气动一致;折叠铰随内板边缘内移至 0.14;
+    尾面板质量回到 0.008,整机求和恢复登记库现行值 0.215;
+    除尾面板质量与惯量外,物理声明值一律未动
+============================================================= -->
+<robot name="fwav_15dof">
+
+  <material name="body_gray"><color rgba="0.55 0.58 0.62 1"/></material>
+  <material name="wing_amber"><color rgba="1.0 0.55 0.25 1"/></material>
+  <material name="wing_amber2"><color rgba="1.0 0.70 0.35 1"/></material>
+  <material name="tail_red"><color rgba="0.95 0.30 0.25 1"/></material>
+  <material name="dark"><color rgba="0.15 0.16 0.18 1"/></material>
+
+  <!-- ============ 机体 ============ -->
+  <link name="base_link">
+    <inertial><mass value="0.135"/><origin xyz="0 0 0"/>
+      <inertia ixx="8.138066e-05" iyy="1.496858e-03" izz="1.495123e-03" ixy="0.000000e+00" ixz="-2.890381e-05" iyz="0.000000e+00"/></inertial>
+    <visual>
+      <origin xyz="0.02 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.035" length="0.30"/></geometry>
+      <material name="body_gray"/>
+    </visual>
+    <visual>
+      <origin xyz="0.20 0 0.012"/>
+      <geometry><sphere radius="0.030"/></geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0.02 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.035" length="0.30"/></geometry>
+    </collision>
+  </link>
+
+  <!-- ============ 左翼 (y+侧) ============ -->
+  <joint name="flap_L" type="revolute">
+    <parent link="base_link"/>
+    <child link="flapconn_L"/>
+    <origin xyz="0 0.06 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.4" upper="1.4" effort="5" velocity="30"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="flapconn_L">
+    <inertial><mass value="0.006"/><origin xyz="0 0.01 0"/>
+      <inertia ixx="1.454000e-06" iyy="8.540000e-07" izz="7.080000e-07" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual><origin xyz="0 0.02 0"/><geometry><cylinder radius="0.006" length="0.04"/></geometry><material name="dark"/></visual>
+  </link>
+
+  <joint name="twist_L" type="revolute">
+    <parent link="flapconn_L"/>
+    <child link="innerwing_L"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.0" upper="1.0" effort="3" velocity="30"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="innerwing_L">
+    <inertial><mass value="0.012"/><origin xyz="-0.05 0.09 0"/>
+      <inertia ixx="3.241600e-05" iyy="4.481600e-05" izz="7.720000e-05" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual>
+      <origin xyz="-0.06344 0.01 0"/>
+      <geometry><box size="0.18688 0.14 0.004"/></geometry>
+      <material name="wing_amber"/>
+    </visual>
+    <collision><origin xyz="-0.06344 0.01 0"/><geometry><box size="0.18688 0.14 0.004"/></geometry></collision>
+  </link>
+
+  <joint name="fold_L" type="revolute">
+    <parent link="innerwing_L"/>
+    <child link="outerwing_L"/>
+    <origin xyz="-0.07 0.08 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="1.2" effort="2" velocity="30"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="outerwing_L">
+    <inertial><mass value="0.009"/><origin xyz="-0.03 0.08 0"/>
+      <inertia ixx="1.920675e-05" iyy="1.080675e-05" izz="3.000000e-05" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual>
+      <origin xyz="-0.04844 0.09 0"/>
+      <geometry><box size="0.15688 0.18 0.003"/></geometry>
+      <material name="wing_amber2"/>
+    </visual>
+    <collision><origin xyz="-0.04844 0.09 0"/><geometry><box size="0.15688 0.18 0.003"/></geometry></collision>
+  </link>
+
+  <!-- ============ 右翼 (y-侧, 镜像) ============ -->
+  <joint name="flap_R" type="revolute">
+    <parent link="base_link"/>
+    <child link="flapconn_R"/>
+    <origin xyz="0 -0.06 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.4" upper="1.4" effort="5" velocity="30"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="flapconn_R">
+    <inertial><mass value="0.006"/><origin xyz="0 -0.01 0"/>
+      <inertia ixx="1.454000e-06" iyy="8.540000e-07" izz="7.080000e-07" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual><origin xyz="0 -0.02 0"/><geometry><cylinder radius="0.006" length="0.04"/></geometry><material name="dark"/></visual>
+  </link>
+
+  <joint name="twist_R" type="revolute">
+    <parent link="flapconn_R"/>
+    <child link="innerwing_R"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.0" upper="1.0" effort="3" velocity="30"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="innerwing_R">
+    <inertial><mass value="0.012"/><origin xyz="-0.05 -0.09 0"/>
+      <inertia ixx="3.241600e-05" iyy="4.481600e-05" izz="7.720000e-05" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual>
+      <origin xyz="-0.06344 -0.01 0"/>
+      <geometry><box size="0.18688 0.14 0.004"/></geometry>
+      <material name="wing_amber"/>
+    </visual>
+    <collision><origin xyz="-0.06344 -0.01 0"/><geometry><box size="0.18688 0.14 0.004"/></geometry></collision>
+  </link>
+
+  <joint name="fold_R" type="revolute">
+    <parent link="innerwing_R"/>
+    <child link="outerwing_R"/>
+    <origin xyz="-0.07 -0.08 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.2" upper="0" effort="2" velocity="30"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="outerwing_R">
+    <inertial><mass value="0.009"/><origin xyz="-0.03 -0.08 0"/>
+      <inertia ixx="1.920675e-05" iyy="1.080675e-05" izz="3.000000e-05" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual>
+      <origin xyz="-0.04844 -0.09 0"/>
+      <geometry><box size="0.15688 0.18 0.003"/></geometry>
+      <material name="wing_amber2"/>
+    </visual>
+    <collision><origin xyz="-0.04844 -0.09 0"/><geometry><box size="0.15688 0.18 0.003"/></geometry></collision>
+  </link>
+
+  <!-- ============ 尾翼: 偏航基座 + 左右差动舵面 ============ -->
+  <joint name="tail_yaw" type="revolute">
+    <parent link="base_link"/>
+    <child link="tail_base"/>
+    <origin xyz="-0.26 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="1" velocity="15"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="tail_base">
+    <inertial><mass value="0.01"/><origin xyz="-0.03 0 0"/>
+      <inertia ixx="8.083742e-06" iyy="1.343756e-05" izz="5.614733e-06" ixy="0.000000e+00" ixz="2.988679e-06" iyz="0.000000e+00"/></inertial>
+    <visual><origin xyz="-0.03 0 0"/><geometry><box size="0.07 0.02 0.005"/></geometry><material name="dark"/></visual>
+    <visual><origin xyz="-0.045 0 0.032"/><geometry><box size="0.07 0.003 0.055"/></geometry><material name="tail_red"/></visual>
+    <!-- I-096 构型同步:差动半展外移至 0.224(I-095 气动表力臂),
+         展向延伸杆连接铰链与外移舵面,仅视觉不承担气动与碰撞 -->
+    <visual><origin xyz="-0.045 0.085 0"/><geometry><box size="0.012 0.17 0.004"/></geometry><material name="dark"/></visual>
+    <visual><origin xyz="-0.045 -0.085 0"/><geometry><box size="0.012 0.17 0.004"/></geometry><material name="dark"/></visual>
+  </link>
+
+  <joint name="tail_L" type="revolute">
+    <parent link="tail_base"/>
+    <child link="tailpanel_L"/>
+    <origin xyz="-0.06 0.012 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.5" upper="0.5" effort="1" velocity="15"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="tailpanel_L">
+    <!-- I-096 构型同步:单面面积 0.01125,总 0.0225 见 I-095,弦 0.09
+         不变,展 0.125,压心力臂 0.224 绝对,面板中心相对铰链 y=0.212。
+         I-114 总质量统一:质量由 I-096 面积比定值 0.01042 回到 0.008,
+         整机求和恢复登记库现行值 0.215,惯量按薄板公式随质量重算 -->
+    <inertial><mass value="0.008"/><origin xyz="-0.045 0.212 0"/>
+      <inertia ixx="1.042e-05" iyy="5.406e-06" izz="1.582e-05" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual>
+      <origin xyz="-0.045 0.212 0"/>
+      <geometry><box size="0.09 0.125 0.003"/></geometry>
+      <material name="tail_red"/>
+    </visual>
+    <collision><origin xyz="-0.045 0.212 0"/><geometry><box size="0.09 0.125 0.003"/></geometry></collision>
+  </link>
+
+  <joint name="tail_R" type="revolute">
+    <parent link="tail_base"/>
+    <child link="tailpanel_R"/>
+    <origin xyz="-0.06 -0.012 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.5" upper="0.5" effort="1" velocity="15"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <link name="tailpanel_R">
+    <inertial><mass value="0.008"/><origin xyz="-0.045 -0.212 0"/>
+      <inertia ixx="1.042e-05" iyy="5.406e-06" izz="1.582e-05" ixy="0.000000e+00" ixz="0.000000e+00" iyz="0.000000e+00"/></inertial>
+    <visual>
+      <origin xyz="-0.045 -0.212 0"/>
+      <geometry><box size="0.09 0.125 0.003"/></geometry>
+      <material name="tail_red"/>
+    </visual>
+    <collision><origin xyz="-0.045 -0.212 0"/><geometry><box size="0.09 0.125 0.003"/></geometry></collision>
+  </link>
+
+</robot>

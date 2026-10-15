@@ -1,0 +1,23 @@
+// 仓库路线（I-075 判据三配套）：阿里云镜像优先，解决境内
+// repo.maven.apache.org TLS 复位问题；官方源保留兜底。
+// 2026-10-05 本机与云端构建实测：镜像命中后不再依赖代理稳定性。
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "lpboard-shell"
+include ":app"

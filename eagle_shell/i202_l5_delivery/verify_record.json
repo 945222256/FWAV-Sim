@@ -1,0 +1,66 @@
+{
+ "generated_at": "2026-10-13T02:08:27.537Z",
+ "eaglex": {
+  "source": {
+   "dir": "eagle_shell/jane_preview_20261013_tail/output",
+   "geo_sha12": "f92f7f6bf379",
+   "chord_sha12": "182cda4702e1",
+   "date": "2026-10-13",
+   "asset": "eagleX"
+  },
+  "segments": [
+   [
+    "flap",
+    24
+   ],
+   [
+    "twist",
+    24
+   ],
+   [
+    "fold",
+    24
+   ],
+   [
+    "tail",
+    24
+   ],
+   [
+    "combo",
+    24
+   ]
+  ],
+  "parts": 8,
+  "chord_rows": 82,
+  "candidate_status": {
+   "mass": "待确认",
+   "inertia": "待确认",
+   "aero": "待确认",
+   "flight": "待确认"
+  },
+  "samples": [
+   [
+    "215g",
+    "active",
+    false
+   ],
+   [
+    "700g",
+    "candidate",
+    false
+   ]
+  ],
+  "stats_215g": {
+   "total": 319,
+   "graph": 0,
+   "rule": 315,
+   "none": 4,
+   "families": 48,
+   "domains": 10,
+   "orphan": 2
+  },
+  "camera_rule": "全动画包围盒并集取景（含一成余量）"
+ },
+ "pass": 25,
+ "fail": 0
+}

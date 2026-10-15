@@ -1,0 +1,52 @@
+# -*- coding: utf-8 -*-
+UNIFIED_SEARCH = {
+    "hard_constraints": {
+        "split_lt": {"value": 0.5, "source": "49ban swap experiment + analytic, dev 0.05%"},
+        "drive_limit_deg": {"value": 80.2, "source": "drive joint limit, measured"},
+        "freq_band": {"value": [1.0, 3.5], "source": "in-loop execution domain, code clip"},
+        "my_dc_coef": {"value": -0.0186, "source": "44ban three-band fit"},
+        "release_drop_rad": {"value": 0.257, "source": "run17 measured 17ms drop"},
+        "ripple_mps": {"value": 0.30, "source": "44ban measured"},
+        "elev_auth": {"value": 0.0145, "source": "15/16ban regression, veff-scheduled"},
+        "elev_travel": {"value": 0.30, "source": "hardware stroke, signed-off"},
+        "ixx": {"value": 0.0024, "source": "config comment grade"},
+        "iyy": {"value": 0.00516, "source": "run9 regression vs PhysX 2.6%"},
+        "izz": {"value": 0.0024, "source": "iyy-class approximation, unverified"},
+        "wing_damp_matrix": {"value": [[-0.0024, 0.0, -0.0233], [0.0, 0.0018, 0.0], [0.0037, 0.0, -0.0076]],
+                              "source": "23ban new-point retest omega=0.5"},
+    },
+    "search_domains": {
+        "alpha_set": {"lo": 5.0, "hi": 70.0, "source": "NUMERICAL bound, NOT physical: 48.5deg is C_N peak not a wall"},
+        "mean": {"lo": -80.0, "hi": 80.0, "source": "NUMERICAL: true bound is joint |mean|+amp<=80.2 applied per-point"},
+        "amp": {"lo": 1.0, "hi": 79.0, "source": "NUMERICAL: joint bound per-point"},
+        "split": {"lo": 0.05, "hi": 0.4999, "source": "kinematic clamp + hard c7 analytic"},
+        "lag": {"lo": -0.5, "hi": 0.5, "source": "NUMERICAL, no evidence found"},
+        "freq": {"lo": 1.0, "hi": 3.5, "source": "execution domain"},
+        "speed": {"lo": 0.5, "hi": 12.0, "source": "NUMERICAL, no evidence found"},
+        "ctrl_pos_dims": {"lo": 1e-3, "hi": 1e3, "source": "NUMERICAL safety, gains physically positive by feedback direction"},
+        "ctrl_signed_dims": {"lo": -1e3, "hi": 1e3, "source": "NUMERICAL safety"},
+    },
+    "time_grids": {
+        "stroke_calib_n": {"value": 288, "source": "16ban discipline"},
+        "closed_loop_dt": {"value": 0.002, "source": "established"},
+        "anchor_dfx_window": {"value": [1.0, 2.0], "source": "49ban fit segment"},
+        "prescreen_s": {"value": 20.0, "source": "run convention, false-kill risk logged"},
+        "final_s": {"value": 60.0, "source": "acceptance"},
+    },
+    "criteria": {
+        "need_frac": 0.70, "lift_min": 0.95, "z_band": [2.0, 8.0], "th_tol": 0.05,
+        "elev_rms_frac": 0.70, "freq_dev_tol": 0.3267, "dfx_gt": 0.0,
+        "source": "class45/50 predeclared, history-signed",
+    },
+    "engine": {
+        "type": "TPE-batch", "batch": 32, "exploit": 24, "explore": 8,
+        "n_batches": 40, "n_ctrl_inner": 8, "procs": 28,
+        "gpu": "try-cupy-else-numpy",
+        "source": "user directive: sequential directed, batch parallel",
+    },
+    "anchors": {
+        "dFx_df_A": {"expect": 0.327, "tol": 0.05, "wave": [40.0, 0.0, 0.25, -0.02, 35.0, 1.25, 3.5]},
+        "dFx_df_B": {"expect": -0.4495, "tol": 0.05, "wave": [35.0, 20.0, 0.75, -0.04, 30.0, 1.25, 3.5]},
+        "my_dc": {"expect": -0.0186, "tol": 0.002},
+    },
+}

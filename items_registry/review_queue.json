@@ -1,0 +1,3700 @@
+{
+  "schema_version": 1,
+  "queue": [
+    {
+      "qid": "Q-001",
+      "title": "尾翼滑流延迟 0.052s 的物理来源复核",
+      "close_criterion": "钉固工况下滑流延迟测量复现且误差带闭合",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-09-30T09:24:18",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-001",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-024",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T09:24:18"
+    },
+    {
+      "qid": "Q-002",
+      "title": "优化一下控制器",
+      "close_criterion": "优化控制器",
+      "submitted_by": "某队",
+      "submitted_at": "2026-09-30T09:24:18",
+      "note": "",
+      "depends_on": [],
+      "review": "linted",
+      "lint_report": {
+        "qid": "Q-002",
+        "checks": [
+          [
+            "R1 完整性",
+            "拒：标题或判据缺失，判据至少十个字"
+          ],
+          [
+            "R3 可检验性",
+            "拒：判据含空泛表述 ['优化']"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ]
+        ],
+        "verdict": "reject",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      }
+    },
+    {
+      "qid": "Q-003",
+      "title": "守门轮继续扫锚点门参数",
+      "close_criterion": "调整参数使贴限情况改善看看效果",
+      "submitted_by": "测试",
+      "submitted_at": "2026-09-30T10:25:41",
+      "note": "",
+      "depends_on": [],
+      "review": "linted",
+      "lint_report": {
+        "qid": "Q-003",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "拒：判据含空泛表述 ['看看']"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "拒：['内部压缩词「锚点」', '内部压缩词「贴限」']"
+          ]
+        ],
+        "verdict": "reject",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      }
+    },
+    {
+      "qid": "Q-004",
+      "title": "看板与协作机制云端化：按云端托管_需求与约束_20260930.md 分四期迁移",
+      "close_criterion": "四期验收判据逐条通过，见需求文档第四节；回退纪律演练一次",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-09-30T11:48:52",
+      "note": "依赖 I-016 基准库冻结后启动第二期",
+      "depends_on": [
+        "I-016"
+      ],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-004",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 ['I-016']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [
+          "I-016"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-031",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T11:48:52"
+    },
+    {
+      "qid": "Q-005",
+      "title": "看板公网域名入口的访问控制审查：personal.karmicsword.com 已可被公网访问，需确认拍板等写操作有身份门槛",
+      "close_criterion": "公网匿名访问无法执行任何写操作，读操作范围有书面声明",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-09-30T16:53:52",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-005",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-042",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T16:53:52"
+    },
+    {
+      "qid": "Q-006",
+      "title": "L4-一：谐波状态空间模型规范与验收判据预登记",
+      "close_criterion": "模型结构定义与验收判据写成机器可读文件并冻结，判据先于任何拟合数据；判据含与线性冠军版同场对拍的胜出阈值",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-09-30T21:00:32",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-006",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-044",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T21:00:32"
+    },
+    {
+      "qid": "Q-007",
+      "title": "L4-二：傅里叶系数估计器内核",
+      "close_criterion": "对合成数据（已知系数的人造周期系统）恢复误差低于预登记阈值，不调用仿真器",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-09-30T21:00:32",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-007",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-045",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T21:00:33"
+    },
+    {
+      "qid": "Q-008",
+      "title": "L4-三：对拍验证：用 I-006 已归档窗口数据重估并与线性冠军版对照",
+      "close_criterion": "同一批归档数据上俯仰通道留出验证净口径优于线性冠军版，数值对照表入档；全程零新增在环运行",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-09-30T21:00:33",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-008",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 ['I-006']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [
+          "I-006"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-046",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T21:00:33"
+    },
+    {
+      "qid": "Q-009",
+      "title": "L4-四：弗洛凯稳定性判读工具",
+      "close_criterion": "对已知解析周期系统算出的周期增长倍率与解析解误差低于预登记阈值，并对盘旋矩阵输出判读报告",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-09-30T21:00:33",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-009",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-047",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T21:00:33"
+    },
+    {
+      "qid": "Q-010",
+      "title": "L4-五：胜出后系数集入参数库与补偿器处方工具适配",
+      "close_criterion": "系数集入册版本化，处方工具读取新系数集输出相位账，与线性版输出对照入档",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-09-30T21:00:33",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-010",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-048",
+      "approved_by": "架构师",
+      "approved_at": "2026-09-30T21:00:33"
+    },
+    {
+      "qid": "Q-011",
+      "title": "混合飞行架构规格：状态机模态层加模态模型层加过渡冲量层，事件级机动参数语义（停拍时刻、时长、侧别、复拍剖面）与占空比语义切割",
+      "close_criterion": "规格文档冻结：模态清单、每模态模型类、过渡冲量表格式、事件参数词汇表四件齐；弗洛凯适用边界写入规范；五科目中事件级科目与模态的映射成立",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-01T14:20:51",
+      "note": "机主 2026-10-01 指示：全包络含鸟式不对称机动；弗洛凯边界与占空比语义漏洞依本日会话裁定",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-011",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-050",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-01T14:20:51"
+    },
+    {
+      "qid": "Q-012",
+      "title": "I-045 剩余验收例：22dB 组的延迟相位解缠混合初值或全延迟粗网格联合扫描",
+      "close_criterion": "该例 A0 组与周期组留出验证过线且判据不改动；若两类修法均不达，按判据争议通道上报，禁止改阈值",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-02T07:15:18",
+      "note": "L4 收工汇报推荐的两个方向，初值盆地可达性问题，估计器本体已在三例验证正确",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-012",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-045']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-045"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-051",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-02T07:15:18"
+    },
+    {
+      "qid": "Q-013",
+      "title": "估计器拟合配方未全量入档致复制批不可逐位复现",
+      "close_criterion": "amps幅值表与环境键(FLAPPER_MODAL_TONE族)写入matrix.json,同CSV重拟合逐位复现通过",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-02T08:20:37",
+      "note": "I-006复制对照批重跑发现:同CSV同CLI参数重拟合与本半净口径36.86对9.62差约四倍,原因为外注入占比加权所用的amps与模态音环境键只在采集进程环境里,matrix.json未记录;判读层只能做同配方自洽带,历史档案数字不可逐位重生成;证据 logs/_i006_netdual_scan.txt 与 tools/判据_净口径放行门_预登记草案_20261002.md 第八节",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-014",
+      "title": "估计器换半列语义错位:实为拟合半自检且基差错位",
+      "close_criterion": "holdout_swap改为真换半(对方半对实测减纯LTI残差拟合同构系数后回估计半验证),既有列语义在代码注释与报告列名中更正,历史档案附三批对照差值记录",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-02T08:20:37",
+      "note": "b86490a落地时mse误用_sm_all(本半系数模型)在est_mask(拟合半)=拟合半自检,声明语义应为对方半拟合系数验本半;_sm2为死变量;_coef2从实测减完整本半模型的残差拟合,基差错位;三批对照(rep35/45/55)两口径差值≤0.01,判读结论不受影响;并列诊断开关I006_SWAP_DIAG已落地供对照;证据 tools/ident_fd_estimator.py 与 logs/ident_matrix/I006rep55E_*",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-015",
+      "title": "check_commit对登记库工具写入误判越界与中文文件名八进制转义误报",
+      "close_criterion": "check_commit对dispatch/ledger/intake工具写入items_registry的提交增加工具写入豁免通道,git diff输出设core.quotepath false或解码八进制路径使中文文件名领地判定正确,两修正各附复现提交哈希",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-02T08:23:12",
+      "note": "复现:提交17e5ab1(登记库写入系append_evidence/claim/intake.submit工具自动落盘)被拒判L3独占区;提交e2287a0的tools/判据_净口径放行门_预登记草案_20261002.md因git八进制转义路径带双引号前缀,startswith领地判定失败误报警告;上一提交a4078bf同病在先",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-016",
+      "title": "I-020 补遗三处注释残留二次落笔：手动频率下限行/速度下限注释块/配平俯仰残行",
+      "close_criterion": "替换文本在 docs/I-020_注释值冲突裁定与替换文本_20260930.md 第六节补遗，落笔后 I-020 复扫无残留即可关闭",
+      "submitted_by": "L3数据资产会话",
+      "submitted_at": "2026-10-02T09:49:52",
+      "note": "首次七处落笔后的复扫残留，均为注释层，不涉参数值变更",
+      "depends_on": [],
+      "review": "linted",
+      "lint_report": {
+        "qid": "Q-016",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-020']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-020"
+        ],
+        "merge_candidates": []
+      }
+    },
+    {
+      "qid": "Q-017",
+      "title": "机制缺陷转录：I-051 与 I-046 的架构师先行范围批文未落 partial_start 字段致依赖门禁拦截认领",
+      "close_criterion": "云端与本地 items.json 的 I-051 与 I-046 的 partial_start 字段按已入档批文填写：I-051 范围为 22dB 组合成验收例的初值搜索与拟合且判据不改动；I-046 范围为三例已验证归档工况先行对拍且 22dB 例缺口单独标注；填毕后 L4队可按机主当班工令认领施工，判据与阈值零改动",
+      "submitted_by": "L4队",
+      "submitted_at": "2026-10-02T10:54:37",
+      "note": "批文出处：I-051 证据链提交 849957f 与 a4078bf，I-046 证据链提交 849957f；机主 2026-10-02 工令已明示两事项先行。本条为行政转录请求，非新事项。",
+      "depends_on": [
+        "I-051",
+        "I-046"
+      ],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-018",
+      "title": "看板移动端响应式改造与可安装网页应用封装",
+      "close_criterion": "手机浏览器打开看板：三路泳道、拍板区、进度条全部可读可操作；封装后手机主屏可安装、全屏打开、离线有外壳；桌面端布局不回退",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-02T11:13:22",
+      "note": "机主 2026-10-02 指示手机查看不便；技术路线按 HQ 手册第六节 PWA 优先",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-018",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-053",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-02T11:13:23"
+    },
+    {
+      "qid": "Q-019",
+      "title": "全景目标看板重建：目标树、依赖关系图、泳道下钻三层结构，React 现代前端，移动端原生响应式",
+      "close_criterion": "验收三条见全景看板_需求与约束_20261002.md 第五节；数据纪律四条全过；桌面端旧功能零回退",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-02T12:10:00",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-019",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-054",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-02T12:10:00"
+    },
+    {
+      "qid": "Q-020",
+      "title": "裁决授权的判据文件与场景落位表改动被领地拦截:config与modules新实例",
+      "close_criterion": "指挥部扩展裁决十一的豁免范围至裁决授权事项涉及的判据真值载体(config/bench_criteria.json与modules/backend/bench_runner.py场景落位表),或把此类文件的裁决授权改动登记为例外通道;修复以复现提交哈希验证",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-02T16:10:27",
+      "note": "复现:提交64d5fcd(I-037重定锚,授权链=裁决十加事项裁决原文由L1更新场景值加机主直接下达)被check_commit拒,config/bench_criteria.json与modules/backend/bench_runner.py属L2独占区本路L1;裁决十一只豁免items_registry数据文件;场景锚真值横跨判据文件与落位表两处,任何重锚施工必然触碰两文件,与由L1更新场景值的裁决原文结构性冲突;前例=Q-015同族问题,裁决十一已修登记库部分",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-021",
+      "title": "作战地图主线叙事与板块下钻升级：十件事主线走廊结构化、板块卡片点击下钻、主线事项判据子项与依赖补录",
+      "close_criterion": "机主手机打开作战地图：点任何板块卡片进入该层事项清单且每项含一句话设计意义；主线走廊十格显示十件事走到第几格；至少五个主线事项补录判据子项后各层进度环不再是未定义",
+      "submitted_by": "L3看板会话",
+      "submitted_at": "2026-10-02T19:07:06",
+      "note": "机主 2026-10-02 反馈立项：未定义环无信息量/只有分类没有主线/板块不可点。三刀方案见本条判据",
+      "depends_on": [
+        "I-054"
+      ],
+      "review": "rejected",
+      "lint_report": {
+        "qid": "Q-021",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "rejected_by": "机主修订一(2026-10-02)",
+      "reject_reason": "机主直接修订需求文档，本提议内容并入修订实施事项 I-056",
+      "rejected_at": "2026-10-02T19:50:54"
+    },
+    {
+      "qid": "Q-022",
+      "title": "机翼态结构辨识：把两翼拍动角与角速度作为状态写进灰箱模型结构，重跑盘旋辨识与双门验收",
+      "close_criterion": "含机翼态的模型在净口径放行门下三通道留出验证过线；判据沿用已批准文本；负结果同样按完成通道交付",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-02T19:49:17",
+      "note": "线性版与谐波版对拍双负后的结构升级主线，I-006 的延续形态",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-022",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-006']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-006"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-055",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-02T19:49:18"
+    },
+    {
+      "qid": "Q-023",
+      "title": "科目一进度里程碑阶梯：转弯保持 5、10、15、20、25、35 秒六档诊断读数进基准报告",
+      "close_criterion": "六档读数在基准报告中自动产出；科目一五条冻结判据一字不动",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-02T22:37:20",
+      "note": "机主需要看见卡住的科目内部的进度，阶梯为诊断非判据",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-023",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-057",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-02T22:37:20"
+    },
+    {
+      "qid": "Q-024",
+      "title": "下边带交调建模：拍频边带与模态带交调项的结构建模（L4 配合 I-055）",
+      "close_criterion": "交调项进模型后滚转通道净口径较 I-055 现行值可判读改善或证伪，双轨报告",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-02T22:37:20",
+      "note": "I-055 下一阶段两杠杆之一，L1 负责慢动态条件化，L4 负责本条",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-024",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-055']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-055"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-058",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-02T22:37:20"
+    },
+    {
+      "qid": "Q-025",
+      "title": "HQ 派发脚手架：自动生成临时员工会话简报（路线、第一条可领事项、开工卡、上下文包裹、禁区清单），机主一键发队",
+      "close_criterion": "新会话凭生成的简报零追问开工；简报内容全部可追溯账本；生成器本地零依赖",
+      "submitted_by": "HQ",
+      "submitted_at": "2026-10-02T22:48:25",
+      "note": "机主 2026-10-02 指示：不再人工贴施工卡；上下文管理与信息中枢归此脚手架",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-025",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-059",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-02T22:48:25"
+    },
+    {
+      "qid": "Q-026",
+      "title": "认领字段残缺：I-053 与 I-056 关闭时 claimed_by 为空而 claimed_at 有值，在制限制与责任链的字段基础不完整",
+      "close_criterion": "ledger 关闭通道增加 claimed_by 非空校验或豁免参数；I-053 与 I-056 两条历史记录补登认领人或由指挥部裁决豁免并留痕",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T10:23:36",
+      "note": "来源：2026-10-03 证据质量审计（最近五条 closed 事项）。依据协作架构开工卡第二条在制限制由 dispatch.claim 强制、整改总计划完成机制纪律第三条责任归属由字段与证据链决定。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-026",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 ['I-053', 'I-056']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [
+          "I-053",
+          "I-056"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-060",
+      "approved_by": "指挥部 Beth（机主 2026-10-03 会话认可）",
+      "approved_at": "2026-10-03T12:57:32"
+    },
+    {
+      "qid": "Q-027",
+      "title": "证据纪律三处缺口：I-056 结构化判据字段未核与判据对照表并存，I-057 证据链含无定位指针条目，I-059 以会话实录充当持久证据",
+      "close_criterion": "三条涉事记录补齐可定位证据或由指挥部裁决豁免并留痕；证据字段书写要求补进汇报标准或语言规范",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T10:23:36",
+      "note": "来源：2026-10-03 证据质量审计。I-056 的 criteria 五条 verified 全为 false 而 criterion_check 五条全过，同一事项内两份真值；I-057 证据第二条为提交见工作区，无哈希无路径；I-059 证据第七条为本会话终端实录，非持久产物。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-027",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-056', 'I-057', 'I-059']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-056",
+          "I-057",
+          "I-059"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-061",
+      "approved_by": "指挥部 Beth（机主 2026-10-03 会话认可）",
+      "approved_at": "2026-10-03T12:57:32"
+    },
+    {
+      "qid": "Q-028",
+      "title": "安卓薄壳应用一期只读接驳：可信网页活动壳加载云端看板，深度链接契约五条路由落地，手机助手可经自然语言指令直达事项详情",
+      "close_criterion": "四条冻结判据全过：一、豆包手机助手凭一条自然语言指令调起应用并直达 I-055 详情页；二、应用展示数据与同一时刻 /api/state 接口内容一致；三、壳代码静态检索不含任何写接口调用；四、深度链接契约 config/deeplink_contract.json 入库，壳与文档共同引用同一份契约",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T12:37:31",
+      "note": "依据协作架构裁决十六与 HQ 手册第六节修订。前置关注 I-042 公网写操作身份门槛审查。建议派 L3。屏幕自动化声明非必需，拍板安全由应用内确认闸保证。",
+      "depends_on": [],
+      "review": "rejected",
+      "rejected_by": "指挥部 Beth",
+      "reject_reason": "判据第四条把深度链接契约放在 config/ 目录，该目录是 L2 独占领地，与建议派 L3 矛盾；契约随安卓壳目录归同一路线，修订判据后重新提交。",
+      "rejected_at": "2026-10-03T12:57:09"
+    },
+    {
+      "qid": "Q-029",
+      "title": "安卓薄壳应用二期拍板闸：拍板动作需机主设备生物识别或长按确认，助手模拟点击无法完成拍板",
+      "close_criterion": "两条冻结判据全过：一、实测助手模拟点击无法完成拍板动作；二、拍板事件写入云端事件流且携带确认方式字段，满足云端托管需求 FR-6 审计要求",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T12:37:31",
+      "note": "依赖一期只读接驳事项完成后开工。判据先于数据，判据文本冻结于入册时。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-029",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-062",
+      "approved_by": "指挥部 Beth（机主 2026-10-03 会话认可）",
+      "approved_at": "2026-10-03T12:57:33"
+    },
+    {
+      "qid": "Q-030",
+      "title": "分工表登记缺口：HQ 手册、HQ 入职便签、云端托管需求、全景看板需求四份管理文件未登记进 lanes.json 指挥部一栏",
+      "close_criterion": "lanes.json 指挥部一栏补登记四份文件路径前缀，提交检查对这四份文件的提交不再报未登记警告",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T12:57:09",
+      "note": "来源：2026 年 10 月 3 日提交检查警告实证，与 L4 路登记缺口事项同属登记缺口家族。机主 2026-10-03 会话同意升级 lanes.json。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-030",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-063",
+      "approved_by": "指挥部 Beth（机主 2026-10-03 会话认可）",
+      "approved_at": "2026-10-03T12:57:33"
+    },
+    {
+      "qid": "Q-031",
+      "title": "安卓薄壳应用一期只读接驳：可信网页活动壳加载云端看板，深度链接契约五条路由落地，手机助手可经自然语言指令直达事项详情",
+      "close_criterion": "四条冻结判据全过：一、豆包手机助手凭一条自然语言指令调起应用并直达 I-055 详情页；二、应用展示数据与同一时刻 /api/state 接口内容一致；三、壳代码静态检索不含任何写接口调用；四、深度链接契约 android_shell/deeplink_contract.json 入库，壳与文档共同引用同一份契约",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T12:57:09",
+      "note": "依据协作架构裁决十六与 HQ 手册第六节修订，取代 Q-028，契约文件随安卓壳目录归同一路线。建议派 L3。屏幕自动化声明非必需，拍板安全由应用内确认闸保证。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-031",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "建议合并：['Q-028']"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": [
+          {
+            "with": "Q-028",
+            "title": "安卓薄壳应用一期只读接驳：可信网页活动壳加载云端看板，深度链接契约五条路由落地，手机助手可经自然语言指令直达事项详情",
+            "similarity": 1.0
+          }
+        ]
+      },
+      "approved_as": "I-064",
+      "approved_by": "指挥部 Beth（机主 2026-10-03 会话认可）",
+      "approved_at": "2026-10-03T12:57:33"
+    },
+    {
+      "qid": "Q-032",
+      "title": "分工表云端双键缺口：心跳上行写 lanes_conf 镜像键，快照下发读 lanes 权威键，云端权威分工表无代理令牌写入路径",
+      "close_criterion": "云端快照下发的分工表与 items_registry/lanes.json 内容一致；心跳上行后快照同步更新，或登记机主会话管理接口作为唯一更新通道并写入文档",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T13:02:41",
+      "note": "来源：2026 年 10 月 3 日裁决十七落地时实证，心跳上行事件序号 568 后强制同步，快照分工表仍为旧版。修复涉及服务端代码或机主会话管理接口，建议派 L3，属云端化分期范畴。",
+      "depends_on": [],
+      "review": "rejected",
+      "rejected_by": "指挥部 Beth",
+      "reject_reason": "结案说明：该申报所指的分工表云端双键缺口已由 I-092 实质修复，I-092 于 2026-10-06 以判据通过关闭，修复文档 docs/I-092_云端分工表双键缺口修复_20261006.md 在档。同一问题不重复立项，本条按已解决驳回结案，留痕备查。",
+      "rejected_at": "2026-10-08T17:44:15"
+    },
+    {
+      "qid": "Q-033",
+      "title": "多跑拼接数据与估计器连续时间假设的接口缺陷:拍相位跨缝假想累计21拍搅乱奇偶分半与拍锁口径",
+      "close_criterion": "估计器感知拼接缝(对缝分段处理相位积分与奇偶划分,或拒绝含缝数据并提示改用单跑原始CSV);pool拼接器产物登记缝结构元数据;受影响读数清单与连续段重估对照表入档",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-03T13:27:24",
+      "note": "复现:logs/_i006_hop.csv与全部48唯一样本_rep*.csv均为三个2.88秒片段加两处11秒缝(pool_ident_csv.py窗口裁剪加时间轴平移的拼接产物);估计器对缝间假想累计约21拍相位(freqL积分),奇偶分半坐标与拍锁36箱基线及净口径锁相扣除全部建立在假连续相位轴上;原始单跑CSV(logs/ident_stream_flight_*.csv)连续35秒无缝可用;此前所有拼接数据拟合(含暂定矩阵与复制对照批)读数方向仍有效(裁决十三零过线基于冻结与净口径双口径)但窗长与样本量语义须以连续段重估为准",
+      "depends_on": [],
+      "review": "approved",
+      "approved_as": "I-068",
+      "approved_by": "HQ架构师",
+      "approved_at": "2026-10-04T16:59:28"
+    },
+    {
+      "qid": "Q-034",
+      "title": "机制补录：I-058 的 partial_start 字段待架构师按机主当班工令填写",
+      "close_criterion": "服务端 I-058 的 partial_start 字段填入先行范围：L4 在 ltv 领地以下边带交调建模配合 I-055，只读 I-055 与 I-006 归档数据与现行值，不改 L1 领地、判据与阈值；填毕后 L4队补办认领手续",
+      "submitted_by": "L4队",
+      "submitted_at": "2026-10-03T15:07:54",
+      "note": "授权出处：机主 2026-10-03 直接工令认领 I-058 并开工；门禁与写入口现状见 I-058 证据链本班记录",
+      "depends_on": [
+        "I-058"
+      ],
+      "review": "rejected",
+      "rejected_by": "指挥部 Beth",
+      "reject_reason": "结案说明：I-058 已于 2026-10-03 关闭，证伪结论在案；已关闭事项不再被认领，partial_start 先行范围字段的补录对象已不存在。本条申请失去作用对象，按已失效驳回结案，留痕备查。",
+      "rejected_at": "2026-10-08T17:44:15"
+    },
+    {
+      "qid": "Q-035",
+      "title": "证据追加接口参数形态双标：本地通道把字符串拆成单字入账，I-058 证据链出现三百七十三条单字废条目",
+      "close_criterion": "两条追加通道的参数形态统一并加类型校验；I-058 证据链的单字条目合并还原为一条完整文本，还原前后总字数一致并留对照记录",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-03T20:44:05",
+      "note": "来源：2026-10-03 验收。实证：I-058 证据三百七十六条中前三条正常、第四条起为单字；云端通道要求字符串、本地通道按列表展开，同一函数两种形态。关联 I-060 与 I-061 的登记卫生家族。",
+      "depends_on": [],
+      "review": "approved",
+      "approved_as": "I-069",
+      "approved_by": "HQ架构师",
+      "approved_at": "2026-10-04T16:59:29"
+    },
+    {
+      "qid": "Q-036",
+      "title": "BANK_TEST环境链路断裂:键声明生效但坡度指令未达roll_des致盘旋工况采集被堵",
+      "close_criterion": "修复FLAPPER_BANK_TEST到控制器roll_des覆盖的链路(环境键打印生效但数据流roll_des列恒零roll不建立),以压坡度试验方案科目一口径验收:切入后roll_des出现坡度分量且roll建立10度邻域;修复附复现采集跑",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-03T22:35:30",
+      "note": "复现:三跑logs/ident_stream_flight_1003_222258、222947、223141(配方=预登记文件tools/采集协议预登记_转弯工况降幅值_20261003.md),[TEST]定坡度盘旋开启打印在场但roll_des中位恒零roll不建立且掉高坠地;桥梁段modules/sim_env_bridge.py 212行改config类属性成功,控制器update的f=cfg.FlightControllerConfig读类属性应生效,断点在覆盖条件或调用时序,属L2领地;此链是I-055盘旋工况采集(D-020)与I-008科目一的共同依赖",
+      "depends_on": [],
+      "review": "approved",
+      "approved_as": "I-067",
+      "approved_by": "HQ架构师",
+      "approved_at": "2026-10-04T16:59:28"
+    },
+    {
+      "qid": "Q-037",
+      "title": "L6路登记缺口：lanes.json 无 L6 条目，rl 目录挂在 L1 独占路径下，六队施工与领地登记不一致",
+      "close_criterion": "lanes.json 增补 L6 条目（名称、任务、独占路径含 rl/）且 L1 独占路径相应调整，协作架构第一节表述同步，由机主或架构师批准入册",
+      "submitted_by": "L6队",
+      "submitted_at": "2026-10-05T09:04:33",
+      "note": "I-071 施工中发现。六队事项 I-071/I-072/I-073 均指向 rl/ 目录施工，但登记领地属于 L1，按领地规则六队无法通过 check_commit 领地检查。",
+      "depends_on": [],
+      "review": "rejected",
+      "rejected_by": "指挥部 Beth",
+      "reject_reason": "结案说明：L6 强化学习线已按决定 D-024 第二条登记进 items_registry/lanes.json，rl 目录归 L6 独占，本次核验确认 lanes.json 含 L6 条目，登记缺口已消除。本条按已解决驳回结案，留痕备查。",
+      "rejected_at": "2026-10-08T17:44:15"
+    },
+    {
+      "qid": "Q-038",
+      "title": "术语登记缺口：条件流匹配与最优传输等强化学习线术语未入术语登记册，语言检查把它们判为未登记缩写",
+      "close_criterion": "术语登记册收录条件流匹配、最优传输、行为克隆、近端策略优化等强化学习线术语并附定义，语言检查对既有 rl 目录文档扫描通过",
+      "submitted_by": "L6队",
+      "submitted_at": "2026-10-05T09:04:33",
+      "note": "I-071 施工中发现。提交信息与文档大量使用条件流匹配（英文缩写 CFM），语言检查工具按未登记缩写退回，需先入册。",
+      "depends_on": [],
+      "review": "rejected",
+      "rejected_by": "指挥部 Beth",
+      "reject_reason": "结案说明：条件流匹配、行为克隆、域随机化、逆映射、生成式策略、过冲共六条术语已按决定 D-024 第四条补登入 items_registry/glossary.json，本次核验确认六条均在册，登记缺口已消除。本条按已解决驳回结案，留痕备查。",
+      "rejected_at": "2026-10-08T17:44:15"
+    },
+    {
+      "qid": "Q-039",
+      "title": "安卓壳黑屏根因修复与标准化自我验收产线：黑屏定性修复、图标补强、静态六项断言、模拟器动态四步、下载位哈希闸",
+      "close_criterion": "六条冻结判据全过：一、黑屏根因以 logcat 证据定性并修复，模拟器冷启动后首页完成渲染，截图与页面结构双重证据证明非黑屏；二、自适应图标与多密度位图落地，模拟器桌面可见应用图标；三、静态验收脚本六项断言（启动入口、图标、包名、网络权限、五条深度链接路由、签名）输出过或不过，产物不过静态验收禁止上传；四、动态验收脚本一条命令完成模拟器安装、冷启动渲染校验、深度链接直达 I-055 详情三步并留证据；五、下载位与本地构建产物哈希一致，不一致即拒收；六、全部验收机器可执行，禁止人肉目测充当验收证据，机主手机侧仅剩豆包语音指令一项",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-05T09:50:32",
+      "note": "机主 2026-10-05 指令：I-074 本机环境先行，本事项随后；机主实测安装包黑屏，要求全部应用开发验收标准化、机器可执行，绝不允许异常漏到机主侧。建议派 L5，依赖 I-074。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-039",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-074']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-074"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-075",
+      "approved_by": "指挥部 Beth（机主 2026-10-05 会话指示）",
+      "approved_at": "2026-10-05T09:51:33"
+    },
+    {
+      "qid": "Q-040",
+      "title": "会话直送跨进程激活缺口：协议进程对桌面客户端宿主的既有会话报 Session is not active，发送前缺少激活步骤",
+      "close_criterion": "查明激活路径并书面定论：session/resume 冷恢复能否激活桌面宿主会话，或裁决常驻宿主方案；定论后定向发送一次成功回读",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-05T09:54:06",
+      "note": "实证：2026-10-05 对 sess_414f8dc3 执行唯一一次 session/send，服务端返回错误码负三二零零四 Session is not active，按机主指令未重试，证据 logs/session_send_l5_i075_evidence.json。",
+      "depends_on": [],
+      "review": "rejected",
+      "rejected_by": "指挥部 Beth",
+      "reject_reason": "内容已被 I-098 完整吸收，随本决定结案。",
+      "rejected_at": "2026-10-06T11:33:24"
+    },
+    {
+      "qid": "Q-041",
+      "title": "I-087：偏航正切律可证伪预测检验——预测二立即（I-083 族二度五度批），预测一预测三等 I-085 数据落地当日完成",
+      "close_criterion": "三条预测逐条给出证实或证伪结论并附数值：预测二（五度批稳定段增益为二度批二点五倍，数据源 I-083 族归档二度五度批）立即完成；预测一与预测三在 I-085 数据落地当日完成；报告入档",
+      "submitted_by": "L4队",
+      "submitted_at": "2026-10-06T08:46:49",
+      "note": "【机主指示】2026-10-06 机主当班工令原文指名 I-087 与分工。上游出处：I-084 报告第三节三条可证伪预测（提交 0f33534）。",
+      "depends_on": [
+        "I-085"
+      ],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-042",
+      "title": "会话直送机制查明：恢复后发送链路实测、双活并发语义实测、三条通道对比定论与裁决素材产出（吸收 Q-040）",
+      "close_criterion": "四条冻结判据全过：一、恢复后发送链路实测定论：用协议进程对本进程新建并已落库的测试会话先执行恢复方法再执行发送方法，回读命中为成立，服务端拒绝为不成立，两种结果都算查明，结论与证据入档；二、双活并发语义实测定论：同一测试会话在桌面客户端可见期间经协议进程发送一条消息，桌面侧栏显示与转录文件追加两种表现分别记录，判定并发持有是安全、分叉还是丢消息；三、三条候选通道（协议进程恢复后发送、桌面内嵌本机网页套接字服务、独立常驻服务器版后端）各出一行结论，含可用性、权限要求、生命周期成本三栏，并给出唯一推荐；四、试验纪律：全部实验只在本事项新建的测试会话上进行，禁止向任何施工会话发送，每次发送留证据文件进 logs 目录，结束时登记测试会话编号清单，结论写入 docs 目录一份事实清单且每条结论带证据指针",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-06T11:32:54",
+      "note": "机主 2026-10-05 指令立项。吸收 Q-040 的激活缺口。背景实证：对 sess_414f8dc3 的唯一一次发送被服务端以 Session is not active 拒绝，证据 logs/session_send_l5_i075_evidence.json。建议派 L5。协议方法清单与参数定义见 packages/shared/src/zcode-protocol/index.ts，驱动样例见 tools/drive_session.mjs 与 tools/send_dispatch_once.mjs。",
+      "depends_on": [],
+      "review": "linted",
+      "lint_report": {
+        "qid": "Q-042",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "拒：['内部压缩词「裁决」']"
+          ]
+        ],
+        "verdict": "reject",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      }
+    },
+    {
+      "qid": "Q-043",
+      "title": "会话直送机制查明：恢复后发送链路实测、双活并发语义实测、三条通道对比定论与决定素材产出（吸收 Q-040）",
+      "close_criterion": "四条冻结判据全过：一、恢复后发送链路实测定论：用协议进程对本进程新建并已落库的测试会话先执行恢复方法再执行发送方法，回读命中为成立，服务端拒绝为不成立，两种结果都算查明，结论与证据入档；二、双活并发语义实测定论：同一测试会话在桌面客户端可见期间经协议进程发送一条消息，桌面侧栏显示与转录文件追加两种表现分别记录，判定并发持有是安全、分叉还是丢消息；三、三条候选通道（协议进程恢复后发送、桌面内嵌本机网页套接字服务、独立常驻服务器版后端）各出一行结论，含可用性、权限要求、生命周期成本三栏，并给出唯一推荐；四、试验纪律：全部实验只在本事项新建的测试会话上进行，禁止向任何施工会话发送，每次发送留证据文件进 logs 目录，结束时登记测试会话编号清单，结论写入 docs 目录一份事实清单且每条结论带证据指针",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-06T11:33:23",
+      "note": "机主 2026-10-06 指令立项，吸收 Q-040 的激活缺口；Q-042 因用语被语言检查拒绝，本件为修订重报。背景实证：对 sess_414f8dc3 的唯一一次发送被服务端以 Session is not active 拒绝，证据 logs/session_send_l5_i075_evidence.json。建议派 L5。协议方法清单见 packages/shared/src/zcode-protocol/index.ts，驱动样例见 tools/drive_session.mjs 与 tools/send_dispatch_once.mjs。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-043",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "建议合并：['Q-042']"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": [
+          {
+            "with": "Q-042",
+            "title": "会话直送机制查明：恢复后发送链路实测、双活并发语义实测、三条通道对比定论与裁决素材产出（吸收 Q-040）",
+            "similarity": 0.98
+          }
+        ]
+      },
+      "approved_as": "I-098",
+      "approved_by": "指挥部 Beth（机主 2026-10-06 会话指示）",
+      "approved_at": "2026-10-06T11:33:24"
+    },
+    {
+      "qid": "Q-044",
+      "title": "运行时 USD 骨架未随 I-096 重导入：fwav_15dof.usd 仍为 09-30 版旧尾翼，须重转换并验证",
+      "close_criterion": "tools/import_fwav_urdf.py 加 --force 重转后 verify_imported_usd.py 校验通过，且 USD 内尾面板尺寸为 0.09×0.125、压心 y=0.224、单面板质量 0.01042，与 assets/flapper/fwav_15dof_from_group.urdf 现行值逐项一致",
+      "submitted_by": "L8队",
+      "submitted_at": "2026-10-06T23:19:50",
+      "note": "I-101 审计证据：USD 最后提交 ec3ede6(09-30 06:51)，I-096(1f3fc19,10-06) 只改 URDF 未重转；加载链 config/sim_config.py:36 FLAPPER_URDF_USD 经 modules/flapper_loader.py:86 直接加载 USD",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-045",
+      "title": "参数登记库主表尾翼两键未随 I-095 更新：aero.tail.area 与 aero.tail.panel_y 仍为旧值 0.015/0.15",
+      "close_criterion": "params_registry/params.json 中 aero.tail.area 改为 0.0225、aero.tail.panel_y 改为 0.224，since 改为 2026-10-06，与 config/sim_config.py TailAeroConfig 现值及 params_registry/archive.json 已有替换记录三处一致",
+      "submitted_by": "L8队",
+      "submitted_at": "2026-10-06T23:19:50",
+      "note": "I-101 审计证据：archive.json 已记录 10-06 替换(replaced_by 0.0225/0.224)但主表 status 仍 current 挂旧值",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-046",
+      "title": "主翼尺寸死常量与误导性登记清理：WINGSPAN 0.60/WING_CHORD 0.10/WING_AREA 0.030 无任何运行时消费者，登记库 vehicle.wingspan.total 0.6 与气动实算全展 0.64 冲突",
+      "close_criterion": "config/sim_config.py 三个死常量删除或注记已废弃，登记库 vehicle.wingspan.total 改登实算值 0.64 或注记为论文复刻口径属性，全库检索无运行时消费残留",
+      "submitted_by": "L8队",
+      "submitted_at": "2026-10-06T23:19:50",
+      "note": "I-101 审计证据：全库 grep 仅 sim_config.py:150-154 定义处与日志快照命中，modules/tools/main_sim 无一处读取",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-047",
+      "title": "整机总质量口径分歧待机主确定：URDF 链求和 0.21984 千克对 sim_config.MASS 与登记库 0.215 千克，差值源于 I-096 尾件增重 4.84 克",
+      "close_criterion": "机主确定单一权威口径后，骨架 URDF、config/sim_config.py 的 MASS、params_registry、运行时 USD 四处质量数值一致，差异不大于 0.0005 千克",
+      "submitted_by": "L8队",
+      "submitted_at": "2026-10-06T23:19:50",
+      "note": "I-101 审计证据：09-30 版 USD 求和恰为 0.21500 与两处 0.215 一致；1f3fc19 后 URDF 求和 0.21984；flapper_loader.py:294 又在根 prim 写 MassAPI 0.215",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-048",
+      "title": "主翼形状对齐施工预登记：翼展骨架 0.80 米对气动 0.64 米、翼尖弦骨架 0.12 米对气动 0.14 米，对齐方向待机主确定权威源",
+      "close_criterion": "机主确定主翼权威源后，骨架 URDF 视觉尺寸或气动 WingGeometryConfig 二者改齐，骨架/气动表/登记库/鹰壳缩放四方翼展差不超过百分之二并留验证记录",
+      "submitted_by": "L8队",
+      "submitted_at": "2026-10-06T23:19:50",
+      "note": "I-101 审计交付四方对照表为施工依据；飞行判据历史标定均落在气动口径 0.64 上，改骨架视觉为影响较小方向，最终由机主确定",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-049",
+      "title": "assets/flapper/fwav_15dof_2.urdf 尾翼仍为 I-096 前构型且是惯量重算工具的输入之一，处置方式待定",
+      "close_criterion": "机主或架构师确定该中间代骨架文件的处置方式：随 I-096 同步尾翼、退役改名留档、或保留并注记边界；确定后该文件状态与 tools/inertia_geometric_recalc.py 的输入引用关系书面一致",
+      "submitted_by": "L8队",
+      "submitted_at": "2026-10-07T14:14:48",
+      "note": "I-107 施工中发现：该文件尾翼仍为 0.09×0.096 面板旧构型，tools/inertia_geometric_recalc.py 第 44 行仍以其为输入；本批范围仅覆盖根目录同名旧件，见 logs/I-107_旧模型文件退役说明_20261007.md 范围边界节",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-050",
+      "title": "云端模式下本地直写 events.json 的账本事件会被缓存下拉覆盖丢失",
+      "close_criterion": "本地工具对账本事件的写入具备持久保证：事件写入走云端接口，或本地写入在下拉覆盖后可恢复，方案落地并验证",
+      "submitted_by": "L7队",
+      "submitted_at": "2026-10-07T16:11:49",
+      "note": "发现经过：I-091 施工中经 events.append 本地直写的同步事件在同步代理下拉云端缓存后被整体覆盖丢失，events.json 实为云端事件投影缓存；看板服务经 git_evidence 本地追加的事件暴露在同一风险下。建议方向：为通用事件提供云端追加接口，或下拉合并时对本地追加事件做并集保留。I-091 已改走 ledger.add_report 云端通道规避。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-050",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-091']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-091"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-132",
+      "approved_by": "指挥部 Beth",
+      "approved_at": "2026-10-08T17:45:07"
+    },
+    {
+      "qid": "Q-051",
+      "title": "后台派活宿主查明：客户端查看是否打断后台运行、居住权转移行为实测、查看不打断与显式打断的方案定论（机主要求：收尾报告含专写给机主的通俗完整说明）",
+      "close_criterion": "五条冻结判据全过：一、查明桌面客户端打开一个正由后台进程驱动的测试会话时，该会话的运行是中断、被接管还是不受影响，三者定性其一，证据为打开前后的状态对照记录；二、查明客户端内能否实现只查看不接管，若默认行为是接管，给出阻止接管的可行做法，或给出替代观察窗方案；三、查明客户端内的停止动作能否中断后台运行的测试会话，显式打断通道存在且有效为成立；四、常驻后台服务做样机级验证：服务能开机自启、能崩溃自愈、派活工具改走该服务后一个测试会话持续运行且客户端的开关与查看均不影响它，样机验证即可，正式施工另立事项；五、收尾汇报必须包含一节专门写给机主的说明，用日常语言完整回答后台派的活在客户端里看会不会一看就断、想让它停能不能停这一问题，该节禁止出现任何事项编号、文件路径与技术名词，自足成文；全部实验只在本事项新建的测试会话上进行，禁止向任何在办会话发送",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-08T09:49:20",
+      "note": "机主 2026-10-08 指令立项。机主原话要求：汇报绝对清楚、面向零上下文读者、不看术语与技术文档、只回答其关心的需求、通俗解释绝对完整、不准有上下文引用。调查方法由指挥部划分。建议派 L5，是 I-098 通道定论与 I-106 派活工具的接续查明。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-051",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L2，依赖 ['I-098', 'I-106']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L2",
+        "suggested_depends_on": [
+          "I-098",
+          "I-106"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-126",
+      "approved_by": "指挥部 Beth（机主 2026-10-08 会话指示）",
+      "approved_at": "2026-10-08T09:49:49"
+    },
+    {
+      "qid": "Q-052",
+      "title": "登记库三处缺陷修复：空账本编号分配崩溃、初始化器与事件词表为模板侧已修同型",
+      "goal_context": "在做 I-128 架构提取、用模板从零实例化新项目时发现",
+      "close_criterion": "items_registry 三处缺陷在源项目侧修复：ledger.add 空账本编号分配崩溃、事件动作词表缺 set_depends 等四词、bootstrap 类初始化漏拷看板目录；修复后模板侧自测全绿，源项目侧须对齐",
+      "submitted_by": "L10队",
+      "submitted_at": "2026-10-08T11:38:44",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-052",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-133",
+      "approved_by": "指挥部 Beth",
+      "approved_at": "2026-10-08T17:45:08"
+    },
+    {
+      "qid": "Q-053",
+      "title": "Linux子系统域名解析缺上游服务器已被静态配置修复存在复发风险",
+      "goal_context": "计算流体力学线在Windows的Linux子系统内安装求解器时遇到域名解析全面失败，根因是systemd-resolved在eth0上无上游域名服务器，已用静态解析配置修复；其他使用该子系统的路线（如同步线）将来重建或升级子系统时会再次撞上同一故障",
+      "close_criterion": "静态解析配置的存活性有机器可执行的巡检命令并留档，或架构师裁示该风险交由各线自防不需要事项跟踪",
+      "submitted_by": "L9队",
+      "submitted_at": "2026-10-08T13:37:21",
+      "note": "修复细节见cfd/docs/选型论证_求解器.md环境记录节",
+      "depends_on": [],
+      "review": "rejected",
+      "lint_report": {
+        "qid": "Q-053",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L2，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L2",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "rejected_by": "指挥部 Beth",
+      "reject_reason": "指挥部决定：该风险交由各线自防，不单独立项跟踪。理由三条：故障根因与静态配置修法已留档于 cfd/docs/选型论证_求解器.md 环境记录节；新机器接入流程有 docs/新机器接入云端三步手册_20261006.md 在档；重建或升级子系统属低频动作，复发时再申报立项不迟。本条按决定驳回结案，留痕备查。",
+      "rejected_at": "2026-10-08T17:45:08"
+    },
+    {
+      "qid": "Q-054",
+      "title": "参数实验室页面阶段一陈列表示施工",
+      "goal_context": "机主指示参数实验室页面立项派工，本件登记该页面的阶段一陈列表示施工，含三维固定渲染资产导出。",
+      "close_criterion": "按设计方案四稿完成阶段一陈列表示：纵向级联五区布局、核心区三维展示区播放固定转台序列、机型选项卡含七百克锁定态、教学层四块全文默认展开；页面全部数值实时来自登记库只读接口、前端源码无硬编码参数值；四稿第九章阶段一相关判据逐条核验通过。",
+      "submitted_by": "Ciri（前端视觉表现顾问）",
+      "submitted_at": "2026-10-08T15:06:55",
+      "note": "设计依据：需求定稿 D-047 与设计方案四稿（工作区 2026-10-08-5cf32d5a 目录），参数分级架构 D-045，I-127 接口契约。三维固定渲染资产导出（glb 加二十四帧转台序列）含在本件范围。阶段二沙盘与传导对比、阶段三实时三维另行立项。页面施工等图结构底座建成，依赖 I-127。",
+      "depends_on": [
+        "I-127"
+      ],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-054",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 ['I-127']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [
+          "I-127"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-130",
+      "approved_by": "Anni（指挥部）",
+      "approved_at": "2026-10-08T15:07:06"
+    },
+    {
+      "qid": "Q-055",
+      "title": "看板窄窗一行一字症状调查：新版与旧版在当前内核三档宽度实测均正常，待机主端复现信息锁定变量",
+      "goal_context": "在做机主日常手机与桌面看板使用时出现截图一行一字症状（机主 2026-10-08 直接工令调查并提交）",
+      "close_criterion": "判据：取得机主端复现三要素（具体入口路径、窗口宽度或边栏模式、页面缩放比例）后复现并修复，修复后同条件截图验证多字成行",
+      "submitted_by": "L3队",
+      "submitted_at": "2026-10-08T15:27:31",
+      "note": "【调查记录】机主截图为最新 Windows Edge 一行一字形态。本机实测：当前内核 390/480/700 像素三档宽度下，/app/ 新版与根路径旧版均正常渲染，窄元素探针未发现塌缩中文标题（探针输出与两份对照截图在 logs/boardbug_ 前缀）。【已排除】部署包自身布局缺陷（三档宽度对照截图正常）；旧引擎不识别区间语法假说（机主为最新 Edge，且当前内核同样支持）。【待锁变量】机主端复现需三要素：打开的具体入口（根路径旧版或 /app/ 新版）、Edge 窗口宽度或是否边栏面板内打开、页面缩放比例（高缩放会缩小有效视口）。【修复方向备选】根路径重定向新版（新版已过移动端验收）；两版窄容器防御性最小宽度；构建样式兼容目标加保险。【证据】logs/boardbug_app_390px_正常.png、logs/boardbug_root_480px_正常.png、本机探针三组输出（会话实录）",
+      "depends_on": [],
+      "review": "linted",
+      "lint_report": {
+        "qid": "Q-055",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      }
+    },
+    {
+      "qid": "Q-056",
+      "title": "派发通道侧栏可见性修复：常驻宿主服务承担任务索引登记（丙案承载，六条防护判据）",
+      "goal_context": "建设指挥部对施工会话的后台派发与前端可见能力，支撑机主在客户端直接看到派出去的会话",
+      "close_criterion": "六条冻结判据全过：一、测试会话经宿主服务派发并回读命中后三十秒内，任务索引出现该任务号的行，查验方式为只读轮询；二、幂等性：同一会话重复登记不产生第二行；三、原子性：登记期间强制终止宿主服务进程，索引库完整性检查通过；四、无干扰：登记后客户端对该行的置顶、改名、归档操作全部生效，由机主在客户端人工核验一次；五、升级自检：客户端版本变更后，形态自检脚本对客户端自写行比对通过；六、状态语义：登记行状态为 completed，文档声明运行态真值在会话库",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-08T17:31:58",
+      "note": "机主 2026-10-08 流程：先调查风险后转正。调查结论为可登记但需防护，推荐丙案即常驻宿主服务承载登记，依据 docs/HQ专项_任务索引登记风险调查_20261008.md 全文；判据草案原文采用该文档第四节六条，判据先于数据。防护清单六条见文档第三节。建议派 L5。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-056",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-131",
+      "approved_by": "指挥部 Beth（机主 2026-10-08 流程指示）",
+      "approved_at": "2026-10-08T17:31:58"
+    },
+    {
+      "qid": "Q-057",
+      "title": "二维气动系数表第一步:当前翼形巡航速度范围内法向力系数随迎角全表并与模型现用值对账",
+      "goal_context": "机主令开工分阶段方案阶段二第一步:用已建成的流场求解工具扫掠当前翼形剖面在巡航速度范围内的攻角全表,产出法向力系数表,与主仿真力律现用拟合对账,偏差入档;扑翼基准加密复验按机主令列为三维阶段首项",
+      "close_criterion": "当前翼形代表剖面在巡航雷诺数区间的法向力系数随迎角全表落盘(覆盖零至九十度,含网格收敛级差);与主仿真现用法向力拟合的逐迎角对账表落盘且偏差数值与口径注记完整;扑翼基准加密复验在分阶段方案文档中列明为三维阶段首项;全程不碰主仿真",
+      "submitted_by": "L9队",
+      "submitted_at": "2026-10-09T07:45:30",
+      "note": "机主2026-10-09直接开工令,授权依据为本会话指令原文",
+      "depends_on": [],
+      "review": "approved",
+      "approved_as": "I-134",
+      "approved_by": "机主",
+      "approved_at": "2026-10-09T07:45:37"
+    },
+    {
+      "qid": "Q-058",
+      "title": "控制台需求登记册与目标层接通：事项总账增类别字段区分需求与任务，六份既有需求文档首批入册",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第一件",
+      "close_criterion": "目标、需求、事项三级链在接口层闭合：每条需求条目可挂到目标编号，六份既有需求与约束文档全部入册并可经云端接口查回，指挥部页面所需数据模型就绪",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:08",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-058",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-141",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:08"
+    },
+    {
+      "qid": "Q-059",
+      "title": "控制台云端模块：cloud_board 增控制台接口模块与会话快照、控制台事件、下查任务三表",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第二件",
+      "close_criterion": "本机推送一条测试会话快照云端可读回且每格带出处指针；部署清单与现状相比不新增独立服务进程与端口；页面状态接口覆盖三个页面所需全部格子",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:08",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-059",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-142",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:09"
+    },
+    {
+      "qid": "Q-060",
+      "title": "控制台采集代理扩展：同步代理增会话库只读采集，五秒周期上行会话快照",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第三件",
+      "close_criterion": "五秒周期连续一小时推送无断档；抽样十条上行数据与直读会话库逐字一致；上下文占用口径按方案第三节以最近一次模型请求输入令牌计",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:42",
+      "note": "依赖 I-142；I-132 已关闭，其云端写入通道为本件上行复用面。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-060",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-132', 'I-142']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-132",
+          "I-142"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-143",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:43"
+    },
+    {
+      "qid": "Q-061",
+      "title": "控制台指挥部页面：目标到需求到事项三级拆解树视图",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第四件",
+      "close_criterion": "页面渲染与接口数据逐格一致；每格可开出处抽屉；层级调整按方案第十四节评审并入记录落实",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:43",
+      "note": "依赖 I-141、I-142、I-143。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-061",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-141', 'I-142', 'I-143']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-141",
+          "I-142",
+          "I-143"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-144",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:44"
+    },
+    {
+      "qid": "Q-062",
+      "title": "控制台战情室页面：十条任务线的泳道状态视图",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第五件",
+      "close_criterion": "页面渲染与接口数据逐格一致；每格可开出处抽屉；租约倒计时与服务器时钟偏差小于五秒",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:44",
+      "note": "依赖 I-142、I-143。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-062",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-142', 'I-143']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-142",
+          "I-143"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-145",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:45"
+    },
+    {
+      "qid": "Q-063",
+      "title": "控制台观察窗与动效：会话卡片墙、上下文仪表与六条动效",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第六件",
+      "close_criterion": "页面显示与后台真实状态偏差不超过五秒；六条动效逐项在档可验；密度上限四条数值达标；机主令先看效果，本件优先交付",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:45",
+      "note": "依赖 I-142、I-143。机主 2026-10-09 令先看效果，本件在五队列内优先于 I-144、I-145 交付。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-063",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-142', 'I-143', 'I-144', 'I-145']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-142",
+          "I-143",
+          "I-144",
+          "I-145"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-146",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:47"
+    },
+    {
+      "qid": "Q-064",
+      "title": "控制台干预面板：注入消息与停止会话两动作",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第七件",
+      "close_criterion": "注入经宿主服务恢复后发送、停止经宿主服务终止驱动回路，各实测一次成功；两动作先弹确认再执行并写入事件台账",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:47",
+      "note": "依赖 I-146。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-064",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-146']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-146"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-147",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:49"
+    },
+    {
+      "qid": "Q-065",
+      "title": "控制台追溯抽屉与下查通道：云端下查任务队列与采集代理只读回传",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第八件",
+      "close_criterion": "已上行格子五秒内开出原始记录摘录；未上行格子三十秒内开出且全程有等待提示；下查全程只读",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:49",
+      "note": "依赖 I-142、I-143。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-065",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-142', 'I-143']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-142",
+          "I-143"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-148",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:50"
+    },
+    {
+      "qid": "Q-066",
+      "title": "控制台上下文自动切换守门：七成触发、交接卡、新会话接管、老会话归档",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第九件",
+      "close_criterion": "测试会话越过百分之七十触发切换，新会话接管且老会话归档可查，台账事件齐全，机主总开关实测生效，十分钟冷却与每日三次上限实测生效",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:50",
+      "note": "依赖 I-146、I-147。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-066",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-146', 'I-147']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-146",
+          "I-147"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-149",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:52"
+    },
+    {
+      "qid": "Q-067",
+      "title": "Eko 编排接入预登记：获取 Eko 副本并评估其工作流拆解与干预机制接口",
+      "goal_context": "机主 2026-10-09 指示建编排控制台作为个人智能体开发能力展示平台，本件为其立项草案第十件",
+      "close_criterion": "Eko 副本入指定目录并登记版本出处；接口评估报告入档；接力编排正式判据届时冻结",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:26:52",
+      "note": "机主 2026-10-09 授权从公共仓库获取 Eko。施工路线待定，先预登记。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-067",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-150",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 批准）",
+      "approved_at": "2026-10-09T10:26:53"
+    },
+    {
+      "qid": "Q-068",
+      "title": "lp_sync 领地未登记：宿主服务与同步代理目录不在任何路线独占区，提交自查对该目录文件只出警告不拦截",
+      "goal_context": "在做 I-131 收尾时运行 check_commit.py L5 自查，发现 lp_sync/i131_registered.json 触发领地未登记警告",
+      "close_criterion": "lanes.json 为 lp_sync/ 登记归属路线或显式归入共享区，此后引用该目录文件的提交自查不再出现领地未登记警告，判定以修改后的 lanes.json 与一次自查输出为准",
+      "submitted_by": "L5队",
+      "submitted_at": "2026-10-09T10:44:11",
+      "note": "证据：2026-10-09 提交 14b402a 自查输出警告 lp_sync/i131_registered.json 不在任何领地登记内；2026-10-08 提交 5fa2149 同样命中。lanes.json 归指挥部独占，施工队不能自改。建议：归 L5，理由是 host_service.py、task_index_formcheck.py、i131_registered.json 等 I-126/I-131 资产均由 L5 施工维护；默认动作：无人答复时维持现状，警告不拦截提交。",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-069",
+      "title": "I-142 控制台云端模块审计发现三处缺陷：建表缺 kind/goal 列潜伏炸新库、干预通道接受代理令牌、server 快照未随施工刷新",
+      "goal_context": "在做 G-002 编排控制台（I-142 控制台云端模块）开工核验时发现：事项已被并行同路会话施工关闭，我按判据独立复核云端实况与代码，发现三处新缺陷。",
+      "close_criterion": "三处缺陷逐一修复并留证：一，cloud_board/db.py 的 items 建表语句与 _EXTRA_ITEM_COLUMNS 补列清单补入 kind 与 goal 两列，全新环境 init_schema 后经 api/ledger/add 实测写入成功；二，/api/console/action 改为机主会话专用（auth.session_user），代理令牌调用实测返回四零三；三，cloud_board/server/ 快照刷新至与部署实况一致（含 api_console.py 与补列迁移），root 与 server 两树 diff 清零。出处指针自指与未来时间戳两处数据质量瑕疵随第一条一并修。",
+      "submitted_by": "L3队",
+      "submitted_at": "2026-10-09T10:51:55",
+      "note": "证据：一，repо ITEM_COLUMNS 已含 kind/goal（提交 911eb9f）但 db.py 建表与补列清单均无，现库靠手工 ALTER 存活，全新库必炸；二，实测代理令牌调 action 返回动作词校验错而非四零一，说明令牌已过鉴权层，与 I-042 公网收紧方向相悖；三，root db.py 缺 I-130 params extra 列迁移，server/ 无 api_console.py，部署源与在库快照脱节；四，console_sessions 现存 sess_i142_test 行 last_activity_at=12:00:00、sampled_at=12:00:05 均晚于实际时刻约七十一分钟，locus 指向云端行自身而非会话库原始行；五，state 接口缺自动开关与上下文上限两格子，进度与并行子节点无出处指针六处。同族领地缺口：cloud_board/ 未登记进任何路线独占区（援引 Q-068 lp_sync 同族），建议一并对齐。",
+      "depends_on": [],
+      "review": "rejected",
+      "lint_report": {
+        "qid": "Q-069",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-042', 'I-130', 'I-142']"
+          ],
+          [
+            "R5 语言规范",
+            "拒：['未登记缩写「EXTRA_ITEM_COLUMNS」']"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "reject",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-042",
+          "I-130",
+          "I-142"
+        ],
+        "merge_candidates": []
+      },
+      "rejected_by": "L3队",
+      "reject_reason": "提交人自撤：备注里出现词表外的代码标识符触发语言检查拒绝，另有一处错字；按可读性重报，内容不变",
+      "rejected_at": "2026-10-09T10:52:47"
+    },
+    {
+      "qid": "Q-070",
+      "title": "I-142 控制台云端模块审计发现三处缺陷：建表语句缺类别与目标两列潜伏炸新库、干预通道接受代理令牌、服务器代码快照未随施工刷新",
+      "goal_context": "在做 G-002 编排控制台（I-142 控制台云端模块）开工核验时发现：事项已被并行同路会话施工关闭，我按判据独立复核云端实况与代码，发现三处新缺陷。",
+      "close_criterion": "三处缺陷逐一修复并留证：一，云端建表脚本的事项表建表语句与老库补列清单补入类别与目标两列，全新环境初始化后经登记接口实测写入成功；二，控制台干预接口改为机主会话专用，代理令牌调用实测返回四零三；三，云端服务器代码快照目录刷新至与部署实况一致（含控制台模块与补列迁移），开发树与快照树逐文件比对零差异。出处指针自指与未来时间戳两处数据质量瑕疵随第一条一并修。",
+      "submitted_by": "L3队",
+      "submitted_at": "2026-10-09T10:52:47",
+      "note": "证据五组：一，事项表写入列清单已含类别与目标两列（提交九一一 eb 九 f），但建表语句与老库补列清单均无此两列，现网数据库靠手工加列存活，全新环境初始化后一切事项写入必报缺列错误；二，实测代理令牌调干预接口返回动作词校验错而非四零一，说明令牌已过鉴权层，与公网入口收紧事项的方向相悖；三，开发树数据库脚本缺参数镜像完整列的老库迁移，快照目录无控制台模块文件，部署源与在库快照脱节，违反快照入库纪律；四，会话快表现存测试行最后活动时刻与采样时刻均晚于实际时刻约七十一分钟，出处定位指向云端行自身而非会话库原始行；五，页面状态接口缺自动切换开关与上下文上限两格子，进度与并行读数子节点无出处指针六处。同族领地缺口：云端看板目录未登记进任何路线独占区（援引待审队列第六十八条同族），建议一并对齐。",
+      "depends_on": [],
+      "review": "linted",
+      "lint_report": {
+        "qid": "Q-070",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "建议合并：['Q-069']"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 ['I-142']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [
+          "I-142"
+        ],
+        "merge_candidates": [
+          {
+            "with": "Q-069",
+            "title": "I-142 控制台云端模块审计发现三处缺陷：建表缺 kind/goal 列潜伏炸新库、干预通道接受代理令牌、server 快照未随施工刷新",
+            "similarity": 0.77
+          }
+        ]
+      }
+    },
+    {
+      "qid": "Q-071",
+      "title": "派发纪律工具化：队伍常驻会话恢复发送为默认通道，测试会话不登记任务索引",
+      "goal_context": "机主 2026-10-09 会话指示：禁止一事一会的派发方式",
+      "close_criterion": "两路各一次连续派发复用同一常驻会话号；自检与测试会话不出现在任务索引；新会话仅限交接切换与新路线首发两种情形",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:54:11",
+      "note": "落地决定 D-047；涉及 lp_sync/host_service.py 与 tools/dispatch_session.mjs。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-071",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-157",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T10:54:11"
+    },
+    {
+      "qid": "Q-072",
+      "title": "指挥部消息通道：成员间留痕传话与群聊视图",
+      "goal_context": "机主 2026-10-09 会话指示：指挥部需要群聊与互相传话功能",
+      "close_criterion": "指挥部成员可按路线互发留痕消息并在控制台查看消息流；每条消息含发送方、接收方、时刻与关联事项号；全部消息入事件台账可查",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:54:11",
+      "note": "施工时序排在 I-146 之后；与控制台同站同源。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-072",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-146']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-146"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-158",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T10:54:12"
+    },
+    {
+      "qid": "Q-073",
+      "title": "自有智能体设施路线图：基于 zcode-cli 开源组件与 Eko 的运行时自有化评估",
+      "goal_context": "机主 2026-10-09 会话指示：基于 zcode 与 Eko 组件搭建自有智能体设施，权重高于独立桌面应用",
+      "close_criterion": "路线图报告入档：含 zcode-cli 可复用组件清单、Eko 接口评估、自有运行时分期路径与脱离客户端依赖的判据；报告经机主过目",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:54:12",
+      "note": "指挥部牵头，L2 配合；Eko 副本获取依 I-150 授权。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-073",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-150']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-150"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-159",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T10:54:13"
+    },
+    {
+      "qid": "Q-074",
+      "title": "会话级模型固定实测：建会话时指定模型的协议支持与多模型混跑验证",
+      "goal_context": "机主 2026-10-09 会话指示：指挥部成员可选标准底座并接入不同高级模型",
+      "close_criterion": "同一工作区内两个不同模型的会话各自跑通一轮问答且用量表记录提供方与模型字段正确；钉模型的方法写入派发工具说明",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T10:54:13",
+      "note": "会话库已有多模型用量记录（两个模型族四个提供方身份），本件做实会话级固定。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-074",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-160",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T10:54:14"
+    },
+    {
+      "qid": "Q-075",
+      "title": "控制台快照表残留测试行清理与ingest新鲜度机制",
+      "goal_context": "I-143 判据二对账发现云端 console_sessions 表存有三队 I-142 测试残留行 sess_i142_test，本地会话库无此会话；该行将永久计入活跃并行额度并在控制台页面显示幽灵卡",
+      "close_criterion": "残留行清除且接口加防护后实测：推送一个不存在于本地会话库的会话号上行被拒或到期自动出清，活跃计数不含幽灵行",
+      "submitted_by": "L5队",
+      "submitted_at": "2026-10-09T11:00:10",
+      "note": "修复建议归三队（console_sessions 表与 ingest 接口属 I-142 交付物）；防护形态建议二选一：上行时校验会话号在会话库存在，或快照行加过期机制超时出清",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-076",
+      "title": "控制台会话卡匿名问题：非宿主派发会话的路线事项映射回填口径",
+      "goal_context": "I-143 施工发现各队并行会话不经宿主服务派发，dispatch_registry 无其三元组，观察窗将显示匿名卡；需指挥部定回填口径（按会话目录定路线？按转录内容识别事项号？或接受匿名展示）",
+      "close_criterion": "指挥部对回填口径作出决定并留痕；决定后映射覆盖率有数字且口径外的会话匿名展示有明示",
+      "submitted_by": "L5队",
+      "submitted_at": "2026-10-09T11:00:10",
+      "note": "当前映射面：宿主服务派发会话全映射，历史三笔回填，非宿主会话空映射如实显示；采集层不猜测不编造",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-077",
+      "title": "自有驱动器验证线：基于 zcode-cli 核心包直建并驱动会话的影子施工验证",
+      "goal_context": "机主 2026-10-09 指示：把自有智能体设施路线图的三期立为正式事项，本件为第二期",
+      "close_criterion": "影子会话在客户端进程停止时完成一轮完整施工问答且记录形态与会话库一致；模型提供方鉴权配置自持；与客户端会话并行跑同一任务对账一致",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T14:02:27",
+      "note": "路线图第二期；I-160 钉模型实测结论并入本件。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-077",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-160']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-160"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-161",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T14:02:28"
+    },
+    {
+      "qid": "Q-078",
+      "title": "Eko 接力编排接入：依赖图接力由 Eko 工作流承载并接控制台干预通道",
+      "goal_context": "机主 2026-10-09 指示：把自有智能体设施路线图的三期立为正式事项，本件为第三期",
+      "close_criterion": "一串三个依赖事项由 Eko 工作流自动接力完成，每步台账齐全，中途人工干预一次生效；工作流快照与交接卡对账一致",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T14:02:28",
+      "note": "路线图第三期；依赖 I-150 副本到位与 I-149 切换守门结论。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-078",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-149', 'I-150']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-149",
+          "I-150"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-162",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T14:02:28"
+    },
+    {
+      "qid": "Q-079",
+      "title": "脱离客户端总验收：客户端降级为可选查看器的四判据验收",
+      "goal_context": "机主 2026-10-09 指示：把自有智能体设施路线图的三期立为正式事项，本件为第四期",
+      "close_criterion": "总判据四条全过：客户端进程停止下完整施工会话跑通且证据入账；两个模型族会话并行施工用量记录正确；客户端停机二十四小时派发监视干预审计四通道不中断；两份许可证合规文件在档",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T14:02:28",
+      "note": "路线图第四期；依赖 I-161 与 I-162。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-079",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-161', 'I-162']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-161",
+          "I-162"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-163",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T14:02:31"
+    },
+    {
+      "qid": "Q-080",
+      "title": "控制台观察窗整改第一班：并行额度实时口径、会话按线分组、未挂事项折叠、筛选全路线、控件视觉打磨",
+      "goal_context": "机主 2026-10-09 使用控制台后提出反馈：并行额度口径、会话按线收置、控件视觉打磨",
+      "close_criterion": "并行额度分子只计实时活跃会话（最近五分钟有活动或驱动进程在册），上限可在页面设置并留痕；会话卡按路线分组收置；未挂事项卡默认折叠；路线筛选覆盖全部路线；L8 与 L9 误挂 I-157 的挂接登记核查修正；注入停止转录出处四控件按设计令牌打磨",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T19:30:51",
+      "note": "机主 2026-10-09 反馈逐条对应；视觉按 Ciri 评审的设计令牌执行。",
+      "depends_on": [],
+      "review": "linted",
+      "lint_report": {
+        "qid": "Q-080",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "拒：['废止编号「第一班」']"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "reject",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      }
+    },
+    {
+      "qid": "Q-081",
+      "title": "参数实验室接口掉线修复：服务入口重挂实验室接口模块并加部署接口清单自检",
+      "goal_context": "机主 2026-10-09 使用控制台后提出反馈：参数实验室页面打不开一直显示加载中",
+      "close_criterion": "参数实验室页面恢复正常打开与数据加载；服务端入口挂载清单含实验室接口模块；部署流程新增接口清单自检，缺接口即报警，自检脚本入档",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T19:30:51",
+      "note": "最可能根因：2026-10-09 控制台上线部署后服务端入口未挂载 api_lab 模块，接口不在线致页面一直加载。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-081",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-164",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 反馈）",
+      "approved_at": "2026-10-09T19:30:51"
+    },
+    {
+      "qid": "Q-082",
+      "title": "指挥部页目标数据修正：目标镜像同步修复与需求归属校正",
+      "goal_context": "机主 2026-10-09 使用控制台后提出反馈：指挥部页面 G-002 没有描述且需求几乎都挂在 G-001 下",
+      "close_criterion": "G-002 的描述在页面正确显示；需求条目归属按真实出处校正（阶段目标相关需求挂 G-002）；页面渲染与目标库原文逐字一致",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T19:30:51",
+      "note": "云端目标镜像可能为旧快照，需求入册时归属字段多填 G-001。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-082",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-165",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 反馈）",
+      "approved_at": "2026-10-09T19:30:52"
+    },
+    {
+      "qid": "Q-083",
+      "title": "控制台观察窗反馈整改：并行额度实时口径、会话按线分组、未挂事项折叠、筛选全路线、控件视觉打磨",
+      "goal_context": "机主 2026-10-09 使用控制台后提出反馈：并行额度口径、会话按线收置、控件视觉打磨",
+      "close_criterion": "并行额度分子只计实时活跃会话（最近五分钟有活动或驱动进程在册），上限可在页面设置并留痕；会话卡按路线分组收置；未挂事项卡默认折叠；路线筛选覆盖全部路线；L8 与 L9 误挂 I-157 的挂接登记核查修正；注入停止转录出处四控件按设计令牌打磨",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T19:31:20",
+      "note": "机主 2026-10-09 反馈逐条对应；视觉按 Ciri 评审的设计令牌执行。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-083",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "建议合并：['Q-080']"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": [
+          {
+            "with": "Q-080",
+            "title": "控制台观察窗整改第一班：并行额度实时口径、会话按线分组、未挂事项折叠、筛选全路线、控件视觉打磨",
+            "similarity": 0.95
+          }
+        ]
+      },
+      "approved_as": "I-166",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 反馈）",
+      "approved_at": "2026-10-09T19:31:21"
+    },
+    {
+      "qid": "Q-084",
+      "title": "战略蓝图应然层数据模型：愿景到蓝图块的拆解登记，块含能力组件表现力描绘与服务业务线",
+      "goal_context": "机主 2026-10-09 指示：愿景与指挥部之间缺应然拆解层，要建战略蓝图",
+      "close_criterion": "蓝图块数据模型入册：每块含名称、应然描绘（应拥有的能力、组件、表现力）、来源愿景、服务业务线四要素；首批蓝图块由指挥部起草经机主核定；页面接口可读",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T19:55:40",
+      "note": "机主定三层结构：许愿池（愿景）、战略蓝图（应然层）、指挥部（执行层）；本件补当前缺失的应然拆解层。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-084",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-167",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T19:55:40"
+    },
+    {
+      "qid": "Q-085",
+      "title": "总览页三层重构：许愿池、战略蓝图、指挥部与业务线述职卡，全部可点击",
+      "goal_context": "机主 2026-10-09 指示：页面一重构为许愿池、战略蓝图、指挥部三层述职视图",
+      "close_criterion": "页面一按三层陈列：许愿池陈列愿景条目、战略蓝图陈列应然块、指挥部陈列 HQ 与业务线述职卡；业务线卡点开见其存在理由与所服务的蓝图块；HQ 卡点开见自我认知、压缩记忆与按时间排列的曾用现用对话；全部数据带出处指针",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T19:55:40",
+      "note": "依赖战略蓝图数据层与 I-165；视觉经 Ciri 评审；述职卡数据源为决定记录、交接卡与会话库。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-085",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-165']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-165"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-168",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T19:55:41"
+    },
+    {
+      "qid": "Q-086",
+      "title": "ZCode 客户端源码带题分析：交互承载、实时可见根因、多模型桥接、网关分流与结合形态",
+      "goal_context": "机主 2026-10-09 指示：派人分析 ZCode 客户端源码，带着问题与我们的编排愿景，不白白耗费令牌精搜",
+      "close_criterion": "按 ZCode客户端源码分析_问题清单_20261009.md 八题逐条回答，每题附源码文件与行号证据；给出结合形态推荐案与两案代价比较；遥测与数据出口清单在档；一个施工会话内完成，不做无目的精搜",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T20:41:25",
+      "note": "问题清单已入根目录；机主强调带题分析、控制令牌消耗。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-086",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-169",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 指示）",
+      "approved_at": "2026-10-09T20:41:25"
+    },
+    {
+      "qid": "Q-087",
+      "title": "历史会话挂接回填：按派发留痕与标题依据回填会话到路线与事项的登记",
+      "goal_context": "机主 2026-10-09 发现战情室 L2 与 L4 等路线基本为空、大量会话未登记进编排控制台",
+      "close_criterion": "在办路线在历史会话回填后显示真实会话数；回填依据逐条可查（派发留痕或会话标题与事项的直接对应）；无登记依据的会话一律不猜不挂",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T21:02:44",
+      "note": "挂接登记自控制台上线才存在，此前会话需按 logs/dispatch_session/ 留痕回填；根因已知，直接回填，不另立调查。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-087",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-170",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 反馈）",
+      "approved_at": "2026-10-09T21:02:45"
+    },
+    {
+      "qid": "Q-088",
+      "title": "代理令牌补登 L10 路线权限：云端令牌表更新并实测改派成功",
+      "goal_context": "机主 2026-10-09 指示 I-169 派 L10，改派被令牌无 L10 权限拦截",
+      "close_criterion": "云端代理令牌的路线权限含 L10；dispatch.assign 对 L10 路线实测改派成功一次；令牌变更留痕",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-09T21:02:45",
+      "note": "云端改派接口按令牌路线权限校验，现令牌缺 L10；lp_sync/_fix_token_lanes.py 为同型修复先例。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-088",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-171",
+      "approved_by": "指挥部 Beth（机主 2026-10-09 反馈）",
+      "approved_at": "2026-10-09T21:02:47"
+    },
+    {
+      "qid": "Q-089",
+      "title": "会话归属权威登记：认领动作自报会话号，机主会话单列分组",
+      "goal_context": "机主 2026-10-10 问：前端怎么才能拿到这个对话属于哪条业务线，最好的方式是什么",
+      "close_criterion": "施工会话认领事项时在认领记录中写入本会话号，控制台映射以认领记录为权威来源；客户端随手开的会话显示为机主会话组而非未挂事项；映射口径文档同步更新",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-10T09:54:19",
+      "note": "现状：映射只靠宿主服务派发登记，客户端自开会话一律未挂事项。双通道方案：认领自报加机主分组。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-089",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-174",
+      "approved_by": "指挥部 Beth（机主 2026-10-10 反馈）",
+      "approved_at": "2026-10-10T09:54:20"
+    },
+    {
+      "qid": "Q-090",
+      "title": "十度配平点方向舵通道尾面截断局部失效：侧滑角加舵偏合计超失速界致增量零效应",
+      "goal_context": "I-173 首次正式执行发现（airworthiness/results/aw_20261010_095508_bank10_lateral/verdict.json tail_clip 节）：十度横侧向评估中方向舵输入矩阵列全零，复算确认机身侧滑角十一度加方向舵偏合计二十四度超过尾面平板失速截断界二十度，增量落在截断平台上。此发现直接解释在案的方向舵权限问题，处置方向（放宽截断界、修配平减少侧滑、或结构处置）待裁。",
+      "close_criterion": "给出方向舵通道在截断平台上的处置决定：修模型、修配平或接受并记录，附在环或离线证据",
+      "submitted_by": "L2队",
+      "submitted_at": "2026-10-10T09:59:21",
+      "note": "I-173 首次执行产出；管线已自动检测并在报告标注（tail_clip 状态与近零列），后续任何构型评估都会自动携带该读数",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-091",
+      "title": "周期矩阵口径的周期项恒为零：力矩对角速度偏导不随拍相位变化，弗洛凯判读退化为常数阻尼判读",
+      "goal_context": "I-173 建线对账发现（对账消息已发 L4 队）：I-102 的 periodic_A 资产在二度与十度配平点给出的周期项范数为 1e-12 量级（数值噪声），且 A0 对配平点不敏感。原因是模型的旋转阻尼为常数系数项，拍翼周期力对其角速度导数的调制为零。S6 周期判读因此退化为常数旋转阻尼的拍周期衰减判读，非真周期时变判读。真周期判读需扩状态集口径（例如含翼态或力对状态的偏导），属 L4 理论域。",
+      "close_criterion": "L4 给出真周期时变判读的状态集定义与实现，或论证本模型不存在需弗洛凯判读的周期时变结构",
+      "submitted_by": "L2队",
+      "submitted_at": "2026-10-10T09:59:21",
+      "note": "I-173 首次执行产出；管线 S6 已带周期项范数检测与退化声明，读数不会被误读为真周期判读",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-092",
+      "title": "术语登记册待补程序接口词：适航性管线契约与代码的语言检查误拦",
+      "goal_context": "I-173 收尾时语言检查发现：airworthiness 契约与代码文件中的程序接口标识符（ endorsements 条目键、C_rows、SLIP_K 等）被 langcheck 未登记缩写类拦截。glossary.json 属 L3 领地，L2 无法直接增补。交付报告已改用中文短名规避，机器可读契约的键名为程序接口需保留英文。",
+      "close_criterion": "glossary.json 增补管线接口词目或 langcheck 增加代码标识符豁免规则",
+      "submitted_by": "L2队",
+      "submitted_at": "2026-10-10T09:59:21",
+      "note": "在案同类判例：standalone 脚本 ERROR 缩写误拦（L8 线）",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-093",
+      "title": "cloud_board 领地未登记：云端看板服务端与部署镜像目录不在任何路线独占区，提交自查对该目录文件只出警告不拦截",
+      "goal_context": "在做 I-136 部署云端镜像与提交自查时，cloud_board/app 与 cloud_board/server 文件触发领地未登记警告，与 Q-068 的 lp_sync 缺口同族",
+      "close_criterion": "lanes.json 为 cloud_board/ 登记归属路线或显式归入共享区，此后该目录文件的提交自查不再出现领地未登记警告，判定以修改后的 lanes.json 与一次自查输出为准",
+      "submitted_by": "L5队",
+      "submitted_at": "2026-10-10T10:37:48",
+      "note": "证据：2026-10-10 提交 a7e73d0 自查输出五条 cloud_board 警告。历史出处：协作架构 D-017 曾把 cloud_board 登记给 L3，现行 lanes.json 无此条目，属登记遗失非从未登记。建议：归 L5，理由是 I-130/I-136/I-144 起的云端部署与镜像更新均由 L5 执行；默认动作：无人答复时维持现状，警告不拦截提交。",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-094",
+      "title": "派发队列落地：宿主服务轮询派发请求文件并自动派活",
+      "goal_context": "机主 2026-10-11 指出不可能有空干预任务线底层执行，要求派发不经过 Kimi 侧命令确认",
+      "close_criterion": "指挥部写入约定格式的派发请求文件后，宿主服务在两轮心跳内自动派出并回读核验；全程不经 Kimi 侧命令确认；失败请求进重试队列并留痕；台账事件齐全",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-11T15:19:58",
+      "note": "配合 Kimi 侧自动放行双保险；落地后派发与确认环境解耦。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-094",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-175",
+      "approved_by": "指挥部 Beth（机主 2026-10-11 指示）",
+      "approved_at": "2026-10-11T15:19:59"
+    },
+    {
+      "qid": "Q-095",
+      "title": "十二键指令实际施加核对与操纵能力范围记录",
+      "goal_context": "在推进通用扑翼飞行器数字孪生框架与现阶段转弯验收时，需要核清十二键指令在不同构型上的实际作用及有证据支持的操纵能力范围。",
+      "close_criterion": "1、十二键逐项记录物理意义、单位、坐标系、允许范围、变化速率、默认值、执行位置与实际观测量，数量为十二且无缺项。\n2、用统一入口验证新增三键的非默认输入是否改变实际翼运动及气动力响应；每键分别给出已支持、未实现或证据不足的结论与运行证据；默认输入按既定标准锁和双跑逐字节一致规则复验。\n3、核对指令、关节运动、气动计算和离线分析所使用的构型与模型版本；逐项记录映射一致处与差异处，所有差异附源码或运行证据。\n4、操纵能力记录包含构型版本、需求关联、工况、输入组合、作动约束、时间窗、实际运动、力与力矩或状态变化、误差及证据；未知范围明确标为待验证。\n5、可控性与稳定性结论逐项注明状态集合、参考运动、工况范围、作动限制、扰动范围和验证时长；局部模型结果与全机结果分别记录。\n6、复用现有登记库和构型评估管线，同一记录结构可表达另一构型的声明样例；样例不作为该构型已通过物理或飞行验证的证据。",
+      "submitted_by": "HQ-Codex",
+      "submitted_at": "2026-10-11T16:07:19",
+      "note": "机主在本会话明确授权提交、查重、审理和派发。复用 I-138 的十二键定义与默认值、I-172 的发生器接入、I-173 的构型评估管线。本项核清实际作用与范围，不承诺完成所有构型的全包络飞行认证。主责 L2；涉及其他领地的修改按既有交接规则另行登记。",
+      "depends_on": [
+        "I-138",
+        "I-172",
+        "I-173"
+      ],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-095",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L2，依赖 ['I-138', 'I-172', 'I-173']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L2",
+        "suggested_depends_on": [
+          "I-138",
+          "I-172",
+          "I-173"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-176",
+      "approved_by": "HQ-Codex（机主授权）",
+      "approved_at": "2026-10-11T16:08:10"
+    },
+    {
+      "qid": "Q-096",
+      "title": "I-176 记录档勘误：气动层模型版本误标与 dA/freq 数值错误、九键计数矛盾、盘旋最好值与 I-103 档案不符、dA 与 dfreq 双层语义披露缺口",
+      "goal_context": "L2 新班对已关闭 I-176 做只读交付复核（服务通用扑翼飞行器数字孪生框架的指令核对与操纵能力记录可信性）时，沿现行源码与既有档案逐条核对六判据交付，发现记录档三处数值或版本错误、一处计数矛盾、一处与所引档案不符、两处适用范围披露缺口，全部证据为现行源码行号与既有档案文件，不需要新在环试验。",
+      "close_criterion": "1、在 logs/I-176_十二键核对与操纵能力记录_20261011.md 追加勘误节并逐条更正：气动层模型版本由冻结版 sane_dickinson 更正为 sane_dickinson_3d（config/sim_config.py 第181行，切换提交 39cfb9a，2026-09-26，三维类仅覆写 _wing_forces）；dA 允许范围由 ±0.30 rad 更正为两档限幅 DA_MAX=0.08 rad 与 DA_MAX_3D=0.175 rad、已验证域 ±0.10（config 第650与785行，0.30 为尾舵 DELTA_MAX）；freq 允许范围由 0.5 至 8.0 更正为自动驾驶仪 1.0 至 3.5 Hz（config 第882与935行，0.5 与 8.0 为 MULTISINE_FREQS 激励网格端点）；已验证操纵能力九键更正为八键已验证加 dfreq 待验证；盘旋现存最好由约十三至十五秒更正为加密扫描表 18.51 秒并注明孤峰坍缩实验 21.8 秒复现 13.5 秒判引擎非确定性幻影。2、勘误节补充 dA 双层语义差异说明（关节侧 flap_L=phi+dA 为角度偏置，气动侧 amp_cmd 为真幅值差动，wing_actuation.py 第204行对第141至146行）与 dfreq/dlag 关节不跟随的适用范围（dfreq 只写气动模型两翼运动学第106至107行，关节只收集体频率第83行；dlag 只写气动两翼 pitch_lag_s 第181至182行）。3、总账 I-176 关闭状态与冻结判据不动；勘误节每条附源码行号或档案文件名出处；HQ 复核认可。",
+      "submitted_by": "L2队",
+      "submitted_at": "2026-10-11T16:33:50",
+      "note": "复核方法：读记录档全文与 hq_intake 材料；逐条沿源码与档案核对。已核证据：默认态双跑 161444 与 161541 两档案 cmp 逐字节相同（I176_DEF2_A/B）；三新键零消费者结论复扫成立；USD 重导入时间线（现行 fwav_15dof.usd 10-07 21:06 对退役副本 09-30 与 10-07 14:12）支持第三节 URDF 与 USD 同步表述，Q-044 属重转换前提交的滞后待审条目。错误不影响判据二与关单结论方向。建议处置：仅追加勘误节（logs 属 L2 领地），不补跑试验。无人答复时的默认动作：只追加记录档勘误节并申报，不动代码、不动总账、不动冻结判据。",
+      "depends_on": [
+        "I-176"
+      ],
+      "review": "rejected",
+      "lint_report": {
+        "qid": "Q-096",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-103', 'I-176']"
+          ],
+          [
+            "R5 语言规范",
+            "拒：['未登记缩写「DA_MAX」', '未登记缩写「DA_MAX_3D」', '未登记缩写「DELTA_MAX」', '未登记缩写「MULTISINE_FREQS」']"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "reject",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-103",
+          "I-176"
+        ],
+        "merge_candidates": []
+      },
+      "rejected_by": "HQ-Anni（机主授权）",
+      "reject_reason": "与 Q-097 为同一问题的旧措辞版本；由 HQ 修订稿 Q-101 吸收，已入册 I-182，不重复立项。",
+      "rejected_at": "2026-10-12T11:11:46"
+    },
+    {
+      "qid": "Q-097",
+      "title": "I-176 记录档勘误（吸收 Q-096，仅为措辞修正）：气动层模型版本误标、两处限幅数值错误、九键计数矛盾、盘旋最好值与 I-103 档案不符、dA 与 dfreq 双层语义披露缺口",
+      "goal_context": "L2 新班对已关闭 I-176 做只读交付复核（服务通用扑翼飞行器数字孪生框架的指令核对与操纵能力记录可信性）时，沿现行源码与既有档案逐条核对六判据交付，发现记录档三处数值或版本错误、一处计数矛盾、一处与所引档案不符、两处适用范围披露缺口，全部证据为现行源码行号与既有档案文件，不需要新在环试验。Q-096 内容相同，因四处配置键名被语言规范规则误拦（与 Q-092 同族误报），本条为措辞修正版，请 HQ 销 Q-096。",
+      "close_criterion": "1、在 logs/I-176_十二键核对与操纵能力记录_20261011.md 追加勘误节并逐条更正：气动层模型版本由冻结版 sane_dickinson 更正为三维后端 sane_dickinson_3d（config/sim_config.py 第181行，切换提交 39cfb9a，2026-09-26，三维类仅覆写机翼力求值，其余继承冻结版）；dA 允许范围由正负 0.30 弧度更正为两档限幅：老幅值差动路径限幅第650行现值 0.08 弧度、三维幅值差动路径限幅第785行现值 0.175 弧度且已验证域正负 0.10（0.30 为第620行尾舵偏角限幅，与 dA 无关）；freq 允许范围由 0.5 至 8.0 更正为自动驾驶仪拍频限幅 1.0 至 3.5 赫兹（第882与935行；0.5 与 8.0 是第812行多正弦辨识激励频率网格的端点，不是指令限幅）；已验证操纵能力九键更正为八键已验证加 dfreq 待验证；盘旋现存最好由约十三至十五秒更正为加密扫描表最好 18.51 秒并注明孤峰坍缩实验 21.8 秒复现 13.5 秒判引擎非确定性幻影（引用两张 I103 汇总表）。2、勘误节补充 dA 双层语义差异说明（关节侧拍动目标为波形角加偏置，气动侧为真幅值差动，wing_actuation.py 第204行对第141至146行，两波形仅波峰重合）与 dfreq、dlag 关节不跟随的适用范围（dfreq 只写气动模型两翼运动学第106至107行，关节只收集体频率第83行；dlag 只写气动两翼俯仰滞后第181至182行，关节扭转用固定默认滞后）。3、总账 I-176 关闭状态与冻结判据不动；勘误节每条附源码行号或档案文件名出处；HQ 复核认可。",
+      "submitted_by": "L2队",
+      "submitted_at": "2026-10-11T16:34:36",
+      "note": "复核方法：读记录档全文与 hq_intake 材料；逐条沿源码与档案核对。已核成立的证据：默认态双跑 161444 与 161541 两档案逐字节相同（标签 I176_DEF2_A/B）；三新键零消费者结论复扫成立；现行 fwav_15dof.usd（10-07 21:06）与两份退役副本（09-30、10-07 14:12）的时间线支持第三节 URDF 与 USD 同步表述，Q-044 属重转换前提交的滞后待审条目。五处错误不影响判据二结论与关单方向。建议处置：仅追加勘误节（logs 属 L2 领地），不补跑在环试验。无人答复时的默认动作：只追加记录档勘误节并申报，不动代码、不动总账、不动冻结判据；Q-096 请一并销项。",
+      "depends_on": [
+        "I-176"
+      ],
+      "review": "rejected",
+      "lint_report": {
+        "qid": "Q-097",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "建议合并：['Q-096']"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-103', 'I-176']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-103",
+          "I-176"
+        ],
+        "merge_candidates": [
+          {
+            "with": "Q-096",
+            "title": "I-176 记录档勘误：气动层模型版本误标与 dA/freq 数值错误、九键计数矛盾、盘旋最好值与 I-103 档案不符、dA 与 dfreq 双层语义披露缺口",
+            "similarity": 0.81
+          }
+        ]
+      },
+      "rejected_by": "HQ-Anni（机主授权）",
+      "reject_reason": "退回修订，问题成立：原稿引用 I-103 已作废扫描和孤峰定性作为有效成绩，并将缺少逐键证据的范围写为八键已验证，未纠正验收未通过与数学不可控的混同。HQ 已完成改写，由 Q-101 吸收并批准为 I-182，交 L2 队施工；本记录保留历史，不要求机主或施工队重新提交。",
+      "rejected_at": "2026-10-12T11:11:46"
+    },
+    {
+      "qid": "Q-098",
+      "title": "外部智能体文件桥：账本写操作请求走文件队列由宿主服务代执行",
+      "goal_context": "Codex 侧经理会话派活与记账被其沙箱断网拦截（WinError 10013），机主 2026-10-11 要求想办法",
+      "close_criterion": "外部智能体把认领、收工、证据追加等账本写请求写成约定格式文件，宿主服务读到后代执行云端写入并回写结果文件；全程外援零网络权限；I-175 派发队列与本件共用同一文件桥通道；失败留痕可查",
+      "submitted_by": "指挥部 Beth",
+      "submitted_at": "2026-10-11T16:38:17",
+      "note": "依赖 I-175 的队列通道；Codex 沙箱断网不改，桥在桥在。",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-098",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 未定，依赖 ['I-175']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "未定",
+        "suggested_depends_on": [
+          "I-175"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-177",
+      "approved_by": "指挥部 Beth（机主 2026-10-11 指示）",
+      "approved_at": "2026-10-11T16:38:34"
+    },
+    {
+      "qid": "Q-099",
+      "title": "战略蓝图接口出处指针字段名与控制台冻结形态不一致：/api/blueprints 每块 source 用 locator 而 I-142 冻结的出处指针四字段为 locus，消费方读 locus 得到空值",
+      "goal_context": "做 G-003 自有智能体设施所含的展示与接驳界面（蓝图 B-10）时，在 I-168 总览页消费蓝图接口出处指针遇到",
+      "close_criterion": "api_map.py 蓝图接口出处指针字段名与 api_console.py 出处指针四字段（kind/locus/excerpt/sampled_at）统一为 locus，云端部署后页面读回逐块 locus 非空且值同 locator 旧值",
+      "submitted_by": "L5队",
+      "submitted_at": "2026-10-11T17:40:33",
+      "note": "I-168 施工中发现：总览页消费 /api/blueprints 出处指针时 locus 字段为空（实为 locator），出处抽屉渲染报错；L5 已在前端做双字段兼容归一（board_ui/src/console/OverviewView.tsx），服务端未改动。修服务端属 cloud_board 数据层，跨路线申报。依据：cloud_board/api_map.py blueprints 函数 prov 构造用 locator 键；cloud_board/api_console.py _SOURCE_FIELDS 冻结 locus。",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-100",
+      "title": "降标准语义拦截通道缺口：汇报正文不经扫描，降标准推荐可随七段汇报直达机主",
+      "goal_context": "机主 2026-10-12 质询本队翻覆治理三选一上报为何未被自动否决时发现：I-124 降标准语义拦截装置按现行实现只挂在 intake 申报与评审决定两条通道，items_registry/langcheck.py 的 scan_standards 函数文档写明提交信息与文档检查不触发本类，cloud_board/rules.py 只在申报 lint 与 check_decide 调用它。工作汇报正文没有任何机器闸口扫描降标准语义，本队 L4 上一份七段汇报的推荐选项乙案验收工况改为五度坡度与丙案判据降档因此未经拦截直达机主。本队已当面撤回该推荐。",
+      "close_criterion": "汇报类文本在送达机主前经降标准语义扫描或经等价的构造级闸口，指挥部批准覆盖范围与实施方案；若指挥部裁定汇报通道维持审理人人工把关则记录该决定并关闭",
+      "submitted_by": "L4队",
+      "submitted_at": "2026-10-12T09:14:00",
+      "note": "本条目只登记缺口本身。实施方案属登记库工具领地归三队，扩大拦截范围属机制契约变更须指挥部与机主批准。机主 2026-10-12 质询为本条目来源证据。",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-101",
+      "title": "十二键作用记录纠正与有效证据边界核对：吸收 Q-097 和 Q-096",
+      "goal_context": "服务通用扑翼飞行器数字孪生框架。当前构型的十二键声明、实际关节运动、力模型运动和能力证据必须分别有可追溯记录。I-176 新班复核发现原报告存在事实错误与证据越界；本项纠正交付记录，明确已证实、未实现和证据不足的范围，为后续模型、执行链和控制施工提供依据。",
+      "close_criterion": "1、逐项对照 I-176 原六条判据，追加交付勘误和证据核对表，分别标明证据齐全、证据缺失或待核；保留原文历史，明确错误陈述的替代文本，不以本次勘误完成代替原判据全部通过。\n2、现行构型十二键逐项记录物理意义、单位、坐标系、默认值、配置限幅、变化速率、指令读取位置、关节目标、气动运动学和观测量；配置限幅、已测试输入范围与已验证能力范围分列，未知字段明确标注，每个非空结论附源码或有效运行出处。\n3、构型与模型来源表分别列出现行在环三维后端、关节驱动、离线分析和其他被引用路径的实际绑定；披露翼幅差动的角度偏置与幅值差动差异，以及频率差动、滞后差动在关节与力模型的不同作用；共享参数不得作为模型或运动一致的证明。\n4、逐键区分声明存在、源码消费者存在、实际运行效应已验证、未实现和证据不足；撤销无逐键证据支持的九键或八键全部已验证表述；默认双跑只证明对应默认运行复现，三新键非默认效应缺少运行证据的事实如实记录，不用默认双跑替代非默认验证。\n5、I-103 被作废的扫描和孤峰定性仅可作为已作废历史记录，不用于有效最好成绩、稳定范围或不可控结论；引用 I-110 等有效记录时注明实际构型、输入、工况、时间窗与适用范围；巡航跟踪通过、盘旋验收未通过、辨识留出误差与数学可控性或稳定性分别表述，缺少认证依据时明确证据不足。\n6、复用现有登记库与构型评估资产，记录结构可表达需求关联、构型和模型版本、作动限制、工况、时间窗、观测响应、误差及证据；另一假想构型以相同十二键结构声明，未知值不继承现行构型的能力结论；逐项列出最小补证或修复建议供 HQ 审理，附源码及证据出处，HQ 独立复核认可后关闭。",
+      "submitted_by": "HQ-Anni（机主授权）",
+      "submitted_at": "2026-10-12T11:10:13",
+      "note": "吸收 Q-097 与 Q-096 的问题和有效源码证据。HQ 不批准原稿继续使用作废扫描、把待验证改为已验证或据失败记录推断一般不可控的处置。当前登记工具无原记录修订接口，因此由 HQ 重新提交修订稿，原提案以有理由的退回记录保留并关联新稿。实施范围为现有记录纠正与只读证据核对，不修改控制器或理论内核，不启动新在环试验，不改变 I-176 历史关闭状态和原验收判据。发现需要代码或试验的缺口时另提 Q，由 HQ 决定后施工。",
+      "depends_on": [
+        "I-176"
+      ],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-101",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-176']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-176"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-182",
+      "approved_by": "HQ-Anni（机主授权）",
+      "approved_at": "2026-10-12T11:11:40"
+    },
+    {
+      "qid": "Q-102",
+      "title": "翼幅差动两层增量语义统一与默认回归：承接 I-182",
+      "goal_context": "服务通用扑翼飞行器数字孪生框架的真实操纵能力核查。I-182 已指出同一个 dA 指令在关节目标中改变拍动中置，在气动运动学中改变拍动幅值。既有十二键契约明确 dA 是左右翼幅值差动，现有两层实现不能代表同一种物理动作。本项先落实这一已定义通道的共同含义与离线一致性，为之后的真实关节响应和操纵能力范围试验提供可用输入，不承诺完成全机稳定范围认证。",
+      "close_criterion": "1、实施前登记本项适用构型、指令来源、左右翼镜像坐标转换、拍动相位来源、启动斜坡、有效限幅和适用开关；dA 仍按既有契约为左翼幅值加 dA、右翼幅值减 dA，单位弧度，不改为中置偏置；跨层比较的采样时点和误差要求在取验收数据前确定。\n2、在既有作动和气动路径中复用同一幅值差动转换规则，关节目标的差动增量与气动运动学的差动增量按相同物理定义生成；相位推进次数和原子发布规则保持可追溯，禁止仅增加外观运动而仍由另一套不一致含义计算气动力。其他通道及基础运动仍存在的差异逐项保留说明，不宣称整套运动已经一致。\n3、完整拍周期的正、负和零差动样例证明该输入改变幅值而不改变中置；左右翼经镜像坐标转换后与既有契约一致，差动增量在所登记相位与条件下逐项一致；启动与限幅边界、频率变化、拍动与停拍条件以及波形发生器已有开关路径的适用性逐项检查，缺失支持明确记录并申报。\n4、沿既有影子和开关机制保留兼容路径；关闭新实现时既有基准逐位不变，零差动样例不引入额外动作；新实现的默认启用变更须在本项验收后由 HQ 登记决定。检查代码、输入、输出和故障样例附出处，不仅检查程序是否执行成功。\n5、交付修复代码、逐项离线验证、构型及模型来源和剩余差异清单；明确本次为源码和离线一致性验证，不能替代真实关节运动、在环气动力响应或稳定包络认证；不改变构型物理参数、气动力公式、控制增益或控制器预算改动。\n6、复用现有实验与构型评估入口提出后续最小在环验证配方，分别记录指令、关节目标、实际关节运动、力模型输入及力与力矩；预登记工况、输入、时间窗、误差预算和完整重复实验判据，由 HQ 审理后另行执行；本项不启动新的在环仿真。",
+      "submitted_by": "HQ-Anni（机主授权）",
+      "submitted_at": "2026-10-12T14:17:37",
+      "note": "主线下一步决定：优先纠正同一 dA 指令在两层的物理含义，按既有幅值差动契约实施。查重范围为在办事项及待审的波形、作动和实际作用问题；I-138 已关闭且只覆盖契约声明，I-176 与 I-182 是核查记录，本项不是重复关单。配置、关节驱动及气动运动学位于 L2 现有领地；不改 L1 控制器或 L4 理论内核。尊重本路线已有批准队列与在制限制，有其他已批准优先事项可施工时不并行认领本项。复用已有工具和观察字段，实验设施工作由现有事项承接，本项不重复建设。后续在环验证必须用已具备完整资格检查的正式通道，本项只提出配方，不提前运行。",
+      "depends_on": [
+        "I-182"
+      ],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-102",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 ['I-138', 'I-176', 'I-182']"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [
+          "I-138",
+          "I-176",
+          "I-182"
+        ],
+        "merge_candidates": []
+      },
+      "approved_as": "I-190",
+      "approved_by": "HQ-Anni（机主授权）",
+      "approved_at": "2026-10-12T14:25:28"
+    },
+    {
+      "qid": "Q-103",
+      "title": "五队总览页生成器入职卡路径更新（I-180 收置配套）",
+      "goal_context": "I-180 已把根目录入职卡统一收置到 organization/onboarding/，根目录同名文件改为兼容转向说明。board_ui/scripts/gen_overview_data.py 属五队领地，其第 29、30 行硬编码读取根目录入职卡_Beth_HQ_20261011.md 与入职卡_Anni_HQ_20261010.md，重新生成总览页数据前需把两处路径改指 organization/onboarding/ 同名文件，否则页面自我认知与记忆节将读到转向说明而非卡片正文。",
+      "close_criterion": "gen_overview_data.py 两处入职卡路径改指 organization/onboarding/ 同名文件，重新生成 overview_data.ts 后总览页 Beth 与 Anni 卡的压缩记忆与曾用对话内容与卡片正文一致，提交自查通过",
+      "submitted_by": "L3队",
+      "submitted_at": "2026-10-12T17:26:32",
+      "note": "【机主说明】这是入职资料搬家后的收尾配套：搬家由三队完成（I-180），但读取总览页数据的脚本属五队地盘，三队不越界代改。改动本身只有两行路径，请指挥部派五队或授权三队执行。依据：I-180 收置检查（organization/check_onboarding.py 七十二项全过）与 lanes.json 五队独占 board_ui/。",
+      "depends_on": [],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-104",
+      "title": "辨识模型控制资格字段补齐需求：真实产物缺状态坐标、输入清单、尺度与验证记录对象",
+      "goal_context": "I-185 施工中发现并按 I-183 冻结规格保守处理：三份在案真实辨识产物 logs/ident_matrix 下 I055 系列与 logs/experiments/817d550f1d5d_20261006_084653 的 I085 正式模型均未声明 state_names、input_names、scales 与 validation 对象，I-183 字段表 model 行要求这些字段逐项声明。I-185 读取器已按保守规则处理：无状态坐标与尺度时读数按诊断口径解释，资格字段缺失返回待核实，not_for_control 为真保留禁用与原因原文。为让真实模型有朝一日能按 I-183 规则评定合格，需生产方按字段表补齐声明字段；补齐前资格保持待核实或仅诊断，不猜测。",
+      "close_criterion": "辨识生产方产物按 I-183 字段表补齐 state_names、input_names、scales 与 validation 对象或指挥部裁定旧档维持诊断口径并将本条关闭，附生产方或指挥部书面记录",
+      "submitted_by": "L4队",
+      "submitted_at": "2026-10-12T18:12:41",
+      "note": "依据 I-183 首批接口规格正式版兼容迁移表 model_no_qualification 行与未决问题节：模型坐标与尺度缺失由 I-185 保守处理并向 Doro 提生产方补齐需求。本队不跨领地改生产方代码。",
+      "depends_on": [
+        "I-183"
+      ],
+      "review": "pending"
+    },
+    {
+      "qid": "Q-105",
+      "title": "I-178 判据二真实链路专用验收：执行会话自交 closed 结果经内核正式关单",
+      "goal_context": "I-178 第四批收尾要求补正式状态回写的真实证据：用一个真实获批事项让真实 ZCode 执行会话自己提交带运行号的 closed 结果，由常驻内核按既有账本规则正式关闭本事项",
+      "close_criterion": "本事项由被派发的真实 ZCode 执行会话自交带运行号的 closed 结果，内核经既有账本规则（ledger.close 全校验）正式关闭本事项并返回回执；同一结果重复提交两次不重复更新；过程留痕齐全即视为本事项判据通过",
+      "submitted_by": "L3队",
+      "submitted_at": "2026-10-13T08:55:42",
+      "note": "【机主说明】这是 I-178 收尾的专用验收事项：Beth 2026-10-13 08:44 指令明确要求用一个真实获批的专用验收事项验证内核按既有规则改变正式状态，reviewer 为 beth。本事项自身就是被测对象：它的正式关闭由被测流程完成，不用于其他工程目的。依据：Beth 2026-10-13 08:44 收尾指令原文。",
+      "depends_on": [],
+      "review": "approved",
+      "reviewer": "beth",
+      "approved_as": "I-200",
+      "approved_by": "Beth（2026-10-13 08:44 收尾指令授权）",
+      "approved_at": "2026-10-13T08:56:00"
+    }
+  ]
+}

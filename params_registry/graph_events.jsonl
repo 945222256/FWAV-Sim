@@ -1,0 +1,1 @@
+{"at": "2026-10-08T10:58:41", "param": "aero.rho_air", "action": "retire", "affected": ["vehicle.mass.total", "ctrl.ref.cruise_vx"]}

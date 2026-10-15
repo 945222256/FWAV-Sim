@@ -1,0 +1,144 @@
+=== t=0.008 step=1 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 112, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.008 step=1 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 147, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.008 step=1 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 112, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.008 step=1 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 147, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.008 step=1 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 112, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.008 step=1 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 147, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.008 step=1 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 112, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.025 step=3 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 148, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+
+=== t=0.025 step=3 ===
+Traceback (most recent call last):
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 225, in __call__
+    self._call_inner(dt)
+    ~~~~~~~~~~~~~~~~^^^^
+  File "G:\Playground\isaac_flapper_sim\modules\aero_solver.py", line 404, in _call_inner
+    _Fk, _Tk = self.model.compute_forces(
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pos_world, quat_world, v_air, vel_angular,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self._sim_time + _k * _T_per / _K)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\Playground\isaac_flapper_sim\agentic_core\audits\I-209\probes\probe7_cycle_preview.py", line 148, in spy
+    raise RuntimeError("注入：预览中途求值失败（k=3）")
+RuntimeError: 注入：预览中途求值失败（k=3）
+

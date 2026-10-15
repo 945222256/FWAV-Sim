@@ -1,0 +1,16 @@
+{
+  "written_keys": 319,
+  "archive_count": 17,
+  "checks": {
+    "all_metadata_read_back": true,
+    "core_fields_unchanged": true,
+    "archive_unchanged": true,
+    "local_core_unchanged": true,
+    "local_archive_bytes_unchanged": true,
+    "metadata_survived_sync": true
+  },
+  "all_data_checks_passed": true,
+  "live_projection_active": false,
+  "server_revision_guard": "Not deployed: current sync API has a transaction and content digest, not compare-and-swap. Immediate preflight and complete readback retained.",
+  "checked_at_utc": "2026-10-15T08:45:15.201262+00:00"
+}

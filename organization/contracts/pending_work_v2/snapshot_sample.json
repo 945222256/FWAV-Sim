@@ -1,0 +1,1190 @@
+{
+ "contract_version": "pending-work-v2",
+ "snapshot_id": "pw-20261014T224854-63702198b144",
+ "sampled_at": "2026-10-14T22:48:50.595-07:00",
+ "source_anchor": {
+  "state_last_tick_at": "2026-10-14T22:48:50.861",
+  "items_generated_at": "2026-10-15T13:48:51",
+  "oldest_source_age_s": 3.7
+ },
+ "sample_validity": {
+  "max_age_s": 300,
+  "anchored_to": "最旧来源时刻（不因重新生成快照续期）",
+  "expires_at": "2026-10-14T22:53:50-07:00"
+ },
+ "source_versions": {
+  "items": {
+   "origin": "cloud",
+   "generated_at": "2026-10-15T13:48:51",
+   "count": 234,
+   "read_error": null
+  },
+  "kernel_state": {
+   "generation": 17,
+   "last_tick_at": "2026-10-14T22:48:50.861",
+   "age_s": 3.7,
+   "fresh": true,
+   "tasks": 56,
+   "runs": 48,
+   "read_error": null
+  },
+  "lane_workers_config": {
+   "version": {
+    "mtime_ms": 1791975050264,
+    "size": 53
+   },
+   "read_error": null
+  },
+  "roster": {
+   "version": {
+    "mtime_ms": 1792042718737,
+    "size": 1216
+   },
+   "read_error": null
+  }
+ },
+ "completeness": {
+  "status": "complete",
+  "reasons": []
+ },
+ "summary": {
+  "total_pending": 10,
+  "by_category": {
+   "ready": 0,
+   "waiting_conditions": 7,
+   "awaiting_orchestration": 2,
+   "needs_verification": 1
+  },
+  "exclusions": {
+   "requirement": {
+    "count": 5,
+    "note": "kind=requirement 非执行任务"
+   },
+   "claimed": {
+    "count": 2,
+    "note": "status=in_progress 且认领一致"
+   },
+   "pending_review": {
+    "count": 17,
+    "note": "status=pending_review 待审核"
+   },
+   "closed": {
+    "count": 174,
+    "note": "status=closed 已完成"
+   },
+   "test_channel": {
+    "count": 0,
+    "note": "kind=test 隔离通道，不进生产待领"
+   }
+  },
+  "needs_verification_count": 28,
+  "by_lane": {
+   "L1": {
+    "count": 3,
+    "items": [
+     "I-187",
+     "I-225",
+     "I-226"
+    ]
+   },
+   "L2": {
+    "count": 2,
+    "items": [
+     "I-222",
+     "I-224"
+    ]
+   },
+   "L4": {
+    "count": 2,
+    "items": [
+     "I-221",
+     "I-223"
+    ]
+   },
+   "L5": {
+    "count": 2,
+    "items": [
+     "I-211",
+     "I-212"
+    ]
+   }
+  },
+  "unassigned": {
+   "count": 1,
+   "items": [
+    "I-163"
+   ],
+   "note": "未分配路线的正式任务独立入口，不伪装成业务线"
+  }
+ },
+ "items": [
+  {
+   "item_id": "I-163",
+   "title": "脱离客户端总验收：客户端降级为可选查看器的四判据验收",
+   "kind": "task",
+   "status": "open",
+   "lane": null,
+   "goal": null,
+   "reviewer": null,
+   "owner": "HQ",
+   "category": "waiting_conditions",
+   "primary_reason": {
+    "code": "DEP_NOT_CLEARED",
+    "category": "waiting_conditions",
+    "sentence": "等待依赖满足：I-162",
+    "related": [
+     {
+      "item_id": "I-161",
+      "status": "closed",
+      "title": "自有驱动器验证线：基于 zcode-cli 核心包直建并驱动会话的影子施工验证",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-162",
+      "status": "open",
+      "title": "Eko 接力编排接入：依赖图接力由 Eko 工作流承载并接控制台干预通道",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "recovery": "依赖交付获批或事项关闭后自动可派",
+    "provenance": "dependency_policy.unmet_dependencies（与任务线同源实际判定）"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-161",
+      "status": "closed",
+      "title": "自有驱动器验证线：基于 zcode-cli 核心包直建并驱动会话的影子施工验证",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-162",
+      "status": "open",
+      "title": "Eko 接力编排接入：依赖图接力由 Eko 工作流承载并接控制台干预通道",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": "依赖交付获批或事项关闭后自动可派",
+   "evaluation": {
+    "at": null,
+    "validity": "ok",
+    "evaluator": "static_same_source",
+    "provenance": "dependency_policy 同源静态评估，未经内核实际准入"
+   },
+   "enqueue": {
+    "in_kernel_queue": false,
+    "request_ids": [],
+    "first_enqueued_at": null,
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": null
+   }
+  },
+  {
+   "item_id": "I-187",
+   "title": "单变量动作实验配方与采集到结果卡贯通验证",
+   "kind": "task",
+   "status": "open",
+   "lane": "L1",
+   "goal": "G-002",
+   "reviewer": null,
+   "owner": "L1队",
+   "category": "waiting_conditions",
+   "primary_reason": {
+    "code": "DEP_NOT_CLEARED",
+    "category": "waiting_conditions",
+    "sentence": "等待依赖满足：I-186",
+    "related": [
+     {
+      "item_id": "I-182",
+      "status": "closed",
+      "title": "十二键作用记录纠正与有效证据边界核对：吸收 Q-097 和 Q-096",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-184",
+      "status": "closed",
+      "title": "原值记录资格检查与完整双跑比较修正",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-186",
+      "status": "pending_review",
+      "title": "记录仪与实验管线保存实际条件和结构化判据结果",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "recovery": "依赖交付获批或事项关闭后自动可派",
+    "provenance": "dependency_policy.unmet_dependencies（与任务线同源实际判定）"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-182",
+      "status": "closed",
+      "title": "十二键作用记录纠正与有效证据边界核对：吸收 Q-097 和 Q-096",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-184",
+      "status": "closed",
+      "title": "原值记录资格检查与完整双跑比较修正",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-186",
+      "status": "pending_review",
+      "title": "记录仪与实验管线保存实际条件和结构化判据结果",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": "依赖交付获批或事项关闭后自动可派",
+   "evaluation": {
+    "at": null,
+    "validity": "ok",
+    "evaluator": "static_same_source",
+    "provenance": "dependency_policy 同源静态评估，未经内核实际准入"
+   },
+   "enqueue": {
+    "in_kernel_queue": false,
+    "request_ids": [],
+    "first_enqueued_at": null,
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": null
+   }
+  },
+  {
+   "item_id": "I-211",
+   "title": "参数实验室逐键语义接入与卡片主标题整改",
+   "kind": "task",
+   "status": "open",
+   "lane": "L5",
+   "goal": "G-001",
+   "reviewer": "ciri",
+   "owner": "L5队",
+   "category": "awaiting_orchestration",
+   "primary_reason": {
+    "code": "NOT_ENQUEUED",
+    "category": "awaiting_orchestration",
+    "sentence": "尚未进入内核派发队列，等待编排提交",
+    "recovery": "经批准的 task_submit 入队后由调度器安排",
+    "provenance": "kernel_state.tasks 无本事项请求"
+   },
+   "related": {
+    "dependencies": [],
+    "delivery_impact": []
+   },
+   "recovery": "经批准的 task_submit 入队后由调度器安排",
+   "evaluation": {
+    "at": null,
+    "validity": "ok",
+    "evaluator": "static_same_source",
+    "provenance": "dependency_policy 同源静态评估，未经内核实际准入"
+   },
+   "enqueue": {
+    "in_kernel_queue": false,
+    "request_ids": [],
+    "first_enqueued_at": null,
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": null
+   }
+  },
+  {
+   "item_id": "I-212",
+   "title": "参数实验室整机展示与参数阅读布局修订",
+   "kind": "task",
+   "status": "open",
+   "lane": "L5",
+   "goal": "G-001",
+   "reviewer": "ciri",
+   "owner": "L5队",
+   "category": "awaiting_orchestration",
+   "primary_reason": {
+    "code": "NOT_ENQUEUED",
+    "category": "awaiting_orchestration",
+    "sentence": "尚未进入内核派发队列，等待编排提交",
+    "recovery": "经批准的 task_submit 入队后由调度器安排",
+    "provenance": "kernel_state.tasks 无本事项请求"
+   },
+   "related": {
+    "dependencies": [],
+    "delivery_impact": []
+   },
+   "recovery": "经批准的 task_submit 入队后由调度器安排",
+   "evaluation": {
+    "at": null,
+    "validity": "ok",
+    "evaluator": "static_same_source",
+    "provenance": "dependency_policy 同源静态评估，未经内核实际准入"
+   },
+   "enqueue": {
+    "in_kernel_queue": false,
+    "request_ids": [],
+    "first_enqueued_at": null,
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": null
+   }
+  },
+  {
+   "item_id": "I-221",
+   "title": "周期与单次动态运动基元及共同轨迹提供者",
+   "kind": "task",
+   "status": "open",
+   "lane": "L4",
+   "goal": "G-001",
+   "reviewer": "fil",
+   "owner": "L4队",
+   "category": "needs_verification",
+   "primary_reason": {
+    "code": "PENDING_CONFLICT",
+    "category": "needs_verification",
+    "sentence": "该事项同时存在待核对冲突，详见待核对清单",
+    "provenance": "snapshot_conflict_check"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-219",
+      "status": "closed",
+      "title": "完整动作对象、九通道配方与参数装配实现",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-220",
+      "status": "pending_review",
+      "title": "统一内部节律、左右协调及历史预览服务",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": null,
+   "evaluation": {
+    "at": "2026-10-14T15:45:31.215",
+    "validity": "ok",
+    "evaluator": "kernel_admission_outcome_verified",
+    "provenance": "内核准入短语经当前同源事实复核（dependency_policy/lane_workers）"
+   },
+   "enqueue": {
+    "in_kernel_queue": true,
+    "request_ids": [
+     {
+      "request_id": "kt-kula-i221-rhythm-20261014",
+      "phase": "completed",
+      "dispatch_attempts": 1
+     },
+     {
+      "request_id": "beth-i221-partial-rework-20261015",
+      "phase": "completed",
+      "dispatch_attempts": 1
+     },
+     {
+      "request_id": "kt-kula-i221-status-propagation-rework-20261015",
+      "phase": "line_pending",
+      "dispatch_attempts": 0
+     }
+    ],
+    "first_enqueued_at": "2026-10-14T15:45:31.215",
+    "total_dispatch_attempts": 2
+   },
+   "execution_ref": {
+    "worker_id": "L4-w1",
+    "session_id": "sess_78376d8c-decc-4d12-9ea4-9fc922547921",
+    "run_id": "run-kt-kula-i221-rhythm-20261014-a1",
+    "dispatch_request_id": "kd-kt-kula-i221-rhythm-20261014-a1",
+    "kernel_phase": "completed"
+   }
+  },
+  {
+   "item_id": "I-222",
+   "title": "完整动作链的预热、钉住释放及双入口生命周期接入",
+   "kind": "task",
+   "status": "open",
+   "lane": "L2",
+   "goal": "G-001",
+   "reviewer": "fil",
+   "owner": "L2队",
+   "category": "waiting_conditions",
+   "primary_reason": {
+    "code": "DEP_NOT_CLEARED",
+    "category": "waiting_conditions",
+    "sentence": "依赖未清：['I-220', 'I-221']",
+    "source_text": "依赖未清：['I-220', 'I-221']",
+    "provenance": "kernel_admission_last_error",
+    "related": [
+     {
+      "item_id": "I-219",
+      "status": "closed",
+      "title": "完整动作对象、九通道配方与参数装配实现",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-220",
+      "status": "pending_review",
+      "title": "统一内部节律、左右协调及历史预览服务",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-221",
+      "status": "open",
+      "title": "周期与单次动态运动基元及共同轨迹提供者",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "recovery": "任务线复核时间 2026-10-14T22:49:28.909 后自动重读"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-219",
+      "status": "closed",
+      "title": "完整动作对象、九通道配方与参数装配实现",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-220",
+      "status": "pending_review",
+      "title": "统一内部节律、左右协调及历史预览服务",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-221",
+      "status": "open",
+      "title": "周期与单次动态运动基元及共同轨迹提供者",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": "任务线复核时间 2026-10-14T22:49:28.909 后自动重读",
+   "evaluation": {
+    "at": "2026-10-14T15:45:31.256",
+    "validity": "ok",
+    "evaluator": "kernel_admission_outcome_verified",
+    "provenance": "内核准入短语经当前同源事实复核（dependency_policy/lane_workers）"
+   },
+   "enqueue": {
+    "in_kernel_queue": true,
+    "request_ids": [
+     {
+      "request_id": "kt-kula-i222-rhythm-20261014",
+      "phase": "line_wait",
+      "dispatch_attempts": 0
+     }
+    ],
+    "first_enqueued_at": "2026-10-14T15:45:31.256",
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": "line_wait"
+   }
+  },
+  {
+   "item_id": "I-223",
+   "title": "外部动作运动学消费与施力来源回执接入",
+   "kind": "task",
+   "status": "open",
+   "lane": "L4",
+   "goal": "G-001",
+   "reviewer": "fil",
+   "owner": "L4队",
+   "category": "waiting_conditions",
+   "primary_reason": {
+    "code": "DEP_NOT_CLEARED",
+    "category": "waiting_conditions",
+    "sentence": "依赖未清：['I-220', 'I-221']",
+    "source_text": "依赖未清：['I-220', 'I-221']",
+    "provenance": "kernel_admission_last_error",
+    "related": [
+     {
+      "item_id": "I-219",
+      "status": "closed",
+      "title": "完整动作对象、九通道配方与参数装配实现",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-220",
+      "status": "pending_review",
+      "title": "统一内部节律、左右协调及历史预览服务",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-221",
+      "status": "open",
+      "title": "周期与单次动态运动基元及共同轨迹提供者",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "recovery": "任务线复核时间 2026-10-14T22:49:23.749 后自动重读"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-219",
+      "status": "closed",
+      "title": "完整动作对象、九通道配方与参数装配实现",
+      "requires": null,
+      "unmet": false
+     },
+     {
+      "item_id": "I-220",
+      "status": "pending_review",
+      "title": "统一内部节律、左右协调及历史预览服务",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-221",
+      "status": "open",
+      "title": "周期与单次动态运动基元及共同轨迹提供者",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": "任务线复核时间 2026-10-14T22:49:23.749 后自动重读",
+   "evaluation": {
+    "at": "2026-10-14T15:45:31.287",
+    "validity": "ok",
+    "evaluator": "kernel_admission_outcome_verified",
+    "provenance": "内核准入短语经当前同源事实复核（dependency_policy/lane_workers）"
+   },
+   "enqueue": {
+    "in_kernel_queue": true,
+    "request_ids": [
+     {
+      "request_id": "kt-kula-i223-rhythm-20261014",
+      "phase": "line_wait",
+      "dispatch_attempts": 0
+     }
+    ],
+    "first_enqueued_at": "2026-10-14T15:45:31.287",
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": "line_wait"
+   }
+  },
+  {
+   "item_id": "I-224",
+   "title": "新动作记录投影与原值目标和消费来源关联",
+   "kind": "task",
+   "status": "open",
+   "lane": "L2",
+   "goal": "G-001",
+   "reviewer": "fil",
+   "owner": "L2队",
+   "category": "waiting_conditions",
+   "primary_reason": {
+    "code": "DEP_NOT_CLEARED",
+    "category": "waiting_conditions",
+    "sentence": "依赖未清：['I-222', 'I-223']",
+    "source_text": "依赖未清：['I-222', 'I-223']",
+    "provenance": "kernel_admission_last_error",
+    "related": [
+     {
+      "item_id": "I-222",
+      "status": "open",
+      "title": "完整动作链的预热、钉住释放及双入口生命周期接入",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-223",
+      "status": "open",
+      "title": "外部动作运动学消费与施力来源回执接入",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "recovery": "任务线复核时间 2026-10-14T22:49:44.803 后自动重读"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-222",
+      "status": "open",
+      "title": "完整动作链的预热、钉住释放及双入口生命周期接入",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-223",
+      "status": "open",
+      "title": "外部动作运动学消费与施力来源回执接入",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": "任务线复核时间 2026-10-14T22:49:44.803 后自动重读",
+   "evaluation": {
+    "at": "2026-10-14T15:45:31.319",
+    "validity": "ok",
+    "evaluator": "kernel_admission_outcome_verified",
+    "provenance": "内核准入短语经当前同源事实复核（dependency_policy/lane_workers）"
+   },
+   "enqueue": {
+    "in_kernel_queue": true,
+    "request_ids": [
+     {
+      "request_id": "kt-kula-i224-rhythm-20261014",
+      "phase": "line_wait",
+      "dispatch_attempts": 0
+     }
+    ],
+    "first_enqueued_at": "2026-10-14T15:45:31.319",
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": "line_wait"
+   }
+  },
+  {
+   "item_id": "I-225",
+   "title": "原生节律所有权与控制器拍边接口接入",
+   "kind": "task",
+   "status": "open",
+   "lane": "L1",
+   "goal": "G-001",
+   "reviewer": "fil",
+   "owner": "L1队",
+   "category": "waiting_conditions",
+   "primary_reason": {
+    "code": "DEP_NOT_CLEARED",
+    "category": "waiting_conditions",
+    "sentence": "依赖未清：['I-220', 'I-222']",
+    "source_text": "依赖未清：['I-220', 'I-222']",
+    "provenance": "kernel_admission_last_error",
+    "related": [
+     {
+      "item_id": "I-220",
+      "status": "pending_review",
+      "title": "统一内部节律、左右协调及历史预览服务",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-222",
+      "status": "open",
+      "title": "完整动作链的预热、钉住释放及双入口生命周期接入",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "recovery": "任务线复核时间 2026-10-14T22:48:46.671 后自动重读"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-220",
+      "status": "pending_review",
+      "title": "统一内部节律、左右协调及历史预览服务",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-222",
+      "status": "open",
+      "title": "完整动作链的预热、钉住释放及双入口生命周期接入",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": "任务线复核时间 2026-10-14T22:48:46.671 后自动重读",
+   "evaluation": {
+    "at": "2026-10-14T15:45:31.350",
+    "validity": "ok",
+    "evaluator": "kernel_admission_outcome_verified",
+    "provenance": "内核准入短语经当前同源事实复核（dependency_policy/lane_workers）"
+   },
+   "enqueue": {
+    "in_kernel_queue": true,
+    "request_ids": [
+     {
+      "request_id": "kt-kula-i225-rhythm-20261014",
+      "phase": "ready",
+      "dispatch_attempts": 0
+     }
+    ],
+    "first_enqueued_at": "2026-10-14T15:45:31.350",
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": "ready"
+   }
+  },
+  {
+   "item_id": "I-226",
+   "title": "完整动作链的完整任务观察与独立接入验收",
+   "kind": "task",
+   "status": "open",
+   "lane": "L1",
+   "goal": "G-001",
+   "reviewer": "doro",
+   "owner": "L1队",
+   "category": "waiting_conditions",
+   "primary_reason": {
+    "code": "DEP_NOT_CLEARED",
+    "category": "waiting_conditions",
+    "sentence": "依赖未清：['I-222', 'I-223', 'I-224']",
+    "source_text": "依赖未清：['I-222', 'I-223', 'I-224']",
+    "provenance": "kernel_admission_last_error",
+    "related": [
+     {
+      "item_id": "I-222",
+      "status": "open",
+      "title": "完整动作链的预热、钉住释放及双入口生命周期接入",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-223",
+      "status": "open",
+      "title": "外部动作运动学消费与施力来源回执接入",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-224",
+      "status": "open",
+      "title": "新动作记录投影与原值目标和消费来源关联",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "recovery": "任务线复核时间 2026-10-14T22:49:07.540 后自动重读"
+   },
+   "related": {
+    "dependencies": [
+     {
+      "item_id": "I-222",
+      "status": "open",
+      "title": "完整动作链的预热、钉住释放及双入口生命周期接入",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-223",
+      "status": "open",
+      "title": "外部动作运动学消费与施力来源回执接入",
+      "requires": null,
+      "unmet": true
+     },
+     {
+      "item_id": "I-224",
+      "status": "open",
+      "title": "新动作记录投影与原值目标和消费来源关联",
+      "requires": null,
+      "unmet": true
+     }
+    ],
+    "delivery_impact": []
+   },
+   "recovery": "任务线复核时间 2026-10-14T22:49:07.540 后自动重读",
+   "evaluation": {
+    "at": "2026-10-14T15:45:31.387",
+    "validity": "ok",
+    "evaluator": "kernel_admission_outcome_verified",
+    "provenance": "内核准入短语经当前同源事实复核（dependency_policy/lane_workers）"
+   },
+   "enqueue": {
+    "in_kernel_queue": true,
+    "request_ids": [
+     {
+      "request_id": "kt-kula-i226-rhythm-20261014",
+      "phase": "line_wait",
+      "dispatch_attempts": 0
+     }
+    ],
+    "first_enqueued_at": "2026-10-14T15:45:31.387",
+    "total_dispatch_attempts": 0
+   },
+   "execution_ref": {
+    "worker_id": null,
+    "session_id": null,
+    "run_id": null,
+    "dispatch_request_id": null,
+    "kernel_phase": "line_wait"
+   }
+  }
+ ],
+ "needs_verification": [
+  {
+   "item_id": "I-008",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-017",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-018",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-031",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-048",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-055",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-062",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-064",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-068",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-070",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-100",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-135",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-162",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-181",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-190",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-194",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-196",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-197",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-198",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-201",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-202",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-203",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-209",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-214",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-228",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-232",
+   "code": "KIND_UNKNOWN",
+   "sentence": "在办范围内历史类别缺失或未知（kind=None），不批改历史记录，待人工核对",
+   "provenance": "items.kind"
+  },
+  {
+   "item_id": "I-196",
+   "code": "CLAIM_WITHOUT_RUN",
+   "sentence": "事项状态 open 但存在认领会话记录，待核对",
+   "claim_session_id": "sess_a4c9eb1b-8344-435d-ba69-452035b59653",
+   "provenance": "items.status+claim_session_id"
+  },
+  {
+   "item_id": "I-221",
+   "code": "CLAIM_WITHOUT_RUN",
+   "sentence": "事项状态 open 但存在认领会话记录，待核对",
+   "claim_session_id": "sess_78376d8c-decc-4d12-9ea4-9fc922547921",
+   "provenance": "items.status+claim_session_id"
+  }
+ ],
+ "capacity": {
+  "status": "degraded",
+  "degraded_reasons": [
+   {
+    "source": "cloud_claims",
+    "severity": "degraded",
+    "lane": "L7",
+    "reason": "云端已认领 1 项但本地无对应活跃运行，占用无法核对，保守不报可派"
+   }
+  ],
+  "global": {
+   "effective_limit": 11,
+   "occupied": 2,
+   "dispatchable": null,
+   "reserved": null,
+   "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置，全局为十线之和）"
+  },
+  "by_lane": {
+   "L1": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L2": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L3": {
+    "effective_limit": 2,
+    "occupied": 1,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 1,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L4": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L5": {
+    "effective_limit": 1,
+    "occupied": 1,
+    "dispatchable": 0,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 1,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L6": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L7": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": null,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 1
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L8": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L9": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   },
+   "L10": {
+    "effective_limit": 1,
+    "occupied": 0,
+    "dispatchable": 1,
+    "reserved": null,
+    "occupancy_sources": {
+     "kernel_slots": 0,
+     "cloud_claims_unreconciled": 0
+    },
+    "policy_source": "lp_sync/kernel_state/lane_workers.json（I-217 每线并发配置）"
+   }
+  },
+  "reservation_policy": {
+   "status": "not_set",
+   "source": "现行编排内核与工位规则（I-205/I-217）未定义预留策略",
+   "note": "reserved 字段为 null 表示未设置预留策略，不是零"
+  },
+  "separate_measures_note": "页面并行额度（console_parallel_limit 云端配置）与近五分钟活跃会话数为独立口径，不与本容量混算；本容量只反映内核工位槽位约束与云端认领保守核对",
+  "config_read_error": null
+ },
+ "read_only": true
+}

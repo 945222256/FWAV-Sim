@@ -1,0 +1,85 @@
+{
+ "schema_version": 1,
+ "item_id": "I-228",
+ "delivery_version": "session-history-ui-v1",
+ "run_id": "run-beth-session-observability-history-20261014-a1",
+ "dispatch_request_id": "kd-beth-session-observability-history-20261014-a1",
+ "session_id": "sess_e2438b4f-44de-4800-b87f-e98fea01e441",
+ "workstation": "L5-w1",
+ "reviewer": "ciri",
+ "generated_at": "2026-10-15T21:35:00",
+ "scope": "board_ui 完整会话历史目录、分页与可点击旧会话只读详情；观察窗实况对账字段与各线历史入口；使用上游已交付真实索引（不改 L3 采集与执行源码）",
+ "upstream_admission": {
+  "版本": "I-227 session-observability-v3（outputs/session_observability_delivery_manifest_v3.json；Beth 已复核 v2 四反例 pass，v3 极小差异合入）",
+  "真实索引": "lp_sync/session_history/index.json（生产 v1 构建，264 会话：retained_timeout 255、explicit_archive 2、active 7；全程只读）",
+  "查询服务": "lp_sync/session_history_server.py（真实服务代码，私有端口运行读真实索引；生产未启动该服务，生产启用归 Beth）",
+  "说明": "上游索引为 v1 构建（含父目录未核实会话）；核实口径重建属生产加载步骤（Beth）。本交付按索引实况逐项一致验证，不冒充核实口径重建后的结果。"
+ },
+ "files": {
+  "新增": [
+   "board_ui/src/console/SessionHistoryView.tsx（历史目录：筛选线/工位/事项/时间/类型、加载更多、完整/筛选/已加载计数；旧会话只读详情：历次事项履历、运行记录、交接卡与前后链、对话与工具摘要、四类缺失原因；只读无任何操作入口）"
+  ],
+  "修改": [
+   "board_ui/src/console/types.ts（历史接口类型与保留类型标签）",
+   "board_ui/src/console/ConsolePage.tsx（历史目录页签与线预筛接线）",
+   "board_ui/src/console/WatchView.tsx（每线完整历史入口按钮；卡片实况对账行：采样时刻+后端状态含待核对后缀）",
+   "board_ui/src/console/console.css（历史视图样式）"
+  ],
+  "检查": [
+   "board_ui/scripts/i228_build_fixture.py（夹具索引构建：126 条、三次交接链、双工位、四类缺失样例）",
+   "board_ui/scripts/i228_check.cjs（隔离核验 26 项）",
+   "board_ui/scripts/i228_proxy.cjs（核验代理：历史→私有查询服务、api→可选目标、静态）",
+   "board_ui/scripts/i228_real_check.cjs（真实端到端 12 项，只读，零非 GET 触生产）"
+  ],
+  "未触碰": "L3 采集与执行源码（console_collector、host_service、session_truth、session_history、内核）；生产索引（只读）；cloud_board 云端代码与凭证；board_ui/src/console/overview_data.ts 等他人未提交改动"
+ },
+ "criteria_vs_evidence": [
+  {
+   "criterion": 1,
+   "state": "隔离+真实已验：每线入口（观察窗组头完整历史按钮）；隔离夹具 L3 35 条与索引逐项一致（含三次交接链与双工位旧会话，不只最新一条）；真实索引 L3 13 条与真实接口逐项一致；十线常驻与灰态保留回归过。注：真实索引现仅含一条真实交接链（I-219 的 L2 对，双向已验）；三交接链以夹具样例验证。"
+  },
+  {
+   "criterion": 2,
+   "state": "隔离+真实已验：筛选（线/工位/事项/类型/时间）逐项与夹具一致；类型筛选显式归档一条、超时保留徽标不冒充显式归档；126 条跨三页与 264 条跨六页遍历均无重复无遗漏（页面=接口全集）；计数行完整/筛选/已加载与接口 total 一致。"
+  },
+  {
+   "criterion": 3,
+   "state": "隔离+真实已验：旧会话号可点击开只读详情（对话与工具摘要、历次事项、交接卡、前后链）；四类缺失样例各显示具体原因——已删除（缺失说明：会话行已删除+对话摘要不可用）、无对话源（对话源缺失原因）、无认领记录（不编造履历）、接口失败（停真实服务后页面显式报错）；真实旧会话摘要为真实内容（L7 样例：文本 5 条、Bash×82/Edit×17/Read×19 等真实工具计数）。"
+  },
+  {
+   "criterion": 4,
+   "state": "隔离+真实已验：夹具链尾 D 为交接后运行中（活跃运行在册），原会话从线列表与链均可到达；详情只读（无注入/停止/恢复按钮），不恢复执行、不计实时额度（额度仍按观察窗实时口径）；真实链（I-219 70% 交接对）前后双向可查、真实交接卡原因与卡文摘录渲染。"
+  },
+  {
+   "criterion": 5,
+   "state": "隔离已验：卡片实况行显示采样时刻与后端状态串（长工具>90 秒判在干活、采集失联判未知待核对，均带原因后缀；不以模型请求时间单独推断停止）；单卡注入定向回归过。真实栈联调待生产启用新采集口径（见 unmet）。"
+  },
+  {
+   "criterion": 6,
+   "state": "后端完整索引（I-227 生产索引，只读）与多工位接口（lane-workers-v2，生产容量 L3=2 已启用）基础上完成真实端到端（私有端口读真实索引+生产只读 state）、构建与页面截图；本清单为单一总清单。生产历史查询服务启动与同源路由接线属生产启用步骤，未完成前真实全部历史可达证据以私有端口+真实索引为准（见 unmet）。"
+  }
+ ],
+ "verification_runs": [
+  {"name": "隔离核验（真实 session_history_server 读私有夹具索引）",
+   "path": "logs/i228_session_history_ui_20261015/isolated_check_record.json", "result": "26/26"},
+  {"name": "真实端到端（私有端口读生产索引+生产只读 state）",
+   "path": "logs/i228_session_history_ui_20261015/real_check_record.json", "result": "12/12；全程零非 GET 请求触达生产"},
+  {"name": "构建检查", "path": "board_ui/dist（tsc -b 无错、vite build 通过）", "result": "通过"}
+ ],
+ "screenshots": [
+  "logs/i228_session_history_ui_20261015/c1_watch_entry.png、c1_l3_list.png（入口与线列表）",
+  "logs/i228_session_history_ui_20261015/c2_pagination_done.png（分页遍历完成）",
+  "logs/i228_session_history_ui_20261015/c3_deleted_sample.png、c3_noclaim_sample.png、c3_api_failure_sample.png（缺失样例）",
+  "logs/i228_session_history_ui_20261015/c4_chain_head_detail.png、c4_chain_tail_running.png（交接链与交接后运行）",
+  "logs/i228_session_history_ui_20261015/c5_live_fields.png（实况字段）",
+  "logs/i228_session_history_ui_20261015/real_watch.png、real_l3_history.png、real_traversal_done.png、real_chain_head.png、real_chain_successor.png、real_old_session_detail.png（真实端到端）"
+ ],
+ "unmet": [
+  "生产启用：session_history_server 生产启动、控制台同源路由接线（或本机回环访问）、生产 sync_agent 重启加载新采集口径（实况字段进生产卡片）——均归 Beth 按维护步骤办理；完成前生产页面卡片仍按旧口径显示",
+  "生产历史索引仍为 v1 构建（264 会话，含父目录未核实会话）；核实口径重建属生产加载步骤",
+  "Ciri 按判据六对完整历史入口的走查与终审（本交付 pending_review）",
+  "真实多交接链样例：生产索引现仅一条真实交接链（L2，I-219）；三交接链已用夹具验证，待生产积累后自然补真"
+ ],
+ "constraints_honored": "只用自建隔离端口/进程（4190/4191/58795/58796，收尾按进程树回收）；生产只读（观察窗 state 与历史索引 GET，零非 GET）；未停止生产宿主、未重启任何工作中的会话；保留其他队改动与全部已有历史；未运行仿真；旧会话查看不调用恢复或派发",
+ "evidence_dir": "logs/i228_session_history_ui_20261015/（started.json、fixture_index/、fixture_meta.json、isolated_check_record.json、real_check_record.json、截图十五张）"
+}

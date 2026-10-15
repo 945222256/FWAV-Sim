@@ -1,0 +1,139 @@
+{
+ "probe": "F03 验证器真实入口覆盖",
+ "validator_source": "tools/i190_da_semantics_check.py",
+ "copy_sha256_identical": true,
+ "runs": {
+  "baseline": {
+   "returncode": 0,
+   "parsed": {
+    "mode": "baseline",
+    "validator_sha256_orig": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1",
+    "validator_sha256_copy": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1",
+    "copy_identical": true,
+    "validator_exit_code": 0,
+    "checks_total": 31,
+    "checks_pass": 31,
+    "verdict": "pass",
+    "real_driver_calls_during_validation": 0,
+    "wing_actuation_imported": false
+   },
+   "stdout_tail": "_AMBDA', 'WAVEGEN_B1', 'WAVEGEN_B3', 'WAVEGEN_KAPPA', 'WAVEGEN_ON']（频率相位类调制，与 dA 幅值通道正交） \n产物: G:\\Playground\\isaac_flapper_sim\\agentic_core\\audits\\I-209\\logs\\I190_离线验证输出_20261013_155858.json\nRUNNER_RESULT_JSON>{\"mode\": \"baseline\", \"validator_sha256_orig\": \"d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1\", \"validator_sha256_copy\": \"d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1\", \"copy_identical\": true, \"validator_exit_code\": 0, \"checks_total\": 31, \"checks_pass\": 31, \"verdict\": \"pass\", \"real_driver_calls_during_validation\": 0, \"wing_actuation_imported\": false}\n",
+   "stderr_tail": ""
+  },
+  "block_import": {
+   "returncode": 0,
+   "parsed": {
+    "mode": "block_import",
+    "validator_sha256_orig": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1",
+    "validator_sha256_copy": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1",
+    "copy_identical": true,
+    "validator_exit_code": 0,
+    "checks_total": 31,
+    "checks_pass": 31,
+    "verdict": "pass",
+    "real_driver_calls_during_validation": 0,
+    "wing_actuation_imported": false
+   },
+   "stdout_tail": "DA', 'WAVEGEN_B1', 'WAVEGEN_B3', 'WAVEGEN_KAPPA', 'WAVEGEN_ON']（频率相位类调制，与 dA 幅值通道正交） \n产物: G:\\Playground\\isaac_flapper_sim\\agentic_core\\audits\\I-209\\logs\\I190_离线验证输出_20261013_155858.json\nRUNNER_RESULT_JSON>{\"mode\": \"block_import\", \"validator_sha256_orig\": \"d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1\", \"validator_sha256_copy\": \"d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1\", \"copy_identical\": true, \"validator_exit_code\": 0, \"checks_total\": 31, \"checks_pass\": 31, \"verdict\": \"pass\", \"real_driver_calls_during_validation\": 0, \"wing_actuation_imported\": false}\n",
+   "stderr_tail": ""
+  },
+  "break_driver": {
+   "returncode": 0,
+   "parsed": {
+    "mode": "break_driver",
+    "validator_sha256_orig": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1",
+    "validator_sha256_copy": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1",
+    "copy_identical": true,
+    "validator_exit_code": 0,
+    "checks_total": 31,
+    "checks_pass": 31,
+    "verdict": "pass",
+    "real_driver_calls_during_validation": 0,
+    "wing_actuation_imported": true
+   },
+   "stdout_tail": "BDA', 'WAVEGEN_B1', 'WAVEGEN_B3', 'WAVEGEN_KAPPA', 'WAVEGEN_ON']（频率相位类调制，与 dA 幅值通道正交） \n产物: G:\\Playground\\isaac_flapper_sim\\agentic_core\\audits\\I-209\\logs\\I190_离线验证输出_20261013_155859.json\nRUNNER_RESULT_JSON>{\"mode\": \"break_driver\", \"validator_sha256_orig\": \"d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1\", \"validator_sha256_copy\": \"d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1\", \"copy_identical\": true, \"validator_exit_code\": 0, \"checks_total\": 31, \"checks_pass\": 31, \"verdict\": \"pass\", \"real_driver_calls_during_validation\": 0, \"wing_actuation_imported\": true}\n",
+   "stderr_tail": ""
+  }
+ },
+ "written_path": {
+  "worst_case": {
+   "abs_diff": 2.8691528486390894e-08,
+   "dA": -0.05,
+   "t": 6.158333333333333,
+   "tgt64": 0.6047617506167906,
+   "written32": 0.6047617793083191
+  },
+  "per_dA": [
+   {
+    "dA": 0.05,
+    "max_abs_diff_float64_vs_written": 2.8276314401054492e-08
+   },
+   {
+    "dA": -0.05,
+    "max_abs_diff_float64_vs_written": 2.8691528486390894e-08
+   },
+   {
+    "dA": 0.08,
+    "max_abs_diff_float64_vs_written": 2.7416878323194283e-08
+   },
+   {
+    "dA": -0.08,
+    "max_abs_diff_float64_vs_written": 2.6893969717889377e-08
+   }
+  ],
+  "boundary": {
+   "missing_key_default": {
+    "names": [
+     "flap_L",
+     "flap_R",
+     "twist_L",
+     "twist_R",
+     "fold_L",
+     "fold_R",
+     "tail_L",
+     "tail_R"
+    ],
+    "write_count": 1,
+    "note": "目标字典按名取值，缺失关节写 0.0 默认值，验证器不覆盖"
+   },
+   "permuted_names": {
+    "names": [
+     "tail_R",
+     "tail_L",
+     "tail_yaw",
+     "fold_R",
+     "fold_L",
+     "twist_R",
+     "twist_L",
+     "flap_R",
+     "flap_L"
+    ],
+    "values_head": [
+     0.009999999776482582,
+     0.009999999776482582,
+     0.0
+    ],
+    "note": "写入顺序跟随关节表顺序，验证器固定二元组顺序"
+   },
+   "empty_names_early_return": {
+    "returned": "None",
+    "write_count": 0,
+    "note": "joint_names 为空时静默跳过整步，验证器不覆盖"
+   },
+   "actual_write_dtype": "float32",
+   "actual_write_shape": [
+    1,
+    9
+   ],
+   "validator_tolerance_fp": 1e-15,
+   "float32_quantization_scale": 1.1920928955078125e-07
+  }
+ },
+ "prior_independent_review": {
+  "location": "logs/hq_intake/20261012_i190_acceptance/",
+  "reviewer": "HQ-Anni（机主授权，独立复核）",
+  "verdict": "not_accepted",
+  "item_status": "I-190 blocked（工具或环境故障）",
+  "key_finding": "禁用真实 _drive_wing_joints 后原验证器仍 31 项全过且入口调用 0 次"
+ }
+}

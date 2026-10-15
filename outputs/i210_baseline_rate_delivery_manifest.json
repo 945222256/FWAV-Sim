@@ -1,0 +1,57 @@
+{
+ "schema_version": 1,
+ "delivery_version": "baseline-rate-v1",
+ "item_id": "I-210",
+ "title": "I-210 余项：真实旧实现回归与速率处置材料",
+ "delivered_at": "2026-10-15T20:20:00",
+ "run_id": "run-kt-anni-i210-baseline-rate-20261015-a1",
+ "reviewer": "doro",
+ "basis": {
+  "supplement_review": "logs/hq_intake/doro_resume_20261014/i210_supplement_review_current/复核结论.md",
+  "baseline_source_audit": "logs/hq_intake/20261015_i210_remaining/baseline_source_audit.json",
+  "observed_rate_audit": "logs/hq_intake/20261015_i210_remaining/observed_rate_audit.json",
+  "accepted_stage_manifest": "logs/hq_intake/20261015_i210_remaining/accepted_stage_manifest.json",
+  "baseline_snapshot": "logs/i210_基线快照_20261013.json（记录提交 1943c924）"
+ },
+ "part1_old_implementation_regression": {
+  "old_source_binding": "五文件按记录摘要提取验证（wing_actuation LF blob、kinematics/config CRLF 摘要、mock_backend LF blob 按 HQ 审计变体；flight_controller 无匹配 blob，记录摘要与当前文件一致，按当前文件只读复制——与审计结论一致）。提取核对与全部写入摘要见 old_source_extraction.json；aero 包闭包七文件（common/attached_flow/dynamic_stall/sane_dickinson/sane_dickinson_3d/tail_fuselage/callback）与四个包初始化自同一提交提取。",
+  "isolation": "旧树只在 logs/i210_baseline_rate_20261015/old_src/，run_chain.py 逐模块断言加载文件位于目标树内并记录文件与摘要（误加载树外模块即失败）；未 checkout、未改工作区/索引/共享历史；旧 flight_controller 依赖闭包（numpy+config+标准库）已核实。",
+  "comparison": "同一固定隔离输入序列（人工配平态、dt=1/120、960 行全记录含暖机）分别驱动真实旧默认链（旧 wing_actuation 纯名义分支+旧 kinematics+记录版控制器+旧 config）与当前默认关闭链，逐字段精确比较全部原指令、九关节目标、力模型输入与关节侧频率：baseline_compare.json——24960 项字段比较 0 差异、字段集一致、判定 identical；无另加容差。",
+  "scope_limit": "隔离旧新对照只是默认兼容局部证据，不等于规定完整物理基准（物理基准待执行清单见 physical_baseline_checklist.md，六项缺失绑定逐条列出）。"
+ },
+ "part2_rate_disposition": {
+  "document": "logs/i210_baseline_rate_20261015/rate_disposition.md——逐段（控制器/发生器/选择器/实际输入）量的语义、限幅与速率执行点、继承或绕过、批准来源；普通段/开关切换/无效回退/触限/参数切换五场景分述。",
+  "scenarios": "scenario_flip_drive.json（第480步关驱动：effective 一步 1.5427→1.8000，表观 30.8758Hz/s，发生器继续计算不被采纳）；scenario_switch_b1.json（第480步 B1 +0.2→−0.2：wavegen 一步 1.8000→2.2046，表观 48.5496Hz/s，其后平滑）——最小真实函数对照，未重跑六档。",
+  "observed_rates_cited": "HQ observed_rate_audit 的 R3/R4 峰值 4.8824/4.8823Hz/s 与 R5 峰值 2.1371Hz/s、名义本窗 0.0Hz/s，作为有限差分观测引用，不作全域界或合格证明。",
+  "distinctions": "幅值界 [1.0,3.5]Hz 不当变化率界；名义 FREQ_SLEW=2.5Hz/s 只作用于名义序列（config:673 冻结）；选中 wavegen 后无第二级斜坡为 I-210 实现决定，无按原流程的批准记录——列为待处置。",
+  "recommendation": "三选项（维持现状需批准登记/选择器加输出斜坡会二次整形波形/仅箝位切换跳变）与影响分析供 HQ 审理；未自行实施任何生产行为变更、限值或容差。未证明部分：无全域速率界推导、无执行器资格、无物理验证、名义斜坡对调制适用性未评估。"
+ },
+ "checks": {
+  "checker": "tools/i210_hopf_check.py",
+  "result": "24 项两跑全过（原 22 项保留复跑通过；新增 Y 真旧实现默认对照 0/24960 差异、Z 速率场景原值与材料齐备）",
+  "note": "检查器产物与第二阶段再生成证据（case/doublerun，内容与已受理阶段证据逐字节一致）落本任务目录 logs/i210_baseline_rate_20261015/；已受理阶段目录已恢复提交状态未改动"
+ },
+ "unmet": [
+  "正式完整物理基准待执行：身份与入口待 HQ 核定、I-186 前置未清、开启零调制差异预算未预先固定（六项缺失绑定见 physical_baseline_checklist.md）",
+  "真实气动力核、实际关节角速度、六分量作用量、平均实测拍频与完整物理双跑仍待 I-186 验收及执行条件核准",
+  "wavegen 无第二级斜坡的处置批准依据待 HQ 审理（三选项与影响已列，未实施）",
+  "本材料全部为隔离链证据：人工配平输入非实测飞行，不用于实际关节、力矩或整机结论",
+  "原六条判据不自勾：阶段与余项证据按 Doro 复核口径保留待整体验收"
+ ],
+ "evidence_index": [
+  "old_source_extraction.json",
+  "old_default.json",
+  "new_default.json",
+  "baseline_compare.json",
+  "scenario_flip_drive.json",
+  "scenario_switch_b1.json",
+  "rate_disposition.md",
+  "physical_baseline_checklist.md",
+  "run_chain.py",
+  "compare_baseline.py",
+  "old_src/（真实旧源码隔离树）",
+  "case_R*_records.json、doublerun_*、chain_summary.json、oldpath_R0_reference.json（第二阶段再生成，与已受理阶段证据一致）",
+  "i210_hopf隔离验证_20261014_201355.json（检查器产物）"
+ ],
+ "boundaries": "生产业务代码全部只读；未改控制器/配置/翼驱动/气动；未运行 Isaac 或任何物理仿真；只写 tools/i210_hopf_check.py、logs/i210_baseline_rate_20261015/ 与本清单；他人改动与历史未触碰。"
+}

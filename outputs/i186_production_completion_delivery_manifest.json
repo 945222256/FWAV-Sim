@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "item_id": "I-186",
+  "title": "记录仪与实验管线保存实际条件和结构化判据结果——L1 接续补齐交付",
+  "delivery_version": "L1补齐一版",
+  "run_id": "run-kt-anni-i186-l1-handoff-20261014-a1",
+  "dispatch_request_id": "kd-kt-anni-i186-l1-handoff-20261014-a1",
+  "session_id": "sess_8cc259a6-4227-42b2-ab12-9521d185e226",
+  "workstation": "L1-w1",
+  "delivered_at": "2026-10-14T21:10:00+08:00",
+  "baseline": {
+    "source_commit": "fdb6d9d",
+    "note": "内核中途交接提交（二队三代码文件部分施工入库，自检四十三例复跑全过）；语义登记册 H3 转写自 source_checkpoint 恢复（ed55d834，与交接清单哈希一致），未从旧版本覆盖任何在制内容"
+  },
+  "original_six_criteria": [
+    {
+      "criterion": "一：身份及文件内容对应",
+      "response": "统一运行器实际产生实验/运行/事项/基准身份（实验标识派生自配置摘要，运行标识为归档目录名，事项与基准取配置声明，先于链步写 identity.json，run_record 与登记表带身份，运行器自身事项改记 runner_item 不再冒充实验归属）；分数文件经 --archive-dir 读归档身份绑定本次实验/运行/事项并携带实际分析输入哈希；构包对结果身份逐项核对，缺失错配阻断（自检 P1/P2/N16 维持）。真实链样例 run_record/identity.json/分数/包卡身份逐项一致。",
+      "evidence": ["logs/hq_intake/20261014_i186_l1_delivery/production_sample/experiments/ 内归档目录 identity.json 与 run_record.json", "W9 自检例（tools/checks/i186_selfcheck.py）"],
+      "gaps_remaining": []
+    },
+    {
+      "criterion": "二：实际条件逐项恢复，缺必要信息不能有效",
+      "response": "必要条件节贯通配置模式（接受并跨节核对条件键须在参数节声明，缺声明拒绝运行）、执行子进程（经参数节注入）、起始采集（必要条件节随 declared 留档）与缺项检查（条件键逐一核对实际注入，必需量对照实际记录量映射逐项核对；空清单不豁免无条件必要项）。运行环境记录子进程内实测解释器版本与仿真运行环境包版本读数（未安装记 Null 加原因），启动命令只作声明不当版本，缺读数即缺项阻断。初态、来流、物理自由度约束维持既有按声明键硬阻断、未声明默认留痕配方。",
+      "evidence": ["W7/W7b/W7c/W7d/W7e/W8/W8b 自检例", "modules/evidence_pack.py capture_conditions 与 _conditions_deficiencies、_necessary_report", "modules/experiment_pipeline/config_schema.py _validate_necessary_in_config"],
+      "gaps_remaining": ["起始采集的初态与来流仍按配方声明键核对（批准配方未声明的键按默认留痕），未新增科学定义；批准定义不足处未猜语义"]
+    },
+    {
+      "criterion": "三：必需量逐项定义并区分目标、实测、模型及拍相位",
+      "response": "逐量口径（单位、坐标、采样时点、目标/实测/模型、生产来源）维持 I-183 冻结字段表与台账八通道单用完整定义；必需量清单由批准配方声明并贯通构包对照实际记录量映射核对（W7d 缺 z 阻断）；实验阶段与翼拍相位分开，来源未接通的拍相位明确缺失限制结论，不由时间猜相位（N20/N15 维持）。",
+      "evidence": ["modules/evidence_pack.py COLUMN_META/LEDGER_CHANNEL_META/_quantity_mapping/_necessary_report", "W7d、N15、N20 自检例"],
+      "gaps_remaining": ["翼拍相位仍无经核实的生产来源列，拍内与周期对齐结论维持如实限制（不虚构替代值）"]
+    },
+    {
+      "criterion": "四：每条科学判据及各状态明确",
+      "response": "真实分数生产函数的逐条嵌套格式被构包直接消费：每条判据按批准测量语义登记册绑定展开为逐被测量切面（H3 两被测量 bindings 逐项转写，H1/H2 经生产实测键适配），逐条含实测值、单位、阈值、阈值键、比较方向、判据版本、标准来源与语义登记册摘要；值阈值与结论字样矛盾复核保留；未转写条目待审阻断（T4b）。整科必需判据集合由科目声明决定，缺项补 missing、重复判歧义、错条目按科目清单阻断。",
+      "evidence": ["modules/evidence_pack.py _producer_aspects/_semantics_bindings/_evaluate_criterion/_criteria", "config/standard_measure_semantics.json（v2）", "W1/W2/W3/W4/W5/W6、T4/T4b 自检例"],
+      "gaps_remaining": ["登记册现覆盖悬停 H1/H2/H3；其他科目条目维持缺结构化定义待审，不宣称已批准"]
+    },
+    {
+      "criterion": "五：当前输入绑定，漏执行或仅程序完成不能通过",
+      "response": "Doro 真实原输入反例重跑（W1）：声明悬停整科、结果仅一条升力比单标量条目，第七版判整科 pass，本版判 unknown 并补 H1/H3 缺失条目，原第五条本轮撤回的勾选以反例阻断恢复依据。单指标分析仅在批准范围明确时记录自身结论（bench_criterion 范围分列于包与卡，不代称整科通过）。外来输入、身份错配、仅程序完成均阻断（既有例维持）。",
+      "evidence": ["W1/W6 自检例", "compute_verdict 判定规则（not_applicable 外任何非 pass 状态阻断）"],
+      "gaps_remaining": []
+    },
+    {
+      "criterion": "六：采集、分析、检查和结果卡贯通，兼容及回退",
+      "response": "真实生产链贯通：当前合法纯 Python 入口（统一运行器）产生记录与身份，当前分析入口（bench_runner）产出结果，构包核验卡片逐条对应（W9 与持久样例判定 pass、核验过、卡片四条目对齐）。旧档兼容维持（无 run_record 待核非 pass、混代可查、成对发布失败回滚一致、损坏输入原文件不变）；旧结果继续标明限制，不补造历史身份。",
+      "evidence": ["logs/hq_intake/20261014_i186_l1_delivery/production_sample/", "W9、N13/N14/N11/N12 自检例"],
+      "gaps_remaining": []
+    }
+  ],
+  "three_gap_groups": [
+    {
+      "group": "整科完整性（悬停 H1/H2/H3 逐项对应；缺项、未执行、未知、无批准语义不得整科 pass；单指标分析明确绑定批准范围；不能给结果文件自选子集豁免；重跑仅 H2 反例并核完整正常与缺一项、重复、错条目出口；原第五条撤回勾选不沿用历史通过）",
+      "closed": true,
+      "evidence": ["W1 反例重跑（判定 unknown，缺 H1/H3 补 missing）", "W2 完整正常（pass，卡片四条目）", "W3 缺一项阻断", "W4 重复条目歧义阻断", "W5 错条目阻断", "W6 单判据范围分列不代称整科"]
+    },
+    {
+      "group": "正式生产贯通（统一运行器实际生成实验、事项、运行及基准身份；保存实际源码及差异来源；逐条嵌套格式直接被读取或由有来源的适配消费，带本次实验/运行和实际分析输入哈希；不得仅自检手写替代格式；当前合法纯 Python 运行入口产生记录，当前分析入口产出结果，直接构包、verify 和卡片逐条对应；兼容旧档如实限定）",
+      "closed": true,
+      "evidence": ["持久真实生产样例 production_sample/（判定 pass）", "W9 真实链自检", "源码版本与未提交差异采集维持（P7 篡改检出）", "适配来源：登记册绑定（转写自标准 text 原文）加 judge_hover 生产实测键"]
+    },
+    {
+      "group": "必要条件与记录量（批准配方必要条件、必需量清单及批准来源贯通配置模式、执行子进程、起始采集与缺项检查；清单不得被模式拒绝、丢弃或由施工方空列表自主豁免；记录真实解释器/已支持仿真运行环境版本，启动命令不当版本；初态、来流、物理自由度约束和实际生效参数分别采集与恢复，默认值有真实来源；必需量单位、坐标、采样时点、生产来源、目标/实测/模型类别逐项对应；批准定义不足时明确未知/待审）",
+      "closed": true,
+      "evidence": ["W7 模式接受且采集留档", "W7b 条件键未声明拒绝运行", "W7c 未注入核验查出并阻断", "W7d 必需量缺失阻断", "W7e 空清单不豁免", "W8 实际版本读数", "W8b 缺读数阻断", "生产样例 run_conditions.json 含 runtime_versions 与必要条件节"],
+      "notes": ["初态与来流按批准配方声明键核对，批准定义不足处未猜科学语义，未新增待审定义宣称批准"]
+    }
+  ],
+  "controls_preserved": [
+    "原正常、失败、回滚与来源篡改控制全部保留（自检 N 系列、S 系列、Q 系列、P 系列共四十三例原保护行为维持）",
+    "原值单用与 CSV 样例各保留合法适用范围（台账单用完整定义 present；CSV 流逐列口径）",
+    "注册检查走已有执行器（tools/checks/executor.py run，退出码零，95 秒），判据先于数据",
+    "未新增物理仿真，未改冻结标准、物理参数、控制增益、气动力公式"
+  ],
+  "verification": {
+    "selfcheck_cases": 58,
+    "selfcheck_two_runs": "58/58 两跑一致（selfcheck_run1_output.txt、selfcheck_run2_output.txt）",
+    "registered_executor": "tools/checks/executor.py run tools/checks/i186_selfcheck.py --timeout 600 通过（logs/checks/）",
+    "fast_bench": "bench_runner --fast BENCH PASS（20261014_210016）",
+    "production_sample_verdict": "pass（execution=completed，data_qualification=valid，四判据条目全过，verify 过，卡片对齐）"
+  },
+  "unmet": [
+    "Doro 独立复核未完成：本交付为 pending_review，不自行关闭",
+    "I-210 实际取证与 I-187 前置继续保留，本队未清理",
+    "语义登记册现覆盖悬停三判据；其他科目判据条目维持待审（不新增未批准定义）",
+    "翼拍相位无经核实生产来源列，相关结论维持如实限制"
+  ],
+  "reviewer": "doro",
+  "construction_record": "logs/I-186_施工记录_20261014_L1.md",
+  "territory_deviation_report": {
+    "problem": "提交后运行 items_registry/check_commit.py L1 拒绝：modules/experiment_pipeline/config_schema.py、modules/evidence_pack.py、config/standard_measure_semantics.json 属 lanes.json 中 L2 独占区（modules/ 与 config/ 整目录），静态领地表不反映本次任务级交接。",
+    "evidence": [
+      "logs/hq_intake/20261014_mainline_recovery/i186_l1_handoff/decision_receipt.json：机主经 Anni 将本事项责任线及所列文件的本轮返修权限转交 L1 队",
+      "工令原文：本轮列明文件已由机主交给 L1 接续；特殊领地交接仅限本任务 writable_paths",
+      "提交 4b52755 仅含本任务清单内文件与交付证据，未触其他 L2 在制改动"
+    ],
+    "recommendation": "HQ 在 lanes.json 为本任务七文件登记临时共享或备注任务级授权（lanes.json 属 HQ 独占区，本队不自行修改）；或由机主追认本次交接提交。",
+    "default_action_if_no_reply": "维持现状：提交保留，偏差随本清单与结果提交上报，不自行改动领地配置。"
+  },
+  "files_changed": [
+    "modules/evidence_pack.py",
+    "modules/experiment_pipeline/config_schema.py",
+    "tools/checks/i186_selfcheck.py",
+    "config/standard_measure_semantics.json",
+    "logs/I-186_施工记录_20261014_L1.md",
+    "logs/hq_intake/20261014_i186_l1_delivery/"
+  ]
+}

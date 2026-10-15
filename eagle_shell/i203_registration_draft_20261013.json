@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "item": "I-203",
+  "stage": "draft_prepared_pending_L8_final_delivery",
+  "prepared_by": "L3队",
+  "prepared_at": "2026-10-13T15:05:00",
+  "purpose": "I-203 正式登记的数据准备稿：新动画机构与旧冻结物理机构的版本区分、来源、单位、轴、开合耦合设置、验证状态与缺失字段。最终登记等待 L8 在 I-201 修复专业复核四项问题（骨骼索引越界、导出模型逐帧验证、过渡区边长变化、翼根轴位）并确认交付后办理；本稿不将任何候选写成已验证。",
+  "authorization": "Jane 2026-10-13 尾部认可与生产线复工文（机主授权生产线复工）+ 构型澄清文（L3 登记范围）",
+  "versions": {
+    "new_animation": {
+      "name": "eagle_x_animation_config_v2",
+      "source": "eagle_shell/l8_i201_animv2/output/（模型 eaglex_anim_config_v2.glb、报告 anim_config_v2_report.json、预览 eaglex_animv2_preview.mp4、分段 clips/、关节命令 joint_commands.csv）",
+      "supersedes": "刚性法向折叠与三片独立旋转的旧动画语义（l8_i201_20261013 历史诊断版，不进最终页面）",
+      "degrees_of_freedom": {
+        "independent_coordinates": ["tail_psi", "tail_phi", "open_L", "open_R"],
+        "independent_count": 4,
+        "linked_candidate": {"relation": "open_R = -open_L（对称）", "count": 3},
+        "status": "候选，真实联动关系未确认；接口保存两角与显式耦合设置"
+      },
+      "tail_hierarchy": "base_link → 整尾偏航（psi，零位机体 z 固定轴）→ 整尾滚转（phi，随动局部 x 轴）→ 共同尾部载体 → 垂尾 + 左平尾开合节点 + 右平尾开合节点",
+      "axes_convention": "R = Rz(psi) @ Rx(phi)；先偏航后滚转，零位机体轴与旋转后局部轴分注",
+      "wing_tip": "每翼尖一个相对弦向折叠角；继承主翼拍动与扭转；法向折叠已撤除",
+      "units": "米（铰点坐标）、度（角度）、无量纲（方向向量）",
+      "verification_status": "施工自检报告在档；专业复核四项问题未修复——导出模型骨骼索引越界、导出模型逐帧验证未做、过渡区最大绝对边长变化约 16%-20% 未修正、翼根轴位约 89% 弦长待调整",
+      "owner_item": "I-201"
+    },
+    "frozen_physical": {
+      "name": "215g 冻结物理机构（现行）",
+      "source": "config/sim_config.py 全量冻结值 + params_registry/params.json 现行生命周期条目",
+      "policy": "质量、惯量、气动参数与物理机构保持原值不动；新动画构型的物理接入另办验证",
+      "verification_status": "冻结在案（既有验收链有效，与动画构型互不影响）"
+    }
+  },
+  "missing_fields_left_empty": [
+    "实物铰位（翼尖折叠、翼根扭转、整尾偏航滚转、平尾开合的真实铰位）",
+    "实物尺寸公差",
+    "运动限位",
+    "舵机数量",
+    "尾部结构质量",
+    "左右平开合的机械联动关系（独立四自由度与联动三自由度均留候选）",
+    "蒙皮材料属性"
+  ],
+  "coupling_settings": {
+    "interface": "保存 open_L 与 open_R 两角及显式耦合标志",
+    "candidates": {"independent": 4, "linked_symmetric": 3},
+    "status": "未确认，演示用同值命令不证明联动"
+  },
+  "coordinate_conventions": {
+    "body_frame": "机体坐标系，零位姿态为参考",
+    "tail_composite": "先 Rz(psi) 后 Rx(phi)，psi 用零位固定机体 z 轴、phi 用随动局部 x 轴",
+    "sign_convention": "左右对称开合在各自节点可用相反符号，统一轴方向定义在报告 axes_convention"
+  },
+  "seam_and_edge_data": {
+    "seam_verification": "施工自检报告值约 1e-17 至 6e-17 米（逐顶点角度插值法）——不能代表导出模型实际蒙皮结果（专业复核第二条）",
+    "edge_length_verification": "过渡区最大绝对相对变化左右翼尖约 19.7%、18.8%，左右平尾约 16.3%、17.3%——须拆分伸长缩短、定位峰值帧并修正",
+    "preexisting_open_boundaries": "原网格既有孔洞单独登记（preexisting_open_boundary_vertices 字段），不混入新增间隙"
+  },
+  "registration_blocked_on": [
+    "I-201：L8 修复专业复核四项问题并交出最终资产",
+    "I-191：首批 30 键已交付（outputs/param_fill_batch1_20261013.json），281 个重名组成员与余量待续——I-203 依赖未清"
+  ],
+  "read_interface_for_L5": {
+    "draft_path": "eagle_shell/i203_registration_draft_20261013.json（本文件）",
+    "final_path": "待 L8 交付确认后写入正式登记文件并在本稿标注最终路径",
+    "shape": "每版本含 name/source/degrees_of_freedom/axes_convention/units/verification_status/missing_fields"
+  }
+}

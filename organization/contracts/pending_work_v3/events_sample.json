@@ -1,0 +1,541 @@
+{
+ "meta": {
+  "last_cursor": 4084,
+  "seen_high_water": 12184,
+  "rebuilt_at": "2026-10-14T23:27:42.393-07:00",
+  "event_count": 4084
+ },
+ "gaps": [],
+ "events": [
+  {
+   "event_id": "0261b8bb0bb998942ee3faafde24e934",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:19:17.190"
+   },
+   "occurred_at": "2026-10-15T11:19:17.190",
+   "identity": {
+    "item_id": "I-223",
+    "lane": "L4",
+    "run_id": null,
+    "request_id": "kt-kula-i223-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4060
+  },
+  {
+   "event_id": "d68654295c777fd2e6af4bc9b4df7da4",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:19:22.719"
+   },
+   "occurred_at": "2026-10-15T11:19:22.719",
+   "identity": {
+    "item_id": "I-222",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i222-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4061
+  },
+  {
+   "event_id": "bd7fe2bb2fdd36308a7bcfc1db1ba433",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:19:33.951"
+   },
+   "occurred_at": "2026-10-15T11:19:33.951",
+   "identity": {
+    "item_id": "I-224",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i224-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4062
+  },
+  {
+   "event_id": "2e3f64e037b5ffa8547b0a1150190768",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:19:39.205"
+   },
+   "occurred_at": "2026-10-15T11:19:39.205",
+   "identity": {
+    "item_id": "I-225",
+    "lane": "L1",
+    "run_id": null,
+    "request_id": "kt-kula-i225-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4063
+  },
+  {
+   "event_id": "43185941a88342d49f163901dc5cdf6e",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:19:44.858"
+   },
+   "occurred_at": "2026-10-15T11:19:44.858",
+   "identity": {
+    "item_id": "I-226",
+    "lane": "L1",
+    "run_id": null,
+    "request_id": "kt-kula-i226-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4064
+  },
+  {
+   "event_id": "63a43af49749dbd8c7b92dc95f643556",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:20:36.005"
+   },
+   "occurred_at": "2026-10-15T11:20:36.005",
+   "identity": {
+    "item_id": "I-223",
+    "lane": "L4",
+    "run_id": null,
+    "request_id": "kt-kula-i223-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4065
+  },
+  {
+   "event_id": "e1ad43f7af04e85146da14bcdbf15606",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:20:41.134"
+   },
+   "occurred_at": "2026-10-15T11:20:41.134",
+   "identity": {
+    "item_id": "I-222",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i222-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4066
+  },
+  {
+   "event_id": "4242cca0180607a9e7c468d60bb8ea13",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:20:52.187"
+   },
+   "occurred_at": "2026-10-15T11:20:52.187",
+   "identity": {
+    "item_id": "I-224",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i224-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4067
+  },
+  {
+   "event_id": "4079b4f2b9f05233d19ac0798a741670",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:20:57.769"
+   },
+   "occurred_at": "2026-10-15T11:20:57.769",
+   "identity": {
+    "item_id": "I-225",
+    "lane": "L1",
+    "run_id": null,
+    "request_id": "kt-kula-i225-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4068
+  },
+  {
+   "event_id": "4b5cad905dad2fb7d7429bc9849bb288",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:21:03.321"
+   },
+   "occurred_at": "2026-10-15T11:21:03.321",
+   "identity": {
+    "item_id": "I-226",
+    "lane": "L1",
+    "run_id": null,
+    "request_id": "kt-kula-i226-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4069
+  },
+  {
+   "event_id": "c26218b25423bd2a09358d2579c338f8",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:21:56.438"
+   },
+   "occurred_at": "2026-10-15T11:21:56.438",
+   "identity": {
+    "item_id": "I-223",
+    "lane": "L4",
+    "run_id": null,
+    "request_id": "kt-kula-i223-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4070
+  },
+  {
+   "event_id": "434f2653624b56e39635e956389a5ad8",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:22:01.637"
+   },
+   "occurred_at": "2026-10-15T11:22:01.637",
+   "identity": {
+    "item_id": "I-222",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i222-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4071
+  },
+  {
+   "event_id": "a1ce5ad7eaf87a5d3bed80aa6e82d168",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:22:12.706"
+   },
+   "occurred_at": "2026-10-15T11:22:12.706",
+   "identity": {
+    "item_id": "I-224",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i224-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4072
+  },
+  {
+   "event_id": "64f00f70e6aca90033be76edd6239b21",
+   "type": "dispatch_selected",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "dispatch_submitted",
+    "ts": "2026-10-15T11:22:13.696"
+   },
+   "occurred_at": "2026-10-15T11:22:13.696",
+   "identity": {
+    "item_id": "I-221",
+    "lane": "L4",
+    "run_id": "run-beth-i221-partial-rework-20261015-a1",
+    "request_id": "beth-i221-partial-rework-20261015",
+    "worker_id": "L4-w1",
+    "session_id": "sess_78376d8c-decc-4d12-9ea4-9fc922547921"
+   },
+   "state_change": {
+    "worker_id": "L4-w1",
+    "request_id": "kd-beth-i221-partial-rework-20261015-a1"
+   },
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4073
+  },
+  {
+   "event_id": "e3926c1557188e85b0ad620dcb43b072",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:22:18.945"
+   },
+   "occurred_at": "2026-10-15T11:22:18.945",
+   "identity": {
+    "item_id": "I-225",
+    "lane": "L1",
+    "run_id": null,
+    "request_id": "kt-kula-i225-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4074
+  },
+  {
+   "event_id": "19938c5004abb15a3b5bc385bcb2e86a",
+   "type": "result_unknown",
+   "source_kind": "kernel_run_start",
+   "source_ref": {
+    "run_id": "run-beth-i221-partial-rework-20261015-a1"
+   },
+   "occurred_at": "2026-10-15T11:22:29.765",
+   "identity": {
+    "item_id": "I-221",
+    "lane": "L4",
+    "worker_id": "L4-w1",
+    "session_id": "sess_78376d8c-decc-4d12-9ea4-9fc922547921",
+    "run_id": "run-beth-i221-partial-rework-20261015-a1",
+    "request_id": "kd-beth-i221-partial-rework-20261015-a1"
+   },
+   "state_change": null,
+   "fact_source": "运行开始保留未知（会话库无该会话在运行开始后的模型/工具活动）：本地 active 只是受理状态，未读到实际执行证据",
+   "cursor": 4075
+  },
+  {
+   "event_id": "1abbb5516ed9b726acabf928b14b0efb",
+   "type": "claim_confirmed",
+   "source_kind": "kernel_task",
+   "source_ref": {
+    "task_req_id": "beth-i221-partial-rework-20261015",
+    "field": "dispatched_at+cloud_claim"
+   },
+   "occurred_at": "2026-10-15T11:22:29.765",
+   "identity": {
+    "item_id": "I-221",
+    "lane": "L4",
+    "worker_id": "L4-w1",
+    "session_id": "sess_78376d8c-decc-4d12-9ea4-9fc922547921",
+    "run_id": "run-beth-i221-partial-rework-20261015-a1",
+    "request_id": "beth-i221-partial-rework-20261015"
+   },
+   "state_change": {
+    "session_id": "sess_78376d8c-decc-4d12-9ea4-9fc922547921",
+    "worker_id": "L4-w1"
+   },
+   "fact_source": "kernel_state.state.json#tasks + 云端认领（会话与工位共同对账）",
+   "cursor": 4076
+  },
+  {
+   "event_id": "a5a018c15ce5d69b154c3143cd4d3aac",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:23:16.643"
+   },
+   "occurred_at": "2026-10-15T11:23:16.643",
+   "identity": {
+    "item_id": "I-223",
+    "lane": "L4",
+    "run_id": null,
+    "request_id": "kt-kula-i223-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4077
+  },
+  {
+   "event_id": "d6d04938c9a0ea163c4a7844329f2de7",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:23:21.827"
+   },
+   "occurred_at": "2026-10-15T11:23:21.827",
+   "identity": {
+    "item_id": "I-222",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i222-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4078
+  },
+  {
+   "event_id": "8e7cd6501c1f4b721b5f5031c469c8a2",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:23:32.765"
+   },
+   "occurred_at": "2026-10-15T11:23:32.765",
+   "identity": {
+    "item_id": "I-224",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i224-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4079
+  },
+  {
+   "event_id": "01ae35f1292316bb7fdf671de1e5cf80",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:23:43.128"
+   },
+   "occurred_at": "2026-10-15T11:23:43.128",
+   "identity": {
+    "item_id": "I-225",
+    "lane": "L1",
+    "run_id": null,
+    "request_id": "kt-kula-i225-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4080
+  },
+  {
+   "event_id": "3ca2c7d05ec4f39494860070031c114b",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:24:35.300"
+   },
+   "occurred_at": "2026-10-15T11:24:35.300",
+   "identity": {
+    "item_id": "I-223",
+    "lane": "L4",
+    "run_id": null,
+    "request_id": "kt-kula-i223-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4081
+  },
+  {
+   "event_id": "64a67519088a072eb1c81d102bbf95fa",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:24:45.998"
+   },
+   "occurred_at": "2026-10-15T11:24:45.998",
+   "identity": {
+    "item_id": "I-222",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i222-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4082
+  },
+  {
+   "event_id": "59581e6964dae3683136289cf874bfae",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:24:51.270"
+   },
+   "occurred_at": "2026-10-15T11:24:51.270",
+   "identity": {
+    "item_id": "I-224",
+    "lane": "L2",
+    "run_id": null,
+    "request_id": "kt-kula-i224-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4083
+  },
+  {
+   "event_id": "ad704f2cbdee1ade5d594c5c5ea4a784",
+   "type": "condition_wait",
+   "source_kind": "kernel_ledger",
+   "source_ref": {
+    "ledger_event": "line_wait",
+    "ts": "2026-10-15T11:25:02.076"
+   },
+   "occurred_at": "2026-10-15T11:25:02.076",
+   "identity": {
+    "item_id": "I-225",
+    "lane": "L1",
+    "run_id": null,
+    "request_id": "kt-kula-i225-rhythm-20261014",
+    "worker_id": null,
+    "session_id": null
+   },
+   "state_change": null,
+   "fact_source": "lp_sync/kernel_state/ledger.json",
+   "cursor": 4084
+  }
+ ]
+}

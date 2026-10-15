@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "_说明": "禁用词表：新项目实例化时按本项目沟通病史自填。metaphor_banned 是比喻词命中即拒；internal_banned 是内部压缩词命中即拒并给替换词；deprecated_numbering 是本项目废止的历史编号模式（正则）。",
+  "metaphor_banned": [],
+  "internal_banned": {},
+  "deprecated_numbering": []
+}

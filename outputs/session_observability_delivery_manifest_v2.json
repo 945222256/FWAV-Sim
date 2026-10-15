@@ -1,0 +1,77 @@
+{
+ "schema_version": 1,
+ "item_id": "I-227",
+ "delivery_version": "session-observability-v2",
+ "reviewer": "beth",
+ "run_id": "run-beth-i227-rework-20261014-a1",
+ "dispatch_request_id": "kd-beth-i227-rework-20261014-a1",
+ "session_id": "sess_cea3e05f-93d4-436f-a4f1-25d196418268",
+ "workstation": "L3-w1",
+ "generated_at": "2026-10-14T22:58:30+08:00",
+ "supersedes": "outputs/session_observability_delivery_manifest_v1.json（原文保留未改；v1 交付被 Beth 于 2026-10-14 22:35 以四反例退回，回执见 logs/hq_intake/beth_session_observability_20261014/beth_rework_receipt.json）",
+ "声明": [
+  "本清单为 I-227 返修交付：Beth 四项反例全部修复并按其原调用方式复现验证，返修新增十一项检查与原二十八项检查复跑合计 44/44 通过，全部结果与证据在 logs/i227_rework_20261014/。",
+  "施工、独立验收、生产加载三者区分明确：本清单为施工交付并通过隔离验收；生产 sync_agent 全程未重启未停止，仍运行旧采集逻辑；新版历史索引只写入本项私有目录 logs/i227_rework_20261014/history_index，生产索引 lp_sync/session_history/index.json 全程只读，SHA256 前后一致（173281afa5a4bc837f29f5effa55a22dc5d9ad9c77248ad1d6889065093de095），生产启用由 Beth 按维护步骤办理。",
+  "Beth 可用原探针脚本 logs/hq_intake/beth_session_observability_20261014/beth_review_counterexamples.py 复跑四反例独立复核；该脚本与全部审核材料、v1 清单原文均未修改。"
+ ],
+ "rework_fixes": [
+  {"counterexample": "stop_without_confirmation", "问题": "phase=stopping 未获停止确认却标已停止",
+   "修复": "session_truth.classify 停止指令在途显示停止中（待核对：停止指令已发，尚未获得停止确认），仅 execution.json phase=stopped 的停止确认判已停止",
+   "验证": "rework_acceptance_results.json 检查 B1、N1"},
+  {"counterexample": "older_tool_still_running", "问题": "只取最新工具行，较新已完成工具掩盖较早仍在途工具并误判空闲",
+   "修复": "_db_session_facts 读取最近 25 条工具行取全部非终态，任一在途即在干活并按最早在途标注长工具，last_tool 携带在途计数",
+   "验证": "检查 B2（Beth 原数据复刻）、N4（两个在途工具加一个已完成）"},
+  {"counterexample": "all_sources_removed_preserve_history", "问题": "来源撤空后结转只留会话壳，旧事项与交接链丢失",
+   "修复": "session_history 完整结转：历次事项、工位、运行、交接卡与链及归档来源整条保留，另记来源缺失；上次有会话库来源的加记会话行已删除",
+   "验证": "检查 B3、H11；显式归档事实随结转保留"},
+  {"counterexample": "reused_session_preserve_old_item", "问题": "同会话换新事项重建后旧事项丢失",
+   "修复": "重建与旧索引合并：旧事项槽、旧运行（按 run_id 去重）、旧交接（按时刻双方来源去重）、旧认领时刻保留；来自旧索引的活跃运行相位标记 stale 不当作当前事实",
+   "验证": "检查 B4、N8、N9、N10"}
+ ],
+ "rework_additions": [
+  {"check": "N2-stop-conflict", "行为": "停止确认与在途工具冲突时实际活动优先显示在干活，状态与缺失原因注明冲突待核对"},
+  {"check": "N3-sample-stale", "行为": "活跃运行在册但最近活动超过三十分钟判未知（待核对：采样过期），不用在册旧记录替代实际活跃证据"},
+  {"check": "N5/N6-parent-verified", "行为": "父工作目录 G:\\Playground 会话须在登记、工位、运行、宿主归属或交接来源核实才纳入快照与索引；真实数据上快照候选由 7 降为 5，私有索引核实会话 100 个"},
+  {"check": "N7-dialog-missing", "行为": "缺失会话源的对话摘要返回明确失败原因（会话库无该会话行），不返回正常空摘要"},
+  {"check": "N11-source-loss", "行为": "单来源失联不崩溃，来源错误留痕于采样元数据"},
+  {"check": "S5-collector-loss 复跑", "行为": "会话库整体不可读时在册会话判未知（采集失联）并附原因"}
+ ],
+ "tests_summary": {
+  "isolated_fixture": {"passed": 44, "total": 44,
+                       "results": "logs/i227_rework_20261014/rework_acceptance_results.json",
+                       "fixture": "logs/i227_rework_20261014/fixture",
+                       "breakdown": "Beth 四反例复现 4 + 返修新增 11 + 原二十八项复跑 29（含删除样例两步）",
+                       "isolated_process": {"port": 58798, "recorded_in_results": true, "reclaimed": true}},
+  "real_evidence": {
+   "longtool_moment": "logs/i227_rework_20261014/rework_longtool_cloud_moment.json：22:55:53 前后云端判空闲与实测在途长工具 100 秒（L3-w1）及 513 秒（L5-w1）同刻对照，两例纠正",
+   "source_counts": "logs/i227_rework_20261014/rework_history_source_counts.json：登记 29、运行 26、宿主归属 13、归档 2、交接事件 1 与独立复算一致，索引 100 会话，生产索引零接触",
+   "restart_pagination": "logs/i227_rework_20261014/rework_restart_pagination.json：100 会话重建两次总数与顺序稳定，运行 26 零重复",
+   "dual_worker_handover": "logs/i227_rework_20261014/rework_dual_worker_handover.json：L3 双工位在册、70% 交接链双向可查、本会话历次事项认领时刻齐备",
+   "started_record": "logs/i227_rework_20261014/started.json"}
+ },
+ "scope": {
+  "modified": [
+   "lp_sync/session_truth.py（在途工具全集、停止分档、采样有效期、冲突注明、父目录核实）",
+   "lp_sync/session_history.py（完整结转、重建合并、运行 stale 标记、交接与运行去重、历次认领、缺失会话源摘要报错、父目录核实、版本号 session-observability-v2）"
+  ],
+  "created": [
+   "lp_sync/i227_rework_test.py（返修隔离验收 44 项）",
+   "lp_sync/i227_rework_real_evidence.py（返修真实取证，索引写私有目录）",
+   "logs/i227_rework_20261014/（started.json、fixture、全部结果与证据、history_index 私有索引）"
+  ],
+  "unchanged_from_v1": ["lp_sync/console_collector.py（v1 已改定的调用面不变）", "lp_sync/session_history_server.py", "lp_sync/session_observability_rollback/console_collector_pre_i227.py"],
+  "not_touched": ["board_ui", "cloud_board 云端代码与凭证", "生产宿主/内核/执行器", "sync_agent.py 及其运行进程", "科研控制与数值", "生产索引 lp_sync/session_history/index.json（只读取证）", "Beth 全部审核材料与 v1 清单原文"]
+ },
+ "production_load_note": {
+  "current_state": "生产 sync_agent 仍运行返修前旧采集逻辑（本项未重启任何生产服务）；生产历史索引仍为 v1 构建（264 会话，含父目录未核实会话）",
+  "enable_steps": "1) 复核通过后由 Beth 重启 sync_agent 加载新采集逻辑（install_runtime_tasks.ps1 既有机制）；2) 以 LP_SESSION_HISTORY_DIR 指向生产目录执行一次 build_index 完成核实口径重建（会话数将按核实结果变化，旧索引入库后合并保留历史事实）；3) 按需启动 session_history_server.py 只读查询服务（默认端口 58791）",
+  "rollback": "生产回退目标仍是 lp_sync/session_observability_rollback/console_collector_pre_i227.py；v2 代码未加载生产前无需代码级回退"
+ },
+ "unmet": [
+  "生产 sync_agent 未重启，新采集逻辑未加载，云端卡片在启用前仍按旧口径显示",
+  "生产历史索引仍为 v1 构建；核实口径重建属生产加载步骤，须 Beth 办理",
+  "board_ui 前端展示新增字段与历史页属 I-228（L5）范围",
+  "历史查询服务默认未随生产启动",
+  "Beth 独立复核（建议复跑原探针脚本）后办理验收"
+ ]
+}

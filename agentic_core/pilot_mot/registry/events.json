@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "events": [
+    {
+      "ts": "2026-10-08T11:32:24",
+      "action": "set_depends",
+      "action_word": "事项依赖清单被登记",
+      "item_id": "I-002",
+      "actor": "架构师",
+      "detail": "依赖清单设为 ['I-001']"
+    },
+    {
+      "ts": "2026-10-08T11:32:24",
+      "action": "set_depends",
+      "action_word": "事项依赖清单被登记",
+      "item_id": "I-003",
+      "actor": "架构师",
+      "detail": "依赖清单设为 ['I-001']"
+    },
+    {
+      "ts": "2026-10-08T11:32:24",
+      "action": "set_depends",
+      "action_word": "事项依赖清单被登记",
+      "item_id": "I-004",
+      "actor": "架构师",
+      "detail": "依赖清单设为 ['I-003']"
+    },
+    {
+      "ts": "2026-10-08T11:32:24",
+      "action": "set_depends",
+      "action_word": "事项依赖清单被登记",
+      "item_id": "I-005",
+      "actor": "架构师",
+      "detail": "依赖清单设为 ['I-001']"
+    }
+  ]
+}

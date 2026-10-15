@@ -1,0 +1,1225 @@
+% 巡航纵向通道状态空间方程全解析推导 —— LaTeX 渲染版
+% 编译：xelatex（两遍，解决目录与交叉引用）
+\documentclass[11pt,a4paper]{ctexart}
+
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage[
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=darkgray,
+  urlcolor=blue!55!black,
+  bookmarks=true,
+  bookmarksnumbered=true,
+  unicode=true
+]{hyperref}
+
+\setlength{\parindent}{2em}
+\widowpenalty=10000
+\clubpenalty=10000
+
+% 注记框
+\newtcolorbox{notebox}{
+  colback=gray!6, colframe=gray!55, boxrule=0.5pt,
+  arc=2pt, left=8pt, right=8pt, top=6pt, bottom=6pt
+}
+
+% 常用记号
+\newcommand{\ud}[1]{\dot{#1}}
+\newcommand{\bvec}[1]{\boldsymbol{#1}}
+\newcommand{\dd}{\mathrm{d}}
+
+\hypersetup{
+  pdftitle={巡航纵向通道状态空间方程全解析推导},
+  pdfauthor={isaac\_flapper\_sim 项目组},
+  pdfsubject={纵向通道线性化状态空间方程的完整多步推导},
+  pdfkeywords={状态空间, 线性化, 特征多项式, 短周期, 长周期, 扑翼飞行器}
+}
+
+\begin{document}
+
+% ═══════════════════════════════════════════════════════
+% 无标题页：封面由 ReportLab 渲染后经 pypdf 合并为第一页
+% ═══════════════════════════════════════════════════════
+
+\tableofcontents
+\newpage
+
+\section*{编制说明}
+\addcontentsline{toc}{section}{编制说明}
+
+编制日期：2026 年 9 月 23 日。本文档为纵向通道状态空间方程的完整多步推导，与《推导\_状态空间方程\_运算版.md》并行存在：运算版给出结论矩阵与数值出处，供快速查阅；全解析版把从牛顿第二定律到特征根的每一个代数步骤全部展开，任何一个等号都可以逐项复核，不存在“整理得”“同法处理”式的省略。
+
+阅读方式：读者只需具备矩阵行列式、泰勒展开、复数四则三项工具。每一章的推导只依赖前面章节已经建立的结果。
+
+验证声明：本文档全部中间数值于 2026 年 9 月 23 日用 numpy 独立复算，手工展开链路与 numpy 全精度链路的逐系数残差小于 $10^{-6}$（六位中间值的末位舍入量级）；复算记录见附录~\ref{app:B}。
+
+增补记录：2026 年 9 月 24 日增补第~\ref{sec:lateral}~章（横向通道的阻尼矩阵与滚转偏航耦合模态，第十八班实测代入）。第 1 至第 11 章的纵向推导正文未改动。
+
+\section{符号与前提总表}\label{sec:notation}
+
+\subsection{坐标系与运动量}
+
+\begin{itemize}[itemsep=2pt]
+  \item 机体系：原点取飞机质心，$x$ 轴沿机身轴线向前，$z$ 轴垂直于机身轴线向下，$y$ 轴按右手系指向右机翼。纵向平面指 $x$--$z$ 平面。
+  \item 前向速度 $u$（沿机体 $x$ 轴，单位 m/s）；垂向速度 $w$（沿机体 $z$ 轴，向下为正，单位 m/s）；俯仰角速率 $q$（绕机体 $y$ 轴，抬头为正，单位 rad/s）；俯仰角 $\theta$（机体 $x$ 轴相对水平面的转角，抬头为正，单位 rad）。
+  \item 重力加速度 $g = 9.81\ \mathrm{m/s^2}$；空气密度 $\rho = 1.225\ \mathrm{kg/m^3}$。
+\end{itemize}
+
+\subsection{力、力矩与导数}
+
+\begin{itemize}[itemsep=2pt]
+  \item 外力沿机体轴分量：$X$（前向，单位 N）、$Z$（垂向，单位 N）；俯仰力矩 $M$（单位 N$\cdot$m）。
+  \item 气动导数按稳定性轴系惯例记为带下标的偏导数，例如 $X_u$ 表示 $\partial X/\partial u$，单位由分母决定（N/(m/s) 或 N/rad）。
+  \item 配平值带上标星号；扰动量带 $\Delta$ 前缀。
+\end{itemize}
+
+\subsection{机体物理量}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llll}
+\toprule
+量 & 符号 & 数值 & 单位 \\
+\midrule
+质量 & $m$ & 0.215 & kg \\
+绕 $y$ 轴转动惯量 & $I_{yy}$ & $7.4\times10^{-3}$ & kg$\cdot$m$^2$ \\
+配平前向速度 & $u^{*}$ & 4.5 & m/s \\
+配平俯仰角 & $\theta^{*}$ & $-0.05$ & rad \\
+\bottomrule
+\end{tabular}
+\caption{机体物理量与配平点}
+\end{table}
+
+\subsection{实测与估计的分级}
+
+标注【实测】的导数直接取自台架辨识与配平扫描落盘文件；标注【估计】的导数由叶素力律或几何量推算；标注【结构零】的导数由力律结构判定恒为零。全部导数的换算在第~\ref{sec:aero}~章逐一给出。
+
+\section{第一步：刚体动力学方程的完整形式}\label{sec:newton}
+
+\subsection{平动方程为什么含有叉乘项}
+
+牛顿第二定律 $\bvec{F}=m\bvec{a}$ 的成立域是惯性系，其中 $\bvec{a}$ 是绝对加速度。机体系固连于机身，机身以角速度 $\bvec{\omega}$ 旋转，因此机体轴系是非惯性系。一个矢量 $\bvec{v}$ 在旋转坐标系中的时间导数与惯性系中的时间导数之间满足
+\begin{equation}
+\left(\frac{\dd\bvec{v}}{\dd t}\right)_{\text{惯性}}
+= \left(\frac{\dd\bvec{v}}{\dd t}\right)_{\text{机体}} + \bvec{\omega}\times\bvec{v}.
+\end{equation}
+把该关系代入 $m(\dd\bvec{v}/\dd t)_{\text{惯性}} = \bvec{F}$，得到机体系下表达的平动动力学方程
+\begin{equation}\label{eq:1-1}
+m\left(\ud{\bvec{v}} + \bvec{\omega}\times\bvec{v}\right) = \bvec{F}.
+\tag{(1-1)}
+\end{equation}
+其中 $\ud{\bvec{v}}$ 从此处起一律表示机体轴系下观察到的时间导数。
+
+\subsection{纵向平面的运动学限制}
+
+对称飞行假设滚转角为零、滚转角速率为零、偏航角速率为零、侧滑速度为零。在该假设下速度矢量与角速度矢量退化为
+\begin{equation}\label{eq:1-2}
+\bvec{v} = (u,\,0,\,w), \qquad \bvec{\omega} = (0,\,q,\,0).
+\tag{(1-2)}
+\end{equation}
+其中角速度矢量 $\bvec{\omega}$ 的 $y$ 分量就是俯仰角速率 $q$。本文档全程以粗体 $\bvec{\omega}$ 表示该旋转角速度矢量（状态量的瞬时值）；第~\ref{sec:modal}~章将引入的 $\omega_s$、$\omega_p$、$\omega_d$ 为模态固有频率标量（特征多项式的参数；“模态”即特征根对应的自然运动分量，正式定义见第~\ref{sec:modal}~章章首），两者不是同一个物理量，届时在第~9.2~节再次声明。
+
+\subsection{叉乘项的逐分量展开}
+
+按叉乘的行列式定义，
+\[
+\bvec{\omega}\times\bvec{v}
+= \begin{vmatrix} \bvec{i} & \bvec{j} & \bvec{k} \\ 0 & q & 0 \\ u & 0 & w \end{vmatrix}.
+\]
+按第一行展开该行列式：
+\begin{itemize}[itemsep=1pt]
+  \item $\bvec{i}$ 分量 $= q\cdot w - 0\cdot 0 = q\,w$；
+  \item $\bvec{j}$ 分量 $= -\left[0\cdot w - 0\cdot u\right] = 0$；
+  \item $\bvec{k}$ 分量 $= 0\cdot 0 - q\cdot u = -q\,u$。
+\end{itemize}
+因此
+\begin{equation}\label{eq:1-3}
+\bvec{\omega}\times\bvec{v} = (\,q\,w,\ 0,\ -q\,u\,).
+\tag{(1-3)}
+\end{equation}
+
+\subsection{平动方程拆为两个标量方程}
+
+把式~\eqref{eq:1-2}~与式~\eqref{eq:1-3}~代入式~\eqref{eq:1-1}~的左端：
+\[
+m\left(\ud{\bvec{v}} + \bvec{\omega}\times\bvec{v}\right)
+= m\bigl(\,(\ud u,\,0,\,\ud w) + (q w,\,0,\,-q u)\,\bigr)
+= m\left(\ud u + q w,\ 0,\ \ud w - q u\right).
+\]
+右端 $\bvec{F} = (X, 0, Z)$。按分量相等写出两个标量方程：
+\begin{align}
+m\left(\ud{u} + q\,w\right) &= X, \label{eq:1-4}\tag{(1-4)}\\[2pt]
+m\left(\ud{w} - q\,u\right) &= Z. \label{eq:1-5}\tag{(1-5)}
+\end{align}
+
+\subsection{转动方程在纵向平面的退化}
+
+刚体转动的牛顿--欧拉方程在旋转机体系中的完整形式为
+\begin{equation}\label{eq:1-6}
+\mathbf{I}\cdot\ud{\bvec{\omega}} + \bvec{\omega}\times\left(\mathbf{I}\cdot\bvec{\omega}\right) = \bvec{M}_{\text{total}},
+\tag{(1-6)}
+\end{equation}
+其中 $\mathbf{I}$ 为惯量张量，$\bvec{M}_{\text{total}}$ 为合外力矩矢量（含重力矩）。纵向飞行下惯量张量取对角形式 $\mathbf{I}=\operatorname{diag}(I_{xx},I_{yy},I_{zz})$，角速度 $\bvec{\omega}=(0,q,0)$。逐项计算两个加数。
+
+第一项：
+\[
+\mathbf{I}\cdot\ud{\bvec{\omega}} = \left(I_{xx}\cdot 0,\ I_{yy}\cdot\ud q,\ I_{zz}\cdot 0\right) = \left(0,\ I_{yy}\,\ud q,\ 0\right).
+\]
+第二项：$\bvec{\omega}\times(\mathbf{I}\cdot\bvec{\omega}) = (0,q,0)\times(0,I_{yy}q,0)$。两个矢量都沿 $y$ 轴方向，同向矢量的叉乘为零矢量，逐分量验证：
+\begin{itemize}[itemsep=1pt]
+  \item $\bvec{i}$ 分量 $= q\cdot 0 - 0\cdot(I_{yy}q) = 0$；
+  \item $\bvec{j}$ 分量 $= -\left[0\cdot 0 - 0\cdot 0\right] = 0$；
+  \item $\bvec{k}$ 分量 $= 0\cdot(I_{yy}q) - q\cdot 0 = 0$。
+\end{itemize}
+因此 $\bvec{\omega}\times(\mathbf{I}\cdot\bvec{\omega})=(0,0,0)$。重力作用于质心，对质心的重力矩为零。式~\eqref{eq:1-6}~的 $y$ 分量给出纵向转动方程
+\begin{equation}\label{eq:1-7}
+I_{yy}\,\ud q = M.
+\tag{(1-7)}
+\end{equation}
+俯仰角运动学关系由定义直接给出
+\begin{equation}\label{eq:1-8}
+\ud\theta = q.
+\tag{(1-8)}
+\end{equation}
+式~\eqref{eq:1-4}、\eqref{eq:1-5}、\eqref{eq:1-7}、\eqref{eq:1-8}~是后续全部推导的四个出发方程。
+
+\section{第二步：配平状态的确立}\label{sec:trim}
+
+\subsection{配平的定义}
+
+定直对称飞行指飞行状态不随时间变化的飞行：$\ud u=0$、$\ud w=0$、$\ud q=0$、$q=0$。把该条件代入四个出发方程，得到配平条件
+\begin{equation}\label{eq:2-1}
+X^{*}=0,\qquad Z^{*}=0,\qquad M^{*}=0,
+\tag{(2-1)}
+\end{equation}
+分别对应前向合力为零、垂向合力为零、合俯仰力矩为零。
+
+\subsection{配平值}
+
+配平扫描给出的工作点为
+\[
+u^{*}=4.5\ \mathrm{m/s},\quad w^{*}=0\ \mathrm{m/s},\quad q^{*}=0\ \mathrm{rad/s},\quad \theta^{*}=-0.05\ \mathrm{rad},
+\]
+以及扑翼频率配平值 $f^{*}$ 与舵偏配平值 $\delta e^{*}$。$w^{*}=0$ 的依据：定直飞行下机体 $z$ 轴合力为零，配平扫描在该状态收敛，垂向速度分量为零。$q^{*}=0$ 的依据：定直飞行定义本身。
+
+\subsection{配平处的重力分量}
+
+第~\ref{sec:gravity}~章将推导出重力投影，先把配平值代入备用：
+\[
+X_g^{*} = -m g\sin\theta^{*} = -0.215\times 9.81\times\sin(-0.05\ \mathrm{rad}).
+\]
+$\sin(-0.05)=-0.0499792$（保留七位）。代入：
+\[
+X_g^{*} = -0.215\times 9.81\times(-0.0499792) = +0.10539\ \mathrm{N}.
+\]
+\[
+Z_g^{*} = m g\cos\theta^{*} = 0.215\times 9.81\times\cos(-0.05\ \mathrm{rad}).
+\]
+$\cos(-0.05)=0.9987503$。代入：
+\[
+Z_g^{*} = 0.215\times 9.81\times 0.9987503 = 2.10651\ \mathrm{N}.
+\]
+含义：配平俯仰角 $\theta^{*}=-0.05$~rad（轻微低头）下，重力在前向有 $+0.105$~N 的分量推动飞机前向，在垂向有 2.106~N 分量（换算到机体 $z$ 轴向下为正的口径，见第~\ref{sec:gravity}~章符号推导）。
+
+\section{第三步：重力投影的完整推导}\label{sec:gravity}
+
+\subsection{基矢量的方向余弦}
+
+重力在世界系中沿竖直向下方向，大小 $m g$。世界系 $z_w$ 轴取向下为正，因此重力方向就是 $+z_w$ 方向。把重力投影到机体轴，等价于把世界竖直单位矢量分解到机体 $x$ 轴与机体 $z$ 轴上，投影系数是两组基矢量的方向余弦。
+
+机体 $x$ 轴（记单位矢 $\bvec{x}_b$）在抬头角 $\theta$ 下的世界系方向：水平前向分量为 $\cos\theta$；抬头使机头上偏，而“上”是 $-z_w$ 方向，竖直分量为 $-\sin\theta$。因此
+\[
+\bvec{x}_b = (\cos\theta,\ 0,\ -\sin\theta)_{\text{world}}.
+\]
+机体 $z$ 轴（记单位矢 $\bvec{z}_b$）在纵向平面内与 $\bvec{x}_b$ 垂直、指向机身下方（低头侧）：与 $\bvec{x}_b$ 正交且在世界竖直向下侧有正分量，该矢量为
+\[
+\bvec{z}_b = (\sin\theta,\ 0,\ \cos\theta)_{\text{world}}.
+\]
+正交性验证：$\bvec{x}_b\cdot\bvec{z}_b = \cos\theta\sin\theta + (-\sin\theta)\cos\theta = 0$，两组表达式确实正交。
+
+\subsection{重力的两个机体轴分量}
+
+重力矢量 $= m g\,(0,0,1)_{\text{world}}$。机体 $x$ 轴分量为重力与 $\bvec{x}_b$ 的点积：
+\[
+X_g = m g\,(0,0,1)\cdot(\cos\theta,0,-\sin\theta) = -m g\sin\theta.
+\]
+机体 $z$ 轴分量为重力与 $\bvec{z}_b$ 的点积：
+\[
+Z_g = m g\,(0,0,1)\cdot(\sin\theta,0,\cos\theta) = +m g\cos\theta.
+\]
+两式合并：
+\begin{equation}\label{eq:3-1}
+X_g = -m g\sin\theta, \qquad Z_g = +m g\cos\theta.
+\tag{(3-1)}
+\end{equation}
+符号直觉核验：$\theta=0$（水平飞行）时 $X_g=0$（重力无前向分量）、$Z_g=+mg$（重力全部沿机体 $z$ 正向，向下），符合 $z$ 向下为正的约定；$\theta$ 抬头为正时 $X_g=-mg\sin\theta<0$，重力出现向后的分量，符合爬升时重力减速的直觉。
+
+\subsection{扰动展开}
+
+配平处 $\theta=\theta^{*}+\Delta\theta$。对两个三角函数做一阶泰勒展开（在 $\theta^{*}$ 处）：
+\begin{align*}
+\sin(\theta^{*}+\Delta\theta) &= \sin\theta^{*} + \cos\theta^{*}\cdot\Delta\theta + O(\Delta\theta^2),\\
+\cos(\theta^{*}+\Delta\theta) &= \cos\theta^{*} - \sin\theta^{*}\cdot\Delta\theta + O(\Delta\theta^2).
+\end{align*}
+代入式~\eqref{eq:3-1}，只保留一阶项，重力扰动力为
+\begin{equation}\label{eq:3-2}
+\Delta X_g = -m g\cos\theta^{*}\cdot\Delta\theta, \qquad
+\Delta Z_g = -m g\sin\theta^{*}\cdot\Delta\theta.
+\tag{(3-2)}
+\end{equation}
+注意 $\Delta Z_g$ 的符号：$\theta^{*}=-0.05$~rad 为低头配平，$\sin\theta^{*}<0$，因此 $-mg\sin\theta^{*}>0$，低头角增大（$\Delta\theta<0$ 方向扰动）时垂向重力分量增大。
+
+\subsection{数值代入}
+
+$\sin(-0.05)=-0.0499792$，$\cos(-0.05)=0.9987503$。
+\begin{align}
+\Delta X_g &= -0.215\times 9.81\times 0.9987503\cdot\Delta\theta = -2.10651\cdot\Delta\theta\ \mathrm{(N)}, \label{eq:3-3a}\tag{(3-3a)}\\[2pt]
+\Delta Z_g &= -0.215\times 9.81\times(-0.0499792)\cdot\Delta\theta = +0.105393\cdot\Delta\theta\ \mathrm{(N)}. \label{eq:3-3b}\tag{(3-3b)}
+\end{align}
+
+\begin{notebox}
+\textbf{注记（对运算版的修正）}：运算版式 (3-3) 给出 $-2.114$ 与 $+0.1056$，两数值为该版手算末位笔误；本版按上述全精度链路给出 $-2.10651$ 与 $+0.105393$。矩阵组装使用的单位质量口径（$-9.7977$ 与 $+0.49029$）在两版中一致，笔误不影响任何后续结果。
+\end{notebox}
+
+\section{第四步：小扰动逐项代入与线性化}\label{sec:peturb}
+
+\subsection{代换式组}
+
+每个运动量拆为配平值加扰动：
+\[
+u = u^{*}+\Delta u,\quad w = w^{*}+\Delta w = \Delta w,\quad q = q^{*}+\Delta q = \Delta q,\quad \theta = \theta^{*}+\Delta\theta.
+\]
+外力与力矩同样拆为配平值加扰动：$X=X^{*}+\Delta X$，$Z=Z^{*}+\Delta Z$，$M=M^{*}+\Delta M$。配平值满足第~\ref{sec:trim}~章的配平条件，因此从方程中消去后只剩扰动量之间的关系。
+
+\subsection{前向方程的逐项代入}
+
+方程~\eqref{eq:1-4}~左端 $=m(\ud u+q w)$。逐项处理：
+\begin{itemize}[itemsep=1pt]
+  \item $\ud u = \dd(u^{*}+\Delta u)/\dd t = 0+\ud{\Delta u}$（配平值常数，导数为零）；
+  \item $q w = (0+\Delta q)(0+\Delta w) = \Delta q\,\Delta w$。
+\end{itemize}
+$\Delta q$ 与 $\Delta w$ 都是扰动小量，乘积为二阶小量 $O(2)$。一阶线性化只保留一次项，因此 $q w$ 项整项舍去。左端变为 $m\,\ud{\Delta u}$。右端 $X=X^{*}+\Delta X$，$X^{*}=0$ 消去。前向扰动方程为
+\begin{equation}\label{eq:4-1}
+m\,\ud{\Delta u} = \Delta X.
+\tag{(4-1)}
+\end{equation}
+
+\subsection{垂向方程的逐项代入}
+
+方程~\eqref{eq:1-5}~左端 $=m(\ud w-q u)$。逐项处理：
+\begin{itemize}[itemsep=1pt]
+  \item $\ud w = \dd(0+\Delta w)/\dd t = \ud{\Delta w}$；
+  \item $q u = (0+\Delta q)(u^{*}+\Delta u) = u^{*}\,\Delta q + \Delta q\,\Delta u$。
+\end{itemize}
+乘积 $\Delta q\,\Delta u$ 为二阶小量 $O(2)$，舍去；乘积 $u^{*}\Delta q$ 是扰动量与有限常数 $u^{*}$ 的乘积，为一阶小量，必须保留。左端变为 $m(\ud{\Delta w}-u^{*}\Delta q)$。右端 $Z^{*}=0$ 消去。垂向扰动方程为
+\begin{equation}\label{eq:4-2}
+m\left(\ud{\Delta w} - u^{*}\,\Delta q\right) = \Delta Z.
+\tag{(4-2)}
+\end{equation}
+整理为显式形式（本章整理仅做移项，不引入新近似）：
+\begin{equation}\label{eq:4-2p}
+\ud{\Delta w} = \Delta Z/m + u^{*}\,\Delta q.
+\tag{(4-2$'$)}
+\end{equation}
+项 $u^{*}\Delta q$ 的物理含义：俯仰转动使机体前向轴抬起时，垂向速度获得来自转动的贡献，该项是一阶运动学耦合，不是小量。
+
+\subsection{转动方程与运动学方程的代入}
+
+方程~\eqref{eq:1-7}：$\ud q = \dd(0+\Delta q)/\dd t=\ud{\Delta q}$，右端 $M=M^{*}+\Delta M$，$M^{*}=0$ 消去：
+\begin{equation}\label{eq:4-3}
+I_{yy}\,\ud{\Delta q} = \Delta M.
+\tag{(4-3)}
+\end{equation}
+方程~\eqref{eq:1-8}：$\ud\theta=q$ 直接给出扰动形式
+\begin{equation}\label{eq:4-4}
+\ud{\Delta\theta} = \Delta q.
+\tag{(4-4)}
+\end{equation}
+
+\subsection{线性化后的方程组}
+
+式~\eqref{eq:4-1}、\eqref{eq:4-2p}、\eqref{eq:4-3}、\eqref{eq:4-4}~构成线性化后的四个微分方程。重力扰动的具体表达式已由式~\eqref{eq:3-2}~给出，气动力扰动的展开在第~\ref{sec:aero}~章完成。
+
+\section{第五步：气动力与力矩的一阶展开}\label{sec:aero}
+
+\subsection{一般形式与高阶项的舍弃论证}
+
+气动力是 $(u,w,\theta,q,f,\delta e)$ 的光滑代数函数（叶素力律）。该表达隐含\textbf{周期平均（准定常）假设}：扑动的拍内动力学被平均化，力律只接受拍频 $f$ 而不接受拍内相位，其成立条件是机体状态与控制量的时间尺度远大于拍周期 $1/f^{*}$；本文档全篇沿用该假设，其在对称性维度的失效条件见 5.6 节 $M_f$ 行，在时间尺度维度（拍内控制）的失效留给拍内瞬时建模（第~\ref{sec:budget}~章挂账）。在配平点做多元泰勒展开，一般形式（以 $X$ 为例）：
+\[
+\Delta X = X_u\,\Delta u + X_w\,\Delta w + X_\theta\,\Delta\theta
++ \tfrac{1}{2}X_{uu}(\Delta u)^2 + X_{uw}\,\Delta u\,\Delta w + \cdots.
+\]
+舍弃全部二阶及更高阶项的论证：线性化工作点的扰动量级为 $\Delta u\sim 1$~m/s（对 $u^{*}=4.5$~m/s 的比值约 0.22）、$\Delta w\sim 0.5$~m/s、$\Delta\theta\sim 0.1$~rad、$\Delta q\sim 1$~rad/s。二阶项与一阶项的比值由扰动量与参考量之比控制，量级为 $0.1\sim 0.2$。第~\ref{sec:budget}~章误差预算中两个主要估计项（尾翼力臂、升力线斜率）的相对不确定度为百分之几十，显著大于二阶项贡献，因此在一阶模型精度内舍弃二阶项不构成主要误差源。该论证同样适用于 $Z$ 与 $M$。
+
+\subsection{各通道的一阶展开式}
+
+$X$ 通道：
+\begin{equation}\label{eq:5-1}
+\Delta X = \Delta X_g + \Delta X_{\mathrm{aero}}
+= -m g\cos\theta^{*}\cdot\Delta\theta + X_u\,\Delta u + X_w\,\Delta w + X_\theta\,\Delta\theta.
+\tag{(5-1)}
+\end{equation}
+$Z$ 通道：
+\begin{equation}\label{eq:5-2}
+\Delta Z = \Delta Z_g + \Delta Z_{\mathrm{aero}}
+= -m g\sin\theta^{*}\cdot\Delta\theta + Z_u\,\Delta u + Z_w\,\Delta w + Z_q\,\Delta q + Z_f\,\Delta f + Z_\theta\,\Delta\theta.
+\tag{(5-2)}
+\end{equation}
+$M$ 通道：
+\begin{equation}\label{eq:5-3}
+\Delta M = M_\alpha\,\Delta\alpha + M_q\,\Delta q + M_{\delta e}\,\Delta\delta e + M_f\,\Delta f.
+\tag{(5-3)}
+\end{equation}
+
+\subsection{\texorpdfstring{$X$}{X} 通道导数表}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{llllX}
+\toprule
+导数 & 定义 & 数值 & 单位 & 出处与级别 \\
+\midrule
+$X_u$ & $\partial X/\partial u$ & $-0.18$ & N/(m/s) & logs/reanchor\_scheduling.json 记录 $\partial F_x/\partial v=+0.18$，机体 $x$ 前向与力分量符号相反，取负。【实测】 \\
+$X_w$ & $\partial X/\partial w$ & $\approx 0$ & N/(m/s) & 阻力对垂向速度（迎角）的灵敏度在巡航迎角附近忽略。【近似零】 \\
+$X_\theta$ & $\partial X/\partial\theta$ & $+0.67$ & N/rad & 同一文件的重锚扫描。【实测】 \\
+\bottomrule
+\end{tabularx}
+\caption{$X$ 通道导数表}
+\end{table}
+
+\begin{notebox}
+\textbf{注记（挂账项） }：$X_\theta=+0.67$~N/rad 在运算版第 4 章表格中挂【实测】，但该数值未进入第~\ref{sec:assemble}~章组装的矩阵（矩阵 $(1,4)$ 元素只含重力项 $-g\cos\theta^{*}$）。若扫描口径中的 $\partial F_x/\partial\theta$ 已含重力投影贡献，则组装正确而表格口径重复；若扫描值为纯气动加推力贡献，则矩阵 $(1,4)$ 应为 $(0.67/0.215-9.7977)=-6.682$ 而非 $-9.7977$。两种口径的裁定需要重新扫描并声明重力处理方式，本版维持运算版的纯重力口径（$-9.7977$），$X_\theta$ 列入挂账清单，裁定后修正。
+\end{notebox}
+
+\subsection{\texorpdfstring{$Z$}{Z} 通道导数表}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{llllX}
+\toprule
+导数 & 定义 & 数值 & 单位 & 出处与级别 \\
+\midrule
+$Z_u$ & $\partial Z/\partial u$ & $-0.90$ & N/(m/s) & docs/TRIM\_SCAN\_215g.md 记录 $\partial F_z/\partial V=+0.9$，$z$ 向下为正口径下取负。【实测】 \\
+$Z_f$ & $\partial Z/\partial f$ & $+0.27$ & N/Hz & 同上，记录值 $-0.27$ 取反。【实测】 \\
+$Z_w$ & $\partial Z/\partial w$ & $-0.4961$ & N/(m/s) & 式~\eqref{eq:5-4}~至~\eqref{eq:5-6}~推算。【估计】 \\
+$Z_\theta$ & $\partial Z/\partial\theta$ & $\approx 0$ & N/rad & 施工记录“$\partial F_z/\partial\theta$ 极弱”。【实测（零值）】 \\
+$Z_q$ & $\partial Z/\partial q$ & $0$ & N$\cdot$s/rad & 准定常力律不含角速率项。【结构零】 \\
+\bottomrule
+\end{tabularx}
+\caption{$Z$ 通道导数表}
+\end{table}
+
+\subsection{\texorpdfstring{$Z_w$}{Zw} 的全链推算}
+
+第一步：配平升力。定直飞行下升力配平重力：
+\begin{equation}\label{eq:5-4}
+L^{*} = m g = 0.215\times 9.81 = 2.10915\ \mathrm{N}.
+\tag{(5-4)}
+\end{equation}
+第二步：配平升力系数。参考面积 $S_{\mathrm{ref}}=0.030$~m$^2$，动压
+\[
+\bar q = \tfrac{1}{2}\rho V^{*2} = \tfrac{1}{2}\times 1.225\times 4.5^2 = \tfrac{1}{2}\times 1.225\times 20.25 = 12.4031\ \mathrm{Pa}.
+\]
+分母 $\bar q\,S_{\mathrm{ref}} = 12.4031\times 0.030 = 0.372094$：
+\begin{equation}\label{eq:5-5}
+C_L^{*} = \frac{L^{*}}{\bar q\,S_{\mathrm{ref}}} = \frac{2.10915}{0.372094} = 5.668330.
+\tag{(5-5)}
+\end{equation}
+第三步：升力线斜率。法向力系数律为 $C_N(\alpha)=3.59\sin(2\alpha+9.1^{\circ})$。对 $\alpha$ 求导：
+\[
+\frac{\dd C_N}{\dd\alpha} = 3.59\times 2\cos(2\alpha+9.1^{\circ}) = 7.18\cos(2\alpha+9.1^{\circ}).
+\]
+取配平迎角处余弦因子 0.84（该因子为估计项，量测路径见第~\ref{sec:budget}~章），得有效升力线斜率
+\begin{equation}\label{eq:5-6}
+C_{L\alpha} \approx 7.18\times 0.84 = 6.03~/\mathrm{rad} \approx 6.0~/\mathrm{rad}.
+\tag{(5-6)}
+\end{equation}
+第四步：链式法则换算到垂向速度。迎角对垂向速度的灵敏度（第~\ref{sec:aoa}~章推导）为 $\partial\alpha/\partial w = 1/u^{*}$。升力对 $w$ 的导数为 $\partial L/\partial w = \bar q S_{\mathrm{ref}} C_{L\alpha}/u^{*}$。垂向力与升力的符号关系：$w$ 增大（向下流动增多）使迎角增大、升力增大，机体 $z$ 轴向下为正，升力增量沿 $z$ 负方向，因此 $Z_w=-\partial L/\partial w$：
+\begin{equation}\label{eq:5-7}
+Z_w = -\frac{\bar q S_{\mathrm{ref}} C_{L\alpha}}{u^{*}}
+= -\frac{(L^{*}/C_L^{*})\,C_{L\alpha}}{u^{*}}
+= -\frac{2.10915\times 6.0}{5.668330\times 4.5}.
+\tag{(5-7)}
+\end{equation}
+分子 $=12.65490$；分母 $=25.50749$：
+\[
+Z_w = -\frac{12.65490}{25.50749} = -0.496125\ \mathrm{N/(m/s)}.
+\]
+（运算版式 (4-4) 用 $L^{*}=2.11$~N 与 $C_L^{*}=5.67$ 得 $-0.496$，与本链路一致；本版自始至终使用 $L^{*}=mg=2.10915$ 的全精度链路，后续 $A$ 矩阵与特征多项式均由式~\eqref{eq:5-7}~的 $-0.496125$ 派生。）
+
+\subsection{\texorpdfstring{$M$}{M} 通道导数表与推算}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{llllX}
+\toprule
+导数 & 定义 & 数值 & 单位 & 出处与级别 \\
+\midrule
+$M_\alpha$ & $\partial M/\partial\alpha$ & $-0.081378$ & N$\cdot$m/rad & 式~\eqref{eq:5-8}。【估计】 \\
+$M_q$ & $\partial M/\partial q$ & $0$ & N$\cdot$m$\cdot$s/rad & 准定常力律不含 $q$ 项（零自然阻尼断言）。【结构零】 \\
+$M_{\delta e}$ & $\partial M/\partial\delta e$ & $-0.3014$ & N$\cdot$m/rad & 式~\eqref{eq:5-9}。【实测（系数）$\times$估计（力臂）】 \\
+$M_f$ & $\partial M/\partial f$ & $0$ & N$\cdot$m/Hz & 扑动力矩结构恒零（700 g 平台实测结论，215 g 同构）。\textbf{适用条件：仅对称扑动成立}——左右翼严格同步时惯性反作用矩相抵；一旦差动频率或幅值扑动，惯性反作用矩不再抵消，拍频及其谐波的周期力矩出现在机身方程中，本结构零断言失效（均值控制量转由气动差动承担，见第~\ref{sec:budget}~章挂账）。【结构零（有条件）】 \\
+\bottomrule
+\end{tabularx}
+\caption{$M$ 通道导数表}
+\end{table}
+
+$M_\alpha$ 推算：尾舵偏转产生法向力，法向力乘以尾翼力臂产生恢复力矩。尾舵效 $|b_{\mathrm{elev}}|=0.3014$~N$\cdot$m/rad（式~\eqref{eq:5-9}~换算），尾翼力臂 $l_t=0.27$~m（URDF 量取，估计项）。迎角增大时尾翼法向力产生低头力矩（静稳定）：
+\begin{equation}\label{eq:5-8}
+M_\alpha = -|b_{\mathrm{elev}}|\cdot l_t = -0.3014\times 0.27 = -0.081378\ \mathrm{N\cdot m/rad}.
+\tag{(5-8)}
+\end{equation}
+$M_{\delta e}$ 推算：舵效系数 $b_{\mathrm{elev}}=-0.0145\,v_{\mathrm{eff}}^2$，其中有效来流速度 $v_{\mathrm{eff}}=\sqrt{V^{*2}+(0.472 f^{*})^2}$。取 $v_{\mathrm{eff}}=4.56$~m/s（该值隐含扑翼频率 $f^{*}\approx 1.1$~Hz；$f^{*}$ 无独立落盘值，见第~\ref{sec:budget}~章注记）：
+\[
+b_{\mathrm{elev}} = -0.0145\times 4.56^2 = -0.0145\times 20.7936 = -0.30151\ \mathrm{N\cdot m/rad}.
+\]
+按运算版既定口径取 $|b_{\mathrm{elev}}|=0.3014$：
+\begin{equation}\label{eq:5-9}
+M_{\delta e} = -0.3014\ \mathrm{N\cdot m/rad}.
+\tag{(5-9)}
+\end{equation}
+
+\section{第六步：迎角关系的完整线性化}\label{sec:aoa}
+
+迎角的几何定义为机体 $x$ 轴与来流速度方向的夹角：
+\[
+\tan\alpha = \frac{w}{u}.
+\]
+在配平点 $(u^{*},w^{*})=(4.5,0)$ 附近做全微分。设 $\alpha=\alpha(u,w)$ 是 $(u,w)$ 的函数，全微分为
+\[
+\dd\alpha = \frac{\partial\alpha}{\partial w}\,\dd w + \frac{\partial\alpha}{\partial u}\,\dd u.
+\]
+两个偏导数由 $\tan\alpha=w/u$ 隐函数求导得到。先对 $w$ 求偏导（$u$ 固定）：
+\[
+\sec^2\alpha\cdot\frac{\partial\alpha}{\partial w} = \frac{1}{u}
+\quad\Longrightarrow\quad
+\frac{\partial\alpha}{\partial w} = \frac{\cos^2\alpha}{u}.
+\]
+先对 $u$ 求偏导（$w$ 固定）：
+\[
+\sec^2\alpha\cdot\frac{\partial\alpha}{\partial u} = -\frac{w}{u^2}
+\quad\Longrightarrow\quad
+\frac{\partial\alpha}{\partial u} = -\frac{\cos^2\alpha\,w}{u^2}.
+\]
+在配平点 $\alpha^{*}=\arctan(0/4.5)=0$，$\cos^2\alpha^{*}=1$，$w^{*}=0$：
+\[
+\left.\frac{\partial\alpha}{\partial w}\right|_{*} = \frac{1}{u^{*}} = \frac{1}{4.5} = 0.2222\ \mathrm{rad/(m/s)},
+\qquad
+\left.\frac{\partial\alpha}{\partial u}\right|_{*} = -\frac{0}{u^{*2}} = 0.
+\]
+因此扰动迎角与扰动垂向速度的关系为
+\begin{equation}\label{eq:6-1}
+\Delta\alpha = \frac{\Delta w}{u^{*}}.
+\tag{(6-1)}
+\end{equation}
+$\partial\alpha/\partial u$ 在配平点为零的含义：$w^{*}=0$ 时前向速度变化不改变迎角，只改变动压；因此 $M$ 通道展开式~\eqref{eq:5-3}~中不出现 $M_u\,\Delta u$ 项，这是结构结果而非近似。
+
+\section{第七步：开环状态方程的组装}\label{sec:assemble}
+
+\subsection{状态变量与输入}
+
+状态向量取 $\bvec{x}=[\Delta u,\ \Delta w,\ \Delta q,\ \Delta\theta]^{\mathsf T}$，输入向量取 $\bvec{u}=[\Delta f,\ \Delta\delta e]^{\mathsf T}$。
+
+\subsection{四个方程的最终线性形式}
+
+前向方程（式~\eqref{eq:4-1}~代入式~\eqref{eq:5-1}，$X_w\approx 0$，$X_\theta$ 挂账未采用）：
+\[
+\ud{\Delta u} = \frac{X_u}{m}\,\Delta u + 0\cdot\Delta w + 0\cdot\Delta q + \left(-g\cos\theta^{*}\right)\Delta\theta.
+\]
+垂向方程（式~\eqref{eq:4-2p}~代入式~\eqref{eq:5-2}，$Z_\theta\approx 0$，$Z_q=0$）：
+\[
+\ud{\Delta w} = \frac{Z_u}{m}\,\Delta u + \frac{Z_w}{m}\,\Delta w + u^{*}\,\Delta q + \left(-g\sin\theta^{*}\right)\Delta\theta + \frac{Z_f}{m}\,\Delta f.
+\]
+转动方程（式~\eqref{eq:4-3}~代入式~\eqref{eq:5-3}~与式~\eqref{eq:6-1}，$M_q=0$，$M_f=0$）：
+\[
+\ud{\Delta q} = 0\cdot\Delta u + \frac{M_\alpha}{I_{yy}u^{*}}\,\Delta w + 0\cdot\Delta q + 0\cdot\Delta\theta + 0\cdot\Delta f + \frac{M_{\delta e}}{I_{yy}}\,\Delta\delta e.
+\]
+运动学方程（式~\eqref{eq:4-4}）：
+\[
+\ud{\Delta\theta} = 0\cdot\Delta u + 0\cdot\Delta w + 1\cdot\Delta q + 0\cdot\Delta\theta.
+\]
+
+\subsection{\texorpdfstring{$A$}{A} 矩阵十六个元素的逐个计算}
+
+以下每行给出：元素位置~$\to$~公式~$\to$~代入~$\to$~数值。
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{llll}
+\toprule
+元素 & 公式 & 代入 & 数值 (1/s) \\
+\midrule
+$A_{11}$ & $X_u/m$ & $(-0.18)/0.215$ & $-0.837209$ \\
+$A_{12}$ & $X_w/m$ & $0/0.215$ & $0$ \\
+$A_{13}$ & —（方程无此项） & — & $0$ \\
+$A_{14}$ & $-g\cos\theta^{*}$ & $-9.81\times 0.9987503$ & $-9.797740$ \\
+$A_{21}$ & $Z_u/m$ & $(-0.90)/0.215$ & $-4.186047$ \\
+$A_{22}$ & $Z_w/m$ & $(-0.496125)/0.215$ & $-2.307558$ \\
+$A_{23}$ & $u^{*}$ & $4.5$ & $4.500000$ \\
+$A_{24}$ & $-g\sin\theta^{*}$ & $-9.81\times(-0.0499792)$ & $+0.490296$ \\
+$A_{31}$ & —（方程无此项） & — & $0$ \\
+$A_{32}$ & $M_\alpha/(I_{yy}u^{*})$ & $(-0.081378)/(0.0074\times 4.5)$ & $-2.443784$ \\
+$A_{33}$ & $M_q/I_{yy}$ & $0/0.0074$ & $0$ \\
+$A_{34}$ & —（方程无此项） & — & $0$ \\
+$A_{41}$ & — & — & $0$ \\
+$A_{42}$ & — & — & $0$ \\
+$A_{43}$ & $1$ & $1$ & $1.000000$ \\
+$A_{44}$ & — & — & $0$ \\
+\bottomrule
+\end{tabular}
+\caption{$A$ 矩阵十六个元素的逐个计算（分母细算两例：$0.0074\times 4.5=0.0333$；$(-0.081378)/0.0333=-2.443784$）}
+\end{table}
+
+\subsection{\texorpdfstring{$B$}{B} 矩阵八个元素的逐个计算}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{llll}
+\toprule
+元素 & 公式 & 代入 & 数值 \\
+\midrule
+$B_{11}$ & —（前向方程无频率项） & — & $0$ \\
+$B_{12}$ & — & — & $0$ \\
+$B_{21}$ & $Z_f/m$ & $0.27/0.215$ & $1.255814$ (m/s)/Hz \\
+$B_{22}$ & — & — & $0$ \\
+$B_{31}$ & $M_f/I_{yy}$ & $0/0.0074$ & $0$ \\
+$B_{32}$ & $M_{\delta e}/I_{yy}$ & $(-0.3014)/0.0074$ & $-40.729730$ (rad/s)/rad \\
+$B_{41}$ & — & — & $0$ \\
+$B_{42}$ & — & — & $0$ \\
+\bottomrule
+\end{tabular}
+\caption{$B$ 矩阵八个元素的逐个计算}
+\end{table}
+
+\subsection{数值矩阵}
+
+\begin{equation}\label{eq:Aopen}
+A_{\mathrm{open}} =
+\begin{bmatrix}
+-0.837209 & 0 & 0 & -9.797740 \\
+-4.186047 & -2.307558 & 4.500000 & 0.490296 \\
+0 & -2.443784 & 0 & 0 \\
+0 & 0 & 1.000000 & 0
+\end{bmatrix}\ \ (1/\mathrm{s}).
+\tag{(7-1)}
+\end{equation}
+\[
+B_{\mathrm{open}} =
+\begin{bmatrix}
+0 & 0 \\
+1.255814 & 0 \\
+0 & -40.729730 \\
+0 & 0
+\end{bmatrix}
+\]
+$B_{\mathrm{open}}$ 的单位为 (m/s)/Hz 与 (rad/s)/rad。与运算版第 6 章矩阵的对照：运算版元素为三位至四位舍入值（$-0.837$、$-2.308$、$-2.444$、$-40.728$ 等），本版给出六位全精度值。两条链路的特征多项式差异小于 0.01（第~\ref{sec:charpoly}~章给出逐系数对照），判为舍入传播，非代数差异。
+
+\subsection{元素物理读法}
+
+\begin{itemize}[itemsep=2pt]
+  \item $A_{21}=-4.186$：前向速度每增大 1 m/s，垂向加速度变化 $-4.186$~m/s$^2$（速度增大使升力增大，$z$ 向下为正，加速度向上为负）。该元素是能量通道速度前馈的物理出处。
+  \item $A_{23}=+4.500$：俯仰角速率通过式~\eqref{eq:4-2p}~的运动学耦合把前向速度转为垂向速度。
+  \item $A_{32}=-2.444$：迎角刚度经式~\eqref{eq:6-1}~除以 $u^{*}$ 与 $I_{yy}$ 进入角加速度方程，是短周期刚度的唯一来源。
+  \item $A_{14}=-9.798$：俯仰角每抬头 1 rad，重力产生 $9.798$~m/s$^2$ 的前向减速。该元素是长周期（浮沉）模态的能量交换通道。
+\end{itemize}
+
+\section{第八步：特征多项式的手工展开}\label{sec:charpoly}
+
+\subsection{写出 \texorpdfstring{$s\mathbf{I}-A$}{sI-A}}
+
+特征多项式定义为 $p(s)=\det(s\mathbf{I}-A)$。逐元素计算 $s\mathbf{I}-A$（单位对角减去第~\ref{sec:assemble}~章矩阵）：
+\begin{equation}\label{eq:sIA}
+s\mathbf{I}-A =
+\begin{bmatrix}
+s+0.837209 & 0 & 0 & +9.797740 \\
++4.186047 & s+2.307558 & -4.500000 & -0.490296 \\
+0 & +2.443784 & s & 0 \\
+0 & 0 & -1 & s
+\end{bmatrix}.
+\tag{(8-0)}
+\end{equation}
+符号说明：非对角元素为 $-A$ 的对应元素取负，例如 $A_{21}=-4.186047$ 取负得 $+4.186047$；$A_{14}=-9.797740$ 取负得 $+9.797740$。
+
+\subsection{按第四行展开}
+
+第四行只有两个非零元素：位置 $(4,3)$ 的 $-1$ 与位置 $(4,4)$ 的 $s$。行列式按行展开公式为
+\[
+\det = \sum\nolimits_j a_{4j}\,(-1)^{4+j}\,M_{4j}.
+\]
+第一支（元素 $a_{43}=-1$）：符号因子 $(-1)^{4+3}=(-1)^{7}=-1$，两项相乘 $(-1)\times(-1)=+1$，贡献 $+M_{43}$。
+
+第二支（元素 $a_{44}=s$）：符号因子 $(-1)^{4+4}=(-1)^{8}=+1$，贡献 $s\,M_{44}$。
+
+因此
+\begin{equation}\label{eq:8-1}
+p(s) = M_{43} + s\,M_{44},
+\tag{(8-1)}
+\end{equation}
+其中 $M_{43}$ 与 $M_{44}$ 分别为划去第 4 行与相应列后的三阶子式。
+
+\subsection{\texorpdfstring{$M_{44}$}{M44} 支：按第一行展开到二阶}
+
+$M_{44}$ 划去第 4 行第 4 列：
+\[
+M_{44} = \det
+\begin{bmatrix}
+s+0.837209 & 0 & 0 \\
++4.186047 & s+2.307558 & -4.500000 \\
+0 & +2.443784 & s
+\end{bmatrix}.
+\]
+第一行只有位置 $(1,1)$ 非零。符号因子 $(-1)^{1+1}=+1$：
+\[
+M_{44} = (s+0.837209)\,
+\det\begin{bmatrix} s+2.307558 & -4.500000 \\ +2.443784 & s \end{bmatrix}.
+\]
+二阶行列式逐项乘开：
+\[
+\det = (s+2.307558)\,s - (-4.500000)(2.443784)
+= s^2 + 2.307558\,s + 4.500000\times 2.443784.
+\]
+乘积 $4.500000\times 2.443784 = 10.997028$。因此
+\begin{equation}\label{eq:8-2}
+M_{44} = (s+0.837209)\left(s^2 + 2.307558\,s + 10.997028\right).
+\tag{(8-2)}
+\end{equation}
+
+\subsection{\texorpdfstring{$M_{43}$}{M43} 支：按第三行展开到二阶}
+
+$M_{43}$ 划去第 4 行第 3 列：
+\[
+M_{43} = \det
+\begin{bmatrix}
+s+0.837209 & 0 & +9.797740 \\
++4.186047 & s+2.307558 & -0.490296 \\
+0 & +2.443784 & 0
+\end{bmatrix}.
+\]
+第三行只有位置 $(3,2)$ 非零，元素 $+2.443784$。符号因子 $(-1)^{3+2}=(-1)^{5}=-1$。划去第 3 行第 2 列得二阶子式：
+\[
+M_{43} = 2.443784\times(-1)\,
+\det\begin{bmatrix} s+0.837209 & +9.797740 \\ +4.186047 & -0.490296 \end{bmatrix}.
+\]
+二阶行列式逐项乘开：
+\begin{align*}
+\det &= (s+0.837209)(-0.490296) - (9.797740)(4.186047)\\
+&= -0.490296\,s - 0.490296\times 0.837209 - 9.797740\times 4.186047.
+\end{align*}
+两个乘积：$0.490296\times 0.837209 = 0.410480$；$9.797740\times 4.186047 = 41.013796$：
+\[
+\det = -0.490296\,s - 0.410480 - 41.013796 = -0.490296\,s - 41.424276.
+\]
+代回：
+\begin{align*}
+M_{43} &= -2.443784\times\left(-0.490296\,s - 41.424276\right)\\
+&= 2.443784\times 0.490296\,s + 2.443784\times 41.424276.
+\end{align*}
+两个乘积：$2.443784\times 0.490296 = 1.198177$；$2.443784\times 41.424276 = 101.231973$：
+\begin{equation}\label{eq:8-3}
+M_{43} = 1.198177\,s + 101.231973.
+\tag{(8-3)}
+\end{equation}
+
+\subsection{\texorpdfstring{$s\,M_{44}$}{sM44} 支的乘开}
+
+先把式~\eqref{eq:8-2}~的两个因子相乘（不提前乘 $s$）：
+\begin{align*}
+&(s+0.837209)\left(s^2+2.307558\,s+10.997028\right)\\
+&= s\left(s^2+2.307558\,s+10.997028\right)
++ 0.837209\left(s^2+2.307558\,s+10.997028\right)\\
+&= s^3 + 2.307558\,s^2 + 10.997028\,s
++ 0.837209\,s^2 + 0.837209\times 2.307558\,s\\
+&\quad + 0.837209\times 10.997028.
+\end{align*}
+两个乘积：$0.837209\times 2.307558 = 1.931909$；$0.837209\times 10.997028 = 9.206813$。按幂次合并同类项：
+\begin{itemize}[itemsep=1pt]
+  \item $s^3$ 项：$1$；
+  \item $s^2$ 项：$2.307558+0.837209 = 3.144767$；
+  \item $s^1$ 项：$10.997028+1.931909 = 12.928937$；
+  \item $s^0$ 项：$9.206813$。
+\end{itemize}
+\[
+(s+0.837209)\left(s^2+2.307558\,s+10.997028\right)
+= s^3 + 3.144767\,s^2 + 12.928937\,s + 9.206813.
+\]
+再乘 $s$：
+\[
+s\,M_{44} = s^4 + 3.144767\,s^3 + 12.928937\,s^2 + 9.206813\,s.
+\]
+
+\subsection{两支相加合并}
+
+$p(s)=s\,M_{44}+M_{43}$，逐幂次相加：
+\begin{itemize}[itemsep=1pt]
+  \item $s^4$ 项：$1$；
+  \item $s^3$ 项：$3.144767$；
+  \item $s^2$ 项：$12.928937$；
+  \item $s^1$ 项：$9.206813+1.198177 = 10.404990$；
+  \item $s^0$ 项：$101.231973$。
+\end{itemize}
+\begin{equation}\label{eq:8-4}
+\boxed{\;p(s) = s^4 + 3.144767\,s^3 + 12.928937\,s^2 + 10.404990\,s + 101.231973.\;}
+\tag{(8-4)}
+\end{equation}
+
+\subsection{与 numpy 全精度复算的对照}
+
+numpy 对式~\eqref{eq:Aopen}~矩阵直接计算 $\det(s\mathbf{I}-A)$ 的系数（高到低）为
+\[
+[\,1,\ 3.144767,\ 12.928936,\ 10.404990,\ 101.231973\,].
+\]
+手工链路与 numpy 链路的逐系数残差：
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{llll}
+\toprule
+系数 & 手工（六位中间值） & numpy（全精度） & 残差 \\
+\midrule
+$s^3$ & 3.144767 & 3.144767 & $<10^{-6}$ \\
+$s^2$ & 12.928937 & 12.928936 & $10^{-6}$ \\
+$s^1$ & 10.404990 & 10.404990 & $<10^{-6}$ \\
+$s^0$ & 101.231973 & 101.231973 & $<10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\caption{手工展开与 numpy 复算的逐系数对照}
+\end{table}
+
+残差全部来自手工链路中间值只保留六位小数的末位舍入。对运算版三位舍入矩阵（$A_{22}$ 取 $-2.308$）做同一计算得
+\[
+[\,1,\ 3.145,\ 12.929796,\ 10.402886,\ 101.24162\,],
+\]
+与全精度链路的常数项差 0.0097，同为舍入传播量级。
+
+\section{第九步：模态结构的解析分解}\label{sec:modal}
+
+本章术语定义：线性定常系统的\textbf{模态}（mode）指其自由响应的自然分解分量——状态矩阵每对共轭复特征根 $s=\sigma\pm\mathrm{j}\,\omega_d$ 对应一个模态，该分量的时间历程形如 $e^{\sigma t}\left(C_1\cos\omega_d t + C_2\sin\omega_d t\right)$，系统的任意自由运动是全部模态的线性叠加。四阶纵向系统恰有两对共轭复根（式~\eqref{eq:9-4}），因此恰有两个振荡模态；经典飞行力学按振荡快慢与状态参与量将其定名为短周期（俯仰）模态与长周期（浮沉）模态，本章沿用该定名。本文档前文的“模态参数”“模态频率”等派生词均指单个模态的描述量（$\omega_n$、$\zeta$、$\sigma$、$\omega_d$）。
+
+\subsection{短周期子系统的分离}
+
+经典飞机模态理论假设：短周期模态（$w$、$q$ 快变）在长周期模态（$u$、$\theta$ 慢变）的时间尺度内完成，因此研究短周期时把 $u$ 与 $\theta$ 冻结在配平值（$\Delta u=0$、$\Delta\theta=0$）。在该假设下取第~\ref{sec:assemble}~章的第二、三方程，得到二阶子系统：
+\begin{align*}
+\ud{\Delta w} &= \frac{Z_w}{m}\,\Delta w + u^{*}\,\Delta q,\\
+\ud{\Delta q} &= \frac{M_\alpha}{I_{yy}u^{*}}\,\Delta w.
+\end{align*}
+该二阶子系统的状态矩阵记 $A_{\mathrm{sp}}$（下标 sp 为 short-period/短周期的缩写，本文档下同；长周期模态相应记下标 p——p 不是 long 的首字母，而是该模态标准英文专名 \emph{phugoid}（浮沉模态，Lanchester 1908 年取希腊语``飞行/逃逸''词根造的词）的首字母，教材惯例记长周期频率为 $\omega_p$；不用 l 的原因是 l/L 已被占用——本文档内 $L^{*}$ 为配平升力、$C_{L\alpha}$ 为升力线斜率、$l_t$ 为尾翼力臂，经典记号中 $L$ 还兼任滚转力矩），其特征多项式记 $p_{\mathrm{sp}}(s)$：
+\[
+A_{\mathrm{sp}} =
+\begin{bmatrix} -2.307558 & 4.500000 \\ -2.443784 & 0 \end{bmatrix},
+\]
+\begin{align}
+p_{\mathrm{sp}}(s) &= \det(s\mathbf{I}-A_{\mathrm{sp}})
+= \det\begin{bmatrix} s+2.307558 & -4.500000 \\ +2.443784 & s \end{bmatrix}
+\nonumber\\
+&= (s+2.307558)\,s + 4.500000\times 2.443784
+= s^2 + 2.307558\,s + 10.997028.
+\label{eq:9-1}\tag{(9-1)}
+\end{align}
+与第~\ref{sec:charpoly}~章 $M_{44}$ 支的对照：式~\eqref{eq:9-1}~的常数项恰为 $M_{44}$ 支内二阶行列式的常数项（$4.5\times 2.443784$），两个推导独立到达同一数值，互为校核。
+
+\subsection{短周期模态参数}
+
+任意二阶振荡系统的特征多项式都可以配成标准形式 $s^2+2\zeta\omega_n s+\omega_n^2$，其中两个系数各有专名：$\omega_n$ 称为\textbf{无阻尼固有频率}（单位 rad/s，系统不受阻尼时的自然振荡角频率），$\zeta$ 称为\textbf{阻尼比}（无量纲，$\zeta<1$ 欠阻尼、$\zeta=1$ 临界阻尼、$\zeta>1$ 过阻尼）。
+
+记号声明：本节的 $\omega_n$ 及其带下标形式 $\omega_s$、$\omega_p$、$\omega_d$ 全部是上述模态频率标量；它们与第~\ref{sec:newton}~章的刚体旋转角速度矢量 $\bvec{\omega}$（粗体，$\bvec{\omega}=(0,q,0)$，$q$ 为其 $y$ 分量）不是同一个物理量——后者是状态量的瞬时值，前者是特征多项式的参数。两者量纲同为 rad/s 纯属量纲巧合（振荡相位变化率与刚体转动角速率都是角度对时间的导数），本文档以粗体矢量记号与带下标标量记号区分两者。
+
+``无阻尼''三字的口径澄清：$\omega_n$ 的定义是``假想拆除阻尼后系统的自然振荡频率''，不是断言该模态无阻尼。模态实际振荡的角频率是阻尼振荡频率 $\omega_d=\omega_n\sqrt{1-\zeta^2}$，恒低于 $\omega_n$；阻尼越大压得越低。参数化采用 $\omega_n$ 而非 $\omega_d$ 的原因：标准形式 $s^2+2\zeta\omega_n s+\omega_n^2$ 的两个系数恰好由 $\zeta$ 与 $\omega_n$ 独立承载阻尼与刚度两类物理属性，若以 $\omega_d$ 为参数则系数必须写成 $\sqrt{\omega_d^2+\sigma^2}$ 的耦合形式。本文档的两条数值链可以核验该关系：短周期 2$\times$2 子系统的 $\omega_s=3.316177$、$\zeta_s=0.348$，实际根虚部 $3.109=3.316177\times\sqrt{1-0.348^2}$；完整四阶短周期根的 $\omega_n=3.7631$，实际虚部 $2.8705=3.7631\times\sqrt{1-0.647^2}$。
+
+短周期模态的参数由式~\eqref{eq:9-1}~与标准形式逐系数对应：
+\begin{align*}
+\omega_s^2 &= 10.997028 \ \Longrightarrow\ \omega_s = 3.316177\ \mathrm{rad/s};\\
+2\zeta_s\omega_s &= 2.307558 \ \Longrightarrow\ \zeta_s = \frac{2.307558}{2\times 3.316177} = \frac{2.307558}{6.632354} = 0.348.
+\end{align*}
+短周期子系统的根：$s = -\zeta_s\omega_s \pm \mathrm{j}\,\omega_s\sqrt{1-\zeta_s^2} = -1.154\pm 3.109\mathrm{j}$~rad/s。
+
+\subsection{多项式除法检验分离假设}
+
+用短周期因子去除完整四次多项式，检验分离假设是否成立。除法竖式逐步执行。
+
+除式与被除式：
+\begin{align*}
+\text{除式：}\quad & s^2+2.307558\,s+10.997028.\\
+\text{被除式：}\quad & s^4+3.144767\,s^3+12.928937\,s^2+10.404990\,s+101.231973.
+\end{align*}
+
+第一步：首项 $s^4\div s^2=s^2$。除式乘 $s^2$ 得 $s^4+2.307558\,s^3+10.997028\,s^2$。相减：
+\begin{align*}
+& (3.144767-2.307558)\,s^3 + (12.928937-10.997028)\,s^2 + 10.404990\,s + 101.231973\\
+&\quad = 0.837209\,s^3 + 1.931909\,s^2 + 10.404990\,s + 101.231973.
+\end{align*}
+第二步：首项 $0.837209\,s^3\div s^2=0.837209\,s$。除式乘该商项得 $0.837209\,s^3+1.931909\,s^2+9.206813\,s$。相减：
+\[
+(1.931909-1.931909)\,s^2 + (10.404990-9.206813)\,s + 101.231973
+= 0\cdot s^2 + 1.198177\,s + 101.231973.
+\]
+第三步：余式首项为 $1.198177\,s$，已低于除式次数 2，除法终止。
+\begin{align}
+\text{商} &= s^2 + 0.837209\,s, \label{eq:9-2}\tag{(9-2)}\\[2pt]
+\text{余式} &= 1.198177\,s + 101.231973. \label{eq:9-3}\tag{(9-3)}
+\end{align}
+除法第二步的 $s^2$ 项恰好整除（$1.931909-1.931909=0$）：被除数第一步余式的 $s^3$ 系数 $0.837209$ 恰为 $3.144767-2.307558$，$s^2$ 系数 $1.931909$ 恰等于 $0.837209\times 2.307558$，这不是数值巧合——下节证据三给出结构解释。
+
+\subsection{分离失效的定量判据}
+
+三个证据表明经典两因子分离在本机不成立。
+
+\textbf{证据一（余式量级） }：分离假设成立时余式应远小于被除式各项。本机余式常数项 101.232 与被除式常数项 101.232 之比为 100\%，余式一次项 1.198 与被除式一次项 10.405 之比为 12\%。长周期因子无法吸收四次式的刚度。
+
+\textbf{证据二（商的结构） }：商 $s^2+0.837209\,s$ 的根为 $s=0$ 与 $s=-0.837$，是两个实根而非共轭复根对。经典长周期模态应为低频共轭复根对，商的实根结构表明 $u$--$\theta$ 通道的振荡模态无法与短周期解耦。
+
+\textbf{证据三（余式的结构） }：余式~\eqref{eq:9-3}~与第~\ref{sec:charpoly}~章的 $M_{43}$（式~\eqref{eq:8-3}）逐系数相同。这不是巧合：由式~\eqref{eq:8-1}，$p(s)=s\,M_{44}+M_{43}$，其中 $M_{44}$ 含短周期因子（第~\ref{sec:modal}~章已证），因此 $p(s)$ 对短周期因子取余必然恰好等于 $M_{43}$。$M_{43}$ 支全部来自被第四行展开“挤出”的重力与速度耦合项（$9.797740\times 4.186047$ 乘积是其常数主体），即分离失效的数学载体正是长周期通道的重力耦合。
+
+Lanchester 长周期近似公式 $\omega_p = g\sqrt{2}/V^{*} = 9.81\times 1.414214/4.5 = 3.083$~rad/s。该公式成立的假设是短周期刚度远大于长周期频率平方（$\omega_s^2\gg\omega_p^2$）；本机 $\omega_s^2=10.997$ 与 $\omega_p^2\approx 9.205$（由 $a_0/\omega_s^2 = 101.231973/10.997028$ 估算）同量级，假设不成立。因此长周期模态的频率与稳定性只能由完整四次方程给出。
+
+\subsection{完整四次方程的根与验证}
+
+式~\eqref{eq:8-4}~的四个根（数值求解）：
+\begin{equation}\label{eq:9-4}
+s_{1,2} = -2.4334 \pm 2.8705\mathrm{j}\ \mathrm{(rad/s)},
+\qquad
+s_{3,4} = +0.8610 \pm 2.5313\mathrm{j}\ \mathrm{(rad/s)}.
+\tag{(9-4)}
+\end{equation}
+每个根代回 $p(s)$ 的验证残差：$|p(s_1)|=|p(s_2)|=5.0\times10^{-13}$；$|p(s_3)|=|p(s_4)|=1.9\times10^{-13}$。残差达到双精度浮点极限，根的数值确认。
+
+\subsection{模态参数换算与定名}
+
+特征根写作 $s=\sigma\pm\mathrm{j}\,\omega_d$ 后，模态参数的换算定义为 $\omega_n=\sqrt{\sigma^2+\omega_d^2}$、$\zeta=-\sigma/\omega_n$，其中 $\sigma$ 为特征根实部（模态衰减率，$\sigma<0$ 收敛、$\sigma>0$ 发散），$\omega_d$ 为特征根虚部（阻尼振荡频率，即该模态实际振荡的角频率），换算得到的 $\omega_n$ 为该模态的无阻尼固有频率（下表 $\omega_n$ 列）：
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{llllX}
+\toprule
+共轭对（$\sigma\pm\omega_d\mathrm{j}$） & $\omega_n$ (rad/s) & $\zeta$ & 定名与判读 \\
+\midrule
+$-2.4334\pm 2.8705\mathrm{j}$ & $3.7631$ & $+0.647$ & 短周期（俯仰）模态：稳定，阻尼良好 \\
+$+0.8610\pm 2.5313\mathrm{j}$ & $2.6737$ & $-0.322$ & 长周期（浮沉）模态：开环发散，必须由外环压住 \\
+\bottomrule
+\end{tabularx}
+\caption{模态参数换算与定名（$\sigma$ 与 $\omega_d$ 即共轭对中的实部与虚部；$\omega$ 列的算术见下文逐项展开）}
+\end{table}
+
+两处换算的逐项算术：$2.4334^2=5.92144$；$2.8705^2=8.23977$；和 $=14.16121$；$\sqrt{14.16121}=3.76314$。$0.8610^2=0.74132$；$2.5313^2=6.40748$；和 $=7.14880$；$\sqrt{7.14880}=2.67372$。
+
+两对模态的频率比 $3.7631/2.6737=1.41$。经典模态分离要求快慢模态频率比远大于 1（通常按大于 3 经验判据），频率比 1.41 从根的层面再次确认分离失效结论。
+
+\section{第十步：控制器如何改写 \texorpdfstring{$A$}{A}}\label{sec:control}
+
+\subsection{能量误差的全微分}
+
+总能量（单位质量口径）定义为
+\[
+E = g\,z + \tfrac{1}{2}\left(u^2+w^2\right),
+\]
+其中 $z$ 为世界系高度（向上为正）。在配平点 $(z^{*},u^{*},w^{*}=0)$ 处做全微分：
+\[
+\dd E = \frac{\partial E}{\partial z}\,\dd z + \frac{\partial E}{\partial u}\,\dd u + \frac{\partial E}{\partial w}\,\dd w
+= g\,\dd z + u\,\dd u + w\,\dd w.
+\]
+代入配平值 $w^{*}=0$：
+\[
+\left.\dd E\right|_{*} = g\,\Delta z + u^{*}\,\Delta u + 0\cdot\Delta w.
+\]
+$\Delta w$ 项系数为零的原因是配平垂向速度为零，不是舍去。控制律使用的能量误差取“参考减实际”口径（能量不足为正，不足则加油）：
+\begin{equation}\label{eq:10-1}
+e_E = E_{\mathrm{ref}} - E = -\left(g\,\Delta z + u^{*}\,\Delta u\right).
+\tag{(10-1)}
+\end{equation}
+
+\subsection{频率控制律的偏导链}
+
+控制律为 $f = f^{*} + 0.03\,e_E + 0.010\int e_E\,\dd t$，因此扰动频率
+\[
+\Delta f = 0.03\left(-g\,\Delta z - u^{*}\,\Delta u\right) + 0.010\,\Delta e_i,
+\]
+其中 $\Delta e_i$ 为能量误差积分器的扰动状态。对 $z$ 与 $u$ 的偏导：
+\[
+\frac{\partial\Delta f}{\partial z} = -0.03\times 9.81 = -0.2943,
+\qquad
+\frac{\partial\Delta f}{\partial u} = -0.03\times 4.5 = -0.1350.
+\]
+符号链（负反馈方向核验）：$z$ 高于参考 $\to$ $g\,\Delta z>0$ $\to$ $e_E<0$ $\to$ $\Delta f<0$ $\to$ 扑翼频率下降 $\to$ 推力减小 $\to$ 飞机回落，扰动被抑制。偏导进入状态矩阵的路径是 $B_{21}=1.255814$（$Z_f/m$ 行）：
+\begin{align*}
+A_{2,z}\ \text{叠加} &= \frac{Z_f}{m}\cdot\frac{\partial\Delta f}{\partial z} = 1.255814\times(-0.2943) = -0.3696,\\
+A_{2,u}\ \text{叠加} &= \frac{Z_f}{m}\cdot\frac{\partial\Delta f}{\partial u} = 1.255814\times(-0.1350) = -0.1695.
+\end{align*}
+两个叠加元素与运算版式 (9-1) 给出的 $-0.369$ 与 $-0.170$ 数值一致；这正是增广数值矩阵中 $v_z$ 行 $z$ 列与 $v_x$ 列出现非零项的机制。
+
+\subsection{俯仰速率阻尼环}
+
+内环力矩指令为
+\[
+m_y = K_{P,R}\left(\omega_{yd} - \mathrm{PITCH\_DAMP}\cdot q\right),
+\]
+其中 $\omega_{yd}$ 为内环的俯仰角速率指令（绕 $y$ 轴的角速率需求，单位 rad/s，与 $q$ 同族同量纲——两者在此相减构成阻尼误差信号），参数 $K_{P,R}=0.40$、$\mathrm{PITCH\_DAMP}=2.0$。$\omega_{yd}=0$ 时：
+\[
+m_y = -0.40\times 2.0\times q = -0.80\,q.
+\]
+$m_y$ 经舵效 $|b_{\mathrm{elev}}|=0.3014$ 换算为俯仰力矩，等效俯仰阻尼导数
+\begin{equation}\label{eq:10-2}
+M_{q,\mathrm{eff}} = M_q - K_{P,R}\cdot\mathrm{PITCH\_DAMP}\cdot|b_{\mathrm{elev}}|
+= 0 - 0.40\times 2.0\times 0.3014 = -0.24112\ \mathrm{N\cdot m\cdot s/rad}.
+\tag{(10-2)}
+\end{equation}
+
+\subsection{闭环短周期的解析估计}
+
+把 $M_{q,\mathrm{eff}}$ 代入短周期子系统（第~\ref{sec:modal}~章的 $\ud{\Delta q}$ 方程增加 $(M_{q,\mathrm{eff}}/I_{yy})\,\Delta q$ 项；$\omega_{s,\mathrm{cl}}$、$\zeta_{s,\mathrm{cl}}$ 为闭环短周期的频率与阻尼比估计，记号承第~9.2~节的 $\omega_s$、$\zeta_s$）：
+\[
+\omega_{s,\mathrm{cl}}^2 \approx \frac{-M_\alpha}{I_{yy}} + \frac{Z_w\,M_{q,\mathrm{eff}}}{m\,I_{yy}}
+= \frac{0.081378}{0.0074} + \frac{(-0.496125)\times(-0.24112)}{0.215\times 0.0074}.
+\]
+逐项计算：$0.081378/0.0074 = 10.997$；分母 $m I_{yy} = 0.215\times 0.0074 = 0.001591$；分子 $(-0.496125)\times(-0.24112) = 0.119633$；比值 $= 0.119633/0.001591 = 75.19$：
+\[
+\omega_{s,\mathrm{cl}}^2 \approx 10.997 + 75.19 = 86.19
+\ \Longrightarrow\
+\omega_{s,\mathrm{cl}} = 9.284\ \mathrm{rad/s}.
+\]
+阻尼系数 $= -(Z_w/m) - (M_{q,\mathrm{eff}}/I_{yy}) = 2.307558 + (0.24112/0.0074) = 2.307558+32.584 = 34.892$：
+\[
+\zeta_{s,\mathrm{cl}} \approx \frac{34.892}{2\times 9.284} = \frac{34.892}{18.568} = 1.879\ \text{（过阻尼估计）}.
+\]
+
+\begin{notebox}
+\textbf{注记（对运算版的修正）}：运算版第 9 章把中间数写为 $11.0+271=282$，该中间数为笔误；同一公式的正确算术为 $10.997+75.19=86.19$（平方根 $9.284$ 恰为运算版给出的结论数 $9.3$，结论数来自正确链路，笔误不影响结论）。本版已按正确算术重写。
+\end{notebox}
+
+\subsection{与数值线性化的对表}
+
+数值线性化（linearize\_dump.txt 验收口径 KPR040）给出的闭环短周期特征值为 $+0.8321\pm 0.3319\mathrm{j}$（离散特征值的模长 $|\lambda|=0.8959$；此处“模”指绝对值，与第~\ref{sec:modal}~章“模态”一词无关），换算连续系：$\sigma=-13.196$~1/s、$\omega_d=45.54$~rad/s、$\zeta=0.278$、
+\[
+\omega_n = \sqrt{13.196^2+45.54^2} = \sqrt{174.13+2073.9} = \sqrt{2248.0} = 47.42\ \mathrm{rad/s}.
+\]
+解析估计 9.28 rad/s 与数值 47.42 rad/s 的差距归因三条，全部可定位：
+\begin{enumerate}[itemsep=2pt]
+  \item 估计项注入：$l_t=0.27$~m 与 $C_{L\alpha}=6.0$ 两个估计量分别进入 $M_\alpha$ 与 $Z_w$，误差直接缩放短周期刚度；
+  \item 通路缺失：式~\eqref{eq:10-2}~只计入阻尼通路（PITCH\_DAMP 项），$K_{P,R}$ 比例通路经 $\omega_{yd}$ 指令引入的刚度项未计入；
+  \item 滤波器缺失：数值模型含两个一阶滤波器（$\tau=0.08$~s，即 12.5 rad/s 带宽，见 dump 矩阵 $pv\_filt\_z$ 与 $w\_filt\_y$ 行），解析模型未含。
+\end{enumerate}
+差距本身不构成问题：解析推导的作用是给出结构、量级与每一项的物理出处，定值以数值线性化与在环验收为准。
+
+\section{第十一步：误差预算与挂账清单}\label{sec:budget}
+
+\subsection{估计项的注入点与消除路径}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+估计项 & 注入的矩阵元素 & 消除路径 \\
+\midrule
+$l_t=0.27$~m（URDF 量取） & $A_{32}$（经 $M_\alpha$） & URDF 直接量取复核，或台架俯仰静稳定性试验 \\
+$C_{L\alpha}\approx 6.0$~/rad（余弦因子 0.84） & $A_{22}$（经 $Z_w$） & 风洞或台架迎角扫频，辨识 $Z_\alpha$ \\
+$M_q$ 结构零的适用范围 & $A_{33}$ & 拍内瞬时建模给出非零项的来源检查 \\
+$M_f$ 结构零的差动失效条件 & $B_{31}$ & 差动频率/幅值扑动构型下结构零断言失效（见 5.6 节适用条件）；需拍内多体模型（翼--身两刚体）给出周期反作用力矩的幅值与谐波结构，均值滚转控制量另行辨识气动差动映射 \\
+$Z_q$、$X_w$ 近似零 & $A_{23}$ 已含 $u^{*}$ 项之外的部分、$A_{12}$ & 瞬时模型的高阶项核算 \\
+$f^{*}$ 无独立落盘值（$v_{\mathrm{eff}}=4.56$ 隐含 $f^{*}\approx 1.1$~Hz） & $B_{32}$（经 $b_{\mathrm{elev}}$） & 配平扫描落盘 $f^{*}$ 后复算 $v_{\mathrm{eff}}$；dump 不动点 freq\_last $\approx 1.30$~Hz 对应 $v_{\mathrm{eff}}=4.587$、$|b_{\mathrm{elev}}|=0.3054$，与现值差 1.3\% \\
+\bottomrule
+\end{tabularx}
+\caption{估计项的注入点与消除路径}
+\end{table}
+
+\subsection{挂账项（需裁定后修正）}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{XXl}
+\toprule
+挂账项 & 现状 & 裁定所需动作 \\
+\midrule
+$X_\theta=+0.67$~N/rad 的口径 & 第~\ref{sec:aero}~章表格挂【实测】但未进矩阵 $A_{14}$；两种口径（已含重力 / 纯气动推力）对应 $A_{14}=-9.798$ 或 $-6.682$ & 重新做 $\partial F_x/\partial\theta$ 扫描并声明重力处理方式 \\
+文首悬空引用 & 运算版文首“数学版第 1 章”不存在 & 运算版再版时删除该句或补建数学版 \\
+\bottomrule
+\end{tabularx}
+\caption{挂账项清单}
+\end{table}
+
+四项估计项全部消除之前，本推导的定量结论以“量级与结构正确、系数待实测精化”为正式口径；该口径与全项目“线性化只管局部、全局以在环验收为判据”的立场一致。
+
+\section{增补章：横向通道的阻尼矩阵与滚转偏航耦合模态（第十八班实测代入）}\label{sec:lateral}
+
+编制说明：本文件第 0 章至第 11 章推导纵向通道（对称飞行假设滚转角、滚转角速率、偏航角速率、侧滑速度全为零，见第 0.1 节）；《推导\_状态空间方程\_运算版.md》文首声明“横航向通道的同款推导留作下一版”。本章为该横向通道的第一块：把第十八班实测的旋转阻尼矩阵代入横向角速度子系统，重算模态，与旧口径（标量阻尼）并排对照。本章的范围限定声明：侧滑刚度类导数（滚转力矩对侧滑角的偏导数 $L_\beta$、偏航力矩对侧滑角的偏导数 $N_\beta$、侧向力对侧滑角的偏导数 $Y_\beta$）本项目从未测量，完整四状态横向模型（侧滑角、滚转角速率、偏航角速率、滚转角）尚不可组装；本章只建立角速度子系统（两个状态），侧滑刚度留作挂账（见~\ref{sec:lateral-budget}~节）。
+
+\subsection{数据来源与矩阵定义}
+
+数据来源：第十八班旋转阻尼专项辨识，工具为 tools/scan\_rot\_damping.py。原始数据存于 logs/scan\_rot\_damping.json，报告为 docs/旋转阻尼专项辨识.md。测量工况为三维模型巡航配平点（速度 4.0~m/s、拍频 1.75~Hz、攻角设定 $35^\circ$、配平俯仰 $+7.14^\circ$），逐轴施加角速度并取周期平均力矩的中心差分斜率。矩阵在角速度 0.5~rad/s 代表点取值，行=力矩轴，列=角速度轴：
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{lccc}
+\toprule
+$D$（N·m·s/rad） & $p$（滚转角速率） & $q$（俯仰角速率） & $r$（偏航角速率） \\
+\midrule
+滚转力矩行 & $-0.0093$ & $+0.0000$ & $-0.0344$ \\
+俯仰力矩行 & $-0.0000$ & $+0.0006$ & $-0.0000$ \\
+偏航力矩行 & $+0.0163$ & $+0.0000$ & $-0.0084$ \\
+\bottomrule
+\end{tabular}
+\caption{旋转阻尼矩阵（角速度 0.5~rad/s 代表点）}
+\end{table}
+
+矩阵元素的定义：$D$ 的第 $i$ 行第 $j$ 列元素等于第 $j$ 轴角速度引起的第 $i$ 轴力矩的偏导数（$D_{ij}=\partial T_i/\partial\omega_j$）。
+
+对角元的独立旁证：对角元另有逐档扫描中位数——滚转轴 $-0.0091$（六档极差 6.0\%，线性段成立）、偏航轴 $-0.0084$（极差 0.5\%，线性成立）、俯仰轴 $+0.0005$（极差 34.7\%，线性不成立且符号为非恢复性）。矩阵表取 0.5~rad/s 代表点的滚转对角元 $-0.0093$，与中位数 $-0.0091$ 相差 2.2\%。
+
+有效范围：第十九班扩段扫描（docs/旋转阻尼专项辨识\_扩段.md）测得 $|\omega|\le 10$~rad/s 全程恢复性、无反号；9~rad/s 处滚转斜率弱化 42.8\%、偏航弱化 7.6\%，弱化机制为叶素攻角 $45^\circ$ 饱和主导。
+
+\subsection{旧口径：标量阻尼的横向速率子系统}
+
+旧口径的内容：现行生效的机翼旋转阻尼为标量系数 WING\_ROT\_DAMP$=0.1$~N·m·s/rad（配置出生值，数值稳定性取值，无物理辨识依据——第十八班 git 史调查），运行时按 $T_{\mathrm{damp}}=-0.1\,\bvec{\omega}$ 逐轴施加（事件序列工具的写法即 $\dd p/\dd t=(T_x-0.1\,p)/I_{xx}$，docs/事件序列可判伪验证.md）。该口径在横向角速度子系统中的线性形式为两个互不耦合的一阶方程：
+\begin{equation}\label{eq:12-1}
+I_{xx}\,\Delta\ud{p}=-0.1\,\Delta p,\qquad
+I_{zz}\,\Delta\ud{r}=-0.1\,\Delta r .
+\end{equation}
+其中 $I_{xx}$ 为滚转转动惯量，$I_{zz}$ 为偏航转动惯量。式~\eqref{eq:12-1} 的两个特征根为实根 $\lambda_1=-0.1/I_{xx}$ 与 $\lambda_2=-0.1/I_{zz}$；两通道独立衰减，交叉项恒为零，不存在振荡模态。
+
+惯量基准（两套，全程并排声明）：
+\begin{itemize}
+\item 基准甲（项目 harness 约值链）：$I_{xx}=2.4\times10^{-3}$~kg·m$^2$（config/sim\_config.py 注释口径，量子表与阻尼时间常数 $\tau=24$~ms 链同源；docs/TABLE\_I\_复核.md 记 harness 已更新此值）。偏航 $I_{zz}$ 无独立落盘值，本章取 $I_{zz}=I_{xx}$（各向同性近似，挂账见~\ref{sec:lateral-budget}~节）。
+\item 基准乙（论文 Table III 真值）：$I_{xx}=3.6\times10^{-4}$~kg·m$^2$、$I_{zz}=7.6\times10^{-4}$~kg·m$^2$（SparrowHawk 论文平台对比表转录，docs/TABLE\_I\_复核.md）。
+\end{itemize}
+
+基准甲的特征根为 $\lambda_1=\lambda_2=-41.67$~s$^{-1}$（重根），时间常数 $\tau=24$~ms，远小于拍周期 571~ms——这正是第十七班第六步“量子冲量折算 88\% 被生效阻尼吃掉”的机理根源（该 88\% 数字后被第十八班证明是 0.1 假值的产物）。基准乙的特征根为 $\lambda_1=-277.78$~s$^{-1}$、$\lambda_2=-131.58$~s$^{-1}$。
+
+\subsection{新口径：实测矩阵的横向速率子系统}
+
+新口径把式~\eqref{eq:12-1} 的阻尼标量换成 12.1 节矩阵的滚转行与偏航行（俯仰行、俯仰列全零，声明见 12.6 节）：
+\begin{equation}\label{eq:12-2}
+I_{xx}\,\Delta\ud{p}=L_p\,\Delta p+L_r\,\Delta r,\qquad
+I_{zz}\,\Delta\ud{r}=N_p\,\Delta p+N_r\,\Delta r .
+\end{equation}
+其中 $L_p=-0.0093$、$L_r=-0.0344$、$N_p=+0.0163$、$N_r=-0.0084$~N·m·s/rad。状态矩阵为
+\begin{equation}\label{eq:12-3}
+A_{\mathrm{lat}}
+=\begin{bmatrix}
+L_p/I_{xx} & L_r/I_{xx}\\[2pt]
+N_p/I_{zz} & N_r/I_{zz}
+\end{bmatrix}.
+\end{equation}
+记 $a=L_p/I_{xx}$、$b=L_r/I_{xx}$、$c=N_p/I_{zz}$、$d=N_r/I_{zz}$。特征多项式为 $\lambda^2-(a+d)\lambda+(ad-bc)=0$；其判别式按“迹的平方减四倍行列式”展开并消去 $ad$ 项：
+\begin{equation}\label{eq:12-4}
+\mathrm{disc}=(a+d)^2-4(ad-bc)=(a-d)^2+4bc .
+\end{equation}
+两通道是否合并为单一模态，由式~\eqref{eq:12-4} 的符号判定。交叉项乘积 $bc$ 的分子为 $L_r N_p=(-0.0344)\times(+0.0163)=-5.607\times10^{-4}$（单位 N·m·s/rad 的平方）——符号为负，物理含义为偏航角速率产生负滚转力矩、滚转角速率产生正偏航力矩，两者构成回环；自阻尼乘积 $L_p N_r=(-0.0093)\times(-0.0084)=+7.812\times10^{-5}$，交叉乘积的绝对值为自阻尼乘积的 7.18 倍。两套惯量基准下 disc 均为负（计算见下），因此特征根为共轭复数对：横向速率子系统存在且仅存在一个振荡模态——滚转与偏航合为一体的耦合振荡（本章称耦合滚转偏航振荡模态），不再有两个独立的一阶弛豫。
+
+基准甲（$I_{xx}=I_{zz}=2.4\times10^{-3}$~kg·m$^2$）：
+\begin{align*}
+a&=\frac{L_p}{I_{xx}}=\frac{-0.0093}{0.0024}=-3.875,\qquad
+b=\frac{L_r}{I_{xx}}=\frac{-0.0344}{0.0024}=-14.3333,\\
+c&=\frac{N_p}{I_{zz}}=\frac{+0.0163}{0.0024}=+6.7917,\qquad
+d=\frac{N_r}{I_{zz}}=\frac{-0.0084}{0.0024}=-3.5;\\
+\mathrm{disc}&=(a-d)^2+4bc=(-0.375)^2+4\times(-14.3333\times 6.7917)\\
+&=0.1406+4\times(-97.3472)=0.1406-389.39=-389.25~\mathrm{s}^{-2};\\
+\sigma&=\frac{a+d}{2}=-3.6875~\mathrm{s}^{-1},\qquad
+\omega_d=\frac{\sqrt{-\mathrm{disc}}}{2}=\frac{19.729}{2}=9.865~\mathrm{rad/s};\\
+\omega_n&=\sqrt{\sigma^2+\omega_d^2}=\sqrt{13.598+97.312}=\sqrt{110.910}=10.531~\mathrm{rad/s},\\
+\zeta&=\frac{-\sigma}{\omega_n}=\frac{3.6875}{10.531}=0.350,\qquad
+\tau=\frac{1}{|\sigma|}=271~\mathrm{ms}.
+\end{align*}
+
+基准乙（$I_{xx}=3.6\times10^{-4}$、$I_{zz}=7.6\times10^{-4}$~kg·m$^2$）：
+\begin{align*}
+a&=\frac{-0.0093}{3.6\times10^{-4}}=-25.8333,\qquad
+b=\frac{-0.0344}{3.6\times10^{-4}}=-95.5556,\\
+c&=\frac{+0.0163}{7.6\times10^{-4}}=+21.4474,\qquad
+d=\frac{-0.0084}{7.6\times10^{-4}}=-11.0526;\\
+\mathrm{disc}&=(-14.7807)^2+4\times(-2049.62)=218.47-8198.5=-7980.0~\mathrm{s}^{-2};\\
+\sigma&=-18.443~\mathrm{s}^{-1},\qquad
+\omega_d=44.66~\mathrm{rad/s},\qquad
+\omega_n=48.32~\mathrm{rad/s},\\
+\zeta&=0.382,\qquad
+\tau=54~\mathrm{ms}.
+\end{align*}
+
+记号声明：本章的 $\omega_d$、$\omega_n$ 为模态频率标量，与第 1 章的刚体角速度矢量 $\bvec{\omega}$ 不是同一个物理量（该双重记号声明原载第 1 章与第 9.2 节，本章沿用）；滚转角速率记 $p$、偏航角速率记 $r$，不与 $\omega$ 混用。
+
+模态矢量的混合程度（“不可分开”的定量依据）：基准甲的复根对应特征矢量 $v\propto(b,\,\lambda-a)=(-14.333,\,0.188+9.865j)$，两分量幅值比 $|p|:|r|=14.333:9.865=1.45:1$；基准乙为 $95.56:45.27=2.11:1$。两套基准下滚转分量与偏航分量幅值均为同一量级，该模态不能按单轴分解。
+
+\subsection{新旧口径对照与三问对答}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{lXXXX}
+\toprule
+量 & 旧口径基准甲 & 新口径基准甲 & 旧口径基准乙 & 新口径基准乙 \\
+\midrule
+特征根 (s$^{-1}$) & $-41.67$（重根） & $-3.688\pm9.865j$ & $-277.78$、$-131.58$ & $-18.443\pm44.66j$ \\
+模态形态 & 两个独立一阶弛豫 & 单耦合振荡（复根对） & 两个独立一阶弛豫 & 单耦合振荡（复根对） \\
+时间常数 $\tau$ & 24~ms & 271~ms & 3.6~ms、7.6~ms & 54~ms \\
+阻尼比 $\zeta$ & 无振荡模态（过阻尼域） & 0.350 & 无振荡模态 & 0.382 \\
+$\omega_n$ (rad/s) & 不适用（无振荡） & 10.53 & 不适用 & 48.32 \\
+\bottomrule
+\end{tabularx}
+\caption{横向速率子系统新旧口径模态对照}
+\end{table}
+
+三问对答：
+
+问题一（特征值挪了多少）：基准甲的衰减率从 $-41.67$~s$^{-1}$ 挪到 $-3.688$~s$^{-1}$，衰减变慢 11.3 倍（时间常数 24~ms 变 271~ms）；基准乙从 $-277.78$~s$^{-1}$ 与 $-131.58$~s$^{-1}$ 挪到 $-18.443$~s$^{-1}$，衰减变慢 15.1 倍与 7.1 倍。交叉核验：新口径基准甲的时间常数 271~ms 对第十八班单轴辨识时间常数 $\tau=I_{xx}/0.0091=263.7$~ms，两者相差 2.8\%，差值来源于交叉耦合项对衰减率的修正——量级闭合。
+
+问题二（阻尼比升了还是降了）：旧口径不存在振荡模态（两个实根处于过阻尼域，阻尼比对其实根无定义、按二阶系统口径为 $\zeta\ge 1$），任何转动扰动都在远短于拍周期的时间内被压平；新口径出现欠阻尼振荡，阻尼比 0.350（基准甲）与 0.382（基准乙）。结论：横向转动扰动的抑制强度整体下降一个量级（衰减时间常数放大 11 至 15 倍），抑制方式从“单调压平”变为“衰减振荡”。
+
+问题三（强交叉是否把两通道耦合成不可分开的模态）：结论为是。判定依据三条：其一，式~\eqref{eq:12-4} 的判别式在两套惯量基准下均为负（$-389.25$ 与 $-7980.0$~s$^{-2}$），两个实根合并为一对共轭复根；其二，模态矢量两分量幅值比 1.45:1（基准甲）与 2.11:1（基准乙），均为同一量级；其三，交叉乘积 $|L_r N_p|$ 达自阻尼乘积 $L_p N_r$ 的 7.18 倍。因此单输入单输出（Single Input Single Output，SISO，每路输入只按单路输出分析的口径）的逐轴阻尼处理在本模型上不成立；横向链设计（新起点路线图第七步）与六参数波形空间（第八步）必须按多输入多输出（Multiple Input Multiple Output，MIMO，多路输入与多路输出相互耦合的分析口径）处理滚转偏航通道。
+
+\subsection{与论文横向模态的量级对照}
+
+论文数值（docs/阻尼辨识\_辅助来源调查.md 转录）：SparrowHawk 横向模态衰减率 0.505~s$^{-1}$、阻尼振荡频率 2.563~rad/s，换算 $\omega_n=\sqrt{0.505^2+2.563^2}=2.612$~rad/s、$\zeta=0.505/2.612=0.193$（恒等校验通过）。我方新口径为 $\zeta=0.350\sim0.382$、$\omega_n=10.53\sim48.32$~rad/s，两项均高于论文。该对照只作量级对照，三条口径差异必须同时声明：其一，对方为全机含尾翼的真机辨识模态（含侧滑刚度的完整横航向振荡，属荷兰滚类模态），我方为仅机翼阻尼矩阵的角速度子系统（无侧滑刚度，模态形态为滚转偏航速率弛豫振荡，不是荷兰滚）；其二，惯量基准不同（对方真机 $3.6\times10^{-4}$~kg·m$^2$ 量级，我方基准甲 $2.4\times10^{-3}$~kg·m$^2$ 比其大 6.7 倍）；其三，配平点不同（对方 6~m/s、5.94~Hz，我方 4.0~m/s、1.75~Hz）。三条差异各自朝何方向偏置该对照，本章未做定量分离，故本节不输出“我方阻尼优于或劣于真机”的结论。
+
+\subsection{三条强制声明}
+
+声明一（矩阵的代表性边界）：矩阵为小信号单点代表值，在角速度 0.5~rad/s 处测得；滚转对角元与六档扫描中位数互差 2.2\%；$|\omega|\le 10$~rad/s 全程恢复性、无反号（第十九班扩段），9~rad/s 处滚转斜率弱化 42.8\%（攻角饱和主导）。逐拍操纵的量子事件级角速度约为 $\pm9$~rad/s，已落入弱化区——逐拍权限折算引用本章数值时必须携带此边界。
+
+声明二（俯仰行为模型边界非物理）：矩阵俯仰行、俯仰列全零是模型边界不是物理——本模型尾翼不接收角速度输入，真机俯仰阻尼主要来自尾翼；本模型内俯仰轴的转动阻尼由控制器俯仰速率阻尼环承担（第 10.3 节等效导数 $M_{q,\mathrm{eff}}$ 的通路）。本条进入真机考核清单（新起点路线图第九步）。
+
+声明三（生效值与生效链分离）：现行生效值仍是 0.1——配置未改，在环生效模型仍为冻结版；本章是分析层替换，不构成生效值变更。生效值变更（人工阻尼降级）在一队裁决链里走：第二十班工程调整已把降级推迟到新起点第五步升格时合批处理，依据为 WING\_ROT\_DAMP 同时作用于现行冻结版在环，冻结版无物理耦合项补偿，单独降级等于现行在环失去阻尼兜底。
+
+\subsection{本章挂账}\label{sec:lateral-budget}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.30\textwidth}XX}
+\toprule
+挂账项 & 现状 & 消除路径 \\
+\midrule
+侧滑刚度导数 $Y_\beta$、$L_\beta$、$N_\beta$ & 未测量，完整四状态横向模型不可组装 & 台架或离线扫侧滑角辨识三导数；补齐后荷兰滚类模态可算 \\
+基准甲的偏航惯量 $I_{zz}$ & 无独立落盘值，本章取 $I_{zz}=I_{xx}$ 各向同性近似 & 惯量称量（真机考核清单既有项）；或 PhysX 整树直读合成 \\
+惯量基准三分歧（URDF $1.2\times10^{-2}$ / harness $2.4\times10^{-3}$ / 论文 $3.6\times10^{-4}$~kg·m$^2$） & 模态数字随基准摆动（$\omega_n$ 为 10.53 对 48.32~rad/s） & 真机称量裁定（docs/TABLE\_I\_复核.md 既有挂账） \\
+矩阵的工况依赖 & 单配平点测得；波形重搜索（第四步）若更换工作点，矩阵须复测 & 新工作点落定后按 tools/scan\_rot\_damping.py 复测 \\
+\bottomrule
+\end{tabularx}
+\caption{本章挂账清单}
+\end{table}
+
+本章数值复算：全部特征值、阻尼比、模态矢量于 2026 年 9 月 24 日按两条链路复算——其一为式~\eqref{eq:12-3} 的 numpy 全精度特征分解；其二为式~\eqref{eq:12-4} 的手工闭式（六位中间值，正文全部数字即此链路）。两链路逐位一致。
+
+\appendix
+
+\section{运算版三处数字问题的处置记录}\label{app:A}
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+位置 & 运算版数值 & 本版数值 & 处置 \\
+\midrule
+式 (3-3) $\Delta X_g$ & $-2.114$ N/rad & $-2.10651$ N/rad & 修正（末位笔误，矩阵不受影响） \\
+式 (3-3) $\Delta Z_g$ & $+0.1056$ N/rad & $+0.105393$ N/rad & 修正（同上） \\
+第 9 章 $\omega_s^2$ 中间数 & $11.0+271=282$ & $10.997+75.19=86.19$ & 修正（中间数笔误；结论数 $\omega_s\approx 9.3$ 与 $\zeta\approx 1.88$ 两版一致，由正确链路产生） \\
+第 9 章 $X_\theta$ & 表格挂账未用 & 维持矩阵现值，显式挂账 & 未修正，待口径裁定 \\
+\bottomrule
+\end{tabularx}
+\caption{运算版数字问题处置记录}
+\end{table}
+
+\section{复算记录}\label{app:B}
+
+本文档全部数值于 2026 年 9 月 23 日按以下两条独立链路复算：其一，从物理量（$m$、$I_{yy}$、$u^{*}$、$\theta^{*}$、各导数）全精度重建 $A$ 与 $B$，numpy 计算 $\det(s\mathbf{I}-A)$ 与特征根；其二，按第~\ref{sec:charpoly}~章的手工展开路线（$M_{44}$ 支、$M_{43}$ 支、乘开合并）以六位中间值逐步计算多项式系数。两条链路的逐系数残差不大于 $10^{-6}$（六位中间值的末位舍入量级），特征根代回残差小于 $5\times10^{-13}$。短周期子系统多项式（式~\eqref{eq:9-1}）与 $M_{44}$ 支常数项的独立到达一致（第~\ref{sec:modal}~章）构成第三重校核。数值线性化对表数据取自 linearize\_dump.txt 验收口径 KPR040。第~\ref{sec:lateral}~章横向数值于 2026 年 9 月 24 日按 numpy 特征分解与式~\eqref{eq:12-4} 手工闭式双链路复算，逐位一致（复算声明见该章末节）。
+
+\end{document}

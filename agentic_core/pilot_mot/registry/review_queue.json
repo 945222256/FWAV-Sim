@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "queue": [
+    {
+      "qid": "Q-001",
+      "title": "数据集选型与接入规格",
+      "goal_context": "在多目标跟踪骨架立项时数据来源未定，须先选型",
+      "close_criterion": "候选数据集对照表登记于 datasets/ 且写明选型判据与数据形状",
+      "submitted_by": "L3队",
+      "submitted_at": "2026-10-08T11:31:55",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-001",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-001",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-08T11:31:55"
+    },
+    {
+      "qid": "Q-002",
+      "title": "点云预处理管线骨架",
+      "goal_context": "在感知前端线开工时激光雷达点云入口未建",
+      "close_criterion": "perception/ 下存在预处理入口模块且空数据输入运行退出码为零",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-08T11:31:55",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-002",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-002",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-08T11:31:55"
+    },
+    {
+      "qid": "Q-003",
+      "title": "目标检测接口契约",
+      "goal_context": "在感知前端与跟踪内核分工时两线接口未定义",
+      "close_criterion": "接口文档写明输入输出数据形状并经两线会签存档",
+      "submitted_by": "L1队",
+      "submitted_at": "2026-10-08T11:31:55",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-003",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L1，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L1",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-003",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-08T11:31:55"
+    },
+    {
+      "qid": "Q-004",
+      "title": "数据关联与轨迹维持骨架",
+      "goal_context": "在跟踪内核线开工时关联入口未建",
+      "close_criterion": "tracker/ 下存在关联入口模块且空帧序列输入运行退出码为零",
+      "submitted_by": "L2队",
+      "submitted_at": "2026-10-08T11:31:55",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-004",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L2，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L2",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-004",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-08T11:31:55"
+    },
+    {
+      "qid": "Q-005",
+      "title": "评测指标脚本",
+      "goal_context": "在骨架验收时缺机器可读的评测入口",
+      "close_criterion": "benchmark/ 下指标脚本对空预测与空真值输出零分且退出码为零",
+      "submitted_by": "L3队",
+      "submitted_at": "2026-10-08T11:31:55",
+      "note": "",
+      "depends_on": [],
+      "review": "approved",
+      "lint_report": {
+        "qid": "Q-005",
+        "checks": [
+          [
+            "R1 完整性",
+            "过"
+          ],
+          [
+            "R3 可检验性",
+            "过"
+          ],
+          [
+            "R2 去重",
+            "过"
+          ],
+          [
+            "R4 归位",
+            "建议路线 L3，依赖 []"
+          ],
+          [
+            "R5 语言规范",
+            "过"
+          ],
+          [
+            "R6 降标准语义",
+            "过"
+          ]
+        ],
+        "verdict": "pass",
+        "suggested_lane": "L3",
+        "suggested_depends_on": [],
+        "merge_candidates": []
+      },
+      "approved_as": "I-005",
+      "approved_by": "架构师",
+      "approved_at": "2026-10-08T11:31:55"
+    }
+  ]
+}

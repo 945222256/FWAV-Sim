@@ -1,0 +1,26 @@
+{
+  "scene": {
+    "argv": ["g:/Playground/isaac_sim_5.1.0/python.bat", "main_sim.py"],
+    "mode": "isaac",
+    "duration_s": 60
+  },
+  "overrides": {
+    "FLAPPER_HEADLESS": "1",
+    "FLAPPER_FLIGHT_LOG": "1",
+    "FLAPPER_LEDGER": "1",
+    "FLAPPER_MAX_S": "60",
+    "FLAPPER_AERO_MODEL": "sane_dickinson"
+  },
+  "criteria": {
+    "kind": "bench_subject",
+    "subject": "hover",
+    "note": "重放历史悬停运行 T6X，判据读自 config/bench_criteria.json 悬停科目三条冻结判据"
+  },
+  "locks": {
+    "standard": true
+  },
+  "tags": {
+    "name": "T6X_HOVER_REPLAY",
+    "desc": "I-015 重放实验，历史悬停运行 T6X 的重放配方，验证凭一份配置一条命令重放并按摘要归档"
+  }
+}

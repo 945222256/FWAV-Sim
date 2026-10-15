@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "shared_paths": ["tools/", "logs/"],
+  "lanes": {
+    "HQ": {
+      "name": "指挥部",
+      "mission": "计划、规则、裁决、派发与目标管理",
+      "keywords": ["计划", "规则", "裁决", "派发"],
+      "exclusive_paths": [],
+      "may_change_parameters": false,
+      "may_refactor": false
+    },
+    "L1": {
+      "name": "感知前端线",
+      "mission": "视觉与激光雷达数据接入、点云预处理、目标检测",
+      "keywords": ["点云", "预处理", "检测", "传感器", "标定"],
+      "exclusive_paths": ["perception/"],
+      "may_change_parameters": false,
+      "may_refactor": false
+    },
+    "L2": {
+      "name": "跟踪内核线",
+      "mission": "多目标数据关联、轨迹维持、身份管理",
+      "keywords": ["关联", "轨迹", "身份", "跟踪", "滤波"],
+      "exclusive_paths": ["tracker/"],
+      "may_change_parameters": false,
+      "may_refactor": false
+    },
+    "L3": {
+      "name": "数据与评测线",
+      "mission": "数据集接入、评测指标、基准测试",
+      "keywords": ["数据集", "评测", "指标", "基准"],
+      "exclusive_paths": ["datasets/", "benchmark/"],
+      "may_change_parameters": false,
+      "may_refactor": false
+    }
+  }
+}

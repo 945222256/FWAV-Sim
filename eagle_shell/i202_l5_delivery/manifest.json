@@ -1,0 +1,42 @@
+{
+ "item": "I-202",
+ "delivery": "七百克候选动作预览先行实现（开发样例阶段）",
+ "date": "2026-10-13",
+ "lane": "L5",
+ "session": "sess_aad06e4d-9932-4d2a-ad14-79adc87cdeda",
+ "note": "最终展示资产须采用 I-201（L8 复核版本）与 I-203（L3 登记数据）关闭后的交付；当前使用 jane_preview_20261013_tail 开发样例，页面已标注开发样例与候选状态",
+ "contents": {
+  "页面源文件": [
+   "board_ui/src/lab/EaglePreview.tsx",
+   "board_ui/src/lab/LabPage.tsx",
+   "board_ui/src/lab/types.ts",
+   "board_ui/src/lab/lab.css"
+  ],
+  "数据协议与载荷": [
+   "lp_board/lab_payload.py（eaglex700 节，现读交付文件）",
+   "board_ui/scripts/render_eaglex_frames.py（Blender 离线渲染）"
+  ],
+  "模型与帧资产": [
+   "board_ui/public/lab/eaglex700/{flap,twist,fold,tail,combo}/frame_00-23.webp（五段各二十四帧，全动画包围盒相机）",
+   "board_ui/public/lab/eaglex700/render_report.json"
+  ],
+  "开发样例模型来源": "eagle_shell/jane_preview_20261013_tail/output/eaglex_articulated_preview.glb（Jane 交付，待 L8 复核）",
+  "绑定清单与几何数据": [
+   "eagle_shell/jane_preview_20261013_tail/output/geometry_and_binding.json（九关节绑定与逐件几何，经 /api/lab/params eaglex700 节下发）",
+   "eagle_shell/jane_preview_20261013_tail/output/chord_stations.csv（八十二行弦长站位）"
+  ],
+  "逐关节动作资产": [
+   "五段帧序列（拍动、扭转、折叠、尾部、组合，页面播放器逐段可辨识）",
+   "上游逐关节视频：eagle_shell/jane_preview_20261013_tail/output/eaglex_motion_preview.mp4"
+  ],
+  "部署与复验材料": [
+   "board_ui/scripts/i202_deploy.py",
+   "board_ui/scripts/i202_check.cjs",
+   "logs/i202_check/（verify_record.json、verify_output.txt、lab700_desktop.png、lab700_mobile.png）"
+  ],
+  "服务端改动": [
+   "cloud_board/server/webui.py（/app/lab/ 静态路由改递归注册，随部署上传）"
+  ]
+ },
+ "verification": "二十五项断言全过（logs/i202_check/verify_output.txt）；上游 I-201 与 I-203 关闭后须换用复核资产与登记数据复验"
+}

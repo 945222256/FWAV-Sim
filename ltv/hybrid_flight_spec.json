@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "item": "I-050",
+  "frozen_at": "2026-10-02",
+  "rule": "本文件为混合飞行架构规格的机器真值，冻结后不许修改任何模态定义、表格式与词汇表条目，改动须机主批准并重新冻结，冻结前已产生的依赖本文件的实现代码须全部复核。",
+  "lane": "L4",
+  "territory_note": "本文件所在 ltv 目录为 L4 路领地，出处为立项提交 7ffff54 的领地声明与事项 I-049 的默认动作记录。本文件只引用不修改任何已登记领地内的既有实现。",
+  "naming": {
+    "mixed_flight": {
+      "term_zh": "混合飞行",
+      "term_en": "hybrid flight",
+      "definition": "扑动飞行与停拍滑翔在同一任务剖面内按事件切换组合的飞行方式，模态间的切换由登记在过渡冲量表的事件驱动。"
+    },
+    "mode": {
+      "term_zh": "模态",
+      "term_en": "mode",
+      "definition": "机翼扑动体制的离散类别，本规格的模态层与既有任务阶段状态机正交：任务阶段回答任务进行到哪一段，模态回答机翼当前以哪种体制工作。"
+    },
+    "phase": {
+      "term_zh": "任务阶段",
+      "term_en": "phase",
+      "definition": "既有 FlightStateMachine 的 LAUNCH、TRANSIT、CRUISE 三段单向流转，出处 modules/flight_state_machine.py，本规格原样引用不修改。"
+    },
+    "transition_impulse": {
+      "term_zh": "过渡冲量",
+      "term_en": "transition impulse",
+      "definition": "模态切换或外部扰动事件施加在机体状态上的瞬时增量映射，本规格用逐项登记的表格式描述，不引入新的执行机构。"
+    },
+    "duty_cycle": {
+      "term_zh": "占空比",
+      "term_en": "duty cycle",
+      "definition": "扑动模态内连续可调的拍内作动时间占比，取值零到一，对应现行 DUTY_MOD 机制，属模态内连续控制量。"
+    },
+    "stop_flap": {
+      "term_zh": "停拍",
+      "term_en": "stop-flap",
+      "definition": "机翼在指定拍相位钉定在保持姿态进入滑翔的事件，现行逐拍门的停拍分支已具备单事件执行能力，出处为在案逐拍差动机制记录。"
+    },
+    "resume_flap": {
+      "term_zh": "复拍",
+      "term_en": "resume-flap",
+      "definition": "停拍后按登记剖面恢复扑动的事件。"
+    },
+    "stroke_phase": {
+      "term_zh": "拍相位",
+      "term_en": "stroke phase",
+      "definition": "由逐翼瞬时频率逐样本积分得到的相位量，取值零至一循环，定义沿用 ltv/hss_spec.json naming 节既定口径。"
+    }
+  },
+  "architecture": {
+    "modal_layer": {
+      "text": "状态机模态层为离散模态集合加事件驱动的模态转移。模态清单为两项：FLAP 扑动模态，机翼按现行波形连续扑动；GLIDE 停拍滑翔模态，机翼钉定在保持姿态。停拍侧别为事件参数不作独立模态，理由为单侧停拍与双侧停拍共享同一动力学类且由保持姿态参数区分，独立成模态会使模态数随侧别组合无谓翻倍。模态转移仅三条：FLAP 至 GLIDE 经停拍事件，GLIDE 至 FLAP 经复拍事件，GLIDE 至 GLIDE 经保持姿态变更事件。模态层与任务阶段层的组合规则为正交组合，任一任务阶段内两模态均可存在，既有单向阶段流转不受模态事件影响。",
+      "modes": [
+        {
+          "id": "FLAP",
+          "name_zh": "扑动模态",
+          "entry": "初始模态或复拍事件完成",
+          "exit": "停拍事件"
+        },
+        {
+          "id": "GLIDE",
+          "name_zh": "停拍滑翔模态",
+          "entry": "停拍事件",
+          "exit": "复拍事件或保持姿态变更事件"
+        }
+      ],
+      "transitions": [
+        {"from": "FLAP", "to": "GLIDE", "event": "stop_flap"},
+        {"from": "GLIDE", "to": "FLAP", "event": "resume_flap"},
+        {"from": "GLIDE", "to": "GLIDE", "event": "hold_pose_change"}
+      ]
+    },
+    "model_layer": {
+      "text": "模态模型层规定每模态的动力学模型类，模型实例按辨识产线版本化纪律从参数库只读。本层为契约层，本规格不实现任何模型代码。",
+      "per_mode": [
+        {
+          "mode": "FLAP",
+          "model_class": "linear_time_periodic",
+          "instance_source": "ltv/hss_spec.json 定义的谐波状态空间模型族，现行线性冠军版为其零阶特例，系数集按 A4 条前置门纪律入库后供只读",
+          "reading": "弗洛凯判读，工具为 ltv/hss_floquet.py"
+        },
+        {
+          "mode": "GLIDE",
+          "model_class": "linear_time_invariant",
+          "instance_source": "机翼钉定姿态下的常数状态矩阵系数集，辨识与入库纪律沿用现行产线，单侧停拍的保持姿态对应独立实例",
+          "reading": "常数矩阵特征值判读，弗洛凯读数在该类退化为每拍增长倍率 exp(特征值乘周期)"
+        }
+      ]
+    },
+    "impulse_layer": {
+      "text": "过渡冲量层规定模态切换与外部扰动在机体状态上的瞬时增量映射，统一走同一张表格式，来源字段区分主动机动与外部扰动。冲量施加遵守既有执行事实：停拍事件的执行载体为现行逐拍门的停拍分支，该分支钉定机翼位置而拍相位照常积分，本规格的相位连续性语义与此对齐。",
+      "table_format": {
+        "columns": [
+          {"name": "event_id", "type": "string", "rule": "全表唯一"},
+          {"name": "source", "type": "enum", "domain": ["maneuver", "disturbance"], "rule": "主动机动与外部扰动共用表格式，来源必填"},
+          {"name": "from_mode", "type": "enum", "domain": ["FLAP", "GLIDE", null], "rule": "外部扰动事件填 null 表示不切模态"},
+          {"name": "to_mode", "type": "enum", "domain": ["FLAP", "GLIDE", null], "rule": "同上"},
+          {"name": "trigger", "type": "enum", "domain": ["time", "condition", "external"]},
+          {"name": "t_trigger_s", "type": "float", "unit": "s", "rule": "trigger 为 time 或 external 时必填"},
+          {"name": "stroke_phase_at_event", "type": "float", "unit": "循环", "domain": [0.0, 1.0], "rule": "停拍事件的施加点为拍相位，左闭右开"},
+          {"name": "impulse_type", "type": "enum", "domain": ["angular_velocity_delta", "velocity_delta"]},
+          {"name": "frame", "type": "enum", "domain": ["body"], "rule": "现行记录口径为体轴"},
+          {"name": "delta", "type": "float_array_3", "unit": "rad/s 或 m/s 按 impulse_type"},
+          {"name": "side", "type": "enum", "domain": ["both", "left", "right"], "rule": "停拍与保持姿态变更事件必填，其余填 both"},
+          {"name": "hold_duration_s", "type": "float", "unit": "s", "domain": [0.0, 10.0], "rule": "进滑翔事件必填，与 hold_strokes 二选一"},
+          {"name": "hold_strokes", "type": "int", "domain": [0, 100], "rule": "进滑翔事件可与 hold_duration_s 二选一"},
+          {"name": "resume_profile_id", "type": "string", "rule": "复拍事件必填，键入事件参数词汇表的复拍剖面登记"},
+          {"name": "phase_continuity", "type": "enum", "domain": ["integrate", "reset"], "rule": "缺省 integrate，与现行停拍分支行为对齐"}
+        ],
+        "validation_rules": [
+          "from_mode 与 to_mode 相同且均非空的事件只允许 hold_pose_change 类保持姿态变更",
+          "进滑翔事件必须携带 side 与时长二选一字段",
+          "复拍事件必须携带 resume_profile_id",
+          "source 为 disturbance 的事件 from_mode 与 to_mode 必须同为 null"
+        ]
+      }
+    }
+  },
+  "event_parameter_vocabulary": {
+    "text": "事件级机动参数词汇表，四项参数为事项标题点名的主参数，全部给出类型、单位、取值域与缺省值。",
+    "terms": [
+      {
+        "name_zh": "停拍时刻",
+        "name_en": "t_stop",
+        "type": "float",
+        "unit": "拍相位循环",
+        "domain": [0.0, 1.0],
+        "default": 0.0,
+        "semantics": "停拍事件目标拍相位，零值表示在拍边界执行；执行器在目标相位最近的拍边界落钉，实际施加点回填进过渡冲量表"
+      },
+      {
+        "name_zh": "时长",
+        "name_en": "hold_duration",
+        "type": "float 或 int",
+        "unit": "秒或拍数",
+        "domain": "秒制零到十，拍数制零到一百",
+        "default": null,
+        "semantics": "滑翔驻留时长，秒制与拍数制二选一必填，两种制的换算用事件登记时刻的实测拍频"
+      },
+      {
+        "name_zh": "侧别",
+        "name_en": "side",
+        "type": "enum",
+        "domain": ["both", "left", "right"],
+        "default": "both",
+        "semantics": "停拍侧别，both 为双翼钉定对称滑翔，left 与 right 为单翼钉定而另一翼继续扑动的混合体制，单侧停拍的滚转与偏航操纵效能为该体制的模型实例属性"
+      },
+      {
+        "name_zh": "复拍剖面",
+        "name_en": "resume_profile",
+        "type": "object",
+        "domain": "profile_type 取 step、linear_ramp、per_stroke_fraction 之一，附 n_ramp_strokes 整数不小于一与幅值分数表长度等于 n_ramp_strokes 且逐项在零到一",
+        "default": "linear_ramp 两拍",
+        "semantics": "复拍恢复扑动的幅值恢复剖面，族属与既有任务阶段两秒斜坡混合先例同族，逐拍幅值分数表的含义为第 k 拍波形幅值乘以表内第 k 项"
+      }
+    ]
+  },
+  "duty_cycle_semantics_cut": {
+    "text": "占空比语义切割为三条硬规则。第一条，占空比是扑动模态内的连续控制量，调节占空比不构成模态事件，模态保持 FLAP。第二条，占空比持续为零不构成滑翔模态，进入 GLIDE 的唯一通道是登记在过渡冲量表中的停拍事件，禁止占空比隐性越界充当模态切换。第三条，占空比调制的模型语义是模态内小信号，其有效性随扑动模态的线性周期时变有效域整体把关，占空比低于零点五时模型有效性告警而非自动切换模态。切割线的判别标准为是否发生模态事件登记：未登记为事件的是连续量，登记为事件的走冲量表。"
+  },
+  "floquet_boundary": {
+    "text": "弗洛凯适用边界为四条。第一条，模态驻留段内弗洛凯读数有效：FLAP 段为线性周期时变类，倍率与指数按拍周期定义，工具为 ltv/hss_floquet.py；GLIDE 段为线性时不变类，标准特征值读数，弗洛凯量退化为每拍增长倍率 exp(特征值乘驻留时长)。第二条，跨事件的增长核算走复合映射：复合单周期转移矩阵等于后段驻留转移矩阵乘冲量跳跃映射乘前段驻留转移矩阵，复合增长为各段倍率与跳跃映射奇异值的乘积，单事件无弗洛凯指数可言，只报各段指数与跳跃增益。第三条，仅当事件序列以某周期重复时复合映射才有弗洛凯指数，指数按事件周期定义。第四条，拍相位按缺省 integrate 语义穿越滑翔段连续积分时，扑动段模型的相位变量跨事件连续，滑翔驻留的贡献为 exp(滑翔常数矩阵乘驻留时长) 直接并入复合映射；复合判读工具属后续事项，本规格只冻结语义不下沉实现。",
+    "tool_ref": "ltv/hss_floquet.py",
+    "composite_tool_status": "未实现，属后续事项，本条只冻结语义"
+  },
+  "subject_mapping": {
+    "text": "五科目取 config/bench_criteria.json subjects 节的悬停、巡航、盘旋、抗扰、窄缝。事件级科目为抗扰与窄缝两科：抗扰科的事件是外部扰动冲量，走冲量表 source 为 disturbance 的行，模态不切换；窄缝科的事件是停拍与复拍的模式切换机动，走冲表拉的 maneuver 行。其余三科为纯扑动模态无事件。映射逐科如下。",
+    "table": [
+      {"subject": "hover", "name_zh": "悬停", "modes": ["FLAP"], "events": "无", "level": "稳态科目"},
+      {"subject": "cruise", "name_zh": "巡航", "modes": ["FLAP"], "events": "无", "level": "稳态科目"},
+      {"subject": "turn", "name_zh": "盘旋", "modes": ["FLAP"], "events": "无", "level": "稳态科目"},
+      {"subject": "disturb", "name_zh": "抗扰", "modes": ["FLAP"], "events": "外部扰动冲量一行：source=disturbance，from_mode=to_mode=null，impulse_type=velocity_delta，frame=body，t_trigger_s=15.0，delta=[0.0, 1.5, 0.0]（横向正向，出处科目定义原文一点五米每秒）", "level": "事件级科目（冲量事件）"},
+      {"subject": "gap", "name_zh": "窄缝", "modes": ["FLAP", "GLIDE"], "events": "停拍事件与复拍事件各至少一行，参数取事件参数词汇表四项，具体数值待该科判据批准后登记", "level": "事件级科目（模态切换机动）"}
+    ],
+    "mapping_verdict": "事件级科目与模态及冲量层词汇的映射成立：抗扰科映射到冲量层的扰动行格式，窄缝科映射到模态清单两模态加两条转移事件加词汇表四参数，两科均无需扩充词汇即可表达。窄缝科判据状态为 proposed，本映射是词汇表达力断言，不改变该科批准状态。"
+  },
+  "lineage": {
+    "inherits": [
+      "modules/flight_state_machine.py 任务阶段单向状态机（原样引用，模态层与之正交）",
+      "ltv/hss_spec.json 谐波状态空间模型族与拍相位口径（FLAP 模态模型类本体）",
+      "tools/ident_fd_estimator.py 线性冠军版（FLAP 模态零阶特例实例）",
+      "ltv/hss_floquet.py 弗洛凯判读工具（模态内读数工具）",
+      "config/bench_criteria.json 五科目机器真值（映射对象）",
+      "现行逐拍门停拍分支执行事实（停拍执行载体与相位照常积分行为）",
+      "现行 DUTY_MOD 占空比调制机制（占空比连续量语义的既有载体，默认关）"
+    ],
+    "new_in_this_spec": [
+      "模态清单两模态与三条转移及模态层与任务阶段正交规则",
+      "每模态模型类契约与实例只读来源",
+      "过渡冲量表十五列格式与四条校验规则",
+      "事件参数词汇表四主参数的类型、单位、取值域、缺省值",
+      "占空比语义切割三条硬规则",
+      "弗洛凯适用边界四条含复合映射语义",
+      "五科目逐科映射表与映射成立结论"
+    ]
+  },
+  "handoff_note": "本文件为混合飞行架构规格的机器真值。人类可读版由 L3 路抄录进 docs 目录，只许引用不许改写。本文件 sha256 指纹随事项证据入账，下游实现代码只读本文件与系数集版本，不读任何口述规格。"
+}

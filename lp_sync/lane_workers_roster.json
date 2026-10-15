@@ -1,0 +1,47 @@
+{
+ "schema_version": 1,
+ "workers": {
+  "L5-w1": {
+   "lane": "L5",
+   "session_id": "sess_e2438b4f-44de-4800-b87f-e98fea01e441",
+   "phase": "idle",
+   "updated_at": "2026-10-14T23:05:43.490"
+  },
+  "L2-w1": {
+   "lane": "L2",
+   "session_id": "sess_599765d3-f605-4103-aaf0-ec75a10c8e41",
+   "phase": "active",
+   "updated_at": "2026-10-14T23:19:51.911",
+   "item_id": "I-210",
+   "run_id": "run-kt-anni-i210-data-qualification-20261015-a1"
+  },
+  "L3-w1": {
+   "lane": "L3",
+   "session_id": "sess_cea3e05f-93d4-436f-a4f1-25d196418268",
+   "phase": "active",
+   "updated_at": "2026-10-14T23:38:47.026",
+   "item_id": "I-205",
+   "run_id": "run-beth-i205-review-followup-v2-20261015-a1"
+  },
+  "L3-w2": {
+   "lane": "L3",
+   "session_id": "sess_bd6fe971-9725-45a0-a8aa-63c276d7b46c",
+   "phase": "active",
+   "updated_at": "2026-10-14T23:16:26.318",
+   "item_id": "I-178",
+   "run_id": "run-beth-i178-readonly-recovery-v2-20261014-a1"
+  },
+  "L1-w1": {
+   "lane": "L1",
+   "session_id": "sess_8cc259a6-4227-42b2-ab12-9521d185e226",
+   "phase": "idle",
+   "updated_at": "2026-10-14T21:51:07.567"
+  },
+  "L4-w1": {
+   "lane": "L4",
+   "session_id": "sess_78376d8c-decc-4d12-9ea4-9fc922547921",
+   "phase": "idle",
+   "updated_at": "2026-10-15T01:02:57.890"
+  }
+ }
+}

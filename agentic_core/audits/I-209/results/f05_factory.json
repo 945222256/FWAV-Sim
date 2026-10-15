@@ -1,0 +1,90 @@
+{
+ "probe": "F05 未知模型名返回默认模型",
+ "entry": "modules.aero_solver.create_aero_callback",
+ "cfg_AERO_MODEL_default": "sane_dickinson_3d",
+ "production_call_site": "modules/flapper_loader.py:365（不传 model_name，用 cfg.AERO_MODEL；可被 FLAPPER_AERO_MODEL 环境变量覆盖，见 modules/sim_env_bridge.py:55-63）",
+ "model_registry": {
+  "attached_flow": "AttachedFlowModel",
+  "dynamic_stall": "DynamicStallModel",
+  "sane_dickinson": "SaneDickinsonModel",
+  "sane_dickinson_3d": "SaneDickinson3DModel"
+ },
+ "factory_tuple_names": [
+  "attached_flow",
+  "dynamic_stall",
+  "sane_dickinson_3d"
+ ],
+ "results": [
+  {
+   "requested": "audit_invalid_model_name",
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "FlapperAeroModel",
+   "model_name_attr": "<未设置>",
+   "raised": false,
+   "logs": []
+  },
+  {
+   "requested": "sane_dickenson",
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "FlapperAeroModel",
+   "model_name_attr": "<未设置>",
+   "raised": false,
+   "logs": []
+  },
+  {
+   "requested": "attached_flow",
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "AttachedFlowModel",
+   "model_name_attr": "attached_flow",
+   "raised": false,
+   "logs": []
+  },
+  {
+   "requested": "dynamic_stall",
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "DynamicStallModel",
+   "model_name_attr": "dynamic_stall",
+   "raised": false,
+   "logs": []
+  },
+  {
+   "requested": "sane_dickinson_3d",
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "SaneDickinson3DModel",
+   "model_name_attr": "sane_dickinson_3d",
+   "raised": false,
+   "logs": []
+  },
+  {
+   "requested": "sane_dickinson_3d ",
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "FlapperAeroModel",
+   "model_name_attr": "<未设置>",
+   "raised": false,
+   "logs": []
+  },
+  {
+   "requested": "",
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "SaneDickinson3DModel",
+   "model_name_attr": "sane_dickinson_3d",
+   "raised": false,
+   "logs": []
+  },
+  {
+   "requested": null,
+   "callback_class": "AeroPhysicsCallback",
+   "model_class": "SaneDickinson3DModel",
+   "model_name_attr": "sane_dickinson_3d",
+   "raised": false,
+   "logs": []
+  }
+ ],
+ "no_aero_subprocess": {
+  "mode": "no_aero",
+  "import_modules.aero_solver": "ImportError: 注入：modules.aero 被禁止导入",
+  "factory_reachable": false,
+  "modules_aero_in_sys_modules": false
+ },
+ "approved_fallback_declaration": "模块 docstring：『sane_dickinson（默认/包不可用兜底）』；ImportError 分支的 warning 文案在 aero_solver.py:532"
+}

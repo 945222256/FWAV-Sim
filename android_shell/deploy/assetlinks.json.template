@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.lp.board",
+      "sha256_cert_fingerprints": [
+        "AB:CD:...（生成步骤见 android_shell/README.md 第四节）"
+      ]
+    }
+  }
+]

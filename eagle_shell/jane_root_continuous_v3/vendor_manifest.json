@@ -1,0 +1,50 @@
+[
+  {
+    "path": "three/build/three.module.js",
+    "url": "https://unpkg.com/three@0.170.0/build/three.module.js",
+    "bytes": 1314681,
+    "sha256": "ce1fa418de16a19495a9f72495580e3015d7745c296d3ce0485897f902ddedfb"
+  },
+  {
+    "path": "three/examples/jsm/loaders/GLTFLoader.js",
+    "url": "https://unpkg.com/three@0.170.0/examples/jsm/loaders/GLTFLoader.js",
+    "bytes": 110273,
+    "sha256": "45139faddd5aaf48ed2d62203d976e5cbd703db1a592de40527f9f6cf58abd44"
+  },
+  {
+    "path": "three/examples/jsm/utils/BufferGeometryUtils.js",
+    "url": "https://unpkg.com/three@0.170.0/examples/jsm/utils/BufferGeometryUtils.js",
+    "bytes": 31768,
+    "sha256": "c25b7930e570e9ec56173cd3b866ec8d2e10016630db3937efb439daf1cedbf6"
+  },
+  {
+    "path": "three/examples/jsm/controls/OrbitControls.js",
+    "url": "https://unpkg.com/three@0.170.0/examples/jsm/controls/OrbitControls.js",
+    "bytes": 32134,
+    "sha256": "80efaadea4f8a636a65fb0bd08bfef62f3d93a0bb94e2e7500f23176c5c07f4e"
+  },
+  {
+    "path": "three/LICENSE",
+    "url": "https://unpkg.com/three@0.170.0/LICENSE",
+    "bytes": 1081,
+    "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+  },
+  {
+    "path": "gltf-validator/index.js",
+    "url": "https://unpkg.com/gltf-validator@2.0.0-dev.3.10/index.js",
+    "bytes": 2829,
+    "sha256": "78deff9ea85743e86461c2d14fae76e7fc3ca0432e652f62948066b55fa16f0d"
+  },
+  {
+    "path": "gltf-validator/gltf_validator.dart.js",
+    "url": "https://unpkg.com/gltf-validator@2.0.0-dev.3.10/gltf_validator.dart.js",
+    "bytes": 307792,
+    "sha256": "b73a7b2d455ac217567725138b46d826a13d7d1bb0c88c15f7c571bfb349298c"
+  },
+  {
+    "path": "gltf-validator/LICENSE",
+    "url": "https://unpkg.com/gltf-validator@2.0.0-dev.3.10/LICENSE",
+    "bytes": 11560,
+    "sha256": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5"
+  }
+]

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "purpose": "通讯录检查器的隔离样例：会话更换与身份变更各一组，全部为测试值（人员、会话、时间均非真实），只用于验证更换与变更的记录方式，不投递任何服务、不发送任何消息。",
+  "session_change_sample": {
+    "note": "会话更换样例：人员标识不变，旧地址连同替代时间与新地址入 history，替代关系可查。",
+    "before": {
+      "person_id": "sample",
+      "member": {
+        "name": "样例人员",
+        "role": "样例职责",
+        "tag": "manager",
+        "onboarding_file": null,
+        "contact": {
+          "platform": "test",
+          "host_id": "test",
+          "thread_id": "thread-old-sample-0001",
+          "verified_at": "2026-10-12T00:00:00+00:00",
+          "source": {"method": "样例", "basis": "隔离样例原地址"}
+        }
+      }
+    },
+    "after": {
+      "person_id": "sample",
+      "member": {
+        "name": "样例人员",
+        "role": "样例职责",
+        "tag": "manager",
+        "onboarding_file": null,
+        "contact": {
+          "platform": "test",
+          "host_id": "test",
+          "thread_id": "thread-new-sample-0002",
+          "verified_at": "2026-10-12T01:00:00+00:00",
+          "source": {"method": "样例", "basis": "隔离样例新地址"}
+        },
+        "history": [
+          {
+            "thread_id": "thread-old-sample-0001",
+            "replaced_at": "2026-10-12T01:00:00+00:00",
+            "replaced_by_thread_id": "thread-new-sample-0002",
+            "source": {"method": "样例", "basis": "隔离样例：旧地址被新地址替代"}
+          }
+        ]
+      }
+    }
+  },
+  "identity_change_sample": {
+    "note": "身份变更样例：人员标识与会话地址不变，职责与分类变化附变更来源与时间；分类变化不增加任何操作权限。",
+    "before": {
+      "person_id": "sample2",
+      "member": {
+        "name": "样例顾问",
+        "role": "原职责描述",
+        "tag": "Advisor",
+        "onboarding_file": null,
+        "contact": {
+          "platform": "test",
+          "host_id": "test",
+          "thread_id": "thread-identity-sample-0003",
+          "verified_at": "2026-10-12T00:00:00+00:00",
+          "source": {"method": "样例", "basis": "隔离样例地址"}
+        }
+      }
+    },
+    "change": {
+      "changed_at": "2026-10-12T02:00:00+00:00",
+      "source": {
+        "method": "样例",
+        "basis": "隔离样例：机主明确变更职责与分类的记录，分类不增加权限"
+      }
+    },
+    "after": {
+      "person_id": "sample2",
+      "member": {
+        "name": "样例顾问",
+        "role": "新职责描述",
+        "tag": "Advisor",
+        "onboarding_file": null,
+        "contact": {
+          "platform": "test",
+          "host_id": "test",
+          "thread_id": "thread-identity-sample-0003",
+          "verified_at": "2026-10-12T00:00:00+00:00",
+          "source": {"method": "样例", "basis": "隔离样例地址"}
+        }
+      }
+    }
+  }
+}

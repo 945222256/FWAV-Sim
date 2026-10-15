@@ -1,0 +1,42 @@
+{
+ "schema_version": 1,
+ "delivery_version": "data-qualification-v1",
+ "item_id": "I-210",
+ "title": "I-210 有限返修：逐份数据资格先于一致性比较",
+ "delivered_at": "2026-10-15T23:27:18",
+ "run_id": "run-kt-anni-i210-data-qualification-20261015-a1",
+ "base_commit_at_delivery_start": "ec6dbb10ba6eeed67aa8fdbcfdc59babd5c60585",
+ "reviewer": "doro",
+ "basis": {
+  "review": "logs/hq_intake/doro_resume_20261014/i210_comparator_review_current/复核结论.md（四项双方同坏漏判）",
+  "contract": "logs/hq_intake/20261015_i210_dataset_qualification/qualification_contract.json（record_id=HQ-I210-ISOLATED-DEFAULT-DATA-20261015-V1，内容摘要 1b90d713… 只读核对，producer sha256 与现 run_chain.py 一致）",
+  "scope": "只补每份数据资格门禁；默认快照、切换事件、单侧比较、960 行数值兼容、同版字节双跑、六档与相位成果保留不重做；run_chain.py 本轮未改"
+ },
+ "implementation": {
+  "script": "logs/i210_baseline_rate_20261015/compare_baseline.py（返修版二）",
+  "gate_order": "按契约 gate_order：先逐份资格旧侧、再新侧、两侧均合格才完整递归比较；同版整档字节门槛独立保留",
+  "qualify_rules": [
+   "外层必需键与类型（含 loaded_modules 非空、input_identity 含 pose7/vel6/dt/state_note）；mode 限定 default；默认快照四开关值与契约比对",
+   "声明步数=实际行数=固定程序 960；步号逐份严格 1..960 连续唯一不重不漏不错序（位置无关，双方同错同缺仍失败）",
+   "时基逐份按登记表达式 step×(1/120) 核值并单调（非累加时钟、无新增容差）",
+   "每行 27 必需字段按契约固定集（不从首行/双方交集/对方推导）；频率五通道非布尔有限正值；命令十八通道非布尔有限数值含零合法；cmd_wavegen_freq 键必需、default 协议 null 合法（不机械全字段禁空）；targets 长度 9 全分量有限",
+   "契约未定义的额外字段返回待定义非通过（不剔除、不给合格一致）——显式版本说明归 HQ 契约更新",
+   "失败输出 qualification_failed 带侧别/行/步/字段路径与非零退出；两侧资格状态分别保留；异常先删本次输出不留旧 identical"
+  ],
+  "no_specialcase": "全部检查由契约字段驱动，直接原始数据改变；不预填资格结果、不按 480 或四例特判"
+ },
+ "regression": {
+  "doro_four": "两侧第480行同删名义频率、同重复前一行、同空对象、整档同删名义频率通道——全部 qualification_failed 退出 1（修复前均误报 identical）",
+  "coverage": "单侧缺各必需通道（step/t_s/targets/cmd_freq/cmd_elevator/cmd_wavegen_freq/wk_freq_after_set/aero_collective）、步号错序、时基不符、类型非法、非有限、频率非正、目标长度错、双方非法、两侧同增未定义字段——全部非通过；正常（双方合法相同）identical 退出 0；合法但不同 differ——四类出口齐备",
+  "checker": "tools/i210_hopf_check.py 29 项两跑全过：28 项保留（AC 更新为两层门禁任一命中即非通过——负例现先经资格拦截仍带定位）；新增 AD 资格门禁检查",
+  "env_note": "临时输入文件用项目隔离目录（logs/i210_dataset_qualification_20261015/tmp_inputs，跑后清理），不重演上轮系统临时目录环境失败；环境失败与实现失败不混淆",
+  "regressions": "bench_runner --fast 快档基准通过（BENCH PASS）"
+ },
+ "unmet": [
+  "速率处置与完整物理基准仍待 HQ 另审；零调制差异预算未预先固定",
+  "实际翼动作与力矩、物理双跑继续等 I-186 验收及执行条件核准",
+  "原六条不自勾，阶段不当整项通过"
+ ],
+ "source_hashes_file": "logs/i210_dataset_qualification_20261015/delivery_hashes.json",
+ "boundaries": "只修 compare_baseline.py 与 tools/i210_hopf_check.py 两份可写脚本；run_chain.py 未改（快照已通过）；旧数据与 old_src 原样保留；HQ 契约只读（SHA 核对一致、生产摘要匹配）；未改生产实现、物理参数或容差；未运行物理；他人改动与历史未触碰，只新增本项提交。"
+}

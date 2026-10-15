@@ -1,0 +1,288 @@
+{
+  "schema_version": 1,
+  "item": "I-173",
+  "holder_lane": "L2",
+  "theory_lane": "L4",
+  "frozen_at": "2026-10-10",
+  "problem_class": {
+    "given": [
+      "config_snapshot",
+      "bank_deg",
+      "scope"
+    ],
+    "answer": [
+      "controllable",
+      "stable",
+      "margins"
+    ]
+  },
+  "entrypoint": "python airworthiness/pipeline.py --bank <deg> --scope <lateral|longitudinal|full>",
+  "steps": {
+    "S1_trim": {
+      "tool": "airworthiness.steps.step1_trim",
+      "reuse": "ltv/hss_i102_stab.py plant_trim",
+      "inputs": [
+        "bank_deg",
+        "config_overrides"
+      ],
+      "outputs": [
+        "x_trim",
+        "freq_hz",
+        "wz_coordinated",
+        "residual_norm",
+        "saturated"
+      ],
+      "thresholds": {
+        "residual_norm_max": 1e-06,
+        "sail_sat_abs": 0.295
+      },
+      "formula_source": "I-102 commit 8a63308"
+    },
+    "S2_linearize": {
+      "tool": "airworthiness.steps.step2_linearize",
+      "reuse": "ltv/hss_i102_stab.py open_loop_A（A 部分）；B 列同款中心差分新增",
+      "inputs": [
+        "x_trim",
+        "freq_hz",
+        "wz_coordinated"
+      ],
+      "outputs": [
+        "A",
+        "B",
+        "state_names",
+        "input_names",
+        "trim_state",
+        "scope_idx"
+      ],
+      "thresholds": {
+        "fd_eps": 1e-05,
+        "regression_tol_vs_i102": 1e-09
+      },
+      "formula_source": "I-102 commit 8a63308 + B 列偏导定义（待背书）"
+    },
+    "S3_modes": {
+      "tool": "airworthiness.steps.step3_modes",
+      "inputs": [
+        "A"
+      ],
+      "outputs": [
+        "eigenvalues",
+        "participation",
+        "mode_tags",
+        "condition_hint"
+      ],
+      "thresholds": {
+        "participation_col_sum_tol": 1e-09,
+        "weakly_damped_re": -1.0
+      },
+      "formula_source": "特征值清单 I-102；参与因子 w_li*v_ji 归一（待背书）"
+    },
+    "S4_gramians": {
+      "tool": "airworthiness.steps.step4_gramians",
+      "inputs": [
+        "A",
+        "B",
+        "C",
+        "scope_idx"
+      ],
+      "outputs": [
+        "ctrb_rank",
+        "obsv_rank",
+        "Wc",
+        "Wo",
+        "Wc_sigma_min",
+        "Wo_sigma_min",
+        "shift",
+        "modal_controllability",
+        "lyap_residuals"
+      ],
+      "thresholds": {
+        "lyap_rel_residual_max": 1e-08,
+        "shift_rule": "max(0, max_eig_re) + 0.5"
+      },
+      "formula_source": "平移李雅普诺夫格拉姆 + 逐模态可控强度（待背书）"
+    },
+    "S5_margins": {
+      "tool": "airworthiness.steps.step5_margins",
+      "inputs": [
+        "A",
+        "B",
+        "C",
+        "actuation_params",
+        "participation"
+      ],
+      "outputs": [
+        "modal_damping",
+        "simo_margins",
+        "stabilizing_gains",
+        "retdiff_sigma_min"
+      ],
+      "thresholds": {
+        "freq_grid": "0.01~100 Hz 对数一千点"
+      },
+      "formula_source": "经典增益相位裕度（回路符号归一）+ 稳定化增益扫描 + 频域最小奇异值（方阵回差/非方阵回路）（待背书）"
+    },
+    "S6_floquet": {
+      "tool": "airworthiness.steps.step6_floquet",
+      "reuse": "ltv/hss_i102_stab.py periodic_A + ltv/hss_i079_adapter.py read_floquet",
+      "inputs": [
+        "x_trim",
+        "freq_hz",
+        "n_phi"
+      ],
+      "outputs": [
+        "Ac",
+        "As",
+        "max_mu",
+        "max_re_per_s",
+        "reading"
+      ],
+      "thresholds": {
+        "n_phi_default": 24,
+        "stable_mu": 0.999
+      },
+      "formula_source": "I-079 commit 7d105ac"
+    },
+    "S7_report": {
+      "tool": "airworthiness.steps.step7_report",
+      "inputs": [
+        "S1..S6 全部输出",
+        "config_fingerprint",
+        "run_info"
+      ],
+      "outputs": [
+        "report.md",
+        "verdict.json"
+      ],
+      "template_sections": [
+        "头部",
+        "配平",
+        "线性化与模态",
+        "可控性可观性",
+        "稳定裕度",
+        "周期口径",
+        "三问结论"
+      ],
+      "formula_source": "L2 流程件"
+    }
+  },
+  "scopes": {
+    "lateral": {
+      "states": [
+        "vy",
+        "roll",
+        "wx",
+        "wy",
+        "wz"
+      ],
+      "inputs": [
+        "aileron",
+        "rudder"
+      ],
+      "reason_wy_included": "在案结论横侧与俯仰两轴耦合振荡"
+    },
+    "longitudinal": {
+      "states": [
+        "u",
+        "wb",
+        "pitch",
+        "wy"
+      ],
+      "inputs": [
+        "elevator",
+        "freq"
+      ]
+    },
+    "full": {
+      "states": [
+        "u",
+        "vy",
+        "wb",
+        "roll",
+        "pitch",
+        "wx",
+        "wy",
+        "wz"
+      ],
+      "inputs": [
+        "elevator",
+        "aileron",
+        "rudder",
+        "freq"
+      ]
+    }
+  },
+  "endorsements": {
+    "I-102_linearity_eigs": {
+      "lane": "L4",
+      "status": "在案",
+      "evidence": "I-102 关单判据通过，提交 8a63308"
+    },
+    "I-079_floquet_core": {
+      "lane": "L4",
+      "status": "在案",
+      "evidence": "I-079 关单判据通过，提交 7d105ac"
+    },
+    "S2_B_columns": {
+      "lane": "L4",
+      "status": "在案",
+      "formula": "B[:,k] = (f(x, u_k+h) - f(x, u_k-h)) / (2h)，h=1e-5，同状态列偏导定义",
+      "endorser": "L4队",
+      "endorsed_at": "2026-10-10",
+      "evidence": "独立复算对上：S3 参与因子列和归一（子集五态全 1.0）；S4 平移李雅普诺夫残差 1.14e-14 对阈 1e-8，首模态强度复算 134.747 与管线逐位一致，shift 1.6288 一致；S5 aileron 速率反馈 k=-0.15 处全部正实部转负（-0.1514）与管线最小增益 -0.150 一致，rudder 列全扫不变（+1.1288，B 列零所致）与不可稳定化判读一致"
+    },
+    "S3_participation": {
+      "lane": "L4",
+      "status": "在案",
+      "formula": "p_ji = w_i[j] * v[i,j] / sum_j(w_i[j]*v[i,j])，w 左特征向量行，v 右特征向量列",
+      "endorser": "L4队",
+      "endorsed_at": "2026-10-10",
+      "evidence": "独立复算对上：S3 参与因子列和归一（子集五态全 1.0）；S4 平移李雅普诺夫残差 1.14e-14 对阈 1e-8，首模态强度复算 134.747 与管线逐位一致，shift 1.6288 一致；S5 aileron 速率反馈 k=-0.15 处全部正实部转负（-0.1514）与管线最小增益 -0.150 一致，rudder 列全扫不变（+1.1288，B 列零所致）与不可稳定化判读一致"
+    },
+    "S4_shifted_gramians": {
+      "lane": "L4",
+      "status": "在案",
+      "formula": "shift=max(0,max Re eig)+0.5；(A-shift I)Wc+Wc(A-shift I)^T+BB^T=0；(A-shift I)^T Wo+Wo(A-shift I)+C^T C=0",
+      "endorser": "L4队",
+      "endorsed_at": "2026-10-10",
+      "evidence": "独立复算对上：S3 参与因子列和归一（子集五态全 1.0）；S4 平移李雅普诺夫残差 1.14e-14 对阈 1e-8，首模态强度复算 134.747 与管线逐位一致，shift 1.6288 一致；S5 aileron 速率反馈 k=-0.15 处全部正实部转负（-0.1514）与管线最小增益 -0.150 一致，rudder 列全扫不变（+1.1288，B 列零所致）与不可稳定化判读一致"
+    },
+    "S4_modal_controllability": {
+      "lane": "L4",
+      "status": "在案",
+      "formula": "m_i = ||B^T w_i|| / (|Re lam_i| + shift)",
+      "endorser": "L4队",
+      "endorsed_at": "2026-10-10",
+      "evidence": "独立复算对上：S3 参与因子列和归一（子集五态全 1.0）；S4 平移李雅普诺夫残差 1.14e-14 对阈 1e-8，首模态强度复算 134.747 与管线逐位一致，shift 1.6288 一致；S5 aileron 速率反馈 k=-0.15 处全部正实部转负（-0.1514）与管线最小增益 -0.150 一致，rudder 列全扫不变（+1.1288，B 列零所致）与不可稳定化判读一致"
+    },
+    "S5_margins_and_stabilizing_gain": {
+      "lane": "L4",
+      "status": "在案",
+      "formula": "SISO 裕度经典定义于回路 L(s)=C_k (sI-A)^-1 b_k G(s)，回路符号先归一使低频增益为正（标准预处理）；不稳定模态逐速率通道扫增益取全部正实部转负最小值；频域最小奇异值：方阵回差 H=I+L 的 σ_min，非方阵（观测数不等于输入数）回差不定义改报 σ_min(L)",
+      "endorser": "L4队",
+      "endorsed_at": "2026-10-10",
+      "evidence": "独立复算对上：S3 参与因子列和归一（子集五态全 1.0）；S4 平移李雅普诺夫残差 1.14e-14 对阈 1e-8，首模态强度复算 134.747 与管线逐位一致，shift 1.6288 一致；S5 aileron 速率反馈 k=-0.15 处全部正实部转负（-0.1514）与管线最小增益 -0.150 一致，rudder 列全扫不变（+1.1288，B 列零所致）与不可稳定化判读一致"
+    }
+  },
+  "change_discipline": "公式条目变更须 L4 背书后登记；流程条目 L2 自主变更留事件；本文件与 PIPELINE_CONTRACT.md 哈希互验，不一致管线拒绝启动",
+  "contract_md_sha256": "afd60f36604c6db184c8cd513fec251f96fe252a4841875d0f1b81b730c565f9",
+  "C_default_rows_by_scope": {
+    "lateral": [
+      "vy",
+      "roll",
+      "wx",
+      "wz"
+    ],
+    "longitudinal": [
+      "u",
+      "pitch",
+      "wy"
+    ],
+    "full": [
+      "vy",
+      "roll",
+      "wx",
+      "wz"
+    ]
+  }
+}

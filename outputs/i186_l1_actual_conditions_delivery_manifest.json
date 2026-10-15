@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "item_id": "I-186",
+  "title": "记录仪与实验管线保存实际条件和结构化判据结果——L1 返修 v4 交付（实际条件采集及批准场景适用性）",
+  "delivery_version": "L1返修v4",
+  "run_id": "run-kt-anni-i186-l1-actual-conditions-20261015-a1",
+  "dispatch_request_id": "kd-kt-anni-i186-l1-actual-conditions-20261015-a1",
+  "session_id": "sess_8cc259a6-4227-42b2-ab12-9521d185e226",
+  "workstation": "L1-w1",
+  "delivered_at": "2026-10-15T09:15:00+08:00",
+  "baseline": {
+    "source_commits": ["07d37e4", "998a47d"],
+    "review_basis": [
+      "logs/hq_intake/doro_resume_20261014/I-186_当前核验结果.md（2026-10-15 复核：两反例同组，实际条件真实性与适用性）",
+      "logs/hq_intake/doro_resume_20261014/i186_l1_v3_review_20261015_074538/review.json（十八项十六项符合）",
+      "logs/hq_intake/20261014_mainline_recovery/i186_review_20261015/（归档交付与本轮证据）"
+    ],
+    "preserved": "正式必要清单绑定、冻结存活计时、逐值核验、原七十七项自检控制与 Doro 独立十八项旧有效结果全部保留；本轮只修原第二、第六条"
+  },
+  "two_fixes": [
+    {
+      "fix": "一：_required_facts 不得以批准场景代填实际事实——事实须绑定同运行实际来源",
+      "status": "已修并实际验证",
+      "implementation": "新最小生产采集入口 modules/experiment_pipeline/scene_witness.py：实际执行进程（链步）把本次初始化/释放、来流、物理约束与控制器事实以 inline JSON 落档 scene_witness.json 并绑定本次实验与运行身份；构包按身份核对采纳（外来见证拒收）。_required_facts 删除全部 scenario 代填：初态、来流、物理约束与控制器事件事实改自同运行见证，缺见证或缺字段逐项点名（unknown），not_applicable 须带范围与可核理由；配置读数只证明配置，无环境覆盖不等于无参数；人工接口样例如实声明无物理事件，来源与结论边界随包卡（data_origin 与 control_use=diagnostic_only）。",
+      "evidence": ["X1（Doro 原输入形态重跑：无场景见证，事实缺失点名阻断，不以场景代填）", "X3（见证缺来流节：来源缺失点名）", "X6（无控制器覆盖键而见证提供参数）", "X8（人工样例边界如实标明）", "生产链样例 scene_witness.json 由实际链步写入并身份核对"]
+    },
+    {
+      "fix": "二：实际模型、初态、来流、物理自由度约束、控制器条件与批准场景逐项比较",
+      "status": "已修并实际验证",
+      "implementation": "_scenario_comparison 把实际采集值与批准悬停场景逐项比较：气动模型按值比较（attached_flow 与默认 sane_dickinson_3d 均未获本场景批准即不符）；来流与物理约束按实际真值类别比较（有实际风或系留障碍即不符，采集真值保留不改）；初态与控制器只核来源存在（CSV 首行状态不要求等于初态）。不符且无批准差异时适用性 not_applicable 并阻断总判定；比较随包与卡分列，核验按条件与同运行见证重算，包内被改或不符仍称适用即拒。未扩批变体、未改冻结标准与必要清单。",
+      "evidence": ["X2（Doro 原输入形态重跑：实际应用 attached_flow，适用性阻断，包卡核验一致）", "X2b（默认 sane_dickinson_3d 不自动获批阻断）", "X4（实际风 1 m/s 真值保留判不符）", "X5（初始化/释放时点事件在档正控制）", "X7（批准模型加完整见证通过）", "生产链样例（默认模型如实 divergent 阻断）与批准采集正向样例（sane_dickinson 实际应用判定 pass）"]
+    }
+  ],
+  "coverage_table_reference": "改码前逐条件生产点对照表见 logs/I-186_施工记录_20261015_L1返修v4.md 第一节（生产点、采集时点、同运行绑定、批准比较规则、有界不适用范围逐项列出）",
+  "verification": {
+    "selfcheck_cases": 86,
+    "selfcheck_two_runs": "86/86 两跑一致（logs/i186_l1_actual_conditions_20261015/selfcheck_run1_output.txt 与 selfcheck_run2_output.txt）",
+    "registered_executor": "tools/checks/executor.py run tools/checks/i186_selfcheck.py --timeout 600 通过（152 秒，退出码零）",
+    "fast_bench": "bench_runner --fast BENCH PASS（20261015_085509）",
+    "regression": "原七十七项有效控制全部保留复测通过；Doro 独立十八项旧有效结果未动",
+    "production_samples": {
+      "chain": {
+        "path": "logs/i186_l1_actual_conditions_20261015/production_chain_v4/",
+        "result": "真实运行器三步链（见证步加记录步加数据流驱动分析步）：必要 complete、见证在档、场景如实 divergent（python 链隔离下生效读数为仓库默认 sane_dickinson_3d，未获本场景批准）、适用 not_applicable、判定 unknown（阻断）、核验一致",
+        "note": "采集入口到包卡与核验的完整证据；默认模型不冒充实际选用"
+      },
+      "positive": {
+        "path": "logs/i186_l1_actual_conditions_20261015/approved_capture_positive/",
+        "result": "真实起始采集子进程实际应用 FLAPPER_AERO_MODEL=sane_dickinson：判定 pass、必要 complete、场景 match、适用 applicable、核验过"
+      }
+    }
+  },
+  "real_counterexamples_rerun": [
+    "未采集实际初始化事件却以批准场景代填事实（X1：无见证阻断，事实缺失点名）",
+    "换用未获本悬停批准的模型（X2：attached_flow 实际应用，适用性阻断）"
+  ],
+  "unmet": [
+    "Doro 独立复核未完成：本交付为 pending_review，不自行关闭",
+    "python 结构链在隔离规则下生效读数为仓库默认 sane_dickinson_3d，未获本场景批准——生产链样例如实阻断；获批模型的正控制经 isaac 采集路径成立。真实 isaac 运行的场景适用须待可运行的仿真进程见证",
+    "其他科目必要清单与语义定义未获批准，仍未知待审",
+    "翼拍相位无经核实生产来源列，只限制对应结论，不猜 vphz",
+    "I-210 实际取证与 I-187 前置继续保留"
+  ],
+  "territory_note": "静态领地检查偏差维持既有处置：机主文件级交接授权继续有效，如实记录，不改全局 lanes.json、不伪报检查通过；本轮改动在已交接五文件加新模块 modules/experiment_pipeline/scene_witness.py（experiment_pipeline 已交接目录内）与 logs/i186_l1_actual_conditions_20261015/、outputs/ 清单。",
+  "reviewer": "doro",
+  "construction_record": "logs/I-186_施工记录_20261015_L1返修v4.md",
+  "files_changed": [
+    "modules/evidence_pack.py",
+    "modules/experiment_pipeline/scene_witness.py",
+    "tools/checks/i186_selfcheck.py",
+    "logs/I-186_施工记录_20261015_L1返修v4.md",
+    "logs/i186_l1_actual_conditions_20261015/"
+  ]
+}

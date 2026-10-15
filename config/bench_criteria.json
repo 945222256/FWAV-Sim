@@ -1,0 +1,326 @@
+{
+  "schema_version": 1,
+  "item": "I-016",
+  "frozen_at": "2026-09-30",
+  "rule": "判据先于数据，冻结后不许改阈值，改动须机主批准并重新冻结",
+  "subjects": {
+    "hover": {
+      "name_zh": "悬停",
+      "status": "active",
+      "backend": "mock优先",
+      "duration_s": 60,
+      "scenario": {
+        "aero_model": "sane_dickinson",
+        "aero_model_source": "modules/backend/run_hover_bench.py 96 行 BENCH_AERO_MODEL；钉定理由见同文件 43-55 行",
+        "initial_state": {
+          "position_m": [0.0, 0.0, 3.0],
+          "pitch_rad": 0.143246,
+          "roll_rad": 0.0,
+          "yaw_rad": 0.0,
+          "vx_m_per_s": 3.95,
+          "freq_hz": 1.8,
+          "startup_pin_s": 0.9
+        },
+        "pitch_note": "文件头以中文数词宣告俯仰零点一四三二四六弧度未记符号；config/sim_config.py 513 行 LAUNCH_PITCH 现行值为 -0.143246，运行器以 config 实际读数为准",
+        "environment": "无系留绳、无来流风、无障碍物、无扰动注入；钉住段机体钉于位置零、零、DP_TARGET_Z 与零欧拉角，释放序列清空气动滤波状态与控制器积分状态",
+        "initial_state_verbatim": "二、初始状态宣告。释放时刻的初始状态取近悬停平衡的现行配平点，各量出处如\n下。位置取零、零、三点零米，出自 config.sim_config 的 DP_TARGET_Z 与\nFlightControllerConfig.Z_REF，两处现行值同为三点零。姿态取俯仰零点一四三\n二四六弧度、滚转与偏航为零，出自 config.sim_config 的 LAUNCH_PITCH 与\nFlightControllerConfig.PITCH_TRIM，两处现行值同号同值。速度取三点九五米每\n秒沿世界 x 轴，出自 config.sim_config 的 LAUNCH_VX，其值等于\nFlightControllerConfig.CRUISE_VX。拍频初值取一点八赫兹，出自\nFlightControllerConfig.FREQ_HOVER，为控制器构造的现行默认。本基准所称悬停\n为现行控制律的配平保持口径，即高度参考三点零米与速度参考三点九五米每秒的\n闭环保持。静气悬停按 config 注释不在自动驾驶仪拍频域内，该口径宣告先于运\n行。",
+        "scene_verbatim": "四、场景设定。起飞段复刻 main_sim.py 主循环的钉住与释放现行用法。仿真时\n刻小于 STARTUP_PIN_S 的阶段为钉住段，机体状态每步钉于位置零、零、\nDP_TARGET_Z 与零欧拉角，九关节按解析规定值钉住。钉住段结束的首步执行释放\n序列，释放序列注入上述初始状态并清空气动滤波状态与控制器积分状态，各复位\n项与 main_sim.py 释放块一一对应。本场景不含系留绳、来流风、障碍物与扰动\n注入。",
+        "source": "modules/backend/run_hover_bench.py 文件头 二、初始状态宣告（31-41 行）与 四、场景设定（57-62 行）"
+      },
+      "criteria": [
+        {
+          "id": "H1",
+          "text": "判据一为闭环存活时长。基准时长取六十秒。飞行窗定义为仿真时刻大于一点零秒\n的时间段。飞行窗内首次出现高度低于零点二米或高于八米或状态数值非有限时，\n该时刻记为坠机时刻。通过条件为存活时长不低于六十秒，即全程无坠机。出处说\n明如下。六十秒时长与高度带零点二至八米出自 docs 三维模型在环确认第五步升\n格文档第一节的判据一与第三节的裁定口径。时刻大于一秒后判坠机的口径出自同\n文档。六十秒时长同时与 main_sim.py 环境变量 FLAPPER_MAX_S 的在环验收用法\n一致。",
+          "threshold": {
+            "survive_min_s": 60.0,
+            "flight_window_start_s": 1.0,
+            "z_crash_m": 0.2,
+            "z_ceil_m": 8.0,
+            "state_finiteness_required": true
+          },
+          "source": "modules/backend/run_hover_bench.py 文件头 一、判据 判据一（11-17 行）；常量区 88-91 行"
+        },
+        {
+          "id": "H2",
+          "text": "判据二为平均升力与重量之比。升力定义为后端每步施加的世界系气动合力的竖直\n分量，含机翼与尾翼贡献，取限幅后的施加值。重量取 config.sim_config 的\nMASS 乘九点八一。通过条件为飞行窗内逐步竖直分量的算术平均值与重量之比不\n低于零点九零。下限依据为如下推导。升力均值低于体重九成时，竖直加速度亏空\n至少为重力的一成，机体从三米基准高度掉落到零点二米判据线只需约二点四秒，\n该时间远短于六十秒窗，因此高度带判据必然先于窗尾失守。",
+          "threshold": {
+            "lift_ratio_min": 0.90,
+            "weight_def": "MASS 乘 9.81",
+            "lift_def": "世界系气动合力竖直分量（含机翼与尾翼，限幅后施加值）的飞行窗算术平均"
+          },
+          "source": "modules/backend/run_hover_bench.py 文件头 一、判据 判据二（19-24 行）；常量区 92 行"
+        },
+        {
+          "id": "H3",
+          "text": "判据三为姿态角偏差带。通过条件为飞行窗内全程滚转角绝对值不超过零点五五\n弧度且俯仰角绝对值不超过零点五五弧度。出处说明如下。零点五五弧度为\nconfig.sim_config.FlightControllerConfig.TILT_MAX 的现行值，该值为期望姿态\n角限幅。实际姿态角越出该值即认定姿态失守。",
+          "threshold": {
+            "roll_abs_max_rad": 0.55,
+            "pitch_abs_max_rad": 0.55
+          },
+          "source": "modules/backend/run_hover_bench.py 文件头 一、判据 判据三（26-29 行）；常量区 93 行"
+        }
+      ]
+    },
+    "cruise": {
+      "name_zh": "巡航",
+      "status": "active",
+      "backend": "isaac在环",
+      "duration_s": 60,
+      "note": "版本取舍：该文档第一节（12-19 行）为四条版，属第 3 至 4 跑口径；第五跑 5d（203-216 行）的五条为状态机专用变体，含切换后判据；第六跑 5e（340-363 行）起的五条为稳定版本，其后第七跑、第八跑、第十五跑均声明判据沿用第六跑五条（467-468 行、602-603 行、1118 行），故取 5e 五条版逐字转录。第十七跑另起六条 Frz 口径判据（1519-1521 行），属另一波形族考卷，不在本科目冻结范围。判据文本取各裁定行内判据短语原文，阈值数字取同行与邻行裁定正文所载口径。重锚记录：2026-10-02 指挥部裁决十批准判据三邻域与场景锚随新惯量工作点重定锚，属惯量修正连带重锚而非判据放宽，判据语义（五条文本与阈值结构）不动，旧锚以历史注记平行保留永不删除；重锚后前三轮贴线须加跑确认（保护条件）。",
+      "scenario": {
+        "launch_mode": "配平态直入（现行默认配置组合，2026-10-02 裁决十重定锚）",
+        "launch_vx_m_per_s": 3.95,
+        "launch_pitch_rad": -0.143246,
+        "pitch_trim_rad": -0.143246,
+        "freq_hover_hz": 1.8,
+        "aero_model": "sane_dickinson_3d",
+        "config_base": "现行 config/sim_config.py 默认值（几何法新惯量工作点，六十秒巡航配置族：波形 1.8/19.8105/0.176/-0.0674/17.73/32.3169，调度 DP_FREQ_NOMINAL 1.8，姿态 KP_A 2.6/KI_A 0.15/PITCH_DAMP 0.3），运行器落位表已同步重锚，不再引用第六跑二十处清单",
+        "env": {
+          "FLAPPER_HEADLESS": "1",
+          "FLAPPER_FLIGHT_LOG": "1",
+          "FLAPPER_MAX_S": "60"
+        },
+        "source": "logs/I-037_巡航判据重定锚建议_20260930.md（现行默认配置组合两次独立六十秒运行实证）＋运行档案 logs/ident_stream_flight_0930_134412 与 logs/ident_stream_flight_0930_160058；五显式键与现行 config 读数核对一致",
+        "old_anchor_verbatim": "旧场景锚（第六跑 5e 口径，2026-09-30 冻结，随新惯量工作点更替作废，历史注记永不删除）：launch_mode 配平态直入（第六跑 5e 弹射口径）；launch_vx_m_per_s 3.5；launch_pitch_rad 0.374；pitch_trim_rad 0.374；freq_hover_hz 1.25；aero_model sane_dickinson_3d；config_base 清单 v2 十七处（幅值 30 档口径）加任务二保调度列三增益共二十处；source docs/三维模型在环确认_第五步升格.md 289-338 行（第六跑 5e 第一节配置与第二节执行记录）"
+      },
+      "criteria": [
+        {
+          "id": "C1",
+          "text": "60 秒存活",
+          "threshold": {
+            "survive_min_s": 60.0,
+            "crash_def": "t>1 s 后数据流 z 列首次 <0.2 m 的仿真时刻",
+            "z_crash_m": 0.2
+          },
+          "source": "docs/三维模型在环确认_第五步升格.md 342 行（第六跑 5e 三、判据逐条裁定 五条先于数据）；统一口径原文见同文件 14-15 行"
+        },
+        {
+          "id": "C2",
+          "text": "高度带 0.2~8 m 不失控",
+          "threshold": {
+            "z_min_m": 0.2,
+            "z_max_m": 8.0,
+            "no_ground_contact": true
+          },
+          "source": "docs/三维模型在环确认_第五步升格.md 345 行（第六跑 5e 判据二）"
+        },
+        {
+          "id": "C3",
+          "text": "拍频稳 2.0 邻域、不贴保护带",
+          "threshold": {
+            "freq_center_hz": 2.0,
+            "neighborhood_hz": [1.70, 2.30],
+            "neighborhood_def": "2.0±0.3",
+            "protect_band_upper_hz": 3.45,
+            "protect_band_lower_hz": 1.05,
+            "protect_band_def": "不贴 1.0/3.5 Hz 保护带，贴带样本口径为频偏不少于 0.05 Hz 进入带内",
+            "reanchor_record": "2026-10-02 指挥部裁决十批准重定锚：拍频邻域按实测改为 1.7 至 2.3 赫兹，定性为惯量修正连带重锚而非判据放宽。实测证据为两次互相独立的六十秒默认配置标准锁在环运行（档案 logs/ident_stream_flight_0930_134412 与 logs/ident_stream_flight_0930_160058），拍频中位 1.9286 赫兹、范围 1.7616 至 2.1056 赫兹，建议值两侧各留约 0.06 至 0.19 赫兹裕度并取整到 0.1 赫兹。保护条件：旧锚平行报告永不删除（见 reanchor_record_old）；重锚后前三轮贴线须加跑确认。",
+            "reanchor_record_old": "旧锚（2026-09-30 冻结，随新惯量工作点更替作废，历史注记永不删除）：拍频稳 1.25 邻域，freq_center_hz 1.25，neighborhood_hz [1.10, 1.40]，neighborhood_def 1.25±0.15，出处 docs/三维模型在环确认_第五步升格.md 350 行（第六跑 5e 判据三）；邻域与贴带数字见同文件 351-354 行。"
+          },
+          "source": "指挥部裁决十（2026-10-02，协作架构_20260930.md 第九节）；定量依据 logs/I-037_巡航判据重定锚建议_20260930.md 第二节两次独立运行实测；保护带定义原文见 docs/三维模型在环确认_第五步升格.md 17 行（四条版判据三，与五条版判据三同一判据），保护带数值随邻域重锚原样保留"
+        },
+        {
+          "id": "C4",
+          "text": "俯仰指令不持续顶限幅（±0.55 口径）",
+          "threshold": {
+            "pitch_des_limit_rad": 0.55,
+            "saturation_sample_threshold_rad": 0.545,
+            "saturation_sample_threshold_note": "顶限幅样本按绝对值不低于 0.545 计入"
+          },
+          "source": "docs/三维模型在环确认_第五步升格.md 355 行（第六跑 5e 判据四）；0.545 样本口径见同文件 356 行"
+        },
+        {
+          "id": "C5",
+          "text": "末 10 秒高度变化率收敛（|dz|<0.5 m/s）",
+          "threshold": {
+            "window_s": [50.0, 60.0],
+            "abs_dzdt_max_m_per_s": 0.5
+          },
+          "source": "docs/三维模型在环确认_第五步升格.md 360 行（第六跑 5e 判据五）"
+        }
+      ]
+    },
+    "turn": {
+      "name_zh": "盘旋",
+      "status": "active",
+      "backend": "isaac在环",
+      "duration_s": 35,
+      "scenario": {
+        "subject_def_verbatim": "科目一（定坡度盘旋）：以当前生效的六十秒巡航升格配置起飞，\n五秒起给定常值坡度指令正十度，总时长三十五秒。",
+        "wing_mix_verbatim": "两组运行均开启偏航抵消组合通道（WING_MIX_ON）。如时间允许，加跑\n一组组合关闭的对照。",
+        "config_switches_verbatim": "配置侧新增 BANK_TEST_ON、BANK_TEST_DEG、BANK_TEST_T 三项（默认关闭）；\n控制器在开关开启且时间越过阈值后把滚转指令覆盖为常值坡度；\n主程序加环境变量桥接。开关关闭时行为与生效配置逐位一致。",
+        "theory_reference_verbatim": "协调盘旋的运动学关系：转弯角速度等于重力加速度乘坡度正切除以速度，\n半径等于速度平方除以重力加速度乘坡度正切。在速度每秒三点九五米、\n坡度十度下，预期转弯角速度约每秒零点四四弧度、半径约九米。",
+        "env_switches_verbatim": "## 二、现行最优配方（R76，环境变量全集）\n\n标准锁组合（POST_STEP_CB/PHYS_CPU/IID_LOCK/OBSTACLE_SEED=42/\nCOUNT=0）+ 标注（TAG/DESC）+ 以下试验开关：\n\nBANK_TEST=1 DEG=10 T=5 SLEW=0.25 FREQ_CAP=2.3 FREQ_FREEZE=1\nPHOLD=1 PHOLD_DEG=-6.5\nYAW_FF=1 DIR=-1 ADAPT=1 COORD_KB=3.0 KI=4.0 I_MAX=0.8\nYAW_DAMP=1.0 ROLL_KI=0.3 DA_LPF_TAU=0.05\nROLL_LEAD_TD=0.10 STAGES=2 PITCH_LEAD_TD=0.10\nATT_QUAT_ERR=1\n\n判据五条不改。双胞胎确定性已三轮逐位一致复证。",
+        "env_prefix_note": "上表开关名为文档缩写，实际环境变量带 FLAPPER_ 前缀，如 FLAPPER_BANK_TEST、FLAPPER_OBSTACLE_SEED；桥接见 modules/sim_env_bridge.py 128 行起、modules/obstacle_manager.py 221-224 行、config/sim_config.py 346 行",
+        "r83_update_note": "下一步计划_20260930.md（仓库根目录）第六节（62-63 行）记当前最优配方更新为 R83 形态，即单轴带通超前、其余同第二节；本次转录以第二节现行配方为准",
+        "source": "科目定义与组合通道 docs/压坡度转弯试验_判据与方案.md 8-9 行与 13-14 行；开关宣告同文件 34-37 行；理论预期同文件 18-20 行；环境变量全集 下一步计划_20260930.md（仓库根目录）第二节 16-28 行"
+      },
+      "criteria": [
+        {
+          "id": "T1",
+          "text": "一、存活与高度：全程高度不低于二米、不触地，高度不高于八米。",
+          "threshold": {
+            "z_min_m": 2.0,
+            "z_max_m": 8.0,
+            "no_ground_contact": true
+          },
+          "source": "docs/压坡度转弯试验_判据与方案.md 24 行（三、判据 第一条）"
+        },
+        {
+          "id": "T2",
+          "text": "二、坡度跟踪：第八秒起滚转角与指令偏差的中位数不大于零点零五弧度；\n尾翼差动指令贴限幅的时间占比不大于百分之十（策略值）。",
+          "threshold": {
+            "eval_from_s": 8.0,
+            "roll_cmd_err_median_max_rad": 0.05,
+            "tail_diff_sat_time_ratio_max": 0.10,
+            "policy_value": true
+          },
+          "source": "docs/压坡度转弯试验_判据与方案.md 25-26 行（三、判据 第二条）"
+        },
+        {
+          "id": "T3",
+          "text": "三、高度保持：坡度切入后两秒内掉高不超过半米。",
+          "threshold": {
+            "window_after_bank_on_s": 2.0,
+            "altitude_drop_max_m": 0.5
+          },
+          "source": "docs/压坡度转弯试验_判据与方案.md 27 行（三、判据 第三条）"
+        },
+        {
+          "id": "T4",
+          "text": "四、转弯率：第十秒至结束段的平均偏航角速度与理论值偏差不超过\n百分之二十五（策略值，首次测量）。",
+          "threshold": {
+            "eval_from_s": 10.0,
+            "eval_to_s": 35.0,
+            "yaw_rate_dev_ratio_max": 0.25,
+            "theory_yaw_rate_rad_per_s": 0.44,
+            "theory_value_source": "同文档 18-20 行：速度每秒三点九五米、坡度十度下约每秒零点四四弧度",
+            "policy_value": true
+          },
+          "source": "docs/压坡度转弯试验_判据与方案.md 28-29 行（三、判据 第四条）"
+        },
+        {
+          "id": "T5",
+          "text": "五、扰动科目（仅科目二）：脉冲后不触地；滚转角与偏航角速度峰值\n记录并与侧滑单扰动试验组对照。",
+          "threshold": {
+            "applicable_subject": "disturb（科目二），盘旋科目不评此项",
+            "no_ground_contact_after_pulse": true,
+            "record_peaks": ["roll_rad", "yaw_rate_rad_per_s"],
+            "compare_to": "侧滑单扰动试验组"
+          },
+          "source": "docs/压坡度转弯试验_判据与方案.md 30-31 行（三、判据 第五条，判据文本自带仅科目二限定）"
+        }
+      ]
+    },
+    "disturb": {
+      "name_zh": "抗扰",
+      "status": "active",
+      "backend": "isaac在环",
+      "duration_s": 35,
+      "scenario": {
+        "subject_def_verbatim": "科目二（盘旋中扰动恢复）：科目一相同配置，十五秒时叠加横向速度\n脉冲正一点五米每秒。",
+        "wing_mix_verbatim": "两组运行均开启偏航抵消组合通道（WING_MIX_ON）。如时间允许，加跑\n一组组合关闭的对照。",
+        "pulse": {
+          "t_s": 15.0,
+          "vy_m_per_s": 1.5,
+          "direction": "横向、正向"
+        },
+        "env_switches": "科目二声明科目一相同配置，开关组合同盘旋科目 R76 现行配方，逐字转录见 subjects.turn.scenario.env_switches_verbatim",
+        "source": "docs/压坡度转弯试验_判据与方案.md 10-11 行（科目二定义）与 13-14 行（组合通道）；开关组合 下一步计划_20260930.md（仓库根目录）16-28 行"
+      },
+      "criteria": [
+        {
+          "id": "D1",
+          "text": "五、扰动科目（仅科目二）：脉冲后不触地；滚转角与偏航角速度峰值\n记录并与侧滑单扰动试验组对照。",
+          "threshold": {
+            "pulse_t_s": 15.0,
+            "pulse_vy_m_per_s": 1.5,
+            "no_ground_contact_after_pulse": true,
+            "record_peaks": ["roll_rad", "yaw_rate_rad_per_s"],
+            "compare_to": "侧滑单扰动试验组"
+          },
+          "source": "docs/压坡度转弯试验_判据与方案.md 30-31 行（三、判据 第五条）"
+        }
+      ]
+    },
+    "gap": {
+      "name_zh": "窄缝",
+      "status": "proposed",
+      "backend": "mock优先（草案）",
+      "duration_s": 15,
+      "note": "全新科目草案，无任何现存判据，状态 proposed；待机主批准后才转为 active，批准前不得作为验收与在环依据。四条判据阈值全部追溯至既有配置常量或已冻结判据，见各条 rationale，无自定新数字。",
+      "scenario": {
+        "initial_state": {
+          "position_m": [0.0, 0.0, 3.0],
+          "pitch_rad_source": "config.sim_config.LAUNCH_PITCH（513 行现行值）",
+          "roll_yaw_rad": [0.0, 0.0],
+          "vx_m_per_s": 3.95,
+          "freq_hz": 1.8,
+          "note": "取悬停基准同一配平点，出处 modules/backend/run_hover_bench.py 31-41 行宣告，使窄缝与悬停两科目初始条件可比；数值出处 config/sim_config.py 479 行 DP_TARGET_Z、512 行 LAUNCH_VX、898 行 FREQ_HOVER"
+        },
+        "obstacles": {
+          "type": "静态固定圆柱浮标，运动学刚体带碰撞",
+          "count": 2,
+          "placement": [
+            {"position_m": [20.0, -0.9, 2.0], "radius_m": 0.3, "height_m": 4.0},
+            {"position_m": [20.0, 0.9, 2.0], "radius_m": 0.3, "height_m": 4.0}
+          ],
+          "placement_rationale": "柱半径零点三米与柱高四米取现行默认 BUOY_DEFAULT_RADIUS 与 BUOY_DEFAULT_HEIGHT（config/sim_config.py 353-354 行）；柱心竖向位置二米等于 WATER_LEVEL 零（93 行 GROUND_LEVEL）加半高二米，柱体竖直跨度零至四米，覆盖巡航高度三米（479 行 DP_TARGET_Z），构成必须横向穿越的缝；两柱横向柱心距一点八米，减两侧柱半径共零点六米，净缝宽一点二米，等于两倍全翼展（WINGSPAN 零点六零米，145 行），中线路径每侧翼尖余量零点三米；柱置原点前方二十米，按前向速度三点九五米每秒（512 行 LAUNCH_VX）释放后约五点一秒到达，与盘旋科目五秒建立段先例（docs/压坡度转弯试验_判据与方案.md 8-9 行）对齐；随机柱林置零即 FLAPPER_OBSTACLE_COUNT=0（R76 配方同款，下一步计划_20260930.md 仓库根目录 18-19 行），仅保留两根显式柱",
+          "capability_source": "modules/obstacle_manager.py spawn_buoy（148-194 行）支持显式位置与半径、无随机量；随机柱林由 FLAPPER_OBSTACLE_COUNT 控制（config/sim_config.py 346 行默认 20），布局种子 FLAPPER_OBSTACLE_SEED（modules/obstacle_manager.py 221-224 行）；动态障碍默认关闭（config/sim_config.py 363 行 DYNAMIC_OBSTACLE_COUNT=0）"
+        },
+        "env": {
+          "FLAPPER_OBSTACLE_COUNT": "0"
+        },
+        "duration_rationale": "总时长十五秒：穿越时刻约五点一秒，前后留建立段与恢复观察段；时长先例取在环直流快标十五秒上限（docs/三维模型在环确认_第五步升格.md 1564-1565 行 FLAPPER_MAX_S=15）",
+        "source": "modules/obstacle_manager.py（障碍能力）；config/sim_config.py（常量 93、145、346、353-354、363、479、512、627、898 行）；modules/backend/run_hover_bench.py（初始状态与坠落判据线）"
+      },
+      "criteria": [
+        {
+          "id": "G1",
+          "text": "穿越全程存活与高度带：飞行窗内高度不低于零点二米、不高于八米，状态数值全程有限，全程无坠机。",
+          "threshold": {
+            "flight_window_start_s": 1.0,
+            "z_min_m": 0.2,
+            "z_max_m": 8.0,
+            "state_finiteness_required": true
+          },
+          "rationale": "高度带与坠落判据线沿用悬停基准判据一的冻结值，出处 modules/backend/run_hover_bench.py 90-91 行 Z_CRASH_M 与 Z_CEIL_M，跨科目同带可比",
+          "source": "草案（I-016），阈值溯源 modules/backend/run_hover_bench.py 90-91 行"
+        },
+        {
+          "id": "G2",
+          "text": "缝隙穿越不触障：穿越窗（机体 x 位于十九至二十一米）内，机体中心与两柱轴线的水平距离均不小于零点六米。",
+          "threshold": {
+            "x_window_m": [19.0, 21.0],
+            "min_horizontal_dist_to_axis_m": 0.6
+          },
+          "rationale": "零点六米等于柱半径零点三米（config/sim_config.py 353 行 BUOY_DEFAULT_RADIUS）加半翼展零点三米（全翼展零点六零米之半，145 行 WINGSPAN），保证任一翼尖不侵入柱面；水平距离判定使自柱顶上方绕行同样计为不通过，钉死横向穿越的科目本义",
+          "source": "草案（I-016），阈值溯源 config/sim_config.py 145 行与 353 行"
+        },
+        {
+          "id": "G3",
+          "text": "穿越窗姿态角带：穿越窗（机体 x 位于十九至二十一米）内，滚转角绝对值与俯仰角绝对值均不超过零点五五弧度。",
+          "threshold": {
+            "x_window_m": [19.0, 21.0],
+            "roll_abs_max_rad": 0.55,
+            "pitch_abs_max_rad": 0.55
+          },
+          "rationale": "零点五五弧度取 FlightControllerConfig.TILT_MAX 现行值（config/sim_config.py 627 行），与悬停基准判据三同源",
+          "source": "草案（I-016），阈值溯源 config/sim_config.py 627 行与 modules/backend/run_hover_bench.py 93 行"
+        },
+        {
+          "id": "G4",
+          "text": "穿越窗高度带：穿越窗（机体 x 位于十九至二十一米）内，机体高度与三点零米之差的绝对值不超过一点零米。",
+          "threshold": {
+            "x_window_m": [19.0, 21.0],
+            "z_center_m": 3.0,
+            "z_half_band_m": 1.0
+          },
+          "rationale": "三点零米取 DP_TARGET_Z 现行值（config/sim_config.py 479 行）；正负一点零米带沿用巡航高度带先例（docs/三维模型在环确认_第五步升格.md 1520 行判据口径与 1596 行判据四 高度 3±1 m）；带上沿四米恰为柱顶高程（WATER_LEVEL 零加 BUOY_DEFAULT_HEIGHT 四米，config/sim_config.py 93 行与 354 行），且判据 G2 的水平距离要求已封堵柱顶上方借道",
+          "source": "草案（I-016），阈值溯源 config/sim_config.py 479 行、93 行、354 行与 docs/三维模型在环确认_第五步升格.md 1520、1596 行"
+        }
+      ]
+    }
+  },
+  "handoff_note": "人类可读文档版由 L3 组抄录到 docs/，本文件为唯一机器真值"
+}

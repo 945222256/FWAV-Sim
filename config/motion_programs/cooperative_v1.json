@@ -1,0 +1,9 @@
+{
+  "schema": "cooperative_shapes_v1",
+  "recipe_name": "cooperative_v1",
+  "recipe_version": "refnorm_v1_phasezero_delta0_from_config",
+  "normalization_version": "cooperative_stroke_harmonics_v1",
+  "startup_duration_beats": 3.0,
+  "stroke_harmonics": [[1, 1.0, 0.0], [2, 0.15, 0.4]],
+  "n_basis": 24
+}

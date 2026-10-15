@@ -1,0 +1,43 @@
+{
+  "scene": {
+    "argv": ["g:/Playground/isaac_sim_5.1.0/python.bat", "main_sim.py"],
+    "mode": "isaac",
+    "duration_s": 35
+  },
+  "overrides": {
+    "FLAPPER_HEADLESS": "1",
+    "FLAPPER_FLIGHT_LOG": "1",
+    "FLAPPER_MAX_S": "35",
+    "FLAPPER_BANK_TEST": "1",
+    "FLAPPER_BANK_DEG": "10.0",
+    "FLAPPER_BANK_T": "5",
+    "FLAPPER_BANK_SLEW": "0.05",
+    "FLAPPER_WING_MIX": "1",
+    "FLAPPER_KP_A": "1.7",
+    "FLAPPER_PITCH_TRIM": "-0.10"
+  },
+  "criteria": {
+    "kind": "bench_subject",
+    "subject": "turn",
+    "note": "I-110 门禁合规重做第一环:孤峰点(外环1.7 配平-0.10 组合半值[config 现值0.5])背靠背两跑逐字节核对;标准锁由管线运行器自动注入;判据读盘旋科目冻结口径,本环核心读数为两跑逐字节一致性与存活时长"
+  },
+  "locks": {
+    "standard": true
+  },
+  "tags": {
+    "name": "I110_PEAK_REPRO",
+    "desc": "I-110 孤峰点门禁合规背靠背复现,标准锁全程,逐字节核对不一致即作废"
+  },
+  "chain": [
+    {
+      "name": "collect_A",
+      "mode": "isaac",
+      "overrides": {}
+    },
+    {
+      "name": "collect_B",
+      "mode": "isaac",
+      "overrides": {}
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      F ield           | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\      O peration       | Version:  v2506                                 |
+|   \\    /   A nd          | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     pimpleFoam;
+
+startFrom       latestTime;
+
+stopAt          endTime;
+
+// 7 strokes, period T = 4 (f = 0.25, c = U = rho = 1)
+endTime         28;
+
+deltaT          0.0005;
+
+writeControl    adjustableRunTime;
+
+writeInterval   4;
+
+purgeWrite      1;
+
+writeFormat     ascii;
+
+writePrecision  8;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  yes;
+
+maxCo           0.4;
+
+functions
+{
+    forces
+    {
+        type            forces;
+        libs            ("libforces.so");
+        patches         (wing);
+        rho             rhoInf;
+        rhoInf          1;
+        CofR            (0 0 0);
+        writeControl    timeStep;
+        writeInterval   1;
+        log             yes;
+    }
+}
+
+// ************************************************************************* //

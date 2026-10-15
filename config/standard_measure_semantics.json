@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "title": "批准标准测量语义转写（指标、方向、单位）",
+  "derived_from": "config/bench_criteria.json",
+  "basis": "各判据条目 text 原文的通过条件措辞（不低于/不超过）与量纲说明逐条转写为结构化定义；非字段名猜测。新增条目须附 text_basis 原文出处。",
+  "note": "仅覆盖已有结构化转写的判据条目；未列入条目缺结构化定义时按待审处理，不得正式通过。允许 unit_equivalents 内的已批准等价表示。单阈值键条目用 threshold_key 与 direction 平铺字段；一条判据含多个被测量（如姿态角偏差带含滚转与俯仰）时用 bindings 列表逐被测量转写，每项含 quantity、measured_key、threshold_key、direction、unit、unit_equivalents。",
+  "entries": {
+    "config/bench_criteria.json#hover/H1": {
+      "indicator": "survive_duration",
+      "threshold_key": "survive_min_s",
+      "direction": ">=",
+      "unit": "s",
+      "unit_equivalents": ["s", "sec", "second", "seconds", "秒"],
+      "text_basis": "通过条件为存活时长不低于六十秒，即全程无坠机"
+    },
+    "config/bench_criteria.json#hover/H2": {
+      "indicator": "lift_to_weight_ratio",
+      "threshold_key": "lift_ratio_min",
+      "direction": ">=",
+      "unit": "dimensionless",
+      "unit_equivalents": ["dimensionless", "ratio", "dimensionless_ratio", "无量纲", "无量纲比值", "比值"],
+      "text_basis": "平均升力与重量之比不低于零点九零；升力/重量为无量纲比值"
+    },
+    "config/bench_criteria.json#hover/H3": {
+      "indicator": "attitude_angle_deviation_band",
+      "bindings": [
+        {
+          "quantity": "roll_max_rad",
+          "measured_key": "roll_max_rad",
+          "threshold_key": "roll_abs_max_rad",
+          "direction": "<=",
+          "unit": "rad",
+          "unit_equivalents": ["rad", "radian", "radians", "弧度"]
+        },
+        {
+          "quantity": "pitch_max_rad",
+          "measured_key": "pitch_max_rad",
+          "threshold_key": "pitch_abs_max_rad",
+          "direction": "<=",
+          "unit": "rad",
+          "unit_equivalents": ["rad", "radian", "radians", "弧度"]
+        }
+      ],
+      "text_basis": "通过条件为飞行窗内全程滚转角绝对值不超过零点五五弧度且俯仰角绝对值不超过零点五五弧度（同一判据条目宣告滚转与俯仰两个被测量，均为不超过）"
+    }
+  }
+}

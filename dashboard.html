@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>扑翼实时看板 · Isaac Live Dashboard</title>
+<style>
+  :root{--bg:#0b0f14;--panel:#111820;--line:#1e2a36;--txt:#d7e0ea;--dim:#7c8da0;--acc:#4dd0e1;--warn:#ffd166;--red:#ff6b5e;--grn:#7bd88a;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font:13px/1.5 "PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+  #cv{position:absolute;inset:0;display:block;cursor:grab}
+  #cv:active{cursor:grabbing}
+  .panel{position:absolute;background:rgba(17,24,32,.92);border:1px solid var(--line);border-radius:10px;backdrop-filter:blur(6px)}
+  #top{left:14px;top:12px;padding:10px 16px;max-width:520px}
+  #top h1{font-size:16px;font-weight:600;letter-spacing:.5px}
+  #top .sub{color:var(--dim);font-size:11.5px;margin-top:2px}
+  #dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--red);margin-right:6px;vertical-align:1px}
+  #ctrl{right:14px;top:12px;width:288px;max-height:calc(100% - 24px);overflow-y:auto;padding:12px 14px}
+  #ctrl h2{font-size:12px;color:var(--acc);margin:12px 0 6px;letter-spacing:1px}
+  #ctrl h2:first-child{margin-top:0}
+  .row{display:flex;align-items:center;gap:8px;margin:4px 0}
+  .row label{flex:0 0 118px;color:var(--dim);font-size:11.5px}
+  .row input[type=range]{flex:1;accent-color:var(--acc);height:18px}
+  .row input[type=range]:disabled{opacity:.75}
+  .row .val{flex:0 0 52px;text-align:right;font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--txt)}
+  .chk{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:11.5px;margin:4px 0}
+  .chk input{accent-color:var(--acc)}
+  #readout{left:14px;bottom:14px;padding:10px 14px;min-width:320px}
+  #readout table{border-collapse:collapse;font-variant-numeric:tabular-nums}
+  #readout td,#readout th{padding:1px 8px;font-size:11.5px;text-align:right}
+  #readout th{color:var(--dim);font-weight:400;text-align:right}
+  #readout .ttl{color:var(--acc);font-size:11.5px;margin-bottom:4px;letter-spacing:1px}
+  #phase{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;width:300px;height:8px;background:#182430;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  #phasebar{height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--warn))}
+  #phaselab{position:absolute;left:50%;transform:translateX(-50%);bottom:28px;color:var(--dim);font-size:11px}
+  #note{right:14px;bottom:14px;width:288px;padding:10px 14px;color:var(--dim);font-size:11px}
+  #note b{color:var(--warn)}
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#243443;border-radius:3px}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<div class="panel" id="top">
+  <h1><span id="dot"></span>扑翼实时看板 <span style="color:var(--dim);font-weight:400">Isaac Live</span></h1>
+  <div class="sub">fwav_15dof · Isaac Sim 实时影子（位姿/关节/力气为真实数据）· 拖拽旋转 · 滚轮缩放</div>
+</div>
+
+<div class="panel" id="ctrl">
+  <h2>步态（实时值 · Isaac）</h2>
+  <div class="row"><label>扑动频率 f</label><input type="range" id="f" min="1.5" max="4" step="0.05" disabled><span class="val" id="f_v">–</span></div>
+  <div class="row"><label>拍动幅值 A</label><input type="range" id="A" min="0" max="60" step="1" disabled><span class="val" id="A_v">–</span></div>
+  <div class="row"><label>扭转角 Θ</label><input type="range" id="Th" min="-30" max="30" step="1" disabled><span class="val" id="Th_v">–</span></div>
+  <div class="row"><label>折叠角 β</label><input type="range" id="fold" min="0" max="70" step="1" disabled><span class="val" id="fold_v">–</span></div>
+  <h2>尾翼（实时值）</h2>
+  <div class="row"><label>俯仰 δe</label><input type="range" id="de" min="-30" max="30" step="1" disabled><span class="val" id="de_v">–</span></div>
+  <div class="row"><label>差动 δr</label><input type="range" id="dr_" min="-30" max="30" step="1" disabled><span class="val" id="dr__v">–</span></div>
+  <div class="row"><label>偏航 δy</label><input type="range" id="dy" min="-30" max="30" step="1" disabled><span class="val" id="dy_v">–</span></div>
+  <h2>手动通道（杆量）</h2>
+  <div class="row"><label>油门</label><input type="range" id="chT" min="-1" max="1" step="0.02" disabled><span class="val" id="chT_v">–</span></div>
+  <div class="row"><label>升降</label><input type="range" id="chE" min="-1" max="1" step="0.02" disabled><span class="val" id="chE_v">–</span></div>
+  <div class="row"><label>副翼</label><input type="range" id="chA" min="-1" max="1" step="0.02" disabled><span class="val" id="chA_v">–</span></div>
+  <div class="row"><label>方向</label><input type="range" id="chR" min="-1" max="1" step="0.02" disabled><span class="val" id="chR_v">–</span></div>
+  <h2>机体姿态（实时）</h2>
+  <div class="row"><label>roll</label><input type="range" id="br" min="-60" max="60" step="1" disabled><span class="val" id="br_v">–</span></div>
+  <div class="row"><label>pitch</label><input type="range" id="bp" min="-60" max="60" step="1" disabled><span class="val" id="bp_v">–</span></div>
+  <div class="row"><label>yaw</label><input type="range" id="by" min="-180" max="180" step="1" disabled><span class="val" id="by_v">–</span></div>
+  <h2>显示</h2>
+  <label class="chk"><input type="checkbox" id="showInst" checked> 速度矢</label>
+  <label class="chk"><input type="checkbox" id="showAvg" checked> 实时气动合力矢(质心)</label>
+  <label class="chk"><input type="checkbox" id="showGrid" checked> 地面参考网格</label>
+  <label class="chk"><input type="checkbox" id="showTrail"> 翼尖轨迹</label>
+  <div class="row"><label>仿真时率</label><input type="range" id="pos_x" min="0" max="1" step="0.02" disabled><span class="val" id="posx_v">–</span></div>
+</div>
+
+<div class="panel" id="readout">
+  <div class="ttl">实时 Wrench（机体系 · 滚动一个扑动周期平均）</div>
+  <table>
+    <tr><th></th><th>x</th><th>y</th><th>z</th></tr>
+    <tr><th>力 F (N)</th><td id="fx">–</td><td id="fy">–</td><td id="fz">–</td></tr>
+    <tr><th>力矩 M (N·m)</th><td id="mx">–</td><td id="my">–</td><td id="mz">–</td></tr>
+  </table>
+  <div style="margin-top:6px;font-size:11px;color:var(--dim)">
+    平均升力 <span id="liftbar" style="color:var(--txt)">–</span> · 位置 <span id="posv" style="color:var(--txt)">–</span> · <span id="fpsv">–</span>
+  </div>
+</div>
+
+<div id="phaselab">—</div>
+<div id="phase"><div id="phasebar"></div></div>
+
+<div class="panel" id="note">
+  <b>数据源（诚实标注）：</b>位姿/关节角/拍频/杆量直接来自 Isaac 实时状态；
+  力/力矩为气动回调的瞬时输出（翼+尾+机身阻力）。三维模型为<b>示意比例</b>（非 1:1），
+  姿态与关节角真实。
+</div>
+
+<script>
+"use strict";
+/* ================= 数学工具（沿用旧版） ================= */
+const V=(x=0,y=0,z=0)=>({x,y,z});
+const add=(a,b)=>V(a.x+b.x,a.y+b.y,a.z+b.z);
+const sub=(a,b)=>V(a.x-b.x,a.y-b.y,a.z-b.z);
+const scl=(a,s)=>V(a.x*s,a.y*s,a.z*s);
+const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
+const cross=(a,b)=>V(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x);
+const norm=a=>Math.hypot(a.x,a.y,a.z);
+const nrm=a=>{const n=norm(a)||1e-12;return scl(a,1/n)};
+const rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
+function rodrigues(a,ang,v){
+  const c=Math.cos(ang),s=Math.sin(ang),C=1-c;
+  const k=dot(a,v);
+  return V(v.x*c+(a.y*v.z-a.z*v.y)*s+a.x*k*C,
+           v.y*c+(a.z*v.x-a.x*v.z)*s+a.y*k*C,
+           v.z*c+(a.x*v.y-a.y*v.x)*s+a.z*k*C);
+}
+function qrot(q,v){const u=V(q.x,q.y,q.z);return add(v,scl(cross(u,add(cross(u,v),scl(v,q.w))),2))}
+const qconj=q=>({w:q.w,x:-q.x,y:-q.y,z:-q.z});
+const qnorm=q=>{const n=Math.hypot(q.w,q.x,q.y,q.z)||1;return{w:q.w/n,x:q.x/n,y:q.y/n,z:q.z/n}};
+function euler(q){
+  const roll=Math.atan2(2*(q.w*q.x+q.y*q.z),1-2*(q.x*q.x+q.y*q.y));
+  const pitch=Math.asin(Math.max(-1,Math.min(1,2*(q.w*q.y-q.z*q.x))));
+  const yaw=Math.atan2(2*(q.w*q.z+q.x*q.y),1-2*(q.y*q.y+q.z*q.z));
+  return [deg(roll),deg(pitch),deg(yaw)];
+}
+
+/* 坐标转换: Isaac(REP-103 x前 y左 z上) → 渲染(x前 y右 z下) */
+const p2r=p=>V(p[0],-p[1],-p[2]);
+const q2r=q=>({w:q[0],x:q[1],y:-q[2],z:-q[3]});
+
+/* ================= 翼几何（沿用旧版视觉比例） ================= */
+const R=0.40, NE=8;
+const rs=[], chords=[];
+for(let i=0;i<NE;i++){const r=0.06+(R-0.06)*i/(NE-1);rs.push(r);chords.push(0.24-(0.24-0.08)*(r/R));}
+const DR=rs[1]-rs[0];
+const TAIL_X=-0.28, TAIL_RS=[0.03,0.075,0.12], TAIL_S=0.08*0.045, FOLD_I=4;
+
+/* ================= 实时状态 ================= */
+let ST=null;           // 最新快照
+let ST_age=Infinity;
+const J={};            // 关节角缓存（rad）
+
+/* 由实时关节角建翼叶素（替代旧版 gait 步态生成） */
+function wingElemsLive(side){
+  const sgn=side==='R'?1:-1;
+  // 关节符号推导见报告: phiR=flap_R, phiL=-flap_L（两侧对称拍动）
+  const phi=side==='R'?(J.flap_R||0):-(J.flap_L||0);
+  const th=(side==='R'?J.twist_R:J.twist_L)||0;
+  const beta=(side==='R'?(J.fold_R||0):(J.fold_L||0));
+  const ps=V(0,sgn*0.06,0), sp=V(0,sgn*Math.cos(phi),Math.sin(phi));
+  const wrist=add(ps,scl(sp,rs[FOLD_I]));
+  const Rf=a=>rodrigues(V(1,0,0),sgn*phi,a);
+  const out=[];
+  for(let i=0;i<NE;i++){
+    let ri,si;
+    if(i<=FOLD_I){ri=add(ps,scl(sp,rs[i]));si=sp;}
+    else{const sd=rodrigues(V(1,0,0),sgn*beta,sp);ri=add(wrist,scl(sd,rs[i]-rs[FOLD_I]));si=sd;}
+    let c=Rf(V(1,0,0)), n=Rf(V(0,0,-1));
+    c=rodrigues(si,th,c); n=rodrigues(si,th,n);
+    out.push({r:ri,c,n,s:si,vj:V(),S:chords[i]*DR,i});
+  }
+  return out;
+}
+function tailElemsLive(){
+  const de=(J.tail_L+J.tail_R)/2||0, dr=((J.tail_L||0)-(J.tail_R||0))/2, dy=J.tail_yaw||0;
+  const out=[];
+  for(let i=0;i<3;i++)for(const sgn of [1,-1]){
+    const ri=V(TAIL_X,sgn*TAIL_RS[i],0);
+    const dLoc=sgn>0?dr:-dr;
+    let c=V(1,0,0), n=V(0,0,-1);
+    n=rodrigues(V(0,1,0),de+dLoc,n); c=rodrigues(V(0,1,0),de+dLoc,c);
+    n=rodrigues(V(0,0,1),dy,n); c=rodrigues(V(0,0,1),dy,c);
+    out.push({r:ri,c,n,s:V(0,sgn,0),vj:V(),S:TAIL_S,i:-1});
+  }
+  return out;
+}
+
+/* ================= 渲染器（沿用旧版） ================= */
+const bird={q:{w:1,x:0,y:0,z:0}, pos:V(0,0,-1.1)};
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+let W=0,H=0; function resize(){W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio;
+  cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';}
+addEventListener('resize',resize); resize();
+const cam={az:rad(-55),el:rad(14),dist:2.6,target:V(0,0,-1.1)};
+let drag=null;
+cv.addEventListener('mousedown',e=>drag={x:e.clientX,y:e.clientY});
+addEventListener('mouseup',()=>drag=null);
+addEventListener('mousemove',e=>{if(!drag)return;
+  cam.az-=(e.clientX-drag.x)*0.006; cam.el=Math.max(-1.4,Math.min(1.4,cam.el+(e.clientY-drag.y)*0.006));
+  drag={x:e.clientX,y:e.clientY};});
+cv.addEventListener('wheel',e=>{e.preventDefault();cam.dist=Math.max(0.6,Math.min(12,cam.dist*(1+e.deltaY*0.001)));},{passive:false});
+cv.addEventListener('dblclick',()=>{cam.az=rad(-55);cam.el=rad(14);cam.dist=2.6;});
+function camBasis(){
+  const ce=Math.cos(cam.el),se=Math.sin(cam.el),ca=Math.cos(cam.az),sa=Math.sin(cam.az);
+  const pos=V(cam.target.x+cam.dist*ce*ca, cam.target.y+cam.dist*ce*sa, cam.target.z+cam.dist*se);
+  const f=nrm(sub(cam.target,pos));
+  const right=nrm(cross(f,V(0,0,-1)));
+  const up=cross(right,f);
+  return {pos,f,right,up};
+}
+function project(p,B){
+  const d=sub(p,B.pos);
+  const z=dot(d,B.f); if(z<0.05)return null;
+  const x=dot(d,B.right), y=dot(d,B.up);
+  const f=H*1.1;
+  return {x:W/2+x/z*f, y:H/2-y/z*f, z};
+}
+function w2w(p){return add(qrot(bird.q,p), bird.pos)}
+function drawArrow(p0,vec,scale,color,lw){
+  const B=camB, a=project(p0,B), b=project(add(p0,scl(vec,scale)),B);
+  if(!a||!b)return;
+  ctx.strokeStyle=color;ctx.lineWidth=(lw||2)*devicePixelRatio;ctx.beginPath();
+  ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+  const ang=Math.atan2(b.y-a.y,b.x-a.x), ah=8*devicePixelRatio;
+  ctx.beginPath();ctx.moveTo(b.x,b.y);
+  ctx.lineTo(b.x-ah*Math.cos(ang-0.45),b.y-ah*Math.sin(ang-0.45));
+  ctx.moveTo(b.x,b.y);
+  ctx.lineTo(b.x-ah*Math.cos(ang+0.45),b.y-ah*Math.sin(ang+0.45));
+  ctx.stroke();
+}
+let camB=null;
+function buildPolys(wR,wL,wT){
+  const polys=[];
+  const shade=(base,n)=>{
+    const L=nrm(V(0.5,0.6,0.7));
+    const d=0.45+0.55*Math.abs(dot(nrm(n),L));
+    return `rgba(${Math.round(base[0]*d)},${Math.round(base[1]*d)},${Math.round(base[2]*d)},0.94)`;
+  };
+  const wingCol=(i)=>[255, 120+Math.round(60*i/NE), 70+Math.round(30*i/NE)];
+  const quad=(pts,col,n)=>polys.push({pts,col:shade(col,n),n});
+  for(const grp of [{el:wR,sgn:1},{el:wL,sgn:-1}]){
+    for(const e of grp.el){
+      const ch=scl(e.c,chords[Math.max(0,e.i)]||0.08);
+      const sp=scl(e.s,DR*0.5);
+      const p1=add(e.r,scl(sp,-1)), p2=add(e.r,sp);
+      quad([p1,p2,add(p2,ch),add(p1,ch)], wingCol(e.i), e.n);
+    }
+  }
+  for(const e of wT){
+    const ch=scl(e.c,0.09), sp=scl(e.s,0.045);
+    const p1=add(e.r,scl(sp,-1)), p2=add(e.r,sp);
+    quad([p1,p2,add(p2,ch),add(p1,ch)],[255,95,73],e.n);
+  }
+  const nose=V(0.22,0,0), tail=V(-0.30,0,0), up=V(0,0,-0.045), dn=V(0,0,0.05), l=V(0,-0.05,0), r=V(0,0.05,0);
+  const bodyC=[214,222,232];
+  quad([nose,up,l],[...bodyC],V(0,-1,-1)); quad([nose,l,dn],bodyC,V(0,-1,1));
+  quad([nose,dn,r],bodyC,V(0,1,1));  quad([nose,r,up],bodyC,V(0,1,-1));
+  quad([tail,l,up],bodyC,V(-1,-1,0)); quad([tail,dn,l],bodyC,V(-1,-1,0));
+  quad([tail,r,dn],bodyC,V(-1,1,0));  quad([tail,up,r],bodyC,V(-1,1,0));
+  quad([V(-0.26,0,0),V(-0.34,0,0),V(-0.34,0,-0.09),V(-0.24,0,-0.05)],[230,120,100],V(0,1,0));
+  return polys;
+}
+function render(polys, arrows, trail){
+  camB=camBasis();
+  const gr=ctx.createLinearGradient(0,0,0,H);
+  gr.addColorStop(0,'#0d1420');gr.addColorStop(0.6,'#0b0f14');gr.addColorStop(1,'#0a0d11');
+  ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+  if(UI.showGrid){
+    ctx.lineWidth=devicePixelRatio*0.7;
+    for(let i=-4;i<=4;i++){
+      const a1=project(V(i,-4,0),camB),b1=project(V(i,4,0),camB);
+      const a2=project(V(-4,i,0),camB),b2=project(V(4,i,0),camB);
+      if(a1&&b1){ctx.strokeStyle=i?'#16212d':'#22364a';ctx.beginPath();ctx.moveTo(a1.x,a1.y);ctx.lineTo(b1.x,b1.y);ctx.stroke();}
+      if(a2&&b2){ctx.strokeStyle=i?'#16212d':'#22364a';ctx.beginPath();ctx.moveTo(a2.x,a2.y);ctx.lineTo(b2.x,b2.y);ctx.stroke();}
+    }
+  }
+  if(UI.showTrail&&trail.length>2){
+    ctx.strokeStyle='rgba(255,209,102,0.5)';ctx.lineWidth=devicePixelRatio;
+    ctx.beginPath();let started=false;
+    for(const p of trail){const q=project(p,camB);if(!q)continue;
+      if(!started){ctx.moveTo(q.x,q.y);started=true;}else ctx.lineTo(q.x,q.y);}
+    ctx.stroke();
+  }
+  const world=polys.map(pl=>{
+    const pts=pl.pts.map(w2w);
+    const pr=pts.map(p=>project(p,camB));
+    if(pr.some(q=>!q))return null;
+    const z=pr.reduce((s,q)=>s+q.z,0)/pr.length;
+    return {pr,z,col:pl.col};
+  }).filter(Boolean).sort((a,b)=>b.z-a.z);
+  for(const pl of world){
+    ctx.fillStyle=pl.col;ctx.strokeStyle='rgba(10,14,18,0.6)';ctx.lineWidth=devicePixelRatio*0.6;
+    ctx.beginPath();ctx.moveTo(pl.pr[0].x,pl.pr[0].y);
+    for(let i=1;i<pl.pr.length;i++)ctx.lineTo(pl.pr[i].x,pl.pr[i].y);
+    ctx.closePath();ctx.fill();ctx.stroke();
+  }
+  for(const ar of arrows)drawArrow(ar.p,ar.v,ar.s,ar.c,ar.w);
+}
+
+/* ================= UI ================= */
+const UI={showInst:true,showAvg:true,showGrid:true,showTrail:false};
+const $=id=>document.getElementById(id);
+for(const id of['showInst','showAvg','showGrid','showTrail'])
+  $(id).addEventListener('change',e=>UI[id]=e.target.checked);
+function setBar(id,v,unit,fmt){
+  const el=$(id); if(el) el.value=v;
+  const lab=$(id+'_v'); if(lab) lab.textContent=fmt(v)+(unit||'');
+}
+
+/* ================= 数据拉取 + 周期平均 ================= */
+let avgBuf=[];   // {t,Fb:[3](机体系isaac),Mb:[3]}
+let flapAmpBuf=[]; // |flap_L| 滚动峰值（拍幅估计）
+async function poll(){
+  try{
+    const r=await fetch('/state',{cache:'no-store'});
+    ST=await r.json(); ST_age=0;
+    const nm=ST.joints&&ST.joints.names||[], ps=ST.joints&&ST.joints.pos||[];
+    nm.forEach((n,i)=>J[n]=ps[i]||0);
+    // 机体系力/力矩（世界系 Isa.ac → 机体系）
+    if(ST.F&&ST.pose){
+      const qa=ST.pose.slice(3,7);
+      const q={w:qa[0],x:qa[1],y:qa[2],z:qa[3]};
+      const vb=qrot(qconj(q),V(ST.F[0],ST.F[1],ST.F[2]));
+      const Fb=[vb.x,vb.y,vb.z];
+      avgBuf.push({t:ST.t,Fb});
+      const T=1/Math.max(0.5,ST.freq||2);
+      while(avgBuf.length&&avgBuf[0].t<ST.t-T)avgBuf.shift();
+    }
+    if(J.flap_L!==undefined){
+      flapAmpBuf.push(Math.abs(J.flap_L));
+      if(flapAmpBuf.length>120)flapAmpBuf.shift();
+    }
+  }catch(e){/* 断链时保持旧画面 */}
+}
+setInterval(poll,50);
+
+/* ================= 主循环 ================= */
+let trail=[];
+function frame(){
+  ST_age+=0.05;
+  const alive=ST&&ST_age<1.0;
+  $('dot').style.background=alive?'var(--grn)':'var(--red)';
+  const wR=wingElemsLive('R'), wL=wingElemsLive('L'), wT=tailElemsLive();
+
+  if(alive){
+    bird.pos=p2r(ST.pose);
+    bird.q=q2r(ST.pose.slice(3,7));
+  }
+  const polys=buildPolys(wR,wL,wT);
+
+  if(UI.showTrail){
+    const tipW=w2w(wR[NE-1].r), tipL=w2w(wL[NE-1].r);
+    trail.push(tipW,tipL); if(trail.length>600)trail.splice(0,2);
+  }else trail=[];
+
+  const arrows=[];
+  const mass=alive?(ST.mass||0.7):0.7;
+  if(alive){
+    if(UI.showInst&&ST.vel){
+      const v=p2r(ST.vel.slice(0,3));
+      if(norm(v)>0.2)arrows.push({p:w2w(V()),v,s:0.35,c:'#ffd166',w:2});
+    }
+    if(UI.showAvg&&ST.F){
+      arrows.push({p:w2w(V()),v:p2r(ST.F),s:0.08,c:'#4dd0e1',w:3});
+    }
+    arrows.push({p:w2w(V()),v:V(0,0,mass*9.81),s:0.08,c:'#6b7684',w:2});
+  }
+  render(polys,arrows,trail);
+
+  /* 读数：机体系滚动一个周期平均（显示转渲染系 x,−y,−z） */
+  if(avgBuf.length>5){
+    const n=avgBuf.length;
+    const avg=[0,1,2].map(k=>avgBuf.reduce((s,e)=>s+e.Fb[k],0)/n);
+    $('fx').textContent=avg[0].toFixed(2);
+    $('fy').textContent=(-avg[1]).toFixed(2);
+    $('fz').textContent=(-avg[2]).toFixed(2);
+    $('mx').textContent='–';$('my').textContent='–';$('mz').textContent='–';
+    const lift=avg[2], pct=Math.round(lift/(mass*9.81)*100);
+    $('liftbar').textContent=lift.toFixed(2)+' N = '+pct+'% 重力';
+    $('liftbar').style.color=pct>95&&pct<115?'#7bd88a':(pct>60?'#ffd166':'#ff6b5e');
+  }
+  if(alive){
+    const [r_,p_,y_]=euler(bird.q);
+    setBar('f',ST.freq||0,' Hz',v=>v.toFixed(2));
+    setBar('A',flapAmpBuf.length?Math.max(...flapAmpBuf)*57.3:0,'°',v=>v.toFixed(0));
+    setBar('Th',(J.twist_L||0)*57.3,'°',v=>v.toFixed(0));
+    setBar('fold',(J.fold_L||0)*57.3,'°',v=>v.toFixed(0));
+    setBar('de',((J.tail_L||0)+(J.tail_R||0))/2*57.3,'°',v=>v.toFixed(0));
+    setBar('dr_',(((J.tail_L||0)-(J.tail_R||0))/2)*57.3,'°',v=>v.toFixed(0));
+    setBar('dy',(J.tail_yaw||0)*57.3,'°',v=>v.toFixed(0));
+    const ch=ST.ch||{};
+    setBar('chT',ch.throttle||0,'',v=>v.toFixed(2));
+    setBar('chE',ch.elevator||0,'',v=>v.toFixed(2));
+    setBar('chA',ch.aileron||0,'',v=>v.toFixed(2));
+    setBar('chR',ch.rudder||0,'',v=>v.toFixed(2));
+    setBar('br',r_,'°',v=>v.toFixed(0));
+    setBar('bp',p_,'°',v=>v.toFixed(0));
+    setBar('by',y_,'°',v=>v.toFixed(0));
+    setBar('pos_x',Math.min(1,Math.max(0,ST.pose[0]/40)),'',v=>v.toFixed(2));
+    const p0=ST.pose;
+    $('posv').textContent=`(${p0[0].toFixed(1)}, ${p0[1].toFixed(1)}, ${p0[2].toFixed(1)}) m`;
+    $('fpsv').textContent=(ST.fps||0).toFixed(0)+' fps · t='+(ST.t||0).toFixed(1)+'s'
+      +(ST.tether&&ST.tether.mode==='tether'
+        ?' · 系留张力 '+ST.tether.tension.toFixed(1)+'N · DP '+(ST.tether.dp_freq?ST.tether.dp_freq.toFixed(2):'—')+'Hz'
+        :' · 自由飞');
+    /* 相位条 */
+    const f=ST.freq||2;
+    const ph=((ST.t||0)*f)%1, down=Math.cos(2*Math.PI*(ST.t||0)*f)>0;
+    $('phasebar').style.width=(ph*100)+'%';
+    $('phaselab').textContent=down?'下扑 DOWNSTROKE':'上扑 UPSTROKE';
+    $('phaselab').style.color=down?'#4dd0e1':'#ffd166';
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

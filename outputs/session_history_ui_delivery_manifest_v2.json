@@ -1,0 +1,69 @@
+{
+ "schema_version": 1,
+ "item_id": "I-228",
+ "delivery_version": "session-history-ui-v2",
+ "run_id": "run-ciri-i228-history-rework-20261014-a1-a1",
+ "dispatch_request_id": "kd-ciri-i228-history-rework-20261014-a1-a1",
+ "session_id": "sess_e2438b4f-44de-4800-b87f-e98fea01e441",
+ "workstation": "L5-w1",
+ "reviewer": "ciri",
+ "generated_at": "2026-10-15T23:06:00",
+ "supersedes": "outputs/session_history_ui_delivery_manifest_v1.json（首版与证据原样保留；Ciri 2026-10-14 评审退回三反例，见 board_ui/lab_design/评审意见_I-228_完整会话历史界面_Ciri_20261014.md 与 logs/ciri_i228_ui_review_20261014/）",
+ "rework_scope": "只修已复现缺口及原需求：筛选异步竞态、索引换版分页停滞、保留类型误标运行、旧会话事项履历补齐；原入口、只读详情、筛选与静态分页等有效成果保留，不整套推倒，不扩充自检数量替代缺陷修复",
+ "rework_fixes": [
+  {
+   "counterexample": "prefilter_old_response（评审返修一）：从 L3 入口挂载时先发全部请求（650ms 迟回），覆盖快速 L3 请求（35ms），控件 L3 而行为 L9，数量与索引时间被旧响应覆盖",
+   "fix": "挂载即以预筛为初始 filters/applied（不发错误首请求，预筛值未变不重设）；请求代次递增，迟到代次的响应不写入列表、数量、索引版本、错误或加载状态",
+   "evidence": "logs/i228_ui_rework_20261015/rework_check_record.json S1a-S1e（复现原时序 650/35ms 反序返回；快速连续筛选 L3→L9→L5 反序延迟最终行为 L5；关闭重开仅一次正确预筛请求）"
+  },
+  {
+   "counterexample": "index_changed_pagination（评审返修二）：页号按去重数量推算，索引换版致第二页一条重复时 99 条后反复请求第二页停滞",
+   "fix": "按实际页号推进（lastPage+1）；响应 index_built_at 与本遍历版本不符即丢弃触发行、重置并重新以新版本第 1 页开始，明示换版提示；完成态限定本版本内（按页推进 1–N），跨页重复行如实折叠计数不冒称零重复",
+   "evidence": "rework_check_record.json S2a-S2i（复现原场景页序 1,2,1,2,3 非停滞，121 条全量可达；固定索引 120 条控制组页序 1,2,3 全量无重复；真实索引 264 条跨 6 页按页推进全量可达=real_recheck_record.json R2）",
+   "dependency_note": "跨版本严格一致的完整遍历依赖后端固定快照机制（同一 snapshot_id 内分页稳定）；现行按 index_built_at 识别换版并重新开始，不跨版本拼接冒称无遗漏——此为原事项对上游的依赖如实列出，未改后端"
+  },
+  {
+   "counterexample": "fresh_idle_retention_label（评审返修三）：retention.kind=active（仅未超时保留）+execution_phase=idle 被标运行中",
+   "fix": "保留类型 active 标签改为近期保留（types.ts 与筛选选项同步）；详情新增执行状态行，按索引 execution_phase 如实映射（运行/空闲/已停止/停止中/已退役，无来源明确未知），并注明相位来自索引快照、实时状态以观察窗实况卡为准；不改任何底层事实",
+   "evidence": "rework_check_record.json S3a-S3e（反例组合消失+近期运行/已停止/无来源对照）；real_recheck_record.json R1a/R1b/R4（真实索引 active 7 行全部近期保留、无任何运行中标签）"
+  },
+  {
+   "requirement": "旧会话事项履历（机主明确要求：过去做了哪些 I、分别什么时候、这些 I 现在什么情况）",
+   "fix": "详情历次事项区补：可核标题与当前账本状态（/api/item-detail 只读）、账本事件时间线（/api/events 只读：派发/认领/释放/阻塞/结载，逐条标账本事件来源）；认领核实仅认本会话认领事件在册，索引/派发关联明示归属未核实不冒充；他方认领、无账本事件、当前账本读取失败、账本事件接口失败分别如实说明；对话摘要（会话库）与事项事件（账本）分别标注来源",
+   "evidence": "rework_check_record.json S4a-S4f（六种样例）；real_recheck_record.json R3a-R3d（真实旧会话 I-219：真实标题/账本状态/时间线/认领归属标注）"
+  }
+ ],
+ "regressions": "rework_check_record.json S5a-S5c + real_recheck R5：十线常驻与历史入口、单卡注入完整会话身份定向、旧会话详情只读（误注入/误停止入口为零）；首版的只读对话摘要、交接卡与前后链、四类缺失说明、完整会话号在 S3/S4 场景中一并复验",
+ "files": {
+  "修改": [
+   "board_ui/src/console/SessionHistoryView.tsx（四项返修主体：初始预筛、请求代次、页号推进与换版重开、执行状态行、事项履历区）",
+   "board_ui/src/console/types.ts（RETENTION_LABEL.active 改近期保留并注明语义）",
+   "board_ui/src/console/console.css（换版提示与事项履历样式段追加）"
+  ],
+  "新增": [
+   "board_ui/scripts/i228v2_rework_check.cjs（返修隔离复验 28 项）",
+   "board_ui/scripts/i228v2_real_recheck.cjs（真实只读复验 10 项）"
+  ],
+  "新领地依据": "logs/i228_ui_rework_20261015/（返修运行记录目录，派工指定）；I-234 与 I-218 未提交改动全部保留未覆盖，共享文件按当前内容最小修改"
+ },
+ "verification_runs": [
+  {"name": "返修隔离复验（三反例+正常控制+履历+回归）",
+   "path": "logs/i228_ui_rework_20261015/rework_check_record.json", "result": "28/28"},
+  {"name": "真实只读复验（私有服务读生产索引+生产账本只读）",
+   "path": "logs/i228_ui_rework_20261015/real_recheck_record.json", "result": "10/10；零非 GET 触生产"},
+  {"name": "构建检查", "path": "board_ui/dist（tsc -b 无错、vite build 通过）", "result": "通过"}
+ ],
+ "screenshots": [
+  "s1_race_fixed.png、s2_pagination_restart.png、s3_retention_semantics.png、s4_item_history.png（隔离复验）",
+  "real_recheck_list.png、real_recheck_traversal.png、real_recheck_item_history.png（真实只读复验）"
+ ],
+ "criteria_mapping_note": "原六条判据逐项证据：判据一（入口/列表一致）S1+S5 与真实 R2/R3；判据二（筛选分页全部可达）S1/S2+控制组与真实 R2；判据三（只读详情与四类缺失+履历补齐）S3/S4 与真实 R3；判据四（交接链只读可达）S5c 与首版真实链保留；判据五（实况语义）S3 执行相位行+观察窗实况卡（首版能力保留）；判据六（本清单+构建+截图；Ciri 终审）",
+ "unmet": [
+  "生产启用归 Beth：session_history_server 生产启动、控制台同源路由、核实口径索引重建（现行生产索引仍为 v1 构建含未核实会话）",
+  "同线三次真实交接与两个并行工位的逐项真实证据（生产索引现仅一条真实交接链 L2；夹具三交接链不替代真实）",
+  "新采集口径的生产回读（真实长工具>90 秒与采集失联的生产实证）",
+  "跨版本严格一致遍历的后端固定快照机制（现按 index_built_at 换版识别重开，未改后端；如需严格跨版本无遗漏由上游提供稳定快照）",
+  "Ciri 按原六条终审走查（pending_review，不自关不勾判据）"
+ ],
+ "constraints_honored": "仅本项前端与必要检查；生产服务/索引/后端事实/执行器只读，零非 GET 触生产；未重启未发布未强制交接；I-234 在途改动与 I-218 基线保留未覆盖；Ciri 独立反例脚本只读复用未改动；旧版隔离 26 项与只读联调 12 项保留原适用范围（logs/i228_session_history_ui_20261015/）"
+}

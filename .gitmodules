@@ -1,0 +1,9 @@
+[submodule "vendor/eko"]
+	path = vendor/eko
+	url = https://github.com/FellouAI/eko.git
+[submodule "vendor/flappy_hummingbird"]
+	path = vendor/flappy_hummingbird
+	url = https://github.com/purdue-biorobotics/flappy.git
+[submodule "vendor/fwaf_vid"]
+	path = vendor/fwaf_vid
+	url = https://github.com/JizhouJiang-HIT/FWAF-VID.git

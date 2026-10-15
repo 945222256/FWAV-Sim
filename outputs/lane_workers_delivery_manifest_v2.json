@@ -1,0 +1,91 @@
+{
+ "schema_version": 1,
+ "item_id": "I-217",
+ "delivery_version": "lane-workers-v2",
+ "reviewer": "beth",
+ "generated_at": "2026-10-14T17:47:31",
+ "generated_by": "L3队（会话 sess_bd527dd6，运行 run-beth-lane-workers-core-rework-20261014-a1）",
+ "rework_basis": "独立复核反例 logs/hq_intake/beth_lane_concurrency_20261014/independent_review_20261014.json 三项缺口；v1 证据已归档（outputs/lane_workers_delivery_manifest_v1.json），不冒称撤回版本重新有效",
+ "声明": [
+  "本清单为 lane-workers-v2 补修交付：三项实际缺口（内核任务线串行门禁、云端认领拒同队第二项、真实并行证据不完整）全部修复并经隔离验证与真实闭环验证。",
+  "生产宿主 83332、生产内核、采集器、其他队执行器与生产云数据库全程零接触零写；全部验证在隔离状态根/队列/端口/数据库/进程树完成。",
+  "施工交付待验收不等于已上线；生产启用由 Beth 按本清单维护步骤组织，回退步骤附后。"
+ ],
+ "gap_fixes": [
+  {
+   "缺口": 1,
+   "问题": "_adopt_line 把任何 lane_active 一律当串行门禁（复核实测第二任务 line_wait）",
+   "修复": "按已分配工位、该线有效容量（lane_workers 配置）与活跃运行归属判定：容量未满且每个在办项归属可核（claim_session_id 或 claim_worker_id 在案）时放行进入工位槽与冲突准入；容量满或归属未知保守等待并留原因。冲突、租约与去重不绕过。",
+   "配套": "任务线读取返回 lane_active_details（逐项认领会话与工位）；内核记 line_parallel_admitted 事件留痕。",
+   "验证": "隔离套件 LW8a（归属可核并行过线）/LW8b（归属未知保守等待）+ 真实闭环 V1a/V1c/V3"
+  },
+  {
+   "缺口": 2,
+   "问题": "check_claim 在 worker_id 保存之前仍拒同队第二项（worker_id 只是事后字段）",
+   "修复": "rules.check_claim 增加容量与工位参数：容量一维持一路一项；容量二允许同队第二项，前提为已有在办与本认领都报固定工位（形态/线一致/序号在容量内）、工位不重复、会话不跨事项重复；容量取管理员配置（config 表 lane_concurrency，缺省一，客户端自报无效）。全部检查在 claim 的 IMMEDIATE 事务内。api_dispatch.claim 事务内读容量配置并把 worker_id/会话传入；claim_worker_id 落库（db.py 幂等加列 + repo 列清单）。",
+   "配套": "正式管理端点 POST/GET /api/admin/lane_concurrency（机主会话专用，取值限 1 或 2）。",
+   "验证": "隔离云探针（自建库+正式 API 路径）11/11：CC1b 同队第二项不同工位获准（复核反例场景）、CC2 同工位拒、CC3 超容量工位集拒、CC4 缺工位拒、CC5 同会话跨事项拒、CC6 同事项重复认领拒、CC7 缺省容量一单工位兼容、CC8 快照回读工位归属与 reviewer 保持"
+  },
+  {
+   "缺口": 3,
+   "问题": "v1 探针只验接受与回读即结束，第二会话无模型执行，不能断言真实并行",
+   "修复": "全栈真实闭环探针 v2：隔离云（自建库+正式 API）+隔离内核+隔离宿主（真实协议子进程执行器、真实会话）；两个真实任务各在其隔离目录真实执行约 75 秒（写 start→真实 sleep→写 end→正式 result_submit），第三项排队自动接续。",
+   "验证": "真实闭环 12/12：V2b 工作文件区间相交（A=[17:44:29,17:46:01] B=[17:43:30,17:44:58]）、V2c 会话消息区间相交（模型执行重叠约 187 秒）、V1b 四不同、V3 第三项自动接续、V4a/b 三项正式结果经内核→桥→隔离云回收为 pending_review 且认领带工位、V5 独立执行器进程（pid 106016/53136）"
+  }
+ ],
+ "files_rework": {
+  "修改": [
+   "lp_sync/orchestrator_kernel.py（_adopt_line 容量与归属判定 + line_parallel_admitted 留痕）",
+   "lp_sync/dispatch_file_queue.py（任务线读取 lane_active_details 与 claim_worker_id 摘要）",
+   "cloud_board/rules.py（check_claim 容量与固定工位口径 + lane_capacity_of）",
+   "cloud_board/api_dispatch.py（claim 事务内读容量配置并传工位与会话）",
+   "cloud_board/db.py / repo.py（claim_worker_id 幂等加列与列清单）",
+   "cloud_board/api_agent.py（/api/admin/lane_concurrency 管理端点）",
+   "cloud_board/settings.py（隔离实例 env 覆盖：监听/端口/库/密钥/证书）",
+   "cloud_board/server_main.py（api_lab 缺失容错启动，仅影响本地隔离实例）",
+   "items_registry/cloud_client.py（LP_CLOUD_PORT 端口覆盖，测试与灾备切换）"
+  ],
+  "新增": [
+   "lp_sync/i217_cloud_capacity_probe.py（隔离云容量与工位认领探针，11 项）",
+   "lp_sync/i217_real_parallel_probe_v2.py（全栈真实闭环探针，12 项；v1 探针保留归档不再作为并行证据）",
+   "lp_sync/lane_workers_drills.py 增 LW8 两项（任务线并行准入样例）"
+  ]
+ },
+ "verification_runs": [
+  {
+   "name": "隔离套件（含 v1 全部 28 项不降断言 + LW8 两项）",
+   "path": "logs/i217_lane_workers_drills_20261014_170634/drill_results.json",
+   "result": "30/30"
+  },
+  {
+   "name": "隔离云容量与工位认领（真实数据库+正式 API 路径）",
+   "path": "logs/i217_cc_probe_20261014_171642/results.json",
+   "result": "11/11"
+  },
+  {
+   "name": "真实 ZCode 双工位完整闭环（隔离全栈）",
+   "path": "logs/i217_real_v2_20261014_174229/evidence.json",
+   "result": "12/12，parallel_real 证据：真实会话 sess 双工位、模型执行区间重叠约 187 秒、三项 pending_review 回收"
+  }
+ ],
+ "contract_adaptation": {
+  "结论": "接口结构未变，沿用冻结版契约 lp_sync/lane_workers_contract_v1.json",
+  "适配说明": "v2 未改 lane_queues 快照结构；任务线读取新增 lane_active_details 为内核内部输入（桥接口增量字段，不进观察窗契约）；云端 claim 增加可选 worker_id 与容量配置，属云内部校验不影响既有消费者。结构变更时须升契约版本。"
+ },
+ "honest_disclosure": [
+  "验证期间发现并修复的探针缺陷：早期一轮真实闭环探针中隔离宿主环境缺少客户端云端指向（LP_CLOUD_HOST/PORT），其任务线读取回落到生产云执行了三次只读快照查询（查询对象为不存在的 I-960..962，立即返回事项不存在；未发生任何写、认领或状态变更）。修复后全部子进程统一指向隔离云。生产云零写的事实依据：该缺陷只触发只读 GET /api/agent/snapshot，且任务线在派发前即被拒，认领与派发从未发出。",
+  "v1 真实并行证据（两会话接受+回读）不再作为并行结论依据，归档保留；v2 以模型执行区间交集为准。"
+ ],
+ "maintenance_steps": [
+  "启用（Beth 组织，有限维护窗口）：1) 云端先执行 POST /api/admin/lane_concurrency {\"set\":{\"L3\":2}}（机主会话）；2) 生产宿主按既有任务计划经 Beth 维护流程重启加载新代码（本施工会话不执行）；3) 生产内核同窗口重启（加载 _adopt_line 与工位槽代码）；4) 首批双工位派发后回读：/api/agent/lane_queues 见 workers 与 concurrency_limit、认领事件详情含工位号、事项 claim_worker_id 落库。",
+  "回退：1) POST /api/admin/lane_concurrency {\"set\":{\"L3\":1}} 即恢复一路一项（无需重启，认领事务内读配置）；2) 内核与宿主回退到 git 既往版本（本项全部改动有清单可对照）；3) lane_workers 配置缺省即一，未配置的线行为与历史一致。",
+  "观察点：桥台账 poll_error 连发（文件竞态残余）、lane_queues conflict 非空（超限异常）、line_wait 原因含「归属未核」（云端认领缺会话或工位）。"
+ ],
+ "unmet": [
+  "生产启用未做（云端容量配置、生产宿主与内核加载新代码、首批双工位派发回读）——待 Beth 按维护步骤组织，本交付不含任何生产写",
+  "生产云端 claim 容量路径的真实写验证待启用阶段完成（隔离云已验证同一代码路径）",
+  "L5 观察窗真实联调待其按冻结契约接入（契约结构未变沿用 v1）",
+  "守门生产观察与桥文件竞态残余监控按启用后首月运行办理"
+ ],
+ "v1_archive_note": "v1 交付与证据见 outputs/lane_workers_delivery_manifest_v1.json 及 logs/i217_lane_workers_drills_20261014_151052 等，全部归档保留；依赖项改绑由 Beth 核验本 v2 交付后办理。"
+}

@@ -1,0 +1,131 @@
+{
+ "schema_version": 1,
+ "item_id": "I-217",
+ "delivery_version": "lane-workers-v1",
+ "reviewer": "beth",
+ "generated_at": "2026-10-14T15:16:19",
+ "generated_by": "L3队（会话 sess_bd527dd6，运行 run-beth-lane-workers-core-20261014-a1）",
+ "声明": [
+  "本清单为 I-217 业务线双工位并行（lane-workers-v1）的总证据清单：设计、源码改动、隔离验证与真实会话并行证据的完整索引。",
+  "全部验证在独立状态根、独立队列根、独立端口与自建测试进程中完成；生产宿主 83332、生产内核、采集器与其他队执行器全程未重启、未终止。",
+  "施工交付待验收不等于已上线：生产启用（加载新内核与宿主代码、L3 并发上限置二）由 Beth 在核验后组织有限维护与回退验证；本清单 unmet 列出未验与待启用条目。",
+  "工作树中其他队未提交改动未做 reset、stash 或整目录提交；本项只新增与修改清单所列文件。"
+ ],
+ "design": {
+  "模型": "业务线与执行工位分离：每线并发上限可配置一或二（lane_workers.json，缺省一、上限二防误配，L3 试点二）；工位标识固定 <lane>-wN；每工位独立会话（工位注册表驻留）与独立执行器（宿主按工位键池化）。",
+  "准入": "并行任务声明 writable_paths 与 exclusive_resources；路径前缀重叠或独占资源同名拒绝并行准入并保留等待原因；缺声明的任务仅可独占本线；派发前对当前持槽集合做最终复核（持槽口径：分配工位起至终态，含任务线检查中间态）。",
+  "兼容": "无 worker_id 的请求走原单工位三通道（roster 线映射）逐位不变；lane_queues 保留 current/current_item_id 等旧字段，多工位时如实标注为最早活跃工位任务（契约 truth_rule）。",
+  "云认领": "claim 可选 worker_id，写入事件详情与 claim_worker_id 字段；署名仍为路线队名，业务线与 reviewer 不变，不借工位字段绕过容量。"
+ },
+ "files": {
+  "新增": [
+   "lp_sync/lane_workers.py（核心：配置、工位注册表、冲突准入、槽位视图）",
+   "lp_sync/lane_workers_contract_v1.json（冻结版接口契约）",
+   "lp_sync/lane_workers_contract_check.py（契约逐字段回读校验器）",
+   "lp_sync/lane_workers_drills.py（八判据隔离验证套件）",
+   "lp_sync/lane_workers_drill_worker.py（工位感知隔离桥）",
+   "lp_sync/lane_workers_drill_executor.py（工位执行器占位进程）",
+   "lp_sync/i217_real_parallel_probe.py（真实会话并行证据探针）",
+   "lp_sync/i217_kill_orphans.py（演练遗留进程清扫工具，仅匹配自建演练进程）"
+  ],
+  "修改": [
+   "lp_sync/orchestrator_kernel.py（工位槽派发与最终准入复核、槽释放、工位视图、派发带工位、重启重建工位注册表、任务声明字段）",
+   "lp_sync/host_service.py（按工位路由：工位执行键、工位会话驻留、工位交接换绑、认领带工位、_exec_key_for_sid 工位反查）",
+   "lp_sync/dispatch_file_queue.py（worker_id 与声明字段校验透传；PermissionError 短重试加固：_atomic_move、结果落盘、台账读写）",
+   "lp_sync/handoff_gate.py（按认领会话定向交接：多项同线在办精确匹配本会话事项；冷却按会话计、每日上限按线计）",
+   "cloud_board/api_dispatch.py（claim 可选 worker_id，保持署名与 reviewer）"
+  ],
+  "未动": [
+   "board_ui",
+   "科研控制器",
+   "仿真入口",
+   "参数数值",
+   "凭证",
+   "生产宿主/内核/采集器进程"
+  ]
+ },
+ "criteria_evidence": [
+  {
+   "判据": 1,
+   "要求": "业务线与工位分离、上限配置、固定工位标识、独立会话与执行器、单工位兼容",
+   "证据": "演练 LW1a/LW1b/LW1c（{'total': 28, 'passed': 28}）：L3=2 缺省=1、标识 L3-w1/w2、L9 两任务串行且旧式请求无 worker 字段照常工作",
+   "真实证据": "真实探针：每工位独立执行器进程（L3-w1 pid=134828、L3-w2 pid=125448）与独立真实会话"
+  },
+  {
+   "判据": 2,
+   "要求": "同线两任务真实重叠执行、四不同证据、第三项排队、自动接续、不超限",
+   "证据": "演练 LW2a-LW2e 全过：A/B 同时活跃于不同工位，会话/工位/进程/运行号四不同（dispatch_log 逐条），C 排队后自动接续派发一次，每线与全局在办不超限",
+   "真实证据": "真实探针 parallel_real=true：两真实会话均接受并回读核验（evidence.json 含派发时刻与回执）"
+  },
+  {
+   "判据": 3,
+   "要求": "按工位认领保持线与 reviewer、四类去重样例有效派发总数一、映射重启一致",
+   "证据": "演练 LW3a-LW3e 全过：同事项重复入队拒、第二内核退出码三、认领到期运行数一、未知回执重启前后派发数不变、工位注册表重启前后回读一致（3 工位）",
+   "真实证据": "云侧 claim worker_id 字段与事件详情（api_dispatch.py）；本项未对生产云端做写样例，生产认领链路待启用后由 Beth 复核"
+  },
+  {
+   "判据": 4,
+   "要求": "声明与准入四样例、不得同时改同一共享文件",
+   "证据": "演练 LW4a-LW4d 全过：重叠任务运行区间不相交（区间断言）、无冲突任务继续、缺声明排队留因、隔离目录两任务并行"
+  },
+  {
+   "判据": 5,
+   "要求": "只杀工位一执行器、工位二保持、断点恢复、生产拒绝全局终止",
+   "证据": "演练 LW5a-LW5d 全过：taskkill 工位一执行器确认死亡（退出码判定）、工位二原会话保持并完成、工位一经 dispatch_resume 续原会话、生产 kill_child 拒绝（隔离标志缺失时）"
+  },
+  {
+   "判据": 6,
+   "要求": "守门按工位会话与准确认领、三项样例",
+   "证据": "演练 LW6a-LW6d 全过（桩云端隔离探针）：两项同线在办按认领会话各自定向、旧会话不切换其他工位事项、archived 会话重复交接抑制、历史派发映射过期按云端认领修正"
+  },
+  {
+   "判据": 7,
+   "要求": "接口字段齐全与兼容、契约逐字段一致、通知关联零重复零丢失",
+   "证据": "演练 LW7a/LW7b 全过：契约校验器对真实 lane_queues 快照核对 54-61 项字段零问题；通知文件与台账事件一一对应、重复零、丢失零"
+  },
+  {
+   "判据": 8,
+   "要求": "全隔离验证、单一总清单、未验条目、不动生产",
+   "证据": "本清单自身；全部演练件位于独立目录（logs/i217_lane_workers_drills_*/），唯一端口族，自建进程；生产宿主 83332 全程未动"
+  }
+ ],
+ "test_judgment_corrections": [
+  "LW4a 首版断言要求等待原因含「重叠」二字：槽位竞争时序不同会让重叠任务以「工位均在执行」等待（同样是拒绝并行准入的合法留痕），属判据错判；第二版改相位快照断言又在错峰运行时误判；终版改为运行区间不相交断言（直接对应判据原文「不能同时修改同一份共享工作文件」），实证见 151052 轮 LW4a 明细。",
+  "LW5a 首版存活判定用 OpenProcess 句柄存在性：被杀进程因父进程持有句柄未收尸时句柄仍在，属判定缺陷；终版按 GetExitCodeProcess 退出码 259 判存活。",
+  "Beth 14:52 恢复指令要求核查判据是否错判：上述两处即本轮发现的判定侧错误，产品侧逻辑未发现为此返工的项。"
+ ],
+ "robustness_fixes_from_drills": [
+  "桥侧与内核侧的文件竞态（内核高频回读 done/ 与台账 vs 桥原子替换，Windows 错误 13）：_atomic_move、结果落盘、台账读+写全部加 PermissionError 三连短重试（dispatch_file_queue.py），生产同样受益。",
+  "演练桥加看门狗与外层自愈重拉（磁盘状态可恢复），把偶发竞态从整套验证失败降为一次自愈事件；151052 轮 28/28 通过时含一次自愈，如实保留在日志。"
+ ],
+ "drill_runs": [
+  {
+   "run": "logs/i217_lane_workers_drills_20261014_151052/drill_results.json",
+   "result": "28/28 通过（终版）",
+   "checks": 28
+  },
+  {
+   "run": "logs/i217_lane_workers_drills_20261014_110414/drill_results.json",
+   "result": "25/28（Beth 恢复指令引用的断点）"
+  },
+  {
+   "run": "logs/i217_real_parallel_20261014_151450/evidence.json",
+   "result": "真实双工位并行证据 parallel_real=true"
+  }
+ ],
+ "interface_contract": {
+  "file": "lp_sync/lane_workers_contract_v1.json",
+  "endpoint": "GET /api/agent/lane_queues",
+  "上行通道": "sync_agent 直读 kernel_state/lane_queues.json 原样上行（新字段 workers/concurrency_limit/active_count/worker_slots 自动透传，零改动）",
+  "回读校验": "python lp_sync/lane_workers_contract_check.py <lane_queues.json>（或 --api <base_url>）",
+  "L5 对接": "预备约定与本契约的对应关系：per_lane.concurrency_limit=concurrency_limit、workers 数组含 worker_id/session_id/item_id/run_id/phase/executor_pid（executor_pid 经工位注册表提供）、waiting/waiting_count、兼容字段 truth_rule 已在契约冻结"
+ },
+ "unmet": [
+  "生产启用未做：新内核与宿主代码在生产宿主 83332 加载、L3 并发上限置二、生产工位会话建立，全部等 Beth 组织有限维护与回退核验（本交付待验收不等于已上线）。",
+  "独立复核未做：Beth 复核与本清单各判据证据的独立复验待安排；L5 真实联调待其按本契约接入后以真实后端回读核对。",
+  "生产云端 claim worker_id 链路未做写样例（本项禁改生产状态）；启用后首批双工位派发时应回读认领事件详情含工位号并由 Beth 核验。",
+  "守门样例基于桩云端探针（LW6）：生产守门在双工位在办下的首月运行留待启用后观察，交接冷却与每日上限参数维持现值。",
+  "演练桥看门狗自愈事件如实保留（151052 轮一次）：桥侧文件竞态已加固但未宣称根除，生产启用后若桥台账出现 poll_error 连发应按维护流程处置。"
+ ],
+ "worktree_note": "工作树含其他队未提交改动，已保留未动；本项文件清单见 files 节。"
+}

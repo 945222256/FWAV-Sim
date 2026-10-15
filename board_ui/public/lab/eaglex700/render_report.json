@@ -1,0 +1,58 @@
+{
+ "glb": "G:/Playground/isaac_flapper_sim/eagle_shell/jane_preview_20261013_tail/output/eaglex_articulated_preview.glb",
+ "camera_rule": "全动画包围盒并集取景（含一成余量）",
+ "bbox_min": [
+  -0.24465586245059967,
+  -0.3990911543369293,
+  -0.1071942150592804
+ ],
+ "bbox_max": [
+  0.21877191960811615,
+  0.3969246447086334,
+  0.2672519087791443
+ ],
+ "engine": "BLENDER_EEVEE",
+ "resolution": 560,
+ "segments": [
+  {
+   "segment": "flap",
+   "time_s": [
+    0,
+    2
+   ],
+   "frames": 24
+  },
+  {
+   "segment": "twist",
+   "time_s": [
+    2,
+    4
+   ],
+   "frames": 24
+  },
+  {
+   "segment": "fold",
+   "time_s": [
+    4,
+    6
+   ],
+   "frames": 24
+  },
+  {
+   "segment": "tail",
+   "time_s": [
+    6,
+    8
+   ],
+   "frames": 24
+  },
+  {
+   "segment": "combo",
+   "time_s": [
+    8,
+    10
+   ],
+   "frames": 24
+  }
+ ]
+}

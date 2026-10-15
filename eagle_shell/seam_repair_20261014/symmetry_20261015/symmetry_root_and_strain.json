@@ -1,0 +1,405 @@
+{
+  "length_unit": "current display metres; not measured physical calibration",
+  "versions": {
+    "before": {
+      "sha256": "f2c2dc2893d2f62e2140d024f855f33f5c86cd3377b4efd134142b7c9fefa2bc",
+      "parts": {
+        "main_L": {
+          "surface_area_m2": 0.03431978054277482,
+          "projected_area_m2": 0.016514765447475398,
+          "min_abs_span_m": 0.012807378023862837,
+          "max_abs_span_m": 0.13999999821186065
+        },
+        "tip_L": {
+          "surface_area_m2": 0.03425321663601008,
+          "projected_area_m2": 0.014998833401971381,
+          "min_abs_span_m": 0.14000000193715095,
+          "max_abs_span_m": 0.3154162488992541
+        },
+        "main_R": {
+          "surface_area_m2": 0.03362747576102106,
+          "projected_area_m2": 0.016187465296435066,
+          "min_abs_span_m": 0.015543182790279386,
+          "max_abs_span_m": 0.13999999821186065
+        },
+        "tip_R": {
+          "surface_area_m2": 0.034945521143383285,
+          "projected_area_m2": 0.015326133669769912,
+          "min_abs_span_m": 0.14000000193715095,
+          "max_abs_span_m": 0.3181520698487163
+        }
+      },
+      "root_boundary": {
+        "L": {
+          "min_abs_span_m": 0.012807378023862837,
+          "max_abs_span_m": 0.04699145764112472,
+          "length_weighted_mean_abs_span_m": 0.024748884474238654
+        },
+        "R": {
+          "min_abs_span_m": 0.015543182790279386,
+          "max_abs_span_m": 0.04972726240754127,
+          "length_weighted_mean_abs_span_m": 0.02748468862774197
+        }
+      },
+      "area_symmetry": {
+        "main": {
+          "left_cm2": 165.14765447475398,
+          "right_cm2": 161.87465296435064,
+          "relative_difference_over_mean_percent": 2.001699233323887
+        },
+        "tip": {
+          "left_cm2": 149.98833401971382,
+          "right_cm2": 153.2613366976991,
+          "relative_difference_over_mean_percent": 2.1586191142382454
+        }
+      },
+      "main_wing_edge_strain_by_mode": {
+        "FLAP_INHERIT/L": {
+          "max_stretch_fraction": 3.6519715695959576e-08,
+          "max_shrink_fraction": -8.162567066705151e-09,
+          "stretch_frame": 21,
+          "shrink_frame": 20
+        },
+        "FLAP_INHERIT/R": {
+          "max_stretch_fraction": 3.6519715251870366e-08,
+          "max_shrink_fraction": -8.162565623415219e-09,
+          "stretch_frame": 6,
+          "shrink_frame": 5
+        },
+        "TWIST_INHERIT/L": {
+          "max_stretch_fraction": 2.8265837670460314e-08,
+          "max_shrink_fraction": -1.424120343873625e-08,
+          "shrink_frame": 31,
+          "stretch_frame": 51
+        },
+        "TWIST_INHERIT/R": {
+          "max_stretch_fraction": 2.8265867868526584e-08,
+          "max_shrink_fraction": -1.4241004486770237e-08,
+          "shrink_frame": 46,
+          "stretch_frame": 36
+        },
+        "TIP_DIHEDRAL_UP/L": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DIHEDRAL_UP/R": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DOWNFOLD/L": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DOWNFOLD/R": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "FLAP_PLUS_FOLD/L": {
+          "max_stretch_fraction": 4.184258850514766e-08,
+          "max_shrink_fraction": -3.948464133429752e-08,
+          "shrink_frame": 121,
+          "stretch_frame": 129
+        },
+        "FLAP_PLUS_FOLD/R": {
+          "max_stretch_fraction": 4.175645051951449e-08,
+          "max_shrink_fraction": -3.951602312035618e-08,
+          "shrink_frame": 121,
+          "stretch_frame": 129
+        }
+      }
+    },
+    "recut": {
+      "sha256": "654ca1b58397efffc7e0f420c8c74876c713f79b7e98311cf5aef4125d847a4c",
+      "parts": {
+        "main_L": {
+          "surface_area_m2": 0.02221857114086663,
+          "projected_area_m2": 0.010528808017940247,
+          "min_abs_span_m": 0.06,
+          "max_abs_span_m": 0.13999999821186065
+        },
+        "tip_L": {
+          "surface_area_m2": 0.03438413145307906,
+          "projected_area_m2": 0.015052513318670496,
+          "min_abs_span_m": 0.14000000193715095,
+          "max_abs_span_m": 0.3161672078187793
+        },
+        "main_R": {
+          "surface_area_m2": 0.022340983509381854,
+          "projected_area_m2": 0.010587134752146031,
+          "min_abs_span_m": 0.06,
+          "max_abs_span_m": 0.13999999821186065
+        },
+        "tip_R": {
+          "surface_area_m2": 0.034945521143383285,
+          "projected_area_m2": 0.015326133669769912,
+          "min_abs_span_m": 0.14000000193715095,
+          "max_abs_span_m": 0.3181520698487163
+        }
+      },
+      "root_boundary": {
+        "L": {
+          "min_abs_span_m": 0.06,
+          "max_abs_span_m": 0.06,
+          "length_weighted_mean_abs_span_m": 0.06
+        },
+        "R": {
+          "min_abs_span_m": 0.06,
+          "max_abs_span_m": 0.06,
+          "length_weighted_mean_abs_span_m": 0.06000000000000001
+        }
+      },
+      "area_symmetry": {
+        "main": {
+          "left_cm2": 105.28808017940247,
+          "right_cm2": 105.87134752146031,
+          "relative_difference_over_mean_percent": 0.5524426244269989
+        },
+        "tip": {
+          "left_cm2": 150.52513318670495,
+          "right_cm2": 153.2613366976991,
+          "relative_difference_over_mean_percent": 1.8013991946615189
+        }
+      },
+      "main_wing_edge_strain_by_mode": {
+        "FLAP_INHERIT/L": {
+          "max_stretch_fraction": 3.6519715251870366e-08,
+          "max_shrink_fraction": -8.162565623415219e-09,
+          "stretch_frame": 6,
+          "shrink_frame": 5
+        },
+        "FLAP_INHERIT/R": {
+          "max_stretch_fraction": 3.651971502982576e-08,
+          "max_shrink_fraction": -8.162565623415219e-09,
+          "stretch_frame": 6,
+          "shrink_frame": 5
+        },
+        "TWIST_INHERIT/L": {
+          "max_stretch_fraction": 2.8284072861595178e-08,
+          "max_shrink_fraction": -1.4256458125139204e-08,
+          "shrink_frame": 46,
+          "stretch_frame": 36
+        },
+        "TWIST_INHERIT/R": {
+          "max_stretch_fraction": 2.8266262885878746e-08,
+          "max_shrink_fraction": -1.4241812507087559e-08,
+          "shrink_frame": 31,
+          "stretch_frame": 36
+        },
+        "TIP_DIHEDRAL_UP/L": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DIHEDRAL_UP/R": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DOWNFOLD/L": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DOWNFOLD/R": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "FLAP_PLUS_FOLD/L": {
+          "max_stretch_fraction": 4.184324620126745e-08,
+          "max_shrink_fraction": -3.95142429887585e-08,
+          "shrink_frame": 121,
+          "stretch_frame": 129
+        },
+        "FLAP_PLUS_FOLD/R": {
+          "max_stretch_fraction": 4.1817086016138205e-08,
+          "max_shrink_fraction": -3.951602312035618e-08,
+          "shrink_frame": 121,
+          "stretch_frame": 129
+        }
+      }
+    },
+    "rejected_trial": {
+      "sha256": "3cf0153fcec885f08cf30846ba75fc37e2670e7bddea355b56ca244448824aba",
+      "main_wing_edge_strain_by_mode": {
+        "FLAP_INHERIT/L": {
+          "max_stretch_fraction": 0.33431932923539676,
+          "max_shrink_fraction": -0.28305173299533626,
+          "stretch_frame": 22,
+          "shrink_frame": 7,
+          "stretch_edge_bind_xyz_m": [
+            [
+              -0.0059751222544963695,
+              0.11409513753356124,
+              0.022225884832888676
+            ],
+            [
+              -0.005935362255318904,
+              0.11320865998386495,
+              0.022645324578631068
+            ]
+          ],
+          "stretch_edge_bind_midpoint_xyz_m": [
+            -0.005955242254907636,
+            0.1136518987587131,
+            0.022435604705759872
+          ]
+        },
+        "FLAP_INHERIT/R": {
+          "max_stretch_fraction": 0.33651901604755285,
+          "max_shrink_fraction": -0.2732348285648297,
+          "stretch_frame": 22,
+          "shrink_frame": 7,
+          "stretch_edge_bind_xyz_m": [
+            [
+              0.12131119206912915,
+              -0.11544438211438791,
+              0.022434204166750762
+            ],
+            [
+              0.12131847669991402,
+              -0.11450190369638293,
+              0.022845246256351464
+            ]
+          ],
+          "stretch_edge_bind_midpoint_xyz_m": [
+            0.12131483438452159,
+            -0.11497314290538542,
+            0.022639725211551113
+          ]
+        },
+        "TWIST_INHERIT/L": {
+          "max_stretch_fraction": 0.5187001957461559,
+          "max_shrink_fraction": -0.3434752657682092,
+          "stretch_frame": 37,
+          "shrink_frame": 37,
+          "stretch_edge_bind_xyz_m": [
+            [
+              -0.009104962899020692,
+              0.09809089806620219,
+              0.017365646203927297
+            ],
+            [
+              -0.00923488310120206,
+              0.09669033496719136,
+              0.016539644515199084
+            ]
+          ],
+          "stretch_edge_bind_midpoint_xyz_m": [
+            -0.009169923000111376,
+            0.09739061651669678,
+            0.01695264535956319
+          ]
+        },
+        "TWIST_INHERIT/R": {
+          "max_stretch_fraction": 0.5178428864661107,
+          "max_shrink_fraction": -0.35032524024971123,
+          "stretch_frame": 37,
+          "shrink_frame": 37,
+          "stretch_edge_bind_xyz_m": [
+            [
+              -0.008868642780579654,
+              -0.09883478348008173,
+              0.015966204937797615
+            ],
+            [
+              -0.008880963224315974,
+              -0.10074326464912459,
+              0.017030764383437636
+            ]
+          ],
+          "stretch_edge_bind_midpoint_xyz_m": [
+            -0.008874803002447813,
+            -0.09978902406460316,
+            0.016498484660617624
+          ]
+        },
+        "TIP_DIHEDRAL_UP/L": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DIHEDRAL_UP/R": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DOWNFOLD/L": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "TIP_DOWNFOLD/R": {
+          "max_stretch_fraction": 0.0,
+          "max_shrink_fraction": 0.0
+        },
+        "FLAP_PLUS_FOLD/L": {
+          "max_stretch_fraction": 0.2646300932734875,
+          "max_shrink_fraction": -0.2697084058100797,
+          "stretch_frame": 125,
+          "shrink_frame": 125,
+          "stretch_edge_bind_xyz_m": [
+            [
+              -0.006756882254417897,
+              0.10996289315132697,
+              0.020634924479669713
+            ],
+            [
+              -0.006793842492427803,
+              0.10877681612332445,
+              0.01987668509209456
+            ]
+          ],
+          "stretch_edge_bind_midpoint_xyz_m": [
+            -0.00677536237342285,
+            0.10936985463732571,
+            0.020255804785882136
+          ]
+        },
+        "FLAP_PLUS_FOLD/R": {
+          "max_stretch_fraction": 0.26338236720012387,
+          "max_shrink_fraction": -0.26820329777586904,
+          "stretch_frame": 125,
+          "shrink_frame": 125,
+          "stretch_edge_bind_xyz_m": [
+            [
+              -0.007465843401679518,
+              -0.10698110268448588,
+              0.01855956633580808
+            ],
+            [
+              -0.007390243268733747,
+              -0.10879942442787191,
+              0.019612365071279655
+            ]
+          ],
+          "stretch_edge_bind_midpoint_xyz_m": [
+            -0.007428043335206633,
+            -0.1078902635561789,
+            0.019085965703543865
+          ]
+        }
+      }
+    }
+  },
+  "unchanged_right_surface_vertices": {
+    "coincident_corner_samples": 8858,
+    "max_coincident_distance_m": 0.0,
+    "qualification": "The new cut also creates interpolated vertices; not all new vertices coincide with old corners."
+  },
+  "interpretation": {
+    "root_partition_shift": "Candidate reassigns native inboard wing surface to the fixed body. This changes colour AND moving/fixed ownership, not just a drawing label.",
+    "rigid_incidence": "Main wing does not materially stretch in the rigid versions; the interface opens.",
+    "trial_incidence": "Only the rejected trial stretches the root transition over |y|=.06 to .14 m. Its strain is an artefact of that LBS proposal, not a physical requirement."
+  },
+  "partition_change": {
+    "L": {
+      "main_area_reduction_percent": 36.246094130572224,
+      "root_boundary_mean_outward_shift_m": 0.035251115525761344
+    },
+    "R": {
+      "main_area_reduction_percent": 34.59671073717999,
+      "root_boundary_mean_outward_shift_m": 0.03251531137225804
+    }
+  },
+  "candidate_qualification": {
+    "static_topological_continuity_verified": true,
+    "final_partition_accepted": false,
+    "reason": "Root cut at |y|=.06 reclassifies inboard wing as fixed body; actual wing-body interface and strict symmetry are not established.",
+    "trial_material_limit_known": false,
+    "trial_5_percent_gate_is_measured_material_limit": false
+  }
+}

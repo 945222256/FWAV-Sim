@@ -1,0 +1,64 @@
+{
+ "schema_version": 1,
+ "item_id": "I-233",
+ "delivery_version": "pending-work-v1",
+ "reviewer": "beth",
+ "run_id": "run-beth-i233-pending-work-backend-20261014-a1",
+ "dispatch_request_id": "kd-beth-i233-pending-work-backend-20261014-a1",
+ "session_id": "sess_cea3e05f-93d4-436f-a4f1-25d196418268",
+ "workstation": "L3-w1",
+ "generated_at": "2026-10-15T22:10:00+08:00",
+ "声明": [
+  "本清单为 I-233 待领工作区后端契约交付：统一只读待领快照、调度因果事件与控制台只读端点已实现并冻结 pending-work-v1 契约，隔离场景检查 23/23 通过，生产来源真实只读快照与事件重建已取证。",
+  "生产启用由 Beth 组织：生产云端未部署新端点、生产采集器未挂接上行（候选补丁未应用）、真实双工位接续尚无生产证据，均列未验项；本交付不冒充生产上线。",
+  "复用不重写：I-205 队列与状态准入、I-217 双工位与冲突规则、I-227 实况与历史成果保持原样，本项只新增只读契约与因果数据，不改排序、预留策略或旧任务判据；I-228 与其他在途改动未触碰。"
+ ],
+ "modules": {
+  "lp_sync/pending_work.py": "统一只读快照：按正式事项号去重的完整待领集合（覆盖已分配/未分配、已入队/未入队）；需求、已认领、待审核、已完成、test 通道范围排除计数；历史类别缺失与认领运行矛盾（含 CLAIM_RUN_SESSION_MISMATCH、CLAIM_WITHOUT_RUN、RUN_WITHOUT_CLAIM、MULTIPLE_ACTIVE_RUNS）待核对分开核账；ready/waiting_conditions/awaiting_orchestration/needs_verification 分类与原因代码（已入队搬运内核准入结果，未入队静态同源评估并明示 evaluator）；容量 effective_limit/occupied/dispatchable/reserved 与真实 policy_source，预留策略如实 not_set 且 reserved=null，页面额度与五分钟活跃数为独立口径只引用不混算；快照身份、来源版本集合、采样有效期、完整性与失联原因",
+  "lp_sync/pending_work_events.py": "调度因果事件：释放、选择、认领确认、实际运行、条件等待、恢复、结果未知七类；账本与状态双来源派生、run_started 按 run_id 跨来源合并、无实际运行记录不生成开工事件；稳定 event_id（事实身份哈希）、持久游标、after_cursor 增量、来源高水位漏段核对、重复派生与重启重建幂等",
+  "cloud_board/api_console.py（挂接）": "四个端点：POST /api/console/pending_work/ingest 与 POST /api/console/pending_work/events/ingest（数据面存储，事件按 event_id 服务端去重）、GET /api/console/pending_work 与 GET /api/console/pending_work/events?after_cursor=N（只读）。修复过程披露：初版快照端点在事务外调用 append_event 且曾留写锁（本机开发实例上 events 表插入唤醒服务端事件消费者遗留锁），已改为审计随配置行保存并经交替写序列验证；该修复属本项新增代码内，未触碰既有端点"
+ },
+ "contract": {
+  "path": "organization/contracts/pending_work_v1/",
+  "files": ["README.md（字段语义冻结）", "snapshot_sample.json（生产真实只读快照样例）", "events_sample.json（生产真实事件重建样例）"]
+ },
+ "minimal_hookup_patch": {
+  "file": "logs/i233_pending_work_20261014/candidate_console_collector_hookup.patch",
+  "target": "lp_sync/console_collector.py（共享文件，仅生成候选不直接覆盖）",
+  "content": "_cycle 内周期调用 pending_work.push_once() 与 pending_work_events.push_once()，异常只留痕",
+  "checks": "默认与 core.autocrlf=false 双配置只读应用检查通过；候选副本编译通过；生产 console_collector.py 未改动",
+  "not_applied": true
+ },
+ "criteria_mapping": [
+  {"criterion": 1, "result": "通过（隔离）", "evidence": "S1 单事项两次请求只计一项且请求层保留；S2 未分配独立入口；S3 需求排除；S4 类别缺失待核对；SC 汇总明细各类计数逐项一致；生产真实快照 total_pending=12 与明细/分类/各线/未分配交叉核对一致，遗漏重复为 0"},
+  {"criterion": 2, "result": "通过（隔离）", "evidence": "S5 依赖未清 DEP_NOT_CLEARED 与交付撤回 DEP_WITHDRAWN_UNREVIEWED 分别给码、关联与恢复条件；S6 资源冲突搬运内核准入结果（provenance=kernel_admission_last_error，非解析自由文字）；就绪评估不尝试认领；生产快照分类含真实等待原因样例"},
+  {"criterion": 3, "result": "通过（隔离）", "evidence": "S7 无预留策略 reservation_policy=not_set、reserved=null、policy_source 真实（kernel_state/lane_workers.json）；生产快照容量 global（limit 11、occupied 3、dispatchable 8）与各线（L9=2/2 等夹具核验）；页面额度与五分钟活跃为独立口径注明"},
+  {"criterion": 4, "result": "通过（隔离）", "evidence": "E2 释放→选择→认领确认→实际运行链完整、身份一致、因果关联；E4 无实际运行记录零开工事件；普通轮询与重复回执不生成不重放（duplicate_result_skipped 不映射）"},
+  {"criterion": 5, "result": "通过（隔离）", "evidence": "快照身份/来源版本/采样有效期/完整性在真实快照与契约样例中冻结；E6 after_cursor 增量、C5 服务端游标读取；R1 只读构建不写内核状态来源；C1-C5 隔离云端四端点真实上行与只读回读（同一 snapshot_id）"},
+  {"criterion": 6, "result": "通过（隔离）", "evidence": "23/23：十场景（S1-S9、E2 双工位释放接续且另一工位事件独立）+ 事件重复两次（E1 同事实只计一次）、重启（E5 幂等）、断线（E6）与漏段（E7）核对；独立端口 9463、独立状态与库、自建进程已回收"},
+  {"criterion": 7, "result": "通过（本清单）", "evidence": "单一总清单本文件；上游 I-205/I-217/I-227 成果与未验条款保留引用；I-228 前端未触碰；生产加载、真实双工位接续生产证据与部署后回读列未验"}
+ ],
+ "real_readback": {
+  "snapshot": "logs/i233_pending_work_20261014/real_snapshot_production_readonly.json（生产云端事项+内核状态只读构建，snapshot_id pw-20261014T220205-cb699f196a35：待领 12、等待条件 6、待编排 4、待核对 2 项待领内+25 项历史类别缺失+2 项认领异常分列、排除计数 174/16/5/2/0、容量 11/3/8）",
+  "events": "logs/i233_pending_work_20261014/real_events_production_readonly.json（生产账本与状态真实重建 3787 事件、无漏段、含活跃运行与历史释放选择链）",
+  "note": "生产云端未部署新端点，上述回读为本地模块对生产来源的真实只读构建；经隔离云实例验证同代码端点的上行与读取闭环（C1-C5）"
+ },
+ "tests": {
+  "script": "lp_sync/i233_pending_work_test.py",
+  "results": "logs/i233_pending_work_20261014/isolation_check_results.json（23/23）",
+  "fixture": "logs/i233_pending_work_20261014/fixture（独立端口 9463、独立库与状态目录；进程已回收）"
+ },
+ "production_deploy_rollback": {
+  "deploy": "1) Beth 复核通过后部署 cloud_board（含 api_console.py 新四端点）；2) 应用 candidate_console_collector_hookup.patch 并重启 sync_agent，采集周期上行快照与事件；3) 页面按契约消费 GET 端点（Ciri 前端第二阶段联调）；4) 部署后按真实只读回读核对快照身份与事件游标",
+  "rollback": "回退 console_collector.py 补丁（两行调用删除）并重启 sync_agent；云端端点只读可保留或随 cloud_board 回退版本；无任何调度状态需要回滚（全程只读与数据面存储）"
+ },
+ "source_hashes": "logs/i233_pending_work_20261014/source_hashes.json",
+ "unmet": [
+  "生产云端未部署 pending_work 端点，生产真实接口回读未验（隔离实例同代码已验）",
+  "生产采集器未挂接上行（候选补丁未应用）、未重启，生产待领快照不会自动刷新",
+  "真实双工位释放并接续尚无生产证据（隔离夹具已验链路；生产证据待部署后由真实事件产生）",
+  "I-205 结构化审核回执候选、I-218 停止候选 v2、I-227 生产加载仍待 Beth 独立维护决策（本项未触碰其文件）",
+  "Ciri 前端第二阶段真实联调与最终页面审核未开始",
+  "Beth 独立复核后办理验收；本清单不勾选原七条判据，事项不自行关闭"
+ ]
+}

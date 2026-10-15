@@ -1,0 +1,44 @@
+{
+ "schema_version": 4,
+ "delivery_version": "v4",
+ "item_id": "I-220",
+ "title": "统一内部节律、左右协调及历史预览服务（原第四条超前预测修复 v4）",
+ "delivered_at": "2026-10-15T22:33:38",
+ "run_id": "run-kt-fil-i220-v3-prediction-rework-20261015-a1",
+ "base_commit_at_delivery_start": "f8cf74815fbe29ff2dc0e9bd925b58bc575af914",
+ "reviewer": "fil",
+ "basis": {
+  "v3_review": "docs/I-220_Fil返修复核_v3_20261015.md（原第六条补证已登记通过，六条通过仅原第四条待修）",
+  "reproduce": "logs/fil_i220_v3_review_20261015/reproduce_supplement.py（11 场景，本轮修复后全部通过，含 future_query_matches_window）",
+  "v3_sources": "logs/fil_i220_v3_review_20261015/source_start.json 与 v3_sources/",
+  "scope": "只修负滞后超前预测与窗口的参数程序一致性问题；v3 参数程序窗口与数组隔离、前轮六项修复、原五条结论全部保留不重开"
+ },
+ "fix": {
+  "problem": "lagged_shape_phase 负滞后（超前）预测每步显式传旧采用频率 twin.advance(self._adopted_f)，覆盖已排定参数程序，与窗口出口（advance(None, dfreq) 程序感知）不一致——Fil 反例：2Hz、0.01s 已走一步，第二步排定 5Hz，目标 0.04s，窗口相位 1.0681415022205298 而超前查询 0.5026548245743669。",
+  "change": "超前预测改为与窗口同一规则：克隆后先播种当前采用频率（twin.adopt），每步 twin.advance(None, None)——已排定参数程序在副本步首执行、无新闭环需求保持当前采用值；不再把旧采用频率伪装成每步新需求覆盖程序。预测方法元数据改名 clone_window_consistent_program_aware 并在文档串声明同一程序执行与保持规则。参数程序未关闭、窗口结果未改。",
+  "evidence": "Fil 复现脚本 11 场景全部通过（含此前唯一失败的 future_query_matches_window）；检查器新增 v4 五项：反例反转（超前=窗口=期望 1.0681415022205298 逐位一致）、程序在起始步/中间步/恰目标步生效时两出口一致、无程序保持与正滞后历史不受影响；既有 70 项全部保留通过（含 v3 第六条正常与异常数组隔离四项）。"
+ },
+ "checks": {
+  "checker": "tools/verify_i220_motion_rhythm.py",
+  "result": "75 项两跑全过（v3 的 70 项全部保留，新增 v4 五项）",
+  "regressions": "I-219 检查器 104 项复跑全过；bench_runner --fast 快档基准通过（BENCH PASS）；Fil reproduce_supplement.py 11 场景全过"
+ },
+ "unverified": [
+  "I-221 具体基元未实现（通用提供者承接已证，具体基元接线归 I-221）",
+  "I-222/I-223 主循环、模拟入口与气动消费未接线",
+  "任意非整步时刻的超前预测精度（登记文档既有限定；本轮工况严格对齐规范步长）",
+  "原第四条不自勾：由 Fil 独立复核后判定"
+ ],
+ "source_hashes": {
+  "modules/motion_action/runtime.py": "b3c3a12ecffb1c1950c19bd69671ffa91a7cc60c86651584fdbc90561f2986b7",
+  "tools/verify_i220_motion_rhythm.py": "dc12b5f8c9539fc636c374865db65cd1019617f7079a901f7b5ed17f8a2fa96b",
+  "modules/motion_action/rhythm.py": "与 v3 一致未改",
+  "modules/motion_action/__init__.py": "与 v3 一致未改"
+ },
+ "history": {
+  "v1": "已退回（六项实现问题），提交 5e71982",
+  "v2": "已退回（四、六部分覆盖），提交 0e6a8f9",
+  "v3": "已退回（原四超前预测一处），提交 58c37fc；原六补证已登记通过",
+  "v4": "本交付：超前预测与窗口共用程序执行与保持规则，方法元数据一致；仅改 runtime.py 与检查器"
+ }
+}

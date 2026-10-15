@@ -1,0 +1,128 @@
+{
+ "schema_version": 1,
+ "登记说明": "战略蓝图应然层数据登记册（I-167）。登记源是本文件，云端镜像经同步代理心跳上行（config 键 blueprints），页面经 GET /api/blueprints 读取。四要素字段：name 块名、description 应然描绘（含应拥有的能力、组件、表现力，取核定稿原文逐字）、vision 来源愿景（目标编号数组）、lanes 服务业务线（路线编号数组，顺序照核定稿）。协作关系的结构化关联字段留位 collaborations，首批无结构化协作数据，不虚构。内容出处：战略蓝图_首批块草案_20261010.md 核定记录（机主 2026-10-11 同意首批十一块）。",
+ "blocks": [
+  {
+   "id": "B-01",
+   "name": "确定性与回归门禁",
+   "description": "任何一次仿真可逐字节复现；任何改动以基准分数说话，劣化零容忍；门禁进持续集成",
+   "vision": ["G-002"],
+   "lanes": ["L2"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-02",
+   "name": "声明式实验管线",
+   "description": "实验即配置，一次性脚本绝迹；历史实验凭配置哈希一条命令重放",
+   "vision": ["G-002"],
+   "lanes": ["L2"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-03",
+   "name": "数据资产与参数治理",
+   "description": "一个物理量只有一个数值一个位置；知识以数据存在；总账、参数库、证据链全部机器可读可审计",
+   "vision": ["G-002"],
+   "lanes": ["L3"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-04",
+   "name": "标准化辨识产线",
+   "description": "指定工况的动力学可被辨识；多正弦激励、频域估计、留出验证一次产出导数矩阵",
+   "vision": ["G-001"],
+   "lanes": ["L1"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-05",
+   "name": "科目能力",
+   "description": "五科目任务集按冻结判据通过；当前焦点为科目一压坡度转弯三十五秒存活",
+   "vision": ["G-001", "G-002"],
+   "lanes": ["L1"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-06",
+   "name": "波形与控制律工具链",
+   "description": "波形族发生器、逐拍控制、补偿器处方齐备；控制契约机器可对齐、可验证",
+   "vision": ["G-001"],
+   "lanes": ["L4", "L1"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-07",
+   "name": "学习控制管线",
+   "description": "向量化训练环境与主仿真共用同一份气动契约；策略在包络级决策与在线适应上产生正收益",
+   "vision": ["G-001"],
+   "lanes": ["L6"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-08",
+   "name": "真机接驳能力",
+   "description": "代理实物闭环演练全流程通过；气动契约对外来数据成立；真机到来即插即飞",
+   "vision": ["G-001"],
+   "lanes": ["L3", "L1"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-09",
+   "name": "协作与审计设施",
+   "description": "多代理编排、全程留痕、机器验收、依赖图接力；任何决定与证据可回放可审计",
+   "vision": ["G-001"],
+   "lanes": ["L7", "L3"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-10",
+   "name": "展示与接驳界面",
+   "description": "云端看板、编排控制台、移动薄壳三件套；所见即所得，每一格信息可追溯到原始记录",
+   "vision": ["G-001"],
+   "lanes": ["L5"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md"
+  },
+  {
+   "id": "B-11",
+   "name": "自有智能体设施",
+   "description": "运行时自有、多模型底座、网关分流；不再依赖任何厂商的智能体环境；架构内核可向其他领域提取复用",
+   "vision": ["G-003"],
+   "lanes": ["L10", "L2"],
+   "collaborations": [],
+   "approved_at": "2026-10-11",
+   "approved_by": "机主",
+   "source_doc": "战略蓝图_首批块草案_20261010.md",
+   "note": "草案时来源愿景为 G-003（候选），2026-10-11 随首批块核定由机主授权写入目标库，候选转正，出处 items_registry/goals.json"
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eagle X · 完整装配接缝检查</title>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#e8eef5;background:#13202c;font:15px/1.6 system-ui,sans-serif}header{padding:16px 22px;background:#1c2d3e}h1{font-size:22px;margin:0 0 6px}p{margin:4px 0}main{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 119px);min-height:470px}#scene{position:relative;background:#eef2f5}canvas{display:block;width:100%;height:100%}aside{padding:16px;overflow:auto}button,select{font:inherit;color:inherit;background:#263f54;border:1px solid #62788b;border-radius:5px;padding:6px 9px;margin:4px 3px 4px 0;cursor:pointer}button:hover{background:#3c5a71}select{width:100%}input[type=range]{width:100%}.note{color:#b7c8d7;font-size:13px}.key{color:#8ce0d2}#message{position:absolute;left:15px;bottom:12px;background:#fffE;padding:6px 12px;color:#203345;border-radius:5px}a{color:#8ce0d2}label{display:block;margin-top:12px}#error{color:#ffb4ac;white-space:pre-wrap}@media(max-width:800px){main{grid-template-columns:1fr;height:auto}#scene{height:60vh}}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/node_modules/three/build/three.module.js"}}</script>
+<header><h1>Eagle X · 完整装配接缝检查</h1><p>可拖动旋转、滚轮缩放。显示实际模型三角面；颜色只用于识别部件。</p><p class="note">连续外皮动作候选：弯扭分布在主翼和翼尖内段。大幅动作有明显伸缩，尚未取得实物材料依据。</p></header>
+<main><div id="scene"><div id="message">正在加载完整模型…</div></div><aside>
+<button id="play">播放动作</button><button id="rest">静止装配</button>
+<p id="time">静止</p><input aria-label="动作时间" id="scrub" type="range" min="0" max="19.99" step="0.01" value="0">
+<label for="view">查看位置</label><select id="view"><option value="whole">完整装配</option><option value="right">右翼根近景</option><option value="left">左翼根近景</option><option value="top">正上方 · 检查左右面积</option><option value="bottom">下方 · 检查表面穿插</option></select>
+<label for="appearance">显示方式</label><select id="appearance"><option value="parts">部件识别色</option><option value="original">原始贴图</option><option value="wire">实际三角边线</option><option value="plain">统一灰色</option></select>
+<label>动作定位</label><div id="poses"><button data-t="0.5">正拍</button><button data-t="1.5">反拍</button><button data-t="2.5">正迎角</button><button data-t="3.5">负迎角</button><button data-t="4.5">翼尖上反</button><button data-t="6.5">翼尖下折</button><button data-t="8.33">组合动作</button><button data-t="10.5">尾翼偏航</button><button data-t="12.5">尾翼滚转</button><button data-t="14.5">尾翼展收</button></div>
+<label>实际导出检查</label><div id="measure" class="note">正在读取检查结果…</div>
+<p class="note">翼根分界距中线 21.2–26.2 毫米；外端保留原命令姿态。迎角仍绕展向轴改变，没有新增绕机体 z 轴的主翼动作。</p>
+<p><a href="output/eaglex_continuous_root_v3.glb" download>下载完整模型</a></p><p><a href="output/接缝检查说明.html">查看测量和使用范围</a></p><p id="error"></p>
+</aside></main>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from './vendor/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import {OrbitControls} from './vendor/node_modules/three/examples/jsm/controls/OrbitControls.js';
+const $=x=>document.getElementById(x), box=$('scene');
+let gltf,mixer,playing=false,rest=true,t=0;const original=new Map();
+const scene=new THREE.Scene();scene.background=new THREE.Color('#eef2f5');
+const camera=new THREE.PerspectiveCamera(38,1,.001,30);
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));box.append(renderer.domElement);
+renderer.setSize(box.clientWidth,box.clientHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+scene.add(new THREE.HemisphereLight(0xffffff,0x66707c,2.8));const sun=new THREE.DirectionalLight(0xffffff,2.4);sun.position.set(.6,1,.8);scene.add(sun);const fill=new THREE.DirectionalLight(0xcfe4ff,1.4);fill.position.set(-.6,.1,-1);scene.add(fill);
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;
+const views={whole:[[.46,.60,.77],[.015,0,0]],right:[[.19,.15,.22],[.06,0,.075]],left:[[.19,.15,-.22],[.06,0,-.075]],top:[[.001,1.12,0],[.001,0,0]],bottom:[[.28,-.55,.56],[.025,0,0]]};
+function view(){const [a,b]=views[$('view').value];camera.position.fromArray(a);camera.up.set(0,1,0);controls.target.fromArray(b);controls.update();}
+function appearance(){if(!gltf)return;const mode=$('appearance').value;gltf.scene.traverse(o=>{if(!o.isMesh)return;const orig=original.get(o.uuid);if(mode==='original'){o.material=orig;return;}let color='#a8b1b9';if(mode!=='plain'){if(o.name.includes('wing_main'))color='#e4b348';else if(o.name.includes('wing_tip'))color='#57af82';else if(o.name.includes('tail'))color='#bd91b3';else color='#758da0';}o.material=new THREE.MeshStandardMaterial({color,roughness:.72,metalness:0,wireframe:mode==='wire',side:THREE.DoubleSide});});}
+function pose(time,isRest=false){if(!mixer)return;rest=isRest;t=time;if(isRest){mixer.stopAllAction();gltf.scene.traverse(o=>{if(o.morphTargetInfluences)o.morphTargetInfluences.fill(0);});}else{mixer.clipAction(gltf.animations[0]).play();mixer.setTime(t);}gltf.scene.updateMatrixWorld(true);$('scrub').value=t;$('time').textContent=isRest?'静止装配':`${t.toFixed(2)} 秒`;}
+function pause(){playing=false;$('play').textContent='播放动作';}
+$('play').onclick=()=>{playing=!playing;$('play').textContent=playing?'暂停动作':'播放动作';if(playing&&rest)pose(0);};$('rest').onclick=()=>{pause();pose(0,true);};
+$('scrub').oninput=()=>{pause();pose(Number($('scrub').value));};$('poses').onclick=e=>{if(e.target.dataset.t){pause();pose(Number(e.target.dataset.t));}};
+$('view').onchange=view;$('appearance').onchange=appearance;
+new ResizeObserver(()=>{camera.aspect=box.clientWidth/box.clientHeight;camera.updateProjectionMatrix();renderer.setSize(box.clientWidth,box.clientHeight);}).observe(box);view();
+const build=await fetch('./output/build_report.json',{cache:'no-store'}).then(r=>r.json());
+new GLTFLoader().load('./output/eaglex_continuous_root_v3.glb?v='+build.glb_sha256,g=>{gltf=g;scene.add(g.scene);g.scene.traverse(o=>{if(o.isMesh){o.frustumCulled=false;original.set(o.uuid,o.material);}});mixer=new THREE.AnimationMixer(g.scene);appearance();pose(0,true);$('message').textContent='完整模型已加载 · 拖动旋转查看接缝';},e=>{$('message').textContent=`正在加载完整模型… ${(e.loaded/1048576).toFixed(1)} MB`;},e=>{$('error').textContent='模型加载失败：'+e.message;});
+fetch('./output/motion_checks.json',{cache:'no-store'}).then(r=>r.json()).then(r=>{const peaks=Object.values(r.actual_exported_edge_changes);$('measure').textContent=`左右主翼各 ${(r.projected_areas_m2.main.R*1e4).toFixed(2)} cm²，翼尖各 ${(r.projected_areas_m2.tip.R*1e4).toFixed(2)} cm²。${r.checked_animation_frames} 帧及 ${r.additional_between_frame_checks} 个帧间姿态：四处接缝测得最大间距 ${(Math.max(...Object.values(r.maximum_seam_gap_m))*1000).toFixed(6)} mm。大幅动作局部网格边长最大伸长约 ${(100*Math.max(...peaks.map(x=>x.stretch))).toFixed(1)}%，最大缩短约 ${(-100*Math.min(...peaks.map(x=>x.shrink))).toFixed(1)}%。`;});
+let last=performance.now();function tick(now){const dt=Math.min((now-last)/1000,.05);last=now;if(playing&&mixer)pose((t+dt)%19.99);controls.update();renderer.render(scene,camera);requestAnimationFrame(tick);}requestAnimationFrame(tick);
+window.addEventListener('error',e=>{$('error').textContent+='\n'+e.message;});
+</script></html>

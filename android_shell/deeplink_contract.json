@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "contract_id": "deeplink-contract-v1",
+  "item": "I-064",
+  "purpose": "安卓薄壳应用与云端看板前端共同遵守的深度链接契约。壳的路由表与本文件为同一份事实源；前端按本文件的路由解析哈希。",
+  "host": {
+    "primary": "https://personal.karmicsword.com",
+    "app_base": "https://personal.karmicsword.com/app/",
+    "note": "域名证书经公开链校验有效（I-064 施工实测）；备用直连 https://101.96.207.208 为自签证书，TWA 不加载自签证书，仅作浏览器兜底入口。"
+  },
+  "custom_scheme": {
+    "scheme": "flapperboard",
+    "format": "flapperboard://<route>[?<query>]",
+    "note": "自定义 scheme 无需域名资产校验即可直接调起应用，为豆包语音助手等第三方调起的首先入口；壳负责把 scheme 链接映射为对应的 https 应用链接。"
+  },
+  "routes": [
+    {
+      "name": "home",
+      "description": "作战地图首页，关系图视图为默认视图",
+      "hash": "#/home",
+      "https": "https://personal.karmicsword.com/app/#/home",
+      "scheme": "flapperboard://home",
+      "frontend_behavior": "tab=graph，无抽屉，无线路下钻",
+      "params": []
+    },
+    {
+      "name": "item",
+      "description": "事项详情页，抽屉展开判据对照、证据链与时间线",
+      "hash": "#/item/{item_id}",
+      "https": "https://personal.karmicsword.com/app/#/item/I-055",
+      "scheme": "flapperboard://item/I-055",
+      "frontend_behavior": "打开该事项的详情抽屉，行为与图上点击同源（GET /api/item-detail）",
+      "params": [{"name": "item_id", "pattern": "^I-[0-9]{3}$"}]
+    },
+    {
+      "name": "lanes",
+      "description": "泳道任务板视图",
+      "hash": "#/lanes",
+      "https": "https://personal.karmicsword.com/app/#/lanes",
+      "scheme": "flapperboard://lanes",
+      "frontend_behavior": "tab=lanes",
+      "params": []
+    },
+    {
+      "name": "graph",
+      "description": "依赖关系图视图",
+      "hash": "#/graph",
+      "https": "https://personal.karmicsword.com/app/#/graph",
+      "scheme": "flapperboard://graph",
+      "frontend_behavior": "tab=graph",
+      "params": []
+    },
+    {
+      "name": "line",
+      "description": "逻辑线下钻视图",
+      "hash": "#/line/{line_id}",
+      "https": "https://personal.karmicsword.com/app/#/line/{line_id}",
+      "scheme": "flapperboard://line/{line_id}",
+      "frontend_behavior": "进入该逻辑线的下钻层，行为与目标树点击同源",
+      "params": [{"name": "line_id", "pattern": "^[A-Za-z0-9_-]+$"}]
+    }
+  ],
+  "unmatched_rule": "未匹配任何路由的链接按 home 处理；item 路由的编号格式不合法时按 home 处理并在页面内无抽屉。",
+  "shell_reference": "安卓壳 android_shell/README.md 与 app/src/main/AndroidManifest.xml 的 intent-filter 路由表逐条对应本文件；壳内不写任何接口调用，数据展示完全由加载的网页前端完成。",
+  "frontend_reference": "board_ui/src/deeplink.ts 为前端解析的唯一实现，路由表与本文件 routes 数组一一对应。"
+}

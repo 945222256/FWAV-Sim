@@ -1,0 +1,29 @@
+[
+  {
+    "entry_id": "P-018",
+    "mismatched_fields": [
+      "goal_context"
+    ],
+    "existing_repair_item": "I-188",
+    "lint_rules_pass": true,
+    "decision": null
+  },
+  {
+    "entry_id": "P-019",
+    "mismatched_fields": [
+      "goal_context"
+    ],
+    "existing_repair_item": "I-188",
+    "lint_rules_pass": true,
+    "decision": null
+  },
+  {
+    "entry_id": "P-020",
+    "mismatched_fields": [
+      "goal_context"
+    ],
+    "existing_repair_item": "I-188",
+    "lint_rules_pass": true,
+    "decision": null
+  }
+]

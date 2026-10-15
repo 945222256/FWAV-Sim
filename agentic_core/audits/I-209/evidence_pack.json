@@ -1,0 +1,123 @@
+{
+  "item": "I-209",
+  "title": "扑翼仿真运行代码七项质量核查",
+  "executor": "L10队",
+  "session_id": "sess_d9237101-b14f-45fa-aeec-65e155ae179c",
+  "generated_at": "2026-10-13",
+  "base_revision": "1dbc6c1aa135d0dede5b53e3cd1f6585d85bc50e",
+  "source_sha256": {
+    "modules/wing_actuation.py": "f7a27ca5cf58bd01d6205715a3dc463fe5db5e5859da2884673f934b0364d836",
+    "modules/aero_solver.py": "967e9954f910dd6661f271ef8681a49b63b05a7c9a7cbf85161f5542e8b18e64",
+    "modules/aero/kinematics.py": "5d275f68ebd3bd205020c38085e8d963f0aec3241028b6b0b9f9ddaf6b0adfca",
+    "modules/aero/sane_dickinson.py": "7ffcf4319a788003c805a434caac3c2a0f9dced5b86ba166984e75f5ad78ff63",
+    "tools/i190_da_semantics_check.py": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1"
+  },
+  "checksum_verification": "开工与收尾各核对一次，五个源文件与派发材料一致，生产源码与参数变更为零",
+  "report": "agentic_core/audits/I-209/I-209_七项质量审计报告.md",
+  "verdicts": {
+    "F01": {
+      "title": "时机差动归零后仍保留旧值",
+      "verdict": "已证实",
+      "entry": "modules/wing_actuation.py:175-184",
+      "key_numbers": {
+        "pitch_lag_baseline_s": -0.0674,
+        "after_plus_0.010": [-0.0574, -0.0774],
+        "after_minus_0.020": [-0.0874, -0.0474],
+        "retained_after_zero_and_mode_exits": true,
+        "cache_records_zero_while_model_retains_offset": true,
+        "control_amp_cmd_symmetric_after_zero": true,
+        "control_dfreq_collective_after_zero": true
+      },
+      "result": "results/f01_dlag_zero.json"
+    },
+    "F02": {
+      "title": "关键同步失败后仍继续写入动作",
+      "verdict": "已证实",
+      "entry": "modules/wing_actuation.py:93,145,153,259 与 modules/aero_solver.py:417-431",
+      "key_numbers": {
+        "freq_sync_fail": {"joint_writes": 1, "tail_writes": 1, "log_entries": 0, "model_freq_stale": "1.8 vs 指令 2.4"},
+        "amp_publish_fail": {"joint_writes": 1, "tail_writes": 1, "log_entries": 0, "amp_cmd": "未发布"},
+        "gate_publish_fail": {"joint_writes": 1, "tail_writes": 1, "log_entries": 0, "sd_gate_cmd": "未发布"},
+        "tail_publish_fail": {"joint_writes": 1, "tail_writes": 0, "log_entries": 1},
+        "aero_tail_compute_fail": {"raised": false, "wing_forces_applied": true, "log_level": "DEBUG"}
+      },
+      "result": "results/f02_sync_failure.json"
+    },
+    "F03": {
+      "title": "验证器没有覆盖真实驱动入口",
+      "verdict": "已证实（当前版本独立复现，引用 I-190 既有复核）",
+      "entry": "tools/i190_da_semantics_check.py:44-46",
+      "key_numbers": {
+        "validator_sha256": "d3569b6a68574949129636a9119024db593c435914f5113dc4c56a11d67829a1",
+        "baseline": "31/31 pass, driver calls 0",
+        "block_import": "31/31 pass",
+        "break_driver": "31/31 pass, driver calls 0",
+        "float64_vs_written32_max_diff_rad": 2.8691528486390894e-08,
+        "validator_tolerance": 1e-15,
+        "prior_review": "logs/hq_intake/20261012_i190_acceptance/ (HQ-Anni not_accepted, I-190 blocked)"
+      },
+      "result": "results/f03_validator_coverage.json"
+    },
+    "F04": {
+      "title": "诊断日志失败会跳过后续尾舵更新",
+      "verdict": "已证实（正式日志配置下为条件可达）",
+      "entry": "modules/wing_actuation.py:241-254",
+      "key_numbers": {
+        "write_fail": {"joint_writes": 1, "tail_writes": 0, "log_entries": 1},
+        "read_fail": {"joint_writes": 1, "tail_writes": 0, "log_entries": 1},
+        "cadence_4_steps_broken_dir": {"joint_writes": 4, "tail_writes": 3},
+        "startup_dir_creation": "main_sim.py:143"
+      },
+      "result": "results/f04_diag_failure.json"
+    },
+    "F05": {
+      "title": "未知模型名称被接受并返回默认模型",
+      "verdict": "已证实（空值回落默认属批准行为，不判缺陷）",
+      "entry": "modules/aero_solver.py:513-533",
+      "key_numbers": {
+        "unknown_name": {"returned": "FlapperAeroModel", "raised": false, "model_name_attr": "未设置", "logs": 0},
+        "typo_sane_dickenson": "FlapperAeroModel（正确名应返回 SaneDickinson3DModel）",
+        "exact_sane_dickinson": "兜底 FlapperAeroModel，登记表同名映射 SaneDickinsonModel，名到类不一致",
+        "empty_or_none": "回落 cfg.AERO_MODEL=sane_dickinson_3d（设计内）",
+        "import_error_branch_reachable": false
+      },
+      "result": "results/f05_factory.json"
+    },
+    "F06": {
+      "title": "驱动依赖主程序的隐含共享状态",
+      "verdict": "结构风险已证实，现行生产入口内未复现运行缺陷",
+      "entry": "modules/wing_actuation.py:31",
+      "key_numbers": {
+        "script_startup_binding_correct": true,
+        "missing_dp_state": {"joint_writes": 0, "tail_writes": 0, "warning": "拍动驱动异常: '_DP_STATE'"},
+        "order_divergence": {"driver_writes_into_runner": true, "recorder_sees": null},
+        "two_experiments": {"caches_stale": true, "pulse_fired_without_rearm": 0, "diag_line_on_exp2_first_step": 0},
+        "refactor_estimate": "6 文件 30-40 行"
+      },
+      "result": "results/f06_shared_state.json"
+    },
+    "F07": {
+      "title": "周期预览直接修改并恢复对象私有状态",
+      "verdict": "异常路径缺陷已证实并量化，正常运行故障未证实",
+      "entry": "modules/aero_solver.py:396-410",
+      "key_numbers": {
+        "calls_per_step": 9,
+        "t_prev_restored_normal": true,
+        "current_F_world_is_last_preview_sample": true,
+        "current_vs_applied_force_diff_N": 0.3969,
+        "injection": {"restore_executed": false, "t_prev_lead_s": 0.13889, "raised_out": true, "crash_log": true},
+        "twin_constant_freq": {"max_phase_dist": 0.25, "recovered_at_step": 20},
+        "twin_freq_change": {"max_phase_dist": 0.25, "permanent_residual": 0.041667, "recovered": false}
+      },
+      "result": "results/f07_cycle_preview.json"
+    }
+  },
+  "prior_items": [
+    {"item": "I-190", "relation": "F03 引用其阻塞理由与 HQ 独立复核档案；本批不接管修复与关闭"},
+    {"item": "I-129", "relation": "F02 涉及的成对动作原子发布历史依据，本批未改动"},
+    {"item": "I-138", "relation": "审计期间 modules/flapper_controller.py 的在制改动属该路线，非本批范围"}
+  ],
+  "repo_movement_during_audit": "HEAD 1dbc6c1 前进至 1f47ac3（I-201、I-208 并行提交）；五个被审计源文件校验值全程不变",
+  "langcheck_note": "报告含源码标识符，langcheck 按未登记缩写拦截，与既有 I-190 施工登记记录同型；未修改术语登记册（登记需授权）",
+  "boundary": "只读跨目录审计与隔离验证；新增文件仅在 agentic_core/audits/I-209/；未启动 Isaac；不修改生产源码、参数、默认开关、冻结判据；离线结果不推断飞行影响"
+}

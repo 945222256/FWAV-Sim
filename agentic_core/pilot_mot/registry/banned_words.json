@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "metaphor_banned": ["打地鼠", "偷走", "拍脑袋"],
+  "internal_banned": {
+    "前馈一把": "写明前馈项与作用位置",
+    "调一版": "写明参数改动内容与判据"
+  },
+  "deprecated_numbering": []
+}

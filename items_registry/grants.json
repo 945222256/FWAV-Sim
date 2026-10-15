@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "grants": [
+    {
+      "scope": "G-002 的验收判据措辞",
+      "grantee": "架构师",
+      "expires": "2026-10-07",
+      "auth_ref": "2026-09-30 会话机主授权",
+      "status": "active",
+      "granted_at": "2026-09-30T09:38:25"
+    }
+  ]
+}

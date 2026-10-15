@@ -1,0 +1,175 @@
+{
+ "probe": "F01 时机差动归零",
+ "entry": "modules.wing_actuation._drive_wing_joints",
+ "config_PITCH_LAG_S": -0.0674,
+ "baseline_pair_after_first_step": [
+  -0.0674,
+  -0.0674
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "note": "基线 dlag=0（首步斜坡内）",
+   "ap_dlag": 0.0,
+   "pitch_lag_s": [
+    -0.0674,
+    -0.0674
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 1
+  },
+  {
+   "step": 2,
+   "note": "dlag=+0.010",
+   "ap_dlag": 0.01,
+   "pitch_lag_s": [
+    -0.0574,
+    -0.0774
+   ],
+   "wing_state_cache_dlag": 0.01,
+   "joint_writes": 2
+  },
+  {
+   "step": 3,
+   "note": "dlag=+0.010（重复）",
+   "ap_dlag": 0.01,
+   "pitch_lag_s": [
+    -0.0574,
+    -0.0774
+   ],
+   "wing_state_cache_dlag": 0.01,
+   "joint_writes": 3
+  },
+  {
+   "step": 4,
+   "note": "dlag=0（撤销正向）",
+   "ap_dlag": 0.0,
+   "pitch_lag_s": [
+    -0.0574,
+    -0.0774
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 4
+  },
+  {
+   "step": 5,
+   "note": "dlag=-0.020",
+   "ap_dlag": -0.02,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": -0.02,
+   "joint_writes": 5
+  },
+  {
+   "step": 6,
+   "note": "dlag=0（撤销负向）",
+   "ap_dlag": 0.0,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 6
+  },
+  {
+   "step": 7,
+   "note": "dlag 键缺失",
+   "ap_dlag": "<键缺失>",
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 7
+  },
+  {
+   "step": 8,
+   "note": "退出自动模式 ap_out=None",
+   "ap_dlag": null,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 8
+  },
+  {
+   "step": 9,
+   "note": "手动模式（dlag 通道不存在）",
+   "ap_dlag": null,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 9
+  },
+  {
+   "step": 10,
+   "note": "对照 dA=+0.05",
+   "ap_dlag": 0.0,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 10
+  },
+  {
+   "step": 11,
+   "note": "对照 dA=0（撤销）",
+   "ap_dlag": 0.0,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 11
+  },
+  {
+   "step": 12,
+   "note": "对照 dfreq=+0.05",
+   "ap_dlag": 0.0,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 12
+  },
+  {
+   "step": 13,
+   "note": "对照 dfreq=0（撤销）",
+   "ap_dlag": 0.0,
+   "pitch_lag_s": [
+    -0.0874,
+    -0.0474
+   ],
+   "wing_state_cache_dlag": 0.0,
+   "joint_writes": 13
+  }
+ ],
+ "controls": {
+  "amp_cmd_after_dA_zero": [
+   0.30944687637859464,
+   0.30944687637859464
+  ],
+  "amp_cmd_symmetric": true,
+  "wing_freq_after_dfreq_zero": [
+   2.2,
+   2.2
+  ],
+  "wing_freq_equal_collective": true
+ },
+ "verdict_facts": {
+  "positive_then_zero_retained": true,
+  "negative_then_zero_retained": true,
+  "key_missing_retained": true,
+  "exit_auto_retained": true,
+  "manual_mode_retained": true,
+  "cache_records_zero_while_model_retains_offset": true
+ },
+ "logs": []
+}

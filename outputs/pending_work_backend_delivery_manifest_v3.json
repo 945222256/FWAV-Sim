@@ -1,0 +1,56 @@
+{
+ "schema_version": 1,
+ "item_id": "I-233",
+ "delivery_version": "pending-work-v3",
+ "reviewer": "beth",
+ "run_id": "run-beth-i233-backend-rework-v3-20261014-a1",
+ "dispatch_request_id": "kd-beth-i233-backend-rework-v3-20261014-a1",
+ "session_id": "sess_cea3e05f-93d4-436f-a4f1-25d196418268",
+ "workstation": "L3-w1",
+ "generated_at": "2026-10-16T00:30:00+08:00",
+ "supersedes": "outputs/pending_work_backend_delivery_manifest_v2.json（v1/v2 清单、契约与全部复验材料原样保留）",
+ "声明": [
+  "本清单为 I-233 返修 v3 交付：真实生产者—HTTP 接收—存储—读取—前端契约消费链已实际贯通（独立 cloud_board 实例真实路由/认证/事务/存储 + 真实 push_once），本轮 8 项消费边界复跑 8/8、上轮冻结 11 项复跑 11/11、真实 HTTP 端到端 9/9。作者自检不等于 Beth 独立复核或生产上线。",
+  "生产未加载；I-234 前端原绑定 v1 保留，不伪称已消费 v2/v3，影响由 Ciri 在新版到位后复核，本项不代清不跨岗联络。"
+ ],
+ "seven_consumer_fixes": [
+  {"id": "actual_snapshot_consumer_accepts_v2（版本贯通）", "fix": "生产者与接收端统一 pending-work-v3；端点接受 v1/v2/v3（v1/v2 遗留兼容收存、事件存收到版本），未知版本经真实路由明确拒绝不落库（H7/H8 实证）；校验为函数内字面版本表", "result": "复跑通过+真实 HTTP"},
+  {"id": "unknown_or_zero_ack_does_not_advance（回执核验）", "fix": "端点返回逐批身份回执（版本/after/first/last/count/摘要/added/deduped）；push_once 仅当逐项匹配且 added+deduped==count 才推进持久游标；带 v3 字段回执核验失败不落计数兜底；遗留纯计数回执按契约数量确认接受并标记 legacy_count；空/缺字段/部分/错批/错版本/类型错误/超时未知均不推进，原请求幂等补发", "result": "复跑通过+真实 HTTP H5/H6（回执丢失与篡改注入）"},
+  {"id": "cloud_claim_source_loss_downgrades_capacity", "fix": "items 源失联传至容量：status=degraded、global.dispatchable=null、degraded_reasons 说明云端占用不可核对；已知内核持槽保留呈现", "result": "复跑通过"},
+  {"id": "claim_worker_identity_must_match", "fix": "认领共同对账：claim_session_id 与 claim_worker_id 都须与任务一致（任一在案不一致即拒绝），不再只比会话", "result": "复跑通过"},
+  {"id": "local_active_record_is_not_actual_execution", "fix": "run_started 须读实际执行消费者证据（会话库该会话在运行开始后的模型/工具活动）；本地 active 与账本 run_started 均为受理产物不再生成开工事实；无证据 result_unknown 保留未知", "result": "复跑通过+真实重建 run_started 25 条均带 execution_evidence"},
+  {"id": "reviewed_impact_cannot_keep_stale_revocation_reason", "fix": "撤回短语改为可复核（delivery_impact.review_required 当前值）；已复核即判过期重分类", "result": "复跑通过"},
+  {"id": "就绪旧文字通则", "fix": "KERNEL_REASON_CODES 全部降为诊断文本：可复核四族（依赖/撤回/容量/冲突）经当前事实复核生效；不可复核族不再显示为已确认等待，分类 needs_verification（ADMISSION_UNVERIFIED_*，diagnostic_only，原句留历史），validity=unverified；evaluator 区分静态未评估与内核复核已评估", "result": "冻结 11 复跑通过"}
+ ],
+ "test_results": {
+  "consumer_replay": "logs/i233_pending_work_v3_20261014/consumer/consumer_review.json（8/8，Beth 原 consumer_checks.py 逐字节复制品，未改期望）",
+  "frozen_replay": "logs/i233_pending_work_v3_20261014/frozen/review.json（11/11，Beth 原冻结脚本复制品；v3 两级回执下 601 条经遗留计数确认完整上行）",
+  "real_http": {
+   "script": "logs/i233_pending_work_v3_20261014/real_http_checks.py",
+   "results": "logs/i233_pending_work_v3_20261014/real_http_check_results.json（9/9，独立实例 127.0.0.1:9464、自建无窗口服务、独立库与状态、进程已回收）",
+   "coverage": "H1 真实快照上行回读同身份同版本；H2 601 条两批全身份回执核验与连续游标；H3 3787 条八批与保留窗口（kept=2000、earliest=1788）；H4 已确认后只发增量；H5 回执丢失（注入）不推进、重试全量去重推进；H6 摘要篡改（注入）拒绝不推进、幂等补发推进；H7 未知版本真实路由拒绝不落库；H8 v1/v2 遗留兼容收存；H9 来源截断（注入）漏段报告"
+  }
+ },
+ "contract": {
+  "path": "organization/contracts/pending_work_v3/",
+  "files": ["README.md（版本约定与五条语义修订冻结）", "snapshot_sample.json（生产真实只读快照）", "events_sample.json（生产真实事件重建节选）"],
+  "history": "v1/v2 契约、样例与全部审核材料原样保留"
+ },
+ "real_readback": {
+  "snapshot": "logs/i233_pending_work_v3_20261014/real/real_snapshot_production_readonly_v3.json（pw-20261014T232735-8eaad86e1131、pending-work-v3：待领 10、待核对 27 分列、容量 degraded 且 dispatchable=null 因云端认领源对账因素保守）",
+  "events": "契约样例内 events_sample.json（真实重建 4084 条：run_started 25 条全部携带 execution_evidence、claim_confirmed 10 条经会话与工位共同对账、result_unknown 45 条如实保留未知）"
+ },
+ "candidate_hookups": "沿用并重申（均未应用、双配置检查通过）：v2 清单 candidate_orchestrator_dispatch_detail.patch（dispatch_submitted 补 item_id/lane 事实字段）；v1 清单 candidate_console_collector_hookup.patch（采集器周期上行）。本轮无新增共享文件改动。",
+ "source_and_load_identity": "logs/i233_pending_work_v3_20261014/source_hashes.json（六文件，含共享只读文件基线）",
+ "deploy_rollback": {
+  "deploy": "1) 部署 cloud_board（含 v3 端点：版本统一、逐批回执、retention）；2) 应用采集器挂接补丁并重启 sync_agent 周期上行；3) 按需应用 orchestrator 事实字段补丁；4) 部署后以真实只读回读核对快照身份、事件游标连续性与回执核验",
+  "rollback": "回退采集器两行调用与补丁；端点只读可保留；push_state/pending_work_data 为本模块自有目录，删除即回首同步全量上行；无调度状态需回滚"
+ },
+ "unmet": [
+  "生产云端未部署 v3 端点、采集器未挂接（候选补丁未应用）、生产真实接口回读未验",
+  "真实双工位释放接续尚无生产证据；生产环境回执丢失/篡改恢复待加载后观察台账",
+  "执行证据当前取自会话库模型/工具活动（时间关联运行开始），更精细的 input 级关联可随生产联调加强",
+  "I-234 前端绑定新版联调与 Ciri 复核未开始；I-178/I-205/I-218 候选与 I-227 成果未受影响",
+  "Beth 独立复核后办理验收；原七条判据未勾选，事项未自行关闭"
+ ]
+}

@@ -1,0 +1,22 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      F ield           | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\      O peration       | Version:  v2506                                 |
+|   \\    /   A nd          | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// kinematic viscosity = U*c/Re with U = 1, c = 1; the driver rewrites nu
+transportModel  Newtonian;
+
+nu              [0 2 -1 0 0 0 0] 0.013333;
+
+// ************************************************************************* //

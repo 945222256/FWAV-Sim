@@ -1,0 +1,95 @@
+{
+ "probe": "F02 关键同步失败后继续写入",
+ "entry": "modules.wing_actuation._drive_wing_joints / modules.aero_solver.AeroPhysicsCallback.__call__",
+ "A": {
+  "scenario": "A 拍频同步失败（set_wing_command 抛异常）",
+  "returned": "None",
+  "raised_to_caller": false,
+  "call_sequence": [
+   "art.set_joint_position_targets",
+   "art.get_joint_positions",
+   "tail.set_command"
+  ],
+  "joint_target_writes": 1,
+  "tail_writes": 1,
+  "model_freq_after": 1.8,
+  "wk_freq_cmd": 2.4,
+  "freq_sync_lost": true,
+  "logs": []
+ },
+ "B_amp": {
+  "scenario": "发布失败（amp_cmd 元组赋值抛异常）",
+  "returned": "None",
+  "raised_to_caller": false,
+  "call_sequence": [
+   "art.set_joint_position_targets",
+   "tail.set_command"
+  ],
+  "joint_target_writes": 1,
+  "tail_writes": 1,
+  "model_amp_cmd_after": "<未发布>",
+  "logs": []
+ },
+ "C_gate": {
+  "scenario": "发布失败（sd_gate_cmd 元组赋值抛异常）",
+  "returned": "None",
+  "raised_to_caller": false,
+  "call_sequence": [
+   "art.set_joint_position_targets",
+   "tail.set_command"
+  ],
+  "joint_target_writes": 1,
+  "tail_writes": 1,
+  "model_sd_gate_cmd_after": "<未发布>",
+  "logs": []
+ },
+ "D": {
+  "scenario": "D 尾舵发布失败（tail_body.set_command 抛异常）",
+  "returned": "None",
+  "raised_to_caller": false,
+  "call_sequence": [
+   "art.set_joint_position_targets",
+   "tail.set_command"
+  ],
+  "joint_target_writes": 1,
+  "tail_writes_attempted": 1,
+  "tail_writes_succeeded": 0,
+  "logs": [
+   {
+    "logger": "main_sim",
+    "level": "WARNING",
+    "msg": "拍动驱动异常: 注入：尾舵 set_command 失败"
+   }
+  ]
+ },
+ "E": {
+  "scenario": "E 气动回调内尾翼 compute 失败（aero_solver 3b 段）",
+  "raised_out_of_callback": null,
+  "forces_still_applied": true,
+  "applied_force": [
+   [
+    [
+     0.31189125776290894,
+     0.0,
+     -0.26682475209236145
+    ]
+   ],
+   [
+    [
+     0.0,
+     0.0,
+     0.0
+    ]
+   ]
+  ],
+  "model_current_F_world_nonzero": true,
+  "last_tail_F_absent_or_zero": true,
+  "logs": [
+   {
+    "logger": "modules.aero_solver",
+    "level": "DEBUG",
+    "msg": "尾翼/机身气动计算失败: 注入：尾翼 compute 失败"
+   }
+  ]
+ }
+}

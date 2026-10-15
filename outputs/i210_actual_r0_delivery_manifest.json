@@ -1,0 +1,452 @@
+{
+  "item_id": "I-210",
+  "version": "hq-actual-R0-compatibility-v1",
+  "created_at": "2026-10-15T08:34:41.089113+00:00",
+  "scope": "completed controlled default-off compatibility only",
+  "source_roots": "logs/hq_takeover_i210_20261015/baseline_preparation_v3/runtime_git_release_driver.json",
+  "approved_plan": "logs/hq_takeover_i210_20261015/physical_run_plan_v2_release.json",
+  "independent_summary": {
+    "path": "logs\\hq_takeover_i210_20261015\\r0_analysis\\full_R0_independent\\verification_summary.json",
+    "sha256": "7d5c7cc7f59cdcee5205851fbf6c7e4099077525dc7fb3b07a3b5be5e86080f2"
+  },
+  "comparison_verdict": "identical",
+  "pairs": [
+    {
+      "name": "old_A_B",
+      "verdict": "identical",
+      "csv_full_bytes_identical": true,
+      "fw_complete_body_identical": true,
+      "fw_compare_exit_code": 0,
+      "fw_compare_report": "G:\\Playground\\isaac_flapper_sim\\logs\\hq_takeover_i210_20261015\\r0_analysis\\full_R0_independent\\old_A_B_fw_compare.json"
+    },
+    {
+      "name": "new_A_B",
+      "verdict": "identical",
+      "csv_full_bytes_identical": true,
+      "fw_complete_body_identical": true,
+      "fw_compare_exit_code": 0,
+      "fw_compare_report": "G:\\Playground\\isaac_flapper_sim\\logs\\hq_takeover_i210_20261015\\r0_analysis\\full_R0_independent\\new_A_B_fw_compare.json"
+    },
+    {
+      "name": "old_new_A",
+      "verdict": "identical",
+      "csv_full_bytes_identical": true,
+      "fw_complete_body_identical": true,
+      "fw_compare_exit_code": 0,
+      "fw_compare_report": "G:\\Playground\\isaac_flapper_sim\\logs\\hq_takeover_i210_20261015\\r0_analysis\\full_R0_independent\\old_new_A_fw_compare.json"
+    },
+    {
+      "name": "old_new_B",
+      "verdict": "identical",
+      "csv_full_bytes_identical": true,
+      "fw_complete_body_identical": true,
+      "fw_compare_exit_code": 0,
+      "fw_compare_report": "G:\\Playground\\isaac_flapper_sim\\logs\\hq_takeover_i210_20261015\\r0_analysis\\full_R0_independent\\old_new_B_fw_compare.json"
+    }
+  ],
+  "archives": {
+    "old_A": {
+      "run_id": "I210_R0_old_20261015_011502_8c4c87ed_A",
+      "path": "logs\\hq_takeover_i210_20261015\\baseline_preparation_v3\\old_candidate\\logs\\experiments\\I210_R0_old_20261015_011502_8c4c87ed_A",
+      "summary": {
+        "qualified": "valid",
+        "execution_complete": true,
+        "child_witness_bound": true,
+        "csv_rows": 5400,
+        "csv_first_t": 0.0083,
+        "csv_last_t": 59.9917,
+        "csv_sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+        "raw_main_loop_samples": 7200,
+        "fw_body_sha256": "5241c9333480161663fcea176af3bbf564c7aa351d8338a0a52510cf99ce72f9",
+        "fw_identity": {
+          "run_id": null,
+          "tag": "I210_R0_old_20261015_011502_8c4c87ed_A",
+          "desc": "I210 approved R0 old; autonomous feedback, frozen physical configuration; full records, no gain retuning 统一入口复验跑 A",
+          "created": "2026-10-15 01:15:15"
+        },
+        "science_as_recorded": {
+          "experiment_verdict": "unknown",
+          "applicability": "applicable",
+          "data_qualification": "invalid",
+          "control_use": "diagnostic_only"
+        },
+        "clock_qualification": "unresolved_actual_PhysX_clock",
+        "observed_last_world_time_FPS": 118.017
+      },
+      "files": {
+        "adapter_archival_result.json": {
+          "sha256": "b5dbb1cf3e1e79986bc90f25f181adfae576089fcea56726dd786d7383318b3d",
+          "bytes": 6175
+        },
+        "crash_log.txt": {
+          "sha256": "44ffe2f4a5508be952fe583522d6b949c5d3050fd6ef1a3fb2856d8ea589318c",
+          "bytes": 70
+        },
+        "drive_diag.txt": {
+          "sha256": "dc036219a747afe00b4a53836913471489d8b473c5aebda6dea3715f91277357",
+          "bytes": 6459
+        },
+        "evidence_pack.json": {
+          "sha256": "c281b08ad5d0c5a1bbcf3947314a17bcb1d2ea3c965d0099c2974269c9eff582",
+          "bytes": 59128
+        },
+        "execution_config.json": {
+          "sha256": "780ebb14ba1052d74183c27b5a0f7e35e5832d97d09d2bcfdc0a8e9a6062e107",
+          "bytes": 1814
+        },
+        "fw_ledger_I210_R0_old_20261015_011502_8c4c87ed_A_1015_011515.bin": {
+          "sha256": "276f59e6531c6cd401f34721050f88f2d181a69fb13836fa49cb246ffbf7ceb3",
+          "bytes": 3227241
+        },
+        "i210_raw_collection_manifest.json": {
+          "sha256": "708b2263abeddb8bedaa8fc466a9c6174c479b82d6f78acd0ea6cf1d62c8440f",
+          "bytes": 718
+        },
+        "i210_raw_qualification.json": {
+          "sha256": "6ffd27b60c9cc45dad7368ddda3384b3f2a773ba086ee5babed42d0677b25993",
+          "bytes": 5577
+        },
+        "ident_latest.txt": {
+          "sha256": "8c380dcc75ff6408aac8bad190239438c909aa6bec807fa71db188a87b46f25a",
+          "bytes": 35
+        },
+        "ident_stream_flight_1015_011515.csv": {
+          "sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+          "bytes": 8138409
+        },
+        "ident_stream_flight_1015_011515.csv.meta.json": {
+          "sha256": "1c47d17d2626ac4ec8462d15b39f3e6853d72f46a932f28d2d49c41eb5065c56",
+          "bytes": 240
+        },
+        "identity.json": {
+          "sha256": "3c3d502e4cdf9cda2ae5a1acaabcfc15ab9eb13fc2e35671bd6f0f59f0440498",
+          "bytes": 578
+        },
+        "launch_environment.json": {
+          "sha256": "ca6ea8b7db3172804fe14a72308441544c9d95a1cd713a406b7bbb96384ddd8e",
+          "bytes": 1423
+        },
+        "result_card.json": {
+          "sha256": "9be036d5922f70e4555204b504623cae5b6abe49234df0a6a22c48c6feb21645",
+          "bytes": 1123
+        },
+        "run_conditions.json": {
+          "sha256": "6b44df5c368d4769ea505d01be88619e5eabe063a58a9ddbb3452c69cbe0182f",
+          "bytes": 5000
+        },
+        "run_record.json": {
+          "sha256": "e81f00fba7647bcd116433390ff93e9faae8481e15807f0080fa13a292654ab7",
+          "bytes": 8412
+        },
+        "run_stdout.txt": {
+          "sha256": "5829db204b0ab60a85a9bd54253f50be359534ba0cc07452d26cfaa3fc015686",
+          "bytes": 93827
+        },
+        "scene_witness.json": {
+          "sha256": "bc7091c896d63ab29cfaf10c0a4a8e20ee9185b71f3f196030cc08c1d52fb8ae",
+          "bytes": 39273
+        }
+      }
+    },
+    "old_B": {
+      "run_id": "I210_R0_old_20261015_011502_8c4c87ed_B",
+      "path": "logs\\hq_takeover_i210_20261015\\baseline_preparation_v3\\old_candidate\\logs\\experiments\\I210_R0_old_20261015_011502_8c4c87ed_B",
+      "summary": {
+        "qualified": "valid",
+        "execution_complete": true,
+        "child_witness_bound": true,
+        "csv_rows": 5400,
+        "csv_first_t": 0.0083,
+        "csv_last_t": 59.9917,
+        "csv_sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+        "raw_main_loop_samples": 7200,
+        "fw_body_sha256": "5241c9333480161663fcea176af3bbf564c7aa351d8338a0a52510cf99ce72f9",
+        "fw_identity": {
+          "run_id": null,
+          "tag": "I210_R0_old_20261015_011502_8c4c87ed_B",
+          "desc": "I210 approved R0 old; autonomous feedback, frozen physical configuration; full records, no gain retuning 统一入口复验跑 B",
+          "created": "2026-10-15 01:17:18"
+        },
+        "science_as_recorded": {
+          "experiment_verdict": "unknown",
+          "applicability": "applicable",
+          "data_qualification": "invalid",
+          "control_use": "diagnostic_only"
+        },
+        "clock_qualification": "unresolved_actual_PhysX_clock",
+        "observed_last_world_time_FPS": 118.017
+      },
+      "files": {
+        "adapter_archival_result.json": {
+          "sha256": "c389a994af1d83ecd9c77633b913da5b395def87c99139524f4a4b582d5302c4",
+          "bytes": 6175
+        },
+        "evidence_pack.json": {
+          "sha256": "f6be5f4b26f7d0313a9a419bd469b60db8c3cbab3b3dc235033a606edf5ae11e",
+          "bytes": 59128
+        },
+        "execution_config.json": {
+          "sha256": "f28609db95d52612e11e7e557acf494242c1b876b757ef36f9448afe57068ee5",
+          "bytes": 1814
+        },
+        "fw_ledger_I210_R0_old_20261015_011502_8c4c87ed_B_1015_011718.bin": {
+          "sha256": "bd8659459153d7600bcddf5961d3b710dc6df98b7e430a7088a9c1d986c810fb",
+          "bytes": 3227241
+        },
+        "i210_raw_collection_manifest.json": {
+          "sha256": "708b2263abeddb8bedaa8fc466a9c6174c479b82d6f78acd0ea6cf1d62c8440f",
+          "bytes": 718
+        },
+        "i210_raw_qualification.json": {
+          "sha256": "afab3394c07768f9db4d053b8391da33539df3ef60ea8c1ad4ddbb3d0c79c498",
+          "bytes": 5577
+        },
+        "ident_stream_flight_1015_011720.csv": {
+          "sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+          "bytes": 8138409
+        },
+        "ident_stream_flight_1015_011720.csv.meta.json": {
+          "sha256": "793796d410831b9a19ff9e16ac419f1afcc5d11118b637ca98656149ca1aaa54",
+          "bytes": 240
+        },
+        "identity.json": {
+          "sha256": "f5f127a21ba316eb62f4475c8efb32e34777d61d3ecb999c612f0fc26e67b26f",
+          "bytes": 578
+        },
+        "launch_environment.json": {
+          "sha256": "2ce2d99aa1c1503154e411d6893b3ed483382c4bd730c738128c88db410284dc",
+          "bytes": 1423
+        },
+        "result_card.json": {
+          "sha256": "11b43af79d2a52d28ca75df01f2e7af0fabf650666cb87c79f89805a8d06750a",
+          "bytes": 1123
+        },
+        "run_conditions.json": {
+          "sha256": "51b0c3ec6b47c7ce6baeeba0e2e8994a3e26bcefc6431edf1f790fc2a5e47b62",
+          "bytes": 5000
+        },
+        "run_record.json": {
+          "sha256": "6e058a90f9929d8017b852fcbe12eb51a936198ea3faab053001b3e0afbfb6ab",
+          "bytes": 7727
+        },
+        "run_stdout.txt": {
+          "sha256": "c239e79a3477d6400e7a5ce950c5ae722fdbf5f70a4a9c5f6bb5cd35a747c70e",
+          "bytes": 94433
+        },
+        "scene_witness.json": {
+          "sha256": "92d6046491540831667a23d4e917ac9e96de2eeadc38203943c91e2defda8ca9",
+          "bytes": 39273
+        }
+      }
+    },
+    "new_A": {
+      "run_id": "I210_R0_new_20261015_012031_d6b108ed_A",
+      "path": "logs\\hq_takeover_i210_20261015\\baseline_preparation_v3\\new_candidate\\logs\\experiments\\I210_R0_new_20261015_012031_d6b108ed_A",
+      "summary": {
+        "qualified": "valid",
+        "execution_complete": true,
+        "child_witness_bound": true,
+        "csv_rows": 5400,
+        "csv_first_t": 0.0083,
+        "csv_last_t": 59.9917,
+        "csv_sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+        "raw_main_loop_samples": 7200,
+        "fw_body_sha256": "5241c9333480161663fcea176af3bbf564c7aa351d8338a0a52510cf99ce72f9",
+        "fw_identity": {
+          "run_id": null,
+          "tag": "I210_R0_new_20261015_012031_d6b108ed_A",
+          "desc": "I210 approved R0 new; autonomous feedback, frozen physical configuration; full records, no gain retuning 统一入口复验跑 A",
+          "created": "2026-10-15 01:20:47"
+        },
+        "science_as_recorded": {
+          "experiment_verdict": "unknown",
+          "applicability": "applicable",
+          "data_qualification": "invalid",
+          "control_use": "diagnostic_only"
+        },
+        "clock_qualification": "unresolved_actual_PhysX_clock",
+        "observed_last_world_time_FPS": 118.017
+      },
+      "files": {
+        "adapter_archival_result.json": {
+          "sha256": "3fcd6411c9d31a8d0f1d679dcdd2a68c2379afa0dc20521c272ac216ad3a33b0",
+          "bytes": 6176
+        },
+        "crash_log.txt": {
+          "sha256": "44ffe2f4a5508be952fe583522d6b949c5d3050fd6ef1a3fb2856d8ea589318c",
+          "bytes": 70
+        },
+        "drive_diag.txt": {
+          "sha256": "dc036219a747afe00b4a53836913471489d8b473c5aebda6dea3715f91277357",
+          "bytes": 6459
+        },
+        "evidence_pack.json": {
+          "sha256": "a9319bab2b0a3d845e548be962ffc51cf4ee42805fe75d4406b02405d6b12e54",
+          "bytes": 59196
+        },
+        "execution_config.json": {
+          "sha256": "08770e4968bc31f7d9376368bebc6adbaba812f2123e62121132953f244ea6ea",
+          "bytes": 1814
+        },
+        "fw_ledger_I210_R0_new_20261015_012031_d6b108ed_A_1015_012047.bin": {
+          "sha256": "ec51e38d6eca093aab4c907646d2f364fa01cb24925bcae05f4ead304e46d3f2",
+          "bytes": 3227241
+        },
+        "i210_raw_collection_manifest.json": {
+          "sha256": "708b2263abeddb8bedaa8fc466a9c6174c479b82d6f78acd0ea6cf1d62c8440f",
+          "bytes": 718
+        },
+        "i210_raw_qualification.json": {
+          "sha256": "a8ca5ac2e55afc2e56ef0e4e2a3ca1b9621560987b434fe339bbdd82d519344e",
+          "bytes": 5577
+        },
+        "ident_latest.txt": {
+          "sha256": "1f69d99cd1e493cd0ca839ba48f7c9fb1b90dfd7b94e9776e0143e493e2030fa",
+          "bytes": 35
+        },
+        "ident_stream_flight_1015_012047.csv": {
+          "sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+          "bytes": 8138409
+        },
+        "ident_stream_flight_1015_012047.csv.meta.json": {
+          "sha256": "ece59d7525bef7ab63510dbfd11cfeb8e6dfc65ad97ce680901d263adc04cfda",
+          "bytes": 240
+        },
+        "identity.json": {
+          "sha256": "af2bd9f4319a9e7dd1223c95a9c92991257d2def3b0109a6d225eec1998ceb61",
+          "bytes": 578
+        },
+        "launch_environment.json": {
+          "sha256": "d69ee734db7b671788b8f558f4edf8be1d577b63da0ce9ebec89a6675e7789da",
+          "bytes": 1423
+        },
+        "result_card.json": {
+          "sha256": "7b5437678adb6c01830207756dd5c6607c3437d28185672b14c310b437b6da53",
+          "bytes": 1123
+        },
+        "run_conditions.json": {
+          "sha256": "64d525a05c9f010b8150e30db78640e56629e8c22c77bd5aed16427b75c0b32b",
+          "bytes": 5031
+        },
+        "run_record.json": {
+          "sha256": "2af7191d089da249fd5a2c80646c5fdbc1f02793ca6924a49726f837dd051394",
+          "bytes": 8413
+        },
+        "run_stdout.txt": {
+          "sha256": "6a996eb49d418eafd587cb40cd495321680c3d580c6fd700b7157eb4ec58a37f",
+          "bytes": 93628
+        },
+        "scene_witness.json": {
+          "sha256": "6def4e0fefbb4855fc82219f386942ccf6a4d75b42ec463579021923cfafce85",
+          "bytes": 39379
+        }
+      }
+    },
+    "new_B": {
+      "run_id": "I210_R0_new_20261015_012031_d6b108ed_B",
+      "path": "logs\\hq_takeover_i210_20261015\\baseline_preparation_v3\\new_candidate\\logs\\experiments\\I210_R0_new_20261015_012031_d6b108ed_B",
+      "summary": {
+        "qualified": "valid",
+        "execution_complete": true,
+        "child_witness_bound": true,
+        "csv_rows": 5400,
+        "csv_first_t": 0.0083,
+        "csv_last_t": 59.9917,
+        "csv_sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+        "raw_main_loop_samples": 7200,
+        "fw_body_sha256": "5241c9333480161663fcea176af3bbf564c7aa351d8338a0a52510cf99ce72f9",
+        "fw_identity": {
+          "run_id": null,
+          "tag": "I210_R0_new_20261015_012031_d6b108ed_B",
+          "desc": "I210 approved R0 new; autonomous feedback, frozen physical configuration; full records, no gain retuning 统一入口复验跑 B",
+          "created": "2026-10-15 01:23:17"
+        },
+        "science_as_recorded": {
+          "experiment_verdict": "unknown",
+          "applicability": "applicable",
+          "data_qualification": "invalid",
+          "control_use": "diagnostic_only"
+        },
+        "clock_qualification": "unresolved_actual_PhysX_clock",
+        "observed_last_world_time_FPS": 118.017
+      },
+      "files": {
+        "adapter_archival_result.json": {
+          "sha256": "38711ffa22c7193fbc189f19805619fd59f60913a134e972828259cbe99e6197",
+          "bytes": 6176
+        },
+        "evidence_pack.json": {
+          "sha256": "5f3926ac5b4f62a57ac9759055a9a7f95e6c6506b271fa42057b9077eee109aa",
+          "bytes": 59196
+        },
+        "execution_config.json": {
+          "sha256": "8102c62b88b13313011cfb308a57fe24c43d82ce0cf817d5555ea2314b75be00",
+          "bytes": 1814
+        },
+        "fw_ledger_I210_R0_new_20261015_012031_d6b108ed_B_1015_012317.bin": {
+          "sha256": "4fd69e40f18ed02b4f65fbf63f68ec443afb8a69067ca1bf43acbe4938a75b46",
+          "bytes": 3227241
+        },
+        "i210_raw_collection_manifest.json": {
+          "sha256": "708b2263abeddb8bedaa8fc466a9c6174c479b82d6f78acd0ea6cf1d62c8440f",
+          "bytes": 718
+        },
+        "i210_raw_qualification.json": {
+          "sha256": "bfee419b2b9631dd07bc559c25e224f6972982477fe2333e882c82740421aa2c",
+          "bytes": 5577
+        },
+        "ident_stream_flight_1015_012320.csv": {
+          "sha256": "1227f215c9d8b61147a31ac1d3370c37e5e9b503669e5767ea4b21b496185dd1",
+          "bytes": 8138409
+        },
+        "ident_stream_flight_1015_012320.csv.meta.json": {
+          "sha256": "f9544935082ec9c40c33b028401860f9606d78e40fd30968ac5d8ed91af3d204",
+          "bytes": 240
+        },
+        "identity.json": {
+          "sha256": "ea45704fb91fc3cb5a197f08225e698cef2529a492a49da7097417a5be28cb8b",
+          "bytes": 578
+        },
+        "launch_environment.json": {
+          "sha256": "8cf15d254fbef5bee8f110bddc3f4458e552a64330a6a2dc2390a17bb5c45f2e",
+          "bytes": 1423
+        },
+        "result_card.json": {
+          "sha256": "d6e3d29ad6c1111b79c35b7084b9244ab4d3f1ce8838a60b556aa41dd5912996",
+          "bytes": 1123
+        },
+        "run_conditions.json": {
+          "sha256": "74d0f2fd362676ba986401fca5ca425df98e66650251753acada63e990775635",
+          "bytes": 5031
+        },
+        "run_record.json": {
+          "sha256": "91a6fd350ed9ceb2682f0e9d63eda368e4e42c205a2ee567e069646e80ef099d",
+          "bytes": 7728
+        },
+        "run_stdout.txt": {
+          "sha256": "a6ab3dd873cf577642b6d0b2c9ba68f45115ac06aa9a6d879df6548cc004e853",
+          "bytes": 94443
+        },
+        "scene_witness.json": {
+          "sha256": "891e745f1aca223e7fe29f7ff119401f81accabd06f9e4a94ff4fb71c7c3a7ed",
+          "bytes": 39379
+        }
+      }
+    }
+  },
+  "boundaries": [
+    "7200 main-loop samples per run; native physical clock not yet measured",
+    "Old config is the explicitly declared compatible additive overlay, not the untouched old five-file snapshot",
+    "Original package experiment_verdict unknown / data_qualification invalid / control_use diagnostic_only are preserved",
+    "Separate approved I210 raw qualification does not overwrite the original package verdict",
+    "No claim of Hopf-on actual consumption, cycle tracking, flight stability, final acceptance or closure"
+  ],
+  "bound_files": {
+    "logs/hq_takeover_i210_20261015/baseline_preparation_v3/runtime_git_release_driver.json": "b0f8200a5b8331f3d3ffb2562eb1c5cedba4eb0a595030ad8619a0968d9a5aa9",
+    "logs/hq_takeover_i210_20261015/physical_run_plan_v2_release.json": "5aabbb44eaccab184bd06732b96a238e5ec354e632278684cbc82ec650afa252",
+    "logs/hq_takeover_i210_20261015/baseline_preparation_v3/preparation_manifest.json": "2b3fe546d9177f1519bdc5d28112d3e1f2c6cc87af0e8e2b2981fedd40ba765d",
+    "logs/hq_takeover_i210_20261015/r0_analysis/full_R0_independent/report.json": "bde728b93b54d54441ff22f88f779b3e2bb000369b0e98bf8d2b4983f2eeff5d",
+    "logs/hq_takeover_i210_20261015/r0_analysis/analyze_r0.py": "07c10878657c3338f5cd4e1083ca2c6344eaa1dd5819b41f20a949205d67a98d",
+    "logs/hq_takeover_i210_20261015/r0_analysis/csv_schema_contract.json": "2a0b297ecdfec1b94d365f5c4df1aef0c568fd7e77bdf95d56773f36cbbd485f"
+  }
+}

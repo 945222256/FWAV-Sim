@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "item_id": "I-186",
+  "title": "记录仪与实验管线保存实际条件和结构化判据结果——L1 返修 v3 交付",
+  "delivery_version": "L1返修v3",
+  "run_id": "run-kt-anni-i186-l1-rework-v3-20261014-a1",
+  "dispatch_request_id": "kd-kt-anni-i186-l1-rework-v3-20261014-a1",
+  "session_id": "sess_8cc259a6-4227-42b2-ab12-9521d185e226",
+  "workstation": "L1-w1",
+  "delivered_at": "2026-10-14T23:35:00+08:00",
+  "baseline": {
+    "source_commit": "80ae719",
+    "review_basis": [
+      "logs/hq_intake/doro_resume_20261014/I-186_当前核验结果.md（返修 v2 复核，四反例归三组）",
+      "logs/hq_intake/doro_resume_20261014/i186_l1_v2_review_223543/review.json（十六项十二项符合）",
+      "logs/hq_intake/20261014_mainline_recovery/i186_l1_rework_v3/returned_v2_delivery_manifest.json"
+    ],
+    "preserved": "已修旧反例、真实身份、实际数据文件对应、整科构建保护、执行环境一致性、逐项定义有效性全部保留，未重做已通过项"
+  },
+  "approval_binding": {
+    "record_id": "HQ-I186-HOVER-REQUIRED-20261014-V1",
+    "approved_file": "logs/hq_intake/20261014_mainline_recovery/i186_required_hover_v1/required_manifest.json",
+    "approved_sha256": "19723b3355acc5d3399859acd4bf1e5f842f1de3d7c8d0f39fe27a0415dad0aa",
+    "current_file_sha256_matches": true,
+    "version": "I186-HOVER-REQUIRED-v1",
+    "authority": "HQ-Anni",
+    "profiles": ["hover_csv", "hover_ledger"],
+    "readback_evidence": "logs/hq_intake/20261014_mainline_recovery/i186_l1_rework_v3/approval_readback.json",
+    "note": "清单文件为 HQ 批准输入，本队未改内容、未重新自批；代码内锚点只登记批准身份与内容摘要供机器核对"
+  },
+  "three_groups": [
+    {
+      "group": "一：正式必要清单——批准核对、分支选择、事实绑定、必需量逐项",
+      "status": "已修并实际验证",
+      "implementation": "来源须精确绑定批准记录（路径、内容 sha256、record_id、version 逐项一致）；分支按本次实际记录类型检出（有 CSV 用 hover_csv 十七项必需量，仅台账用 hover_ledger bp/bv/Fa，错分支与用台账分支豁免 CSV 缺量均阻断，无记录不得凭空选分支）；十二条条件按 condition_definitions 的 required 字段逐项收集实际事实（源码、身份步骤、时基、版本读数、模型与参数含新采 MASS、配置哈希、初态、来流、物理约束与锁分列、控制器、分析输入分列），事实缺失逐字段点名阻断，不适用须带可核原因，FLAPPER_ 附加条件仍按实际注入核对，config_schema 跨节检查收窄到环境键；必需量逐项核存在与定义有效性并须 quantity_definitions 在档，附加声明量同核（vphz 反例维持），生产链 CSV 补 roll/pitch 列按已登记转换计算；无清单定义、未获批准或空声明待审阻断，悬停基准旧口径不再放行新实验。",
+      "evidence": ["V7（Doro 自造版本文件反例重跑：待审阻断）", "V8（Doro 批准文件无基线加空清单反例重跑：待审阻断）", "V9/V9b（错分支双向阻断）", "V3（vphz 定义未知阻断维持）", "W7 系列（环境键注入、附加量、空清单不豁免）", "生产样例 v3 必要 complete、分支 hover_csv、事实齐"]
+    },
+    {
+      "group": "二：冻结存活计时恢复",
+      "status": "已修并实际验证",
+      "implementation": "飞行窗改严格 t>1.0 s（与 run_hover_bench 同口径），窗只限定判坠机与统计范围；无坠机存活为实际记录覆盖时长（完整 60 s 覆盖报 60，不从终点减窗起点，不按预期时长补齐，未完成覆盖按实际计并注明）；坠机存活取原仿真时刻；未改阈值、未延长输入、未用预期步数补数据、未用墙钟。",
+      "evidence": ["U1（完整 60 s：老批准入口与新数据流入口同报 60.000 均通过，修复前新入口误报 59）", "U2（t=1.0 与 t=0.5 单行出带 dip 窗外不判坠机）", "U3（首个 t>1 坠机存活 1.0083 原仿真时刻）", "U4（中途坠机存活 35.0）", "U5（未完成覆盖按实际 50 计不补成通过）"]
+    },
+    {
+      "group": "三：verify 逐值绑定",
+      "status": "已修并实际验证",
+      "implementation": "核验重算投影扩展到 value、unit、comparison、threshold、criterion_version、standard_source、verdict_word、status 逐项与按运行声明及原结果文件的独立重算比对，原始精度比对不加容差；重查值与 pass 矛盾随逐值比对与矛盾复核成立；删项、增项、改状态与单卡篡改保护保留。",
+      "evidence": ["V6（Doro 原输入反例重跑：包内值 1.02 改 0.5 其余不动，核验拒）", "V5/V5b/V5c（同删、改状态、增条目维持拒绝）", "N10（单卡篡改维持）"]
+    }
+  ],
+  "verification": {
+    "selfcheck_cases": 77,
+    "selfcheck_two_runs": "77/77 两跑一致（logs/i186_l1_rework_v3_20261014/selfcheck_run1_output.txt 与 selfcheck_run2_output.txt）",
+    "registered_executor": "tools/checks/executor.py run tools/checks/i186_selfcheck.py --timeout 600 通过（122 秒，退出码零）",
+    "fast_bench": "bench_runner --fast BENCH PASS（20261014_232533）",
+    "production_sample_v3": {
+      "path": "logs/i186_l1_rework_v3_20261014/production_sample_v3/",
+      "verdict": "pass（execution=completed，data_qualification=valid，necessary=complete（分支 hover_csv、事实齐），核验过，卡片对齐）",
+      "h1": "按实际覆盖 61 秒（无坠机、覆盖时长口径，不减窗起点不补预期）",
+      "analysis_inputs": "标准定义加本次数据流双类哈希",
+      "data_origin": "人工接口隔离结构数据，包内标明来源与结论边界，不作真实飞行证据"
+    }
+  },
+  "real_counterexamples_rerun": [
+    "批准文件没有必要基线但空清单仍齐备（V8）",
+    "自造版本标记文件被当批准配方（V7）",
+    "六十秒完整存活在新旧入口语义一致（U1：修复前后对照，现两入口一致报 60）",
+    "包内科学值与原结果不符（V6）"
+  ],
+  "unmet": [
+    "Doro 独立复核未完成：本交付为 pending_review，不自行关闭",
+    "其他科目（巡航、盘旋等）必要清单与语义定义未获批准，仍未知待审",
+    "翼拍相位无经核实生产来源列，只限制拍内与周期对齐结论，不猜 vphz",
+    "I-210 实际取证与 I-187 前置继续保留"
+  ],
+  "territory_note": "静态领地检查偏差维持既有处置：机主文件级交接授权继续有效，如实记录，不改全局 lanes.json、不伪报检查通过；本轮改动均在已交接五文件与 logs/i186_l1_rework_v3_20261014/、outputs/ 清单内，未新增其他领地路径。",
+  "reviewer": "doro",
+  "construction_record": "logs/I-186_施工记录_20261014_L1返修v3.md",
+  "files_changed": [
+    "modules/evidence_pack.py",
+    "modules/backend/bench_runner.py",
+    "modules/experiment_pipeline/config_schema.py",
+    "tools/checks/i186_selfcheck.py",
+    "logs/I-186_施工记录_20261014_L1返修v3.md",
+    "logs/i186_l1_rework_v3_20261014/"
+  ]
+}

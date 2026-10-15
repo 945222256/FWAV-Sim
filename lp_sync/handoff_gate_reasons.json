@@ -1,0 +1,59 @@
+{
+ "schema_version": 1,
+ "events": [
+  {
+   "ts": "2026-10-13T14:43:10",
+   "session": "sess_test_gate_0001",
+   "kind": "skip",
+   "detail": "测试原因写入"
+  },
+  {
+   "ts": "2026-10-14T11:00:26",
+   "session": "sess_gate_B",
+   "kind": "skip",
+   "detail": "路线 L3 有 1 个进行中事项但无一由本会话认领，守门不切换其他工位的事项"
+  },
+  {
+   "ts": "2026-10-14T11:06:26",
+   "session": "sess_gate_B",
+   "kind": "skip",
+   "detail": "路线 L3 有 1 个进行中事项但无一由本会话认领，守门不切换其他工位的事项"
+  },
+  {
+   "ts": "2026-10-14T15:05:08",
+   "session": "sess_gate_B",
+   "kind": "skip",
+   "detail": "路线 L3 有 1 个进行中事项但无一由本会话认领，守门不切换其他工位的事项"
+  },
+  {
+   "ts": "2026-10-14T15:09:31",
+   "session": "sess_gate_B",
+   "kind": "skip",
+   "detail": "路线 L3 有 1 个进行中事项但无一由本会话认领，守门不切换其他工位的事项"
+  },
+  {
+   "ts": "2026-10-14T15:13:40",
+   "session": "sess_gate_B",
+   "kind": "skip",
+   "detail": "路线 L3 有 1 个进行中事项但无一由本会话认领，守门不切换其他工位的事项"
+  },
+  {
+   "ts": "2026-10-14T15:51:36",
+   "session": "sess_5074d84c-2adc-43b6-aec6-33f46c3df739",
+   "kind": "pending",
+   "detail": "等待原会话停止回执；不启动接力执行"
+  },
+  {
+   "ts": "2026-10-14T17:05:57",
+   "session": "sess_gate_B",
+   "kind": "skip",
+   "detail": "路线 L3 有 1 个进行中事项但无一由本会话认领，守门不切换其他工位的事项"
+  },
+  {
+   "ts": "2026-10-14T17:09:19",
+   "session": "sess_gate_B",
+   "kind": "skip",
+   "detail": "路线 L3 有 1 个进行中事项但无一由本会话认领，守门不切换其他工位的事项"
+  }
+ ]
+}

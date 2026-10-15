@@ -1,0 +1,47 @@
+{
+  "scene": {
+    "argv": ["g:/Playground/isaac_sim_5.1.0/python.bat", "main_sim.py"],
+    "mode": "isaac",
+    "duration_s": 60
+  },
+  "overrides": {
+    "FLAPPER_HEADLESS": "1",
+    "FLAPPER_FLIGHT_LOG": "1",
+    "FLAPPER_MAX_S": "60",
+    "FLAPPER_WING_MIX": "1",
+    "FLAPPER_BANK_TEST": "1",
+    "FLAPPER_BANK_DEG": "3.0",
+    "FLAPPER_BANK_T": "5",
+    "FLAPPER_BANK_SLEW": "0.05",
+    "FLAPPER_AIL_PROBE_AMP": "0.03",
+    "FLAPPER_ELEV_PROBE_AMP": "0.03",
+    "FLAPPER_RUD_PROBE_AMP": "0.03",
+    "FLAPPER_MULTISINE_ON": "1",
+    "FLAPPER_FREQ_PROBE_AMP": "0.25",
+    "FLAPPER_DA_PROBE_AMP": "0.02",
+    "FLAPPER_MULTISINE_FREQS": "0.2,0.5,0.8,1.0,1.3,1.6,2.0,2.33,2.6,2.9,3.2,3.8,4.5,5.5,6.5,8.0"
+  },
+  "criteria": {
+    "kind": "bench_subject",
+    "subject": "turn",
+    "note": "采集配方位形复刻自一队 I055turn3deg 预登记采集（三度坡度平衡点探察，十六点多正弦注入）；拟合判据为辨识产线判据文档第四节的留出验证冻结口径"
+  },
+  "locks": {
+    "standard": true
+  },
+  "tags": {
+    "name": "I078_TURN_COLLECT_FIT",
+    "desc": "I-078 转弯采集加拟合一条命令验证：采集步六十秒标准锁，拟合步频域估计器吃采集数据流出报告"
+  },
+  "chain": [
+    {
+      "name": "collect",
+      "mode": "isaac"
+    },
+    {
+      "name": "fit",
+      "mode": "python",
+      "argv": ["python", "tools/ident_fd_estimator.py", "{collect_csv}", "--tag", "{tag}", "--t0", "5.0", "--t1", "55.0", "--freqs", "0.2,0.5,0.8,1.0,1.3,1.6,2.0,2.33,2.6,2.9,3.2,3.8,4.5,5.5,6.5,8.0"]
+    }
+  ]
+}

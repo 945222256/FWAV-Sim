@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "_说明": "项目配置：新项目实例化时填写。env_prefix 是本项目环境变量统一前缀（全大写加下划线结尾），acronym_whitelist 是本项目专属英文缩写白名单，tool_data_globs 是登记库工具写入豁免的追加路径正则（不含两侧锚定符）。",
+  "project_code": "<项目代号，全大写英文>",
+  "env_prefix": "<PREFIX>_",
+  "acronym_whitelist": [],
+  "tool_data_globs": []
+}

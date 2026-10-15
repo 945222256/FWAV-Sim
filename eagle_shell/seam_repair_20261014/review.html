@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eagle X 实际接缝检查</title><style>
+body{margin:0;background:#eef2f5;color:#223242;font:17px/1.65 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1200px;margin:auto;padding:28px}h1{font-size:29px}h2{font-size:22px;margin-top:30px}.status{padding:16px;background:#fff5db;border-left:5px solid #d79830}img,video{width:100%;height:auto;background:white;border-radius:8px}button,a{font:inherit}button{padding:7px 16px;margin:5px;border:1px solid #9bacba;border-radius:5px;cursor:pointer;background:white}small{display:block;color:#536574}a{color:#146b8a}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:700px){.grid{grid-template-columns:1fr}}.note{background:white;padding:16px;border-radius:8px}
+</style><main><h1>Eagle X 实际接缝检查</h1>
+<p class="status">2026-10-15 复核：此候选只证明静态接边连续，不作为最终分件。它把内侧一段原翼面划入固定机身，黄色活动主翼面积减少约35%；动态翼根仍未修好。当前线上模型尚未替换。</p>
+<h2>黄色主翼为什么向外移</h2><img src="symmetry_20261015/同尺度俯视_黄色绿色面积与分界位置.png"><p>上图为旧分件，下图为重切候选。红虚线是展向正负6厘米。固定灰色区域扩大，黄色主翼的内侧边界外移；这一位置尚未确认是正确的翼身接口。</p><p>按当前显示尺度的俯视投影，候选左、右黄色面积分别为105.3、105.9平方厘米，绿色为150.5、153.3平方厘米。左右差分别约0.55%与1.80%，并非严格对称。</p>
+<h2>真实动作中哪里分开</h2><div class="grid"><figure><img src="before/00_root_R.png"><figcaption>右翼静止：锯齿状部件接口。</figcaption></figure><figure><img src="before/04_root_R.png"><figcaption>右翼迎角反向：翼根与机身之间露出背景。</figcaption></figure></div>
+<p>灰蓝色是机身，黄色是主翼，绿色是翼尖。每个三角形按导出模型实际姿态绘制，没有轮廓填色、贴图透明或补洞。</p>
+<h2>静态接口重切前后</h2><img src="after/静态接缝_修前与连续重切.png"><p>原始完整曲面重新分件。左图为旧接口，右图为连续重切；原曲面总面积保持一致，没有增加遮盖面。</p>
+<h2>拍动 迎角 折叠 组合动作</h2><video id="motion" controls preload="metadata" poster="after/静态接缝_修前与连续重切.png"><source src="after/实际接缝_修前与重切_四种动作.mp4" type="video/mp4"></video>
+<div><button data-time="0">拍动</button><button data-time="2">迎角</button><button data-time="4">翼尖上反</button><button data-time="6">翼尖下折</button><button data-time="8">组合动作</button></div>
+<small>视频左边为旧分件，右边为静态重切候选。右边的动态翼根仍待处理；主翼与翼尖已通过全部 301 帧接缝检查。</small>
+<h2>两侧分别检查</h2><img src="before/完整装配_静止拍动迎角折叠_两侧翼根.png"><p>从上到下为静止、拍动、迎角正向、翼尖上反；左列为模型左侧，右列为模型右侧。另有迎角反向、翼尖下折及组合动作的独立近景。</p>
+<div class="note"><strong>下一步取决于真实翼根接口。</strong><p>连续翼膜需要适当变形；机械转动接头需要正确的接触或设计间隙。直接混合蒙皮的完整动作复算中，迎角时局部边长增加约52%，拍动约34%。该试验未获采用；这些数值不是实物必须承受的应变。</p>
+<a href="after/eaglex_conforming_recut.glb">下载静态分件修复候选 GLB（动态翼根尚未完成）</a><br><a href="after/recut_and_trial_checks.json">查看曲面、接口及拒绝试验的数据</a><br><a href="after/export_checks.json">查看实际导出复验结果</a></div></main>
+<script>const v=document.getElementById('motion');for(const b of document.querySelectorAll('[data-time]'))b.onclick=()=>{v.currentTime=Number(b.dataset.time);v.play().catch(()=>{});};</script></html>

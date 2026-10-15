@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "item_id": "I-218",
+  "delivery_version": "i218-time-fix-ciri-v1",
+  "implementer": "Ciri",
+  "generated_at": "2026-10-15T07:08:27.074807+00:00",
+  "delivery_kind": "stage_supplement",
+  "parent_delivery_preserved": "lane-workers-ui-v2",
+  "authorization": "机主在本会话明确要求Ciri不用等、接下来自己接手；Beth转达两天内经理本人施工，本轮由Ciri直接实施。",
+  "scope": "观察窗活动时间、逐卡与全局采样有效性及单调服务器对时；保留原五条和已有多工位成果。",
+  "source_sha256": {
+    "board_ui/src/console/ConsolePage.tsx": "adf7dd4067928e6492ef3605ce09fc14b696f45e6886ec9c95fe1512dbcaa90a",
+    "board_ui/src/console/WatchView.tsx": "baabab8ae72aeda9317d52d416207d3be7a98b3a841fe4fb92b13d43d67e4ccd",
+    "board_ui/src/console/console.css": "81f141ba1ae8c4de23ce69e241ff4cbb9efa49f62231eef48077fd5efb095ef7",
+    "board_ui/src/console/time.ts": "8506005f3f0bddb170cc4ad3268dad62d576a5b36fb1167febb2740bc238db9c",
+    "board_ui/scripts/i218_time_check.cjs": "11b5850544709d27f120e059193dc5e5ef33551f4e5cd7fdecfc71cba8ef8cbf"
+  },
+  "patch": "logs/ciri_i218_time_fix_20261014/manager_changes.patch",
+  "patch_sha256": "3ce8999a10953968747e77421a2f620208abe155d0c9625ad83677eb1823db21",
+  "review_document": "board_ui/lab_design/交付说明_I-218_时间与采样修复_Ciri_20261014.md",
+  "checks": {
+    "unit": {
+      "passed": 21,
+      "total": 21,
+      "evidence": "logs/ciri_i218_time_fix_20261014/unit_check.json"
+    },
+    "browser": {
+      "passed": 22,
+      "total": 22,
+      "evidence": "logs/ciri_i218_time_fix_20261014/browser_after.json"
+    },
+    "unchanged_baseline_counterexamples": {
+      "passed": 3,
+      "total": 22,
+      "evidence": "logs/ciri_i218_time_fix_20261014/browser_before.json"
+    },
+    "build_and_types": "logs/ciri_i218_time_fix_20261014/verification_summary.json"
+  },
+  "screenshots": [
+    "logs/ciri_i218_time_fix_20261014/before_naive.png",
+    "logs/ciri_i218_time_fix_20261014/after_naive.png",
+    "logs/ciri_i218_time_fix_20261014/before_future.png",
+    "logs/ciri_i218_time_fix_20261014/after_future.png",
+    "logs/ciri_i218_time_fix_20261014/after_card-stale.png"
+  ],
+  "production_readonly_source": "logs/ciri_i218_time_fix_20261014/console_state_before.json",
+  "production_deployed": false,
+  "production_services_restarted": false,
+  "original_criteria_changed": false,
+  "unmet": [
+    "本人实现部分尚待独立复核，I-218整项保持待审核。",
+    "实际来源仍有缺时区时间，当前诚实显示待核对；精确相对时间需有依据的时区契约。",
+    "生产加载、固定版本在线回读、停止候选加载与生产单卡操作及实际采集路径终验仍未完成。",
+    "浏览器为私有只读样例，时间推进为隔离计时，不代替生产自然老化观察。"
+  ]
+}

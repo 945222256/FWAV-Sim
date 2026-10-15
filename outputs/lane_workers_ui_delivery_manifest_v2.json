@@ -1,0 +1,117 @@
+{
+ "schema_version": 1,
+ "item_id": "I-218",
+ "delivery_version": "lane-workers-ui-v2",
+ "generated_at": "2026-10-14T19:43:30",
+ "run_id": "run-beth-lane-workers-ui-rework-20261014-a1",
+ "dispatch_request_id": "kd-beth-lane-workers-ui-rework-20261014-a1",
+ "session_id": "sess_e2438b4f-44de-4800-b87f-e98fea01e441",
+ "workstation": "L5-w1",
+ "reviewer": "ciri",
+ "scope": "Ciri 18:32 退回三项返修：waiting 类型消费、逐工位历史卡保留、操作检查完整身份；原五条判据不变，真实双会话页面联调补齐",
+ "rework_basis": {
+  "return_receipt": "logs/ciri_i218_review_20261014/return_receipt.json",
+  "counterexamples": "logs/ciri_i218_review_20261014/consumer_probe.json（四条：快照直喂报错、一活跃一保留丢卡、双空闲只留一张、截断前缀检查失效）",
+  "contract": "lp_sync/lane_workers_contract_v1.json（冻结版 lane-workers-v1，waiting 为 request_id→原因 的对象）",
+  "backend": "outputs/lane_workers_delivery_manifest_v2.json（lane-workers-v2，30/30+11/11+12/12；生产容量 L3=2 已于 18:51 启用，logs/hq_intake/beth_lane_concurrency_20261014/capacity_enabled_receipt.json）"
+ },
+ "counterexample_fixes": [
+  {
+   "ciri_counterexample": "真实冻结快照直喂 LaneView 报 TypeError：(queue.waiting ?? queue.queued_items ?? []).map is not a function（waiting 实为对象）",
+   "fix": "types.ts 按冻结契约改 waiting 为 Record<request_id, 原因>（旧预备数组形态过渡兼容）；新增 waitingEntries 统一折算（queued_items 优先，缺时回落对象键值）；LaneView 消费折算结果",
+   "evidence": "logs/i218v2_check/server_render_probe.json S1：真实快照 logs/i217_real_v2_20261014_174229/kernel_state/lane_queues.json 直喂 LaneView 与 WatchView 渲染无异常"
+  },
+  {
+   "ciri_counterexample": "一活跃一保留时后一张历史卡丢失（articles=1，foundItemB=false）",
+   "fix": "WatchView renderGroup 改逐卡保留：laneHistory 按完整 session_id 去重（retained 覆盖同号 archived）返回全部驻留/归档工位会话，与活跃卡并存渲染，同号活跃会话不重复出灰卡",
+   "evidence": "隔离：server_render_probe.json S-one_active_one_retained（2 卡、两会话、两事项）与浏览器样例三；真实栈：logs/i218_ui_real_20261014_193604 P8a/P8b（D 活跃卡+另一工位驻留灰卡并存，完整会话号与最后事项）"
+  },
+  {
+   "ciri_counterexample": "双空闲时只留一张（articles=1，retained=1）",
+   "fix": "同上逐卡保留，不再 latestRetained 只取最新一张",
+   "evidence": "隔离：server_render_probe.json S-both_workers_retained（2 卡）与浏览器样例七（两张灰卡各带完整会话号与最后事项，组头计入历史工位灰卡 2）"
+  },
+  {
+   "ciri_counterexample": "操作检查只比截断前缀（sess_mock_i218 前十四字符相同，检查失效）",
+   "fix": "卡体/弹层携带 data-session-id 完整会话身份；检查按完整号全等核对并显式证明同前缀对可区分；注入/停止核对弹层目标与 POST /api/console/action 请求体；履历核对抽屉完整会话号；出处核对 locus 完整会话号",
+   "evidence": "隔离：样例八（同前缀对四操作完整号定向，另方零误作用）+ server_render_probe.json S5（前缀断言失效、完整号断言有效的对照记录）；真实栈：P4a-P7（完整会话号全等定向，console_tasks 只指向本工位）"
+  }
+ ],
+ "files_rework": {
+  "修改": [
+   "board_ui/src/console/types.ts（waiting 对象类型+waitingEntries 折算；workers 元素可选字段与 request_id；active_count/order/current/conflict 契约字段）",
+   "board_ui/src/console/LaneView.tsx（waitingEntries 消费对象/数组/缺字段三态；等待行带 data-request-id 与请求号悬停；等待数不再以空槽为显示条件；工位行缺号如实标注未登记）",
+   "board_ui/src/console/WatchView.tsx（laneHistory 逐卡保留替代 latestRetained 单张；活跃与历史灰卡并存；组头计入历史工位灰卡数；占位灰卡明示无可核查原因；卡体/弹层 data-session-id 完整身份；workersBySession 空号防御）"
+  ],
+  "新增": [
+   "board_ui/scripts/i218v2_check.cjs（隔离核验 32 项：甲段服务端渲染反例复验 6 项+乙段浏览器样例 26 项）",
+   "board_ui/scripts/i218v2_real_stack_probe.py（隔离全栈探针：隔离云+内核+宿主真实会话+采集/同步 mimic+驻留语义）",
+   "board_ui/scripts/i218v2_real_page_check.cjs（真实页面检查阶段一/二）",
+   "board_ui/scripts/i218v2_static_proxy.cjs（隔离联调静态代理，自建进程）"
+  ],
+  "未触碰": "board_ui/src/console/overview_data.ts 等他人未提交改动；宿主、内核、云数据库与凭证；生产宿主 83332 与生产云"
+ },
+ "verification_runs": [
+  {
+   "name": "隔离核验（六类样例+Ciri 四反例复验+完整身份操作核对）",
+   "path": "logs/i218v2_check/isolated_samples_record.json",
+   "result": "32/32；甲段 S1-S5 复刻 consumer_probe.cjs 方法论，真实冻结快照与真实值回放（logs/i217_real_v2_20261014_174229 只读回读）"
+  },
+  {
+   "name": "真实双会话页面联调（隔离全栈：真实 ZCode 会话双工位并行）",
+   "path": "logs/i218_ui_real_20261014_193604/evidence.json",
+   "result": "29/29；A/B 真实并行（工作区间与模型区间双证相交）、C 排队自动接续、页面两卡与内核快照/云端接口三方逐项一致、注入/停止/履历/出处完整会话号定向且 console_tasks 误作用零、D 活跃+另一工位驻留灰卡并存；截图五张随档"
+  },
+  {
+   "name": "构建检查",
+   "path": "board_ui/dist（tsc -b 无错、vite build 通过）",
+   "result": "通过；未运行 prebuild（overview_data.ts 为他人未提交生成物，不覆盖）"
+  }
+ ],
+ "screenshots": [
+  "logs/i218_ui_real_20261014_193604/real_phase1_dual_cards.png（真实双工位执行中两卡）",
+  "logs/i218_ui_real_20261014_193604/real_phase1_inject_modal.png（注入弹层定向）",
+  "logs/i218_ui_real_20261014_193604/real_phase1_history_drawer.png（履历抽屉）",
+  "logs/i218_ui_real_20261014_193604/real_phase1_source_drawer.png（出处抽屉）",
+  "logs/i218_ui_real_20261014_193604/real_phase2_active_plus_retained.png（活跃+驻留并存）",
+  "logs/i218v2_check/sample2_dual_workers_real_replay.png、sample3_exit_retained_coexist.png、sample4_waiting_reason_object.png、sample6_no_session.png、sample7_both_idle_two_gray_cards.png、sample8_sameprefix_inject_target.png、sample9_real_replay_ops.png（隔离样例）"
+ ],
+ "criteria_vs_evidence": [
+  {
+   "criterion": 1,
+   "state": "真实栈已验（P1/P2/P3：组头执行二比二等待一、两卡完整事项号/工位号/会话号、内核快照=云端 lane_queues 接口=页面三方逐项一致）；同时执行两项等待第三项为 A/B/C 真实任务"
+  },
+  {
+   "criterion": 2,
+   "state": "真实栈已验（P4a/P4b/P5a/P5b/P6/P7：注入/停止/履历/出处按完整会话号定向，console_tasks 恰两行各指本工位，误作用零）；空闲历史保留已验（P8b、隔离样例三/七）；空闲超时保留检查沿用 I-207 语义（fresh_cut 三十五分钟门槛）经驻留语义演示走通"
+  },
+  {
+   "criterion": 3,
+   "state": "隔离 32/32：六类样例全过（单工位旧接口/双工位新接口/工位退出/等待原因/接口缺字段/无会话），旧字段兼容范围=无 workers 时组头排队计数加未采集标注、卡面工位未登记、current_item_id 兼容显示；不编造会话或执行数（无会话样例计数零执行、占位灰卡明示原因）"
+  },
+  {
+   "criterion": 4,
+   "state": "实时联调已用 lane-workers-v2 实际接口与真实回读完成（隔离全栈，契约沿用冻结 v1 结构）；发布未做（归 Beth），无依赖任务未被申报阻塞"
+  },
+  {
+   "criterion": 5,
+   "state": "构建记录、真实双工位截图五张、逐项核对记录（page_check_result_phase1/2.json）与本总清单在档；前端交付验证通过的宣称以 Ciri 按原判据审核为准"
+  }
+ ],
+ "honest_disclosure": [
+  "预演运行两轮归档保留：logs/i218_ui_real_20261014_192137_shakedown_proxy_bug（静态代理未剥 /app 前缀致资源 404，页面阶段无效，机制项 15/15）；logs/i218_ui_real_20261014_192920（页面阶段 5 拒：B 会话行经采集 mimic 上行晚约四十秒且 P7 断言误以采集侧 locus 为准；机制项与阶段二全过）。最终轮加 R1d 双会话行到达等待与弹层等待后 29/29；两轮教训已固化进脚本。",
+  "驻留灰卡的时间戳语义：阶段二的驻留行由探针直写隔离库 console_sessions，updated_at 为四十四分钟前（模拟采集停止刷新超新鲜度门槛），会话身份、事项与认领核实均为真实值；生产环境该状态由采集自然停止刷新达成，未在生产验证。双空闲两张灰卡在真实栈未单独设景（隔离样例七以真实会话值验证）。",
+  "操作检查的会话级真实作用：注入/停止在隔离云落 console_tasks 动作行（pending，无人认领执行——探针不驱动会话干预执行），核对口径为请求体与落库行完整会话号定向；对真实会话的实际注入/停止执行属采集代理通道，未在本联调中执行（不触碰真实会话运行）。",
+  "观察窗组头/战情室读数以镜像快照为源（生产 sync_agent 三秒级心跳），页面三秒轮询；阶段一核对时快照与内核态已收敛一致（P0 等待镜像到位后才核对）。",
+  "board_ui/scripts 新增检查依赖 puppeteer-core（npm install --no-save 装入 node_modules，package.json 与 lock 未改）。",
+  "本轮四项真实 Zcode 任务（I-970..I-973）在隔离全栈真实执行（各 110/110/10/25 秒），结果经内核回收为 pending_review 于隔离云，不冒充生产事项。"
+ ],
+ "unmet": [
+  "Ciri 按原五条判据的页面走查与审核（本交付 pending_review，不可自行关闭）",
+  "生产发布与生产真实回读（Beth 按最终构建与回退核验办理；本交付零生产写）",
+  "驻留灰卡过期时间戳为隔离库语义模拟（身份真实），生产路径由采集自然停更达成，未在生产验证",
+  "对真实会话的实际注入/停止执行（采集代理通道）未在联调中执行，本交付核对到请求体与云端落行为止"
+ ],
+ "constraints_honored": "未改宿主、内核、云数据库与凭证；未动他人未提交改动（overview_data.ts 等）；隔离进程仅回收自建树（内核/宿主树/隔离云/静态代理，收尾端口零残留）；未运行科研仿真；生产发布归 Beth",
+ "v1_archive_note": "v1 交付与证据保留于 outputs/lane_workers_ui_delivery_manifest_v1.json 及 logs/i218_check/，不撤回不重报"
+}

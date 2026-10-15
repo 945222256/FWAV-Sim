@@ -1,0 +1,15 @@
+[Unit]
+Description=LP Digital Board Cloud Service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/lpboard
+ExecStart=/usr/bin/python3 /opt/lpboard/server_main.py
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/lpboard.log
+StandardError=append:/var/log/lpboard.log
+
+[Install]
+WantedBy=multi-user.target

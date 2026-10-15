@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "terms": [
+    "VMOT",
+    "LiDAR",
+    "MOTA",
+    "MOTP",
+    "IDS",
+    "FP",
+    "FN",
+    "IOU"
+  ],
+  "_术语定义": {
+    "VMOT": "视觉激光雷达多目标跟踪，本项目代号；多目标跟踪指从连续传感器画面中同时为多个目标维持身份与轨迹",
+    "LiDAR": "激光雷达，Light Detection and Ranging",
+    "MOTA": "多目标跟踪准确度，Multiple Object Tracking Accuracy",
+    "MOTP": "多目标跟踪精确度，Multiple Object Tracking Precision",
+    "IDS": "身份交换次数，Identity Switches",
+    "FP": "误检数，False Positives",
+    "FN": "漏检数，False Negatives",
+    "IOU": "交并比，Intersection over Union"
+  }
+}

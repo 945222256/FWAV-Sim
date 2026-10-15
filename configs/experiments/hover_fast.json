@@ -1,0 +1,20 @@
+{
+  "scene": {
+    "argv": ["python", "-m", "modules.backend.bench_runner", "--fast"],
+    "mode": "python",
+    "duration_s": 60
+  },
+  "overrides": {},
+  "criteria": {
+    "kind": "bench_subject",
+    "subject": "hover",
+    "note": "判据读自 config/bench_criteria.json 悬停科目三条冻结判据，本实验为声明式管线的自验快档"
+  },
+  "locks": {
+    "standard": true
+  },
+  "tags": {
+    "name": "I015_HOVER_FAST",
+    "desc": "I-015 声明式实验管线自验运行，纯 Python 快档悬停基准，验证同配置同摘要且产物可复现"
+  }
+}

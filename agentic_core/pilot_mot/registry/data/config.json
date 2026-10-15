@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "project_code": "VMOT",
+  "env_prefix": "VMOT_",
+  "acronym_whitelist": ["VMOT", "LiDAR", "MOTA", "MOTP", "IDS", "FP", "FN", "IOU"],
+  "tool_data_globs": []
+}

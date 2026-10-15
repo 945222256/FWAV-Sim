@@ -1,0 +1,85 @@
+{
+ "schema_version": 4,
+ "delivery_version": "v4",
+ "item_id": "I-219",
+ "title": "完整动作对象、九通道配方与参数装配实现（返修 v4）",
+ "delivered_at": "2026-10-14T22:19:50",
+ "run_id": "run-kt-fil-i219-v3-rework-20261014-a1",
+ "base_commit_at_delivery_start": "7a5a0f36af599b760522abd365c4f841faa0c122",
+ "review_basis": {
+  "v3_review_report": "docs/I-219_Fil返修复核_v3_20261014.md",
+  "v3_independent_results": "logs/fil_i219_v3_review_20261014/independent_results.json",
+  "v3_archive_manifest": "logs/fil_i219_v3_review_20261014/v3_archive_manifest.json",
+  "note": "v3 已退回，唯一剩余缺口为求力需求表遗漏扭转角速度；v4 只修这一项，v3 全部已核实修复（尾舵策略、字段诊断、导出边界、拍动角加速度登记）保留不重开；v3 源码归档仅追溯不覆盖工作树。"
+ },
+ "v4_fix": {
+  "求力导数表扭转角速度": {
+   "implemented": true,
+   "what": "需求表新增 aero_force 行：sane_dickinson_3d 且旋转力开启（ENABLE_ROTATIONAL=True 现行默认，与附加质量开关无关）时左右扭转通道必需扭转角速度（alpha_dot 进旋转力项，单位 rad/s），缺失时消费记无效不填假零；旋转力关闭时不强制；不登记扭转角加速度（当前力核不消费，不强制增加），不登记尾舵导数。拍动两行（附加质量开必需拍动角速度加角加速度、关时只必需角速度）原样保留。各行条件只由本行自己的开关控制，切换附加质量不消除旋转力开启的扭转需求。表注释明确适用边界：仅覆盖 sane_dickinson_3d，其他气动模型须按其真实消费另行登记后适用。",
+   "evidence": "检查项 F08/旋转力开时左右扭转通道必需扭转角速度（限 twist_L/twist_R、invalidate_consumption、rad/s）；F08/两开关独立控制（扭转行条件不含附加质量开关、拍动行条件不含旋转力开关）；F08/不强制扭转角加速度与尾舵导数；F08/表行完整性（必需量都在 DERIV_Q_ALL 登记量名内、适用通道都在九关节内）；F08/适用边界声明。真实力核核验：F08/真实力核默认旋转力开且实际消费扭转角速度（alpha_dot 由 0 改 2 时机体系力变 [0,0,0.0622] 牛、力矩变 [-0.0128,0.0031,0] 牛米，与 Fil 反例同号同量级）；F08/旋转力开时扭转角速度缺失即异常（契约判无效正确）；F08/旋转力关闭时扭转角速度可缺失（构造 enable_rotational=False 实例，输出与零角速度一致）；F08/附加质量关不影响旋转力开关与扭转消费成立（真实核附加质量关时旋转力仍开，表结构双查）。"
+  }
+ },
+ "original_criteria_status": {
+  "note": "原六条判据不自行标通过，由 Fil 按 v4 复核；下为实现对照",
+  "1": "类型与九关节元数据、三层限位分列、三态分列、帧只读（v2/v3 已核实修复全部保留）。",
+  "2": "九行绑定表、绑定唯一键、偏移唯一持有、中置上反保留、关节与气动来源分列（保留）。",
+  "3": "四来源优先级、不读全局字典、差频不加第二层保持；逐关节最终目标策略、翼面适用量真实执行、未知与不支持组合定位拒绝（v3 修复保留）。",
+  "4": "分工保持；幅值差动与旧角偏置分列；右翼相差从配置解析；偏移来源机器引用与解析值分列（保留）。",
+  "5": "导数策略四覆盖与同一输出规则导数保持；需求表按真实力核分行登记：附加质量开关独立控制拍动角速度与角加速度、旋转力开关独立控制扭转角速度（v4 补齐），角运动学与机身世界系分列，适用边界明确。",
+  "6": "默认旧配方、原指令键、抽象执行器、可选消费协议保持；二十三个非法变体经真实装载入口带位置拒绝；asdict 回环装载通过（保留）。"
+ },
+ "v3_counterexample_reproduction": {
+  "note": "Fil v3 复核反例 aero_twist_velocity_consumer 在 v4 检查器复测；不保留 v3 错误结果作为新版通过条件",
+  "cases": [
+   {
+    "name": "any_requirement_applies_to_twist",
+    "v3_result": "需求表无任何行适用扭转通道",
+    "v4_result": "旋转力开行适用 twist_L/twist_R 必需 twist_angular_velocity"
+   },
+   {
+    "name": "force_difference_for_changed_twist_velocity",
+    "v3_result": "真实力核消费 alpha_dot 而表未登记（力变 [0,0,0.0622] 牛）",
+    "v4_result": "检查器同法核验力与力矩实际变化并登记该量"
+   },
+   {
+    "name": "twist_velocity_none",
+    "v3_result": "旋转力开时 alpha_dot 缺失真实求力抛类型异常而契约未覆盖",
+    "v4_result": "契约登记消费无效，检查器核验缺失即异常"
+   },
+   {
+    "name": "rotational_disabled_accepts_missing",
+    "v3_result": "旋转力关时接受缺失、输出与零角速度一致",
+    "v4_result": "契约登记不强制，检查器构造开关关实例同法核验"
+   }
+  ]
+ },
+ "checks": {
+  "checker": "tools/verify_i219_motion_action.py",
+  "result": "104 项两跑全过（两跑结果一致，退出码零；v3 的 96 项有效检查全部保留或等价更新，新增 8 项扭转角速度与开关独立核验）",
+  "coverage": "新增：需求表按两开关分行、扭转行必需量与通道、开关条件独立（表结构）、不强制扭转加速度与尾舵导数、表行完整性（量名与通道名全查）、适用边界声明、真实力核扭转角速度消费（力与力矩都变）、旋转力开缺失即异常、旋转力关可缺失、附加质量关不影响旋转力与扭转需求",
+  "regression": "bench_runner --fast 快档基准通过（BENCH PASS）；生产入口默认返回 None（回归铁律）保持；v3 全部已核实修复未重开"
+ },
+ "unverified": [
+  "完整仿真接入未做（后续事项办理），反例仅证明对象层与接口语义，不用于推断飞行影响",
+  "需求表为消费契约定义，拍动角速度/角加速度与扭转角速度的具体生成算法归后续基元与轨迹事项",
+  "其他气动模型（如冻结版 sane_dickinson 二维叶素）的需求行未登记，须按其真实消费另行登记后适用",
+  "节律推进、锁相协调与差频采用出口（I-220、I-221）尚未运行为声明态",
+  "完整记录回放不在本项验收范围（导出边界仅 asdict 回环装载）"
+ ],
+ "source_hashes": {
+  "modules/motion_action/types.py": "2c7e4a1c6dfa6eef5890792e29fbd33ca9c8f0bbde5730a65d0b555f9a5a953b",
+  "modules/motion_action/parameters.py": "f490938171ac4bdb88c3a0959bdf72af30112bbc356ef421f5da8e2518d7328d",
+  "modules/motion_action/__init__.py": "bde5de18a2b8d84816c31f2ec331ec1c3fff68a60db0eb3e0de366011f295c25",
+  "config/motion_recipes/cooperative_v1.json": "831f83f85075cbe2bde5310344a602f8ad738f101dc6683bb40464dc35fb6dd1",
+  "modules/contracts.py": "82fa5527c59c796599a6b2686245c5047eeb28d1ac5609c5000b2b61387e71eb",
+  "config/sim_config.py": "75c77437b625205da690a2dcc5197e9c18f0dc2041d2881317c743dcc2dfcab3",
+  "modules/sim_env_bridge.py": "9eea18f423a7f9d3f32ec03a1c0a263fed4748041410219c81cf9dcc9ef79295",
+  "tools/verify_i219_motion_action.py": "4ade14159fdef407ff29029ac2f94249488fc46011cf76017b11b8917a419670"
+ },
+ "history": {
+  "v1": "已退回撤回（Fil 首轮复核八项），散列见 logs/fil_i219_review_20261014/v1_archive_manifest.json",
+  "v2": "已退回（三项缺口加导出备注），交付提交 1281252、补记 e33299d，归档见 logs/fil_i219_v2_review_20261014/",
+  "v3": "已退回（唯一剩余求力导数契约缺口），交付提交 7a5a0f3，归档见 logs/fil_i219_v3_review_20261014/",
+  "v4": "本交付：只补扭转角速度需求行与对应核验；parameters、配方、contracts、sim_config、sim_env_bridge 与 v3 相同（散列一致），修订集中在 types 需求表、包导出与检查器"
+ }
+}

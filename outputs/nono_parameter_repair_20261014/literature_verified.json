@@ -1,0 +1,135 @@
+{
+  "checked_at_utc": "2026-10-15T04:02:50Z",
+  "checked_at_local": "2026-10-14T21:02:50-07:00",
+  "scope": "独立联网核对 Auke Ijspeert / EPFL BioRob 的 CPG + 深度强化学习主线；只采用作者论文、正式出版原文、EPFL 官方论文目录及作者项目/代码库。",
+  "main_judgment": "已确认 CPG-RL、Visual CPG-RL、DeepTransition 三篇主线均由 Auke Ijspeert 合著。适合向 Mira 提供分层动作接口与验证方法参考；没有任何一篇验证扑翼飞行。DeepTransition 的2023预印本与2024期刊版是同一工作的不同版本，不能凑成两篇。",
+  "exact_title_not_verified": {
+    "query": "Learning to Walk Like Animals",
+    "status": "本轮在 EPFL、arXiv、作者项目/代码库范围没有找到与此准确题名相符的原始论文；不能据相似宣传表述确定论文身份，也不能将组外CPG-RL论文归于Ijspeert组。",
+    "note": "这不是不存在该作品的证明；可能是口头描述或记忆中的题名。当前提供的三篇有独立作者和原文证据。"
+  },
+  "papers": [
+    {
+      "id": "cpg_rl_2022",
+      "priority": 1,
+      "title": "CPG-RL: Learning Central Pattern Generators for Quadruped Locomotion",
+      "authors": ["Guillaume Bellegarda", "Auke Ijspeert"],
+      "affiliation_verified": "原文列两位作者均属 EPFL BioRobotics Laboratory；EPFL BioRob官方目录亦收录。",
+      "publication": {
+        "year": 2022,
+        "venue": "IEEE Robotics and Automation Letters",
+        "volume": 7,
+        "issue": 4,
+        "pages": "12547-12554",
+        "doi": "10.1109/LRA.2022.3218167",
+        "doi_url": "https://doi.org/10.1109/LRA.2022.3218167",
+        "arxiv": "2211.00458v1",
+        "arxiv_submitted": "2022-11-01",
+        "original_fulltext": "https://arxiv.org/html/2211.00458v1"
+      },
+      "paper_facts": {
+        "cpg": "每腿一个幅度控制相位振荡器；主要方案移除显式振荡器耦合。振荡状态生成足端轨迹，经逆运动学与关节PD得到力矩。不要把这套方程直接称为Hopf振荡器。",
+        "rl_action": "PPO在线输出每腿的幅值设定μ、节律频率ω、足端轨迹方向角变化率ψ；四腿共12维。RL调参数而不直接输出所有关节力矩，足端离地高度等属于另设的轨迹映射参数。",
+        "observations": "完整观测包含速度指令、机体姿态/线角速度、关节位置速度、足接触布尔量、上次动作、CPG状态；另比较去除关节量的中等观测和仅CPG状态+接触布尔量的最小观测。最小观测实验任务限于特定前进速度。",
+        "reward": "机体系x/y速度及偏航角速度跟踪，惩罚竖向速度、滚转/俯仰角速度及原文命名为work的项；没有另加摆腿时间奖励。",
+        "training": "Isaac Gym/PhysX，Unitree A1，PPO；平地训练，策略100Hz，振荡器积分和关节PD为1kHz；再做A1实机迁移。",
+        "randomization_caution": "文中证明某些条件无需域随机化仍可迁移；但默认训练设置又列有摩擦、质量、推扰随机化。不能概括成所有实验都不做随机化。",
+        "reward_formula_caution": "原文work项写成绝对值τ与相邻两步关节速度之差的点积；不能未经核实改写为通常的瞬时机械功率τ·q_dot。"
+      },
+      "evidence": [
+        {"url": "https://arxiv.org/html/2211.00458v1", "locator": "作者脚注；II-B；III-A至III-D；Fig.2；Table I", "supports": "作者归属、DOI、振荡器、动作/执行链、观测、奖励及训练平台"},
+        {"url": "https://www.epfl.ch/labs/biorob/publications/all/", "locator": "CPG-RL条目", "supports": "正式刊物、年卷期页、DOI和作者"}
+      ],
+      "flapping_transfer_limits": [
+        {"kind": "论文证据边界", "text": "足端接触、支撑/摆动分段、逆运动学和地面力矩闭环属于四足系统；论文没有翼气动、空中六自由度或扑翼实机实验。"},
+        {"kind": "研究者判断", "text": "可借鉴RL调制低维节律接口；扑翼需重建翼运动学到真实执行器及气动力的映射，接触布尔量的最小观测结论不能直接迁移为空中最小观测结论。"}
+      ],
+      "mira_suggestion": {"kind": "建议，非论文已证事实", "text": "先读本篇确定动作接口：把慢层参数指令、振荡状态和执行器实际消费量分开记录；先验证频率/幅值指令确实改变翼运动和力矩，再比较学习效果。"}
+    },
+    {
+      "id": "visual_cpg_rl_2024",
+      "priority": 3,
+      "title": "Visual CPG-RL: Learning Central Pattern Generators for Visually-Guided Quadruped Locomotion",
+      "authors": ["Guillaume Bellegarda", "Milad Shafiee", "Auke Ijspeert"],
+      "affiliation_verified": "原文作者脚注列EPFL BioRobotics Laboratory；EPFL BioRob官方目录有同题同作者会议记录。",
+      "publication": {
+        "year": 2024,
+        "venue": "IEEE International Conference on Robotics and Automation (ICRA)",
+        "pages": "1420-1427",
+        "doi": "10.1109/ICRA57147.2024.10611128",
+        "doi_url": "https://doi.org/10.1109/ICRA57147.2024.10611128",
+        "arxiv": "2212.14400v2",
+        "arxiv_first_submitted": "2022-12-29",
+        "arxiv_v2": "2024-03-11",
+        "original_fulltext": "https://arxiv.org/html/2212.14400v2",
+        "version_caution": "初稿年份2022不等于正式会议出版年份2024；方法核对依据为2024 v2。"
+      },
+      "paper_facts": {
+        "cpg": "每腿相位和x/y两个幅值状态生成三维足端轨迹，再经IK和关节PD执行；比较显式耦合强度及MLP/LSTM策略。",
+        "rl_action": "四腿各输出μ_x、μ_y和ω，共12维；不同于2022版的μ、ω、ψ方向角速率接口。",
+        "observations": "速度指令、本体/关节/接触、上次动作、CPG状态，加局部地形高度图采样；策略输入不是原始RGB像素。实机用D435i点云建高程图、T265定位。",
+        "reward": "跟踪机体系x/y速度和偏航角速度，惩罚竖向/滚转俯仰速度及功率；更重视前进，使遇障时允许偏离侧向或偏航指令；碰撞终止配合训练。",
+        "training": "Isaac Gym/PhysX、Unitree Go1、PPO；平地到随机箱障碍的课程，含质量/摩擦/PD增益随机化与外感噪声，策略100Hz，其余控制1kHz。",
+        "result_caution": "实机导航中耦合和LSTM有益，但Table III和III-C的90ms额外延迟试验中，Visual CPG-RL的LSTM成功率为0；MLP更好。不能用摘要把有记忆网络或某个延迟容限说成普遍保证。"
+      },
+      "evidence": [
+        {"url": "https://arxiv.org/html/2212.14400v2", "locator": "II-A至II-F；Table III；III-C", "supports": "动作、观测/地图管线、奖励、平台及延迟反例"},
+        {"url": "https://arxiv.org/abs/2212.14400", "locator": "版本历史与Comments", "supports": "2022首稿、2024 v2及ICRA接受信息"},
+        {"url": "https://www.epfl.ch/labs/biorob/publications/all/", "locator": "Visual CPG-RL条目", "supports": "正式会议年、作者、页码和DOI"}
+      ],
+      "flapping_transfer_limits": [
+        {"kind": "论文证据边界", "text": "输入为机体周围高程地图、执行对象为地面四足足端轨迹；没有三维飞行避障或非定常翼气动证明。"},
+        {"kind": "研究者判断", "text": "扑翼可借鉴多速率观测、延迟与耦合消融；需要面向空中空间/气流设计观测，不能直接复制地面高度图或认定LSTM必然更稳。"}
+      ],
+      "mira_suggestion": {"kind": "建议，非论文已证事实", "text": "需要感知导航后再读本篇；将真实延迟/噪声下的MLP、记忆策略、振荡器耦合分别比较，不只看无延迟训练回报。"}
+    },
+    {
+      "id": "deeptransition_2024",
+      "priority": 2,
+      "title": "Viability leads to the emergence of gait transitions in learning agile quadrupedal locomotion on challenging terrains",
+      "authors": ["Milad Shafiee", "Guillaume Bellegarda", "Auke Ijspeert"],
+      "affiliation_verified": "Nature正式论文作者与单位及作者项目/代码库相互一致，属于EPFL BioRob研究主线。",
+      "publication": {
+        "year": 2024,
+        "published_date": "2024-04-09",
+        "venue": "Nature Communications",
+        "volume": 15,
+        "article_number": "3073",
+        "doi": "10.1038/s41467-024-47443-w",
+        "doi_url": "https://doi.org/10.1038/s41467-024-47443-w",
+        "original_fulltext": "https://www.nature.com/articles/s41467-024-47443-w",
+        "arxiv": "2306.07419v2",
+        "arxiv_first_submitted": "2023-06-12",
+        "preprint_title": "DeepTransition: Viability Leads to the Emergence of Gait Transitions in Learning Anticipatory Quadrupedal Locomotion Skills",
+        "version_caution": "2023预印本不是最终期刊版；正式版奖励消融用zero/low/medium/high四档、64组合，旧预印本为三档、27组合，不能混用。",
+        "project": "https://miladshafiee.github.io/DeepTransition/",
+        "author_code": "https://github.com/MiladShafiee/DeepTransition"
+      },
+      "paper_facts": {
+        "cpg": "每腿幅度控制相位振荡器构成节律生成层RG；PF层将状态映射到足端位置，再经IK和PD执行。平地walk/trot是显式相位矩阵约束的不同训练策略；跨缝实验不设显式耦合。",
+        "rl_action": "PPO调μ和ω；跨缝另学每腿水平偏置x_off，合为12维。x_off绕过CPG节律动力学进入轨迹映射，不能称全部动作都经过振荡器。",
+        "observations": "盲走含本体/关节/足接触、前动作、CPG状态和速度指令；跨缝加深度/高度图或足到缝边界的显式几何特征，并做信息消融。",
+        "reward": "通过未跌倒的前进进度近似viability，并比较能耗、接触峰力、姿态惩罚；平地另做速度跟踪。viability为任务代理目标，并非形式验证得到的安全可行域证书。",
+        "training": "PPO，PyBullet及Isaac Gym，Unitree A1/Go1；策略100Hz。作者公开Isaac Gym实现，README注明Gym Preview 3、legged_gym与rsl_rl。",
+        "hardware_boundary": "正式论文Hardware experimental results明确：A1跨连续缝隙时，用等效仿真场景中已知的相对缝隙距离替代机载视觉/LiDAR；不能称为已验证实机自主视觉避障闭环。"
+      },
+      "evidence": [
+        {"url": "https://www.nature.com/articles/s41467-024-47443-w", "locator": "作者；About this article；Methods/Action space, Observation space, Reward function；Hardware experimental results；Code availability", "supports": "正式元数据、分层结构、动作/观测/奖励、实机感知边界与作者代码归属"},
+        {"url": "https://arxiv.org/abs/2306.07419", "locator": "题名、作者与提交历史", "supports": "旧题名与2023预印本身份"},
+        {"url": "https://arxiv.org/html/2306.07419", "locator": "Appendix S.1；Reward Function", "supports": "训练平台和控制周期；明确旧版奖励消融与正式版有差异"},
+        {"url": "https://miladshafiee.github.io/DeepTransition/", "locator": "标题、作者、Paper/Code链接、BibTeX", "supports": "DeepTransition与正式期刊论文的身份对应"},
+        {"url": "https://github.com/MiladShafiee/DeepTransition", "locator": "README/Deep Transition Repository, Installation, CODE STRUCTURE", "supports": "作者公开实现及依赖；不是复现已通过的证明"}
+      ],
+      "flapping_transfer_limits": [
+        {"kind": "论文证据边界", "text": "跌倒/缝隙落脚可行性属于有支撑接触的四足任务；平地步态类别部分由耦合矩阵预设，不能说所有步态转换都无先验涌现。"},
+        {"kind": "研究者判断", "text": "飞行需单独定义失高、失速、碰撞、执行器极限等失败指标及真实消费的节律/非节律动作通道；地面接触奖励、参数范围和策略权重不能直接迁移。"}
+      ],
+      "mira_suggestion": {"kind": "建议，非论文已证事实", "text": "用本篇组织奖励消融与节律/偏置通道比较；把能飞并持续完成任务作为独立约束和测量，再研究能耗。保留跌倒代理与严格安全保证的区别，也单列已知几何和真实感知输入。"}
+    }
+  ],
+  "cross_paper_recommendations": [
+    {"kind": "给Mira的研究建议", "text": "阅读顺序为CPG-RL基础接口→DeepTransition的动作旁路/viability消融→Visual CPG-RL的感知延迟与耦合。"},
+    {"kind": "给Mira的研究建议", "text": "先固定可重复的扑翼被控对象，记录参数指令→实际翼关节运动→气动力矩→机体状态→下一条指令；CPG名义输出不能代替执行器实际消费证据。"},
+    {"kind": "证据边界", "text": "本轮没有运行作者代码、训练策略或扑翼仿真，没有复现性能，也没有向Mira或其他经理发送消息。"}
+  ]
+}

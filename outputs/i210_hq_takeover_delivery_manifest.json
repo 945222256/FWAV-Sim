@@ -1,0 +1,207 @@
+{
+  "item_id": "I-210",
+  "delivery_version": "hq-direct-takeover-v1",
+  "run_id": "run-anni-i210-hq-takeover-20261015",
+  "generated_at_utc": "2026-10-15T07:32:07.304701+00:00",
+  "implementer": "Anni with explicitly authorized subagents",
+  "implementation_commit": "54a2573f39fb2ebd4c50485f9314d9607ee96a11",
+  "scope": "default isolated-data qualification, actual-consumer observation hooks, event archival, bounded numerical verification and baseline preparation",
+  "sources": [
+    {
+      "file": "logs/i210_baseline_rate_20261015/compare_baseline.py",
+      "sha256": "78f7da174a618637e66a25c717d8423ee2933c8a30a3beeb469a7a5104778ef4",
+      "bytes": 21849
+    },
+    {
+      "file": "tools/i210_hopf_check.py",
+      "sha256": "5332e53ba473d959dd877ebdea6938498464486c1848f6acb4d46f8d17347d57",
+      "bytes": 40005
+    },
+    {
+      "file": "modules/wing_actuation.py",
+      "sha256": "24d6819eff9de0eaed030c5072814f883e1fd14903490b3b5c0913890af6b8a1",
+      "bytes": 21462
+    },
+    {
+      "file": "modules/aero_solver.py",
+      "sha256": "d31cf107ec1d1ac6874b82c0e25e49044b7e00557cf88d902e3cf1e8b268695b",
+      "bytes": 39578
+    },
+    {
+      "file": "modules/fw_iid_ledger.py",
+      "sha256": "d1ea161671ec649eb43023160e6f1d86e4216fca1691fb2e73e525e9a7e796ad",
+      "bytes": 41169
+    },
+    {
+      "file": "modules/i210_evidence.py",
+      "sha256": "9eb198f31e59cc911a6a3911af7c80cffe15c43cbd371c4e5edabef1019b7945",
+      "bytes": 15192
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/qualification_contract_v2.json",
+      "sha256": "4cd380e3918c8e23f09840d1ed69d4931dc7f6feaf37d6795ece191af870bc86",
+      "bytes": 6858
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/actual_evidence_contract.json",
+      "sha256": "fc2ea78d33698ab0c17dcefafb196b461cf2824f7b6be290204b5e2f8ed667f6",
+      "bytes": 3470
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/stage_decision.json",
+      "sha256": "8e16d9b6926516df76add3ab69110810713633e65f8ed052aa2c343b4ca1c4ae",
+      "bytes": 3393
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/test_actual_evidence_recorder.py",
+      "sha256": "fe2e70028daebb7956cd4a2f3786d13ea78093908e61c568eca814e995ca4308",
+      "bytes": 13680
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/接管交付.md",
+      "sha256": "61f1231c033d3d7099c3380f51de0fc1e5fe721876abb55f7d3cfa7322df7587",
+      "bytes": 5627
+    },
+    {
+      "file": "modules/flight_controller.py",
+      "sha256": "730b19f78619b5e4c42d6087997d6415e598c55c22ced0d6d3c704781cb6ea62",
+      "bytes": 84262
+    },
+    {
+      "file": "modules/aero/kinematics.py",
+      "sha256": "86ac4a06c16b3fc4ddc80734fdda00f3431083894ebd220bdc8b827c0741a83f",
+      "bytes": 12048
+    },
+    {
+      "file": "config/sim_config.py",
+      "sha256": "75c77437b625205da690a2dcc5197e9c18f0dc2041d2881317c743dcc2dfcab3",
+      "bytes": 79648
+    },
+    {
+      "file": "logs/i210_baseline_rate_20261015/run_chain.py",
+      "sha256": "761dcdd1e30539c36cf2b1dbfb8c3575b79f6ae3c11276e99f720ae9af4b574e",
+      "bytes": 7598
+    }
+  ],
+  "evidence": [
+    {
+      "file": "logs/hq_takeover_i210_20261015/validation_result.json",
+      "sha256": "a91f0b9781d1e1fb1c07b40c3b80b4106db45314f03a71d2ab3231d8956b8a3c",
+      "bytes": 2951
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/qualification_audit/postfix/report.json",
+      "sha256": "cbc460662c914c7d805006c42cc1d8427622fe5b8bb624347717cf147a232ccc",
+      "bytes": 18943
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/qualification_audit/postfix/source_followup.json",
+      "sha256": "6e459ed0270401fd0b3be3907ac11b85ddb183dc656d348464e7c05f5b1b38ad",
+      "bytes": 2051
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/measurement_review/probe_report.json",
+      "sha256": "76a968dabf15d7c049364cb13f2e5080c509a5108bd6fa31a40c931dfa207f1e",
+      "bytes": 75553
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/measurement_review/final_sidecar/report.json",
+      "sha256": "a3924d5c678fc82113ab5054e1ffd55adfe36ee00776024d3935ab0b1c0cc6d7",
+      "bytes": 11943
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/measurement_review/有限最终复核结论.md",
+      "sha256": "b71e8851a2a26d7bdd9d4882aa43dc89e18d5c15dd6726583314c106ad44f927",
+      "bytes": 2530
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/actual_evidence_recorder_checks.json",
+      "sha256": "63f0a0b9d1fa3ae936f853eb945be55b4db734c0d83d18c583e6d265f1d917ff",
+      "bytes": 3331
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/baseline_preparation/preparation_manifest.json",
+      "sha256": "87331a84862c04f1318aa80ea1a93185ae14adc2ea16aad980599f6e7cb5dcc5",
+      "bytes": 192991
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/baseline_preparation/candidate_verification.json",
+      "sha256": "edd399bf08171c32395979c907e208c3cbe34a5d048fe8c2cd5537031062585d",
+      "bytes": 74025
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/asset_dependency_result.json",
+      "sha256": "454c300a586131c827a804b97520d6dd31a082c9a578957db6e244ffe410ca95",
+      "bytes": 2187
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/zero_mod_oracle/v1/rules.json",
+      "sha256": "5dbf234f4a45e0a744055c536fc5da9483c7aec4c564337f5f12c7226b71e895",
+      "bytes": 4704
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/zero_mod_oracle/v1/summary.json",
+      "sha256": "39aa08b1d51de7256649f5e71d8a862dfa504c537a32c5bef8d4e73797424128",
+      "bytes": 16913
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/zero_mod_oracle/v1/raw_sequence.jsonl",
+      "sha256": "16dd81a76cf9d45af307caf8decab984e87129a636058148b3a009b336ebdd0e",
+      "bytes": 209510
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/zero_mod_oracle/v2/rules.json",
+      "sha256": "cc64f080182dedef1afa0d585e5e08a34908f3fb5f68586005c0a91b11b69eba",
+      "bytes": 5415
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/zero_mod_oracle/v2/summary.json",
+      "sha256": "8ee264b32b9e62e540928f16f010113bec4f3f596579ac04b2c1c2d1e2fd8399",
+      "bytes": 3382
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/zero_mod_oracle/v2/raw_sequence.jsonl",
+      "sha256": "3e97dc14206c90b103b7394b9d1cdc717e1adf28780972b6493a16dd21199ce5",
+      "bytes": 209294
+    },
+    {
+      "file": "logs/hq_takeover_i210_20261015/zero_mod_oracle/oracle.py",
+      "sha256": "093cfb498f792f1236b7812ba703b2b685404bab70e3ff31610bde3fa92efaeb",
+      "bytes": 15999
+    }
+  ],
+  "verification": {
+    "registered_chain": "29/29 pass",
+    "independent_comparator_cli": "50/50 expected",
+    "independent_production_hooks": "18/18 expected; physical APIs isolated",
+    "independent_final_sidecar": "16/16 expected",
+    "author_recorder_files": "15/15 expected",
+    "zero_mod_v1": {
+      "points": 360,
+      "all_gates_pass": false,
+      "retained_failure": "requested 1Hz is raised by existing controller minimum 1.2Hz; numerical oracle gates hold but fixed-input qualification fails"
+    },
+    "zero_mod_v2": {
+      "points": 360,
+      "frequencies_hz": [
+        1.2,
+        1.8,
+        3.5
+      ],
+      "all_gates_pass": true,
+      "scope": "local P4 arithmetic plus sampled platform atan2/modulo qualification; no global libm or plant certification"
+    },
+    "baseline_drafts": "two 128-file roots; 256 SHA, 166 compile, 10 JSON checks; draft_not_runnable"
+  },
+  "original_six_criteria_self_verified": false,
+  "physical_executed": false,
+  "I186_owner": "Doro; Anni writer stopped, no further I186 edits or tests",
+  "remaining": [
+    "Doro formal independent acceptance of I210 original criteria is separate from this limited subagent review",
+    "I186 substantive acceptance and stable source handoff remain required",
+    "Re-freeze complete trees including new observation code and active concurrent changes",
+    "Bind actual asset dependencies, common approved scene/input/initial state/physical constraints and complete measurement recipe",
+    "Actual Isaac A/B full baseline and wing/force measurements remain unexecuted",
+    "Local original result_pending bridge operation requires owner reconciliation; cloud receipt does not prove local completion"
+  ]
+}

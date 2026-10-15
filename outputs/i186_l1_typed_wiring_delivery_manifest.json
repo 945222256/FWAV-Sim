@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "item_id": "I-186",
+  "title": "记录仪与实验管线保存实际条件和结构化判据结果——L1 返修 v6 交付（完整字段契约与真实生产观察接线）",
+  "delivery_version": "L1返修v6",
+  "run_id": "run-kt-anni-i186-typed-runtime-wiring-20261015-a1",
+  "dispatch_request_id": "kd-kt-anni-i186-typed-runtime-wiring-20261015-a1",
+  "session_id": "sess_8cc259a6-4227-42b2-ab12-9521d185e226",
+  "workstation": "L1-w1",
+  "delivered_at": "2026-10-15T14:30:00+08:00",
+  "baseline": {
+    "source_commit": "04731eb",
+    "review_basis": [
+      "logs/hq_intake/doro_resume_20261014/I-186_当前核验结果.md 当前节（五反例：裸布尔位置、空姿态对象、部分欧拉、unknown 控制参数、裸速度无来源）",
+      "logs/hq_intake/doro_resume_20261014/i186_l1_v5_review_current/review.json（二十三项十八项符合）"
+    ],
+    "preserved": "上轮六类反例与本版正控制上的同类改变阻断保留；既有四条通过范围与全部历史控制保留"
+  },
+  "handoff_used": {
+    "record_id": "HQ-I186-OBSERVATION-HANDOFF-20261015",
+    "baseline_verified": "三文件基线哈希与工作副本逐一相符（flight_controller.py 未提交差异属交接基线内既有内容）",
+    "files_edited": {
+      "main_sim.py": "唯一共享文件改动：两个只读观察挂点（45 行差异，见 logs/i186_l1_typed_wiring_20261015/main_sim_observation_hook.diff；基线 eff69b88…，施工后 14ffbf45…）",
+      "modules/sim_env_bridge.py": "未改动（哈希与基线一致；其可观事实经活对象读数采集）",
+      "modules/flight_controller.py": "未改动（避免连带他人未提交内容；控制器事实由 main_sim 挂点只读 autopilot 活对象）"
+    },
+    "release_materials": "logs/i186_l1_typed_wiring_20261015/交接释放材料.md（精确 diff、前后哈希、请 HQ 登记临时交接释放）"
+  },
+  "two_parts": [
+    {
+      "part": "一：字段契约整体漏洞——先核合法外层结构与状态，再核全部必需分量、非布尔数值、形状/有限性、来源",
+      "status": "已修并实际验证",
+      "implementation": "_fact_field_problems 重写为 _FACT_CONTRACT 契约驱动（字段→允许结构→必需分量→有效数值/状态→来源→缺失出口的有限可执行对照，构包与核验复用）：外层非对象即点名（无跳过出口）；姿态须完整四元数或完整欧拉三分量其一（空、部分欧拉、部分四元数、all() 空集、双表示歧义均阻断）；严格非布尔有限数值与严格布尔状态；控制参数 unknown 类字样不算事实；裸值无来源阻断；有界不适用须范围+理由+实际来源；未自行扩大合法类型（runtime_object 字段的 stage/site 随来源保留）。",
+      "evidence": ["Z1 裸布尔位置（Doro 原输入形态）阻断", "Z2 空姿态对象阻断", "Z3 部分欧拉阻断", "Z4 unknown 控制参数阻断", "Z5 裸速度无来源阻断", "Z6 部分四元数、Z7 自由度缺分量、Z8 字符串布尔同类阻断", "Z9 如实 unknown 核验合法与伪 complete 加 pass 必拒的区分"]
+    },
+    {
+      "part": "二：真实生产观察接线——同 run 实际对象读数在生产点落档",
+      "status": "已接线并隔离验证（真实飞行读数待实际 isaac 运行，本轮未授权物理运行）",
+      "implementation": "main_sim.py 两个只读挂点：钉住首步 observe_initialization（mav_view 实际位姿/线角速度、autopilot 活对象属性现值、config 活模块 WIND_VECTOR 现值、钉住段六自由度锁定）与释放序列末尾 observe_release（释放后对象读数、复位事件与实际时点、六自由度自由）。新模块 runtime_observer 全读取 guarded（查询失败记 query_error 明确 unknown；不以配置/标准推断执行已发生；不强制首条 CSV 等于初态）；写失败记采集缺失限制证据不吞成 pass；collection_mode 固定 runtime_object 与 producer_declared 分列，改标签不升级资格；每条绑定同 experiment/run（runner 注入 I186_* 身份环境）、site 与 observed_at_sim_t。不改控制流/物理状态/执行器指令/参数/气动/事件时序，不为采集 reset/step。",
+      "evidence": ["Z10 真实生产函数隔离调用：缺身份不采集、字段流逐项正确、事件与时点正确、查询抛错记 query_error 不中断、写失败不抛（桩对象只供属性读数，不称实测飞行，不复制物理逻辑）", "Z11 源级接线证明：main_sim.py 源含两处采集调用、runner.py 源含三项身份注入", "交接释放材料（精确 diff 与前后哈希）"]
+    }
+  ],
+  "verification": {
+    "selfcheck_cases": 107,
+    "selfcheck_two_runs": "107/107 两跑一致（logs/i186_l1_typed_wiring_20261015/selfcheck_run1_output.txt 与 selfcheck_run2_output.txt，实测约 208 秒）",
+    "registered_executor": "tools/checks/executor.py run tools/checks/i186_selfcheck.py --timeout 600 通过（210 秒，退出码零）",
+    "execution_record_correction": "240 秒超时属第四版复核记录；第五版 Doro 600 秒时限实跑 304 秒 96 项通过（与本轮五反例并存）；本轮为 107 项实际完成记录",
+    "fast_bench": "bench_runner --fast BENCH PASS",
+    "regression": "原九十六项控制全部保留复测通过；五反例在原始事实上直接重跑，不预填 required_missing"
+  },
+  "real_counterexamples_rerun": [
+    "bare_boolean_position（Z1）",
+    "empty_orientation_object（Z2）",
+    "partial_euler_orientation（Z3）",
+    "bare_unknown_controller_parameters（Z4）",
+    "bare_velocity_without_source（Z5）"
+  ],
+  "unmet": [
+    "Doro 独立复核未完成：本交付为 pending_review，不自行关闭",
+    "runtime_object 采集经隔离调用与源级证明；真实飞行运行下的实测读数须待实际 isaac 运行（本轮 physical_run_authorized=false，未运行物理仿真，不以完整飞行性能为验收要求）",
+    "临时共享文件交接待 HQ 登记释放（材料已备：精确 diff、前后哈希）",
+    "其他科目定义未批准仍待审；翼拍相位只限制对应结论，不猜 vphz",
+    "I-210 实际取证与 I-187 前置继续保留"
+  ],
+  "territory_note": "静态领地检查不识别临时交接时如实附 HQ 记录（交接释放材料），不改全局 lanes.json、不伪报检查过；本轮共享文件仅改 main_sim.py（授权范围内最小挂点），未覆盖他人工作。",
+  "reviewer": "doro",
+  "construction_record": "logs/I-186_施工记录_20261015_L1返修v6.md",
+  "files_changed": [
+    "modules/evidence_pack.py",
+    "modules/experiment_pipeline/runtime_observer.py",
+    "modules/experiment_pipeline/scene_witness.py",
+    "modules/experiment_pipeline/runner.py",
+    "main_sim.py",
+    "tools/checks/i186_selfcheck.py",
+    "logs/I-186_施工记录_20261015_L1返修v6.md",
+    "logs/i186_l1_typed_wiring_20261015/"
+  ]
+}

@@ -1,0 +1,134 @@
+[
+  {
+    "title": "Eagle X 主翼与翼尖分件、几何提取及完整关节动作预览交付（修订版）",
+    "requested_owner": "L8队",
+    "reply": {
+      "entry": {
+        "id": "P-018",
+        "title": "Eagle X 主翼与翼尖分件、几何提取及完整关节动作预览交付（修订版）",
+        "lint": {
+          "checked_at": "2026-10-12T14:47:16",
+          "rules": [
+            {
+              "rule": "完整性",
+              "verdict": "pass",
+              "reason": "标题、打勾判据、判据子项齐全"
+            },
+            {
+              "rule": "去重",
+              "verdict": "pass",
+              "reason": "与全部在册事项标题相似度低于门槛"
+            },
+            {
+              "rule": "可检验性",
+              "verdict": "pass",
+              "reason": "打勾判据与全部子项均可判真伪"
+            },
+            {
+              "rule": "归位",
+              "verdict": "pass",
+              "reason": "建议进 L3，排在该路队尾第 8 位。依据：正文命中关键词「参数」；正文命中关键词「表」"
+            },
+            {
+              "rule": "降标准语义",
+              "verdict": "pass",
+              "reason": "无降标准语义"
+            }
+          ],
+          "suggested_lane": "L3",
+          "duplicate_of": [],
+          "summary": "建议进 L3"
+        },
+        "decision": null
+      }
+    }
+  },
+  {
+    "title": "参数实验室七百克候选的 Eagle X 动作预览与几何数据展示（修订版）",
+    "requested_owner": "L5队",
+    "reply": {
+      "entry": {
+        "id": "P-019",
+        "title": "参数实验室七百克候选的 Eagle X 动作预览与几何数据展示（修订版）",
+        "lint": {
+          "checked_at": "2026-10-12T14:47:16",
+          "rules": [
+            {
+              "rule": "完整性",
+              "verdict": "pass",
+              "reason": "标题、打勾判据、判据子项齐全"
+            },
+            {
+              "rule": "去重",
+              "verdict": "pass",
+              "reason": "与全部在册事项标题相似度低于门槛"
+            },
+            {
+              "rule": "可检验性",
+              "verdict": "pass",
+              "reason": "打勾判据与全部子项均可判真伪"
+            },
+            {
+              "rule": "归位",
+              "verdict": "pass",
+              "reason": "建议进 L1，排在该路队尾第 6 位。依据：正文命中关键词「惯量」；正文命中关键词「拍动」"
+            },
+            {
+              "rule": "降标准语义",
+              "verdict": "pass",
+              "reason": "无降标准语义"
+            }
+          ],
+          "suggested_lane": "L1",
+          "duplicate_of": [],
+          "summary": "建议进 L1"
+        },
+        "decision": null
+      }
+    }
+  },
+  {
+    "title": "Eagle X 提取几何与机构绑定数据的版本来源登记（修订版）",
+    "requested_owner": "L3队",
+    "reply": {
+      "entry": {
+        "id": "P-020",
+        "title": "Eagle X 提取几何与机构绑定数据的版本来源登记（修订版）",
+        "lint": {
+          "checked_at": "2026-10-12T14:47:16",
+          "rules": [
+            {
+              "rule": "完整性",
+              "verdict": "pass",
+              "reason": "标题、打勾判据、判据子项齐全"
+            },
+            {
+              "rule": "去重",
+              "verdict": "pass",
+              "reason": "与全部在册事项标题相似度低于门槛"
+            },
+            {
+              "rule": "可检验性",
+              "verdict": "pass",
+              "reason": "打勾判据与全部子项均可判真伪"
+            },
+            {
+              "rule": "归位",
+              "verdict": "pass",
+              "reason": "建议进 L3，排在该路队尾第 8 位。依据：正文命中关键词「参数」；正文命中关键词「表」"
+            },
+            {
+              "rule": "降标准语义",
+              "verdict": "pass",
+              "reason": "无降标准语义"
+            }
+          ],
+          "suggested_lane": "L3",
+          "duplicate_of": [],
+          "summary": "建议进 L3"
+        },
+        "decision": null
+      }
+    }
+  }
+]

@@ -1,0 +1,41 @@
+供 Mira 参考：Ijspeert / EPFL BioRob 的 CPG 与强化学习
+核对日期：2026-10-14（America/Los_Angeles）
+整理：Nono；独立检索核对：physical_semantics
+范围：已核实三篇主线，均有 Auke Ijspeert 合著与原文证据。此材料是参考准备，尚未向 Mira 发送。
+
+建议阅读顺序：CPG-RL → DeepTransition → Visual CPG-RL。
+
+1. CPG-RL: Learning Central Pattern Generators for Quadruped Locomotion
+Guillaume Bellegarda, Auke Ijspeert. IEEE Robotics and Automation Letters, 2022, 7(4):12547–12554.
+DOI：https://doi.org/10.1109/LRA.2022.3218167
+原文：https://arxiv.org/html/2211.00458v1
+方法定位：II-B、III-A至III-D、Fig.2。
+研究价值：策略调节四腿节律的幅值、频率及轨迹方向角变化率，共12维；振荡器状态先转足端轨迹，再经逆运动学和关节控制执行。主要方案去掉显式振荡器耦合，并非所有CPG都须固定耦合。
+
+2. Viability leads to the emergence of gait transitions in learning agile quadrupedal locomotion on challenging terrains
+Milad Shafiee, Guillaume Bellegarda, Auke Ijspeert. Nature Communications, 2024, 15:3073.
+正式原文：https://www.nature.com/articles/s41467-024-47443-w
+项目与代码：https://miladshafiee.github.io/DeepTransition/
+旧预印本：https://arxiv.org/abs/2306.07419
+方法定位：Methods的Action space、Observation space、Reward function；Hardware experimental results。
+研究价值：即DeepTransition的正式版本；跨缝时除幅值/频率，还学习直接进入轨迹映射的水平偏置，不能概括为所有动作都经过节律层。它适合组织“持续完成任务”与能耗等目标的消融。
+版本与实验边界：2023预印本和2024期刊版是同一工作。期刊实机跨缝使用等效仿真给定的相对缝隙信息，不能说已经证明机载视觉自主闭环；viability任务代理也不是形式安全证书。
+
+3. Visual CPG-RL: Learning Central Pattern Generators for Visually-Guided Quadruped Locomotion
+Guillaume Bellegarda, Milad Shafiee, Auke Ijspeert. ICRA 2024:1420–1427.
+DOI：https://doi.org/10.1109/ICRA57147.2024.10611128
+原文：https://arxiv.org/html/2212.14400v2
+版本：2022-12首稿，2024-03 v2；正式会议年为2024。
+方法定位：II-A至II-F；Table III及III-C。
+研究价值：增加局部地形高度图，比较显式振荡器耦合和有/无记忆策略；适合参考感知、节律和执行的不同更新速率及延迟消融。
+反例：其90ms延迟仿真试验中，两种LSTM条件成功率为0，MLP表现更好；不能把有记忆网络描述为延迟下普遍更稳。
+
+给 Mira 的扑翼研究建议（以下是研究判断，不是论文已验证结论）
+先建立同一可复现扑翼对象的链路：节律参数指令 → 振荡器状态 → 翼关节实际运动 → 气动力/力矩 → 机体反馈。名义输出不能代替执行器实际消费证据。
+先比较已有固定节律基线、RL调幅值/频率、再加相位/非节律偏置的受限接口；每次保留相同被控对象和测量标准，避免把参数接入差异误当学习收益。
+单列失高、失速/失控、碰撞、执行器极限及任务完成率，再测能耗；耦合、记忆策略和真实延迟分别做消融，不同时改变所有条件。
+三篇的验证对象是四足地面运动。足接触、足端逆运动学、支撑奖励、动作范围和策略权重不能直接移作扑翼证据。
+
+书目信息交叉核对：https://www.epfl.ch/labs/biorob/publications/all/
+逐篇动作/观测/奖励、版本差异与原文定位：本目录 literature_verified.json。
+本轮未复现作者代码、训练策略或扑翼性能。

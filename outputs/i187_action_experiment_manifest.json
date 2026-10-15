@@ -1,0 +1,23 @@
+{
+  "item": "I-187",
+  "delivery_stage": "implementation_only",
+  "experiment_directory": "logs/experiments/i187_global_frequency/interface_preflight_v3",
+  "plan_sha256": "857f95f17e234d2dc529444200d2116593757a0e94a308a19328e84c5ffedd5a",
+  "source_files_sha256": {
+    "modules/experiment_pipeline/action_recipe.py": "53357898388c89ab4c52422f293f2b0524a1eac765d1993843ff252d91630a54",
+    "modules/experiment_pipeline/action_analysis.py": "4464d36aaf933128a6dac43a1b1f56785b61fc29e762969e117b6f0445b9c4bc",
+    "tools/action_experiment.py": "26a0669f6a5798d227e008ff161f9e172dd6071f3f974953df45aaf152d5e118",
+    "tools/checks/test_action_experiment.py": "d368dc67b2acd6e262e1c0624a0f008e5e1ff2ea3ad47530b7c39c16d9b027be",
+    "tools/checks/action_experiment_acceptance.py": "b527002296ea9bd40037660e4684c6295e4d52d4aa760dbe6217e4d309e85e1e",
+    "config/experiments/global_frequency_v1.json": "5eb38caf763f0b0116d3a87a339591632eedb38ced6b3883780a78b695c0d758",
+    "docs/单变量动作实验工具使用说明.md": "b8326261fd93e71becde1bc9e5028cda464de618a09dc3794a2efd3ef54ce221"
+  },
+  "production_integrated": false,
+  "physics_acquisition_completed": false,
+  "formal_criteria_pass": false,
+  "pending_action": "Anni登记modules/sim_env_bridge.py最小文件交接；Doro接线后重新冻结计划并执行四档真实A/B。",
+  "check_script": "tools/checks/action_experiment_acceptance.py",
+  "interface_tests": "logs/checks/action_experiment_latest.json",
+  "usage": "docs/单变量动作实验工具使用说明.md",
+  "commit": "7ce13f3d0b221d498fd07258ed6e3f5e953bb29f"
+}

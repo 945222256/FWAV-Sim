@@ -1,0 +1,4 @@
+// android_shell/build.gradle — I-064 薄壳工程根
+plugins {
+    id "com.android.application" version "8.5.2" apply false
+}

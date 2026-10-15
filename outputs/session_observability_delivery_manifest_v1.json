@@ -1,0 +1,81 @@
+{
+ "schema_version": 1,
+ "item_id": "I-227",
+ "delivery_version": "session-observability-v1",
+ "reviewer": "beth",
+ "run_id": "run-beth-session-observability-state-20261014-a1",
+ "dispatch_request_id": "kd-beth-session-observability-state-20261014-a1",
+ "session_id": "sess_cea3e05f-93d4-436f-a4f1-25d196418268",
+ "workstation": "L3-w1",
+ "generated_at": "2026-10-14T22:26:00+08:00",
+ "声明": [
+  "本清单为 I-227 会话实况真值与历史索引的单一总交付清单：状态对账四源判定、持久历史索引与后端只读查询接口全部完成，隔离夹具验收 28/28 通过，真实数据四项证据与判据五回归全部判定通过。",
+  "施工交付待验收不等于已上线：生产 sync_agent 进程仍在运行旧采集逻辑（本项未重启、未停止任何生产进程），新采集逻辑、历史索引重建与查询服务启用由 Beth 按本清单维护步骤组织。",
+  "生产宿主、生产内核、云端服务、board_ui、科研控制器与数值全程零修改零接触；全部验收在自建夹具目录、独立端口与自建进程完成；既有 264 个会话历史全部保留进索引。"
+ ],
+ "dependency_admission": {
+  "依据": "I-227 派发允许按指定版本的可用交付准入，不等待最终关单；开工前已核对版本、总清单与真实接口。",
+  "multisession_backend": {
+   "delivery_version": "lane-workers-v2",
+   "manifest": "outputs/lane_workers_delivery_manifest_v2.json",
+   "item": "I-217",
+   "status": "pending_review",
+   "real_interface_used": "lp_sync/lane_workers.py 的工位注册表读取与 LP_LANE_WORKERS_ROSTER 环境变量重定向，session_truth.py 实际调用"
+  },
+  "multisession_ui_contract": {
+   "delivery_version": "lane-workers-ui-v2",
+   "manifest": "outputs/lane_workers_ui_delivery_manifest_v2.json",
+   "item": "I-218",
+   "status": "pending_review",
+   "contract": "lp_sync/lane_workers_contract_v1.json（本项历史查询接口的字段命名与其 worker_id 口径一致）"
+  }
+ },
+ "scope": {
+  "modified": [
+   {"path": "lp_sync/console_collector.py", "change": "collect_once 改为调用 session_truth 四源对账；push_once 上行前剥离本地元数据；_cycle 时间线记录来源错误与采集失联；_archived_rows、下查任务、守门评估、线程接口与云端包结构保持不变，handoff_gate 兼容"}
+  ],
+  "created": [
+   {"path": "lp_sync/session_truth.py", "role": "状态对账：宿主归属、运行记录、模型请求、工具活动四源判定；长工具在途不判空闲；已停止须停止确认；来源缺失与采集失联判未知附原因；全部路径可环境变量重定向"},
+   {"path": "lp_sync/session_history.py", "role": "持久历史索引：登记册、运行记录、认领、交接记录、保留快照、宿主归属合并去重；显式归档、空闲超时保留、无来源三分；上次索引结转已删除标记；筛选与稳定分页查询；只读对话摘要"},
+   {"path": "lp_sync/session_history_server.py", "role": "后端只读查询服务：独立进程、独立端口、只接受 GET；不随生产自动启动"},
+   {"path": "lp_sync/i227_acceptance_test.py", "role": "隔离验收脚本：五种状态样例、四种历史样例、缺失原因、分页与只读检查"},
+   {"path": "lp_sync/i227_real_evidence.py", "role": "真实取证脚本：长工具同刻对照、来源计数、重启分页、双工位交接、判据五回归"},
+   {"path": "lp_sync/session_history/index.json", "role": "生产历史索引（已构建，264 会话）"},
+   {"path": "lp_sync/session_observability_rollback/console_collector_pre_i227.py", "role": "施工前 console_collector.py 完整备份，回退用"}
+  ],
+  "not_touched": ["board_ui", "cloud_board 云端代码", "orchestrator_kernel.py", "host_service.py", "sync_agent.py", "科研控制器与数值", "生产进程（未重启未停止）"]
+ },
+ "criteria_evidence": [
+  {"criterion": "判据一：四源对账，长工具不判空闲，停止须确认，采样过期未知；五种状态样例", "evidence": ["logs/hq_intake/beth_session_observability_20261014/acceptance_results.json 检查 S1 至 S5 与 F3", "logs/hq_intake/beth_session_observability_20261014/real_longtool_cloud_moment.json 真实长工具同刻对照"]},
+  {"criterion": "判据二：状态携带会话号、工位号、事项号、运行号、最近工具活动、采样时刻、来源及缺失原因；同线双会话一致；窗口外可核实；误判停止为 0", "evidence": ["acceptance_results.json 检查 F1、F2、F3、H5", "real_longtool_cloud_moment.json 的 comparisons 含工位、运行与工具事实"]},
+  {"criterion": "判据三：索引合并登记、认领派发、交接、保留快照去重；归档三分；链、线、工位、事项、交接卡可查；源记录与索引数量一致", "evidence": ["acceptance_results.json 检查 H1 至 H4、H6、H12、H13", "history_source_counts.json：登记 29、运行 24、宿主归属 13、归档 2、交接事件 1、索引 264，报告与独立复算一致"]},
+  {"criterion": "判据四：按线、工位、事项、日期筛选与稳定分页；跨门槛、70% 交接、重启、重复采集旧记录不丢失且重复为 0；外部内容不进入", "evidence": ["acceptance_results.json 检查 H5 至 H10", "restart_pagination.json：264 会话 11 页遍历重复 0，重建前后顺序稳定", "dual_worker_handover_check.json：70% 交接卡实测可读（上下文 70.0% 达到守门线 70%）"]},
+  {"criterion": "判据五：只读查询不恢复不执行不影响现役；四种缺失原因分别保存；旧单工位、灰态、现行履历、当前事项回归", "evidence": ["acceptance_results.json 检查 H10、H11、R1 至 R5", "regression_results.json：四项回归与无副作用检查全部通过"]},
+  {"criterion": "判据六：真实长工具与云端同刻对照、完整来源计数、重启分页、双工位交接核验记录与单一总清单", "evidence": ["real_longtool_cloud_moment.json：22:20:53 云端判空闲与 22:20:57 实测在途长工具 100 秒同刻对照，两个真实反例纠正", "history_source_counts.json", "restart_pagination.json", "dual_worker_handover_check.json", "本清单"]},
+  {"criterion": "验收隔离：独立状态、队列、端口与自建进程；不停止生产宿主；不终止生产会话做演练；不运行仿真", "evidence": ["acceptance_fixture 目录全部自建文件；查询服务仅用端口 58799 自建进程；本项全程零生产进程操作；未运行仿真"]}
+ ],
+ "tests_summary": {
+  "isolated_fixture": {"passed": 28, "total": 28, "results": "logs/hq_intake/beth_session_observability_20261014/acceptance_results.json"},
+  "real_evidence": {"longtool_moment": "pass", "source_counts": "pass", "restart_pagination": "pass", "dual_worker_handover": "pass", "regression": "pass"},
+  "production_index": {"sessions": 264, "retention": {"retained_timeout": 255, "explicit_archive": 2, "active": 7}}
+ },
+ "state_truth_semantics": {
+  "在干活": "在途工具（part 行 state.status 为 pending 或 running）不论时长一律在干活，超过九十秒标注长工具；活跃运行在册时等待模型或运行在册分档；九十秒内有最近活动分档在干活",
+  "空闲": "工位注册表相位 idle 且无活跃运行为已交付空闲；其余按最近活动间隔判空闲",
+  "已停止": "仅 execution.json phase=stopped（停止确认）或 phase=stopping（停止指令已发待回执）判已停止；无确认的静默会话不判停止",
+  "未知": "会话库不可读为采集失联；会话行缺失为对话源缺失；查询失败附具体错误；均附原因并保持可核实",
+  "窗口": "九十秒与三十分钟窗口口径不变；窗口外会话仅在途工具或活跃运行在册时纳入，依据随 source 携带；云端扩展字段（工位号、运行号、最近工具活动）经 console_sessions.source 列整包保存，云端与 board_ui 无需改动即可留存"
+ },
+ "maintenance": {
+  "enable_collector": "新采集逻辑随 sync_agent 下次重启自动加载（install_runtime_tasks.ps1 既有机制；本项未自行重启生产）。重启前可先跑 python lp_sync/i227_acceptance_test.py 与 python lp_sync/i227_real_evidence.py 复核。",
+  "rebuild_index": "python lp_sync/session_history.py 不带参数可直接 import build_index；推荐命令：cd lp_sync && python -c \"import session_history as h;i,r=h.build_index();print(r['index_sessions'])\"",
+  "start_query_service": "cd lp_sync && python session_history_server.py（默认端口 58791，仅本机回环；可用 LP_SESSION_HISTORY_PORT 改端口；供 I-228 前端与验收查询调用）",
+  "rollback": "复制 lp_sync/session_observability_rollback/console_collector_pre_i227.py 覆盖 lp_sync/console_collector.py 并重启 sync_agent；历史索引与查询服务为独立新文件，停用删除即可，不影响既有链路"
+ },
+ "unmet": [
+  "生产 sync_agent 尚未重启加载新采集逻辑，云端卡片在启用前仍按旧口径显示（真实反例已在证据中固定）；启用须由 Beth 按维护步骤办理",
+  "board_ui 前端展示工位号、运行号、最近工具活动与历史索引页面属 I-228（L5）范围，本交付只提供后端只读接口与上行数据",
+  "历史索引查询服务默认未随生产启动，生产启用由维护步骤显式启动",
+  "Beth 对上述判据逐项证据独立复核后办理验收"
+ ]
+}

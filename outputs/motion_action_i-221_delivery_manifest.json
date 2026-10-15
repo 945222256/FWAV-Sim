@@ -1,0 +1,87 @@
+{
+ "schema_version": 1,
+ "delivery_version": "v1",
+ "item_id": "I-221",
+ "title": "周期与单次动态运动基元及共同轨迹提供者——先行施工阶段证据",
+ "scope": "partial_start",
+ "delivered_at": "2026-10-15T09:21:06",
+ "run_id": "run-kt-kula-i221-rhythm-20261014-a1",
+ "worker_id": "L4-w1",
+ "reviewer": "fil",
+ "authorization": "2026-10-15 机主批准 I-221 改派 L4 并登记有限先行范围；本清单只交先行部分阶段证据，不勾选整项判据，不申报整项通过。",
+ "partial_start_scope": [
+  "仅先行实现周期与单次DMP的方程、内部状态、形状权重、初值及导数，解析/采样/示教参考导入和归一化版本，接收外部相位与规范进度的共同轨迹采样接口；以已验收I-219对象契约为依据。",
+  "不依赖已撤回I-220交付的运行正确性，不修改rhythm.py、runtime.py或kinematics.py；时钟输入可由明确标记的检查夹具提供，不能伪称真实时钟接通。",
+  "I-220原依赖保留；真实RhythmService接入、停复拍/事件/预览副本接续及完整合作配方验收须等I-220修复验收后完成。先行成果只交阶段证据，不自行勾选整项判据或关闭事项。"
+ ],
+ "dependency_status": {
+  "I-220": "未清，原依赖保留，等待修复验收"
+ },
+ "files_touched": [
+  "modules/motion_action/primitives.py",
+  "modules/motion_action/trajectories.py",
+  "tools/verify_i221_motion_primitives.py",
+  "logs/motion_action_i-221/verify_results.json",
+  "outputs/motion_action_i-221_delivery_manifest.json"
+ ],
+ "files_not_touched": [
+  "modules/motion_action/rhythm.py",
+  "modules/motion_action/runtime.py",
+  "modules/motion_action/types.py",
+  "modules/motion_action/parameters.py",
+  "modules/motion_action/__init__.py",
+  "modules/aero/kinematics.py",
+  "config/motion_recipes/cooperative_v1.json",
+  "modules/wing_actuation.py",
+  "main_sim.py"
+ ],
+ "implementation": {
+  "modules/motion_action/primitives.py": {
+   "周期基元方程": "G=-k*z-d*v+F(θ;w)+c，dz/dχ=v，dv/dχ=G；物理时间导数为 ż=ν̇v、v̇=ν̇G、z̈=ν̈v+ν̇²G。规范相位取未回绕累计拍数 χ，θ=2πχ。形状驱动项 F(θ;w)=Σw_kΨ_k(θ)/ΣΨ_k(θ)，Ψ_k(θ)=exp(κ_k(cos(θ-c_k)-1)) 为周期核。",
+   "单次基元方程": "τ²·d²z/dp²=α(β(1-z)-τ·dz/dp)+f(p)，f(p)=Σψ_k(p)·w_k·(1-p)，ψ_k(p)=exp(-h_k(p-c_k)²) 为高斯核；f(1)=0 保证进度完成后收敛到终点。规范进度 p 由外部时钟样本提供，基元不另起时钟。",
+   "内部状态与提交纪律": "周期状态 ζ=(z,v)、单次状态 (z,u) 只在 advance 提交一次；sample 只读；同一物理步或步号回退重复提交拒绝；相位或进度回退拒绝并保留最后有效状态；冻结或零增量时状态保持；周期回绕只影响周期基函数求值，不重置内部状态；积分出现非有限值时本步整体回滚。",
+   "初值": "reset 要求显式给出形状值与对规范坐标的一阶导数；参考导入按参考在明确初始相位处的形状值及其导数设定初值，导入方法与误差写入元数据；不允许把全部内部速度隐式设零，显式静止初值须带注记。",
+   "导数": "链式导数按方程申报；χ̈ 或 s̈ 未提供时二阶导数返回 None 并注明，不填假零。",
+   "参考导入": "fit_reference_periodic 与 fit_reference_discrete 接收三类来源：解析函数、采样序列、带相位标注的示教序列；统一样本集后做归一化核最小二乘；ReferenceNormalization 保存中心、尺度、形状坐标、相位零点、版本、来源、起终点、拟合方法、拟合残差 RMS、闭环回放 RMS 与初值注记。",
+   "时钟来源守卫": "CanonicalClockSample 的 source 在先行版本只放行 check_fixture: 前缀；真实节律来源等待 I-220 修复验收后接续，该守卫保证先行成果不能伪称真实时钟已接通。",
+   "耦合入口": "CouplingInput 声明值、单位、控制权所有者与出口；单位与基元耦合单位不符或值非有限时拒绝；周期与单次耦合单位分别为 shape_accel_per_beat_squared 与 shape_accel_per_progress_squared。"
+  },
+  "modules/motion_action/trajectories.py": {
+   "共同采样接口": "TrajectoryProviderBase 规定 advance 每物理步一次提交、sample 只读、clone_for_preview 隔离；接口统一执行时钟来源守卫与步号单调检查。",
+   "四类提供者": "AnalyticProvider 覆盖 sin_phase、cos_phase、split_sin_phase、fold_sin_phase 与 aero_pitch 五种具名解析形状，split 形状只读复用 modules/aero/kinematics.py 的 split_phase_map 公共纯函数，aero 俯仰尖点导数如实判不可用、二阶不提供；PrimitiveProvider 转发周期基元；HoldProvider 输出保持常值且零为其真实导数；TransitionProvider 驱动单次基元并登记绝对起终点，make_spring_transition 提供零权重弹簧阻尼默认过渡。",
+   "链式导数装配": "assemble_channel_trajectory 按统一输出规则 q=sat(center+scale*z+control) 展开一阶 q̇=μ̇+ȧz+aż+ċ 与二阶 q̈=μ̈+äz+2ȧż+az̈+c̈；饱和区导数为该输出规则的真实零，恰在限幅边界判不可用，缺项级联为 None，不填假零；crosscheck_first_order_with_i219 提供与已验收 I-219 output_with_derivative 的同式对照出口。",
+   "I-219契约咬合": "build_channel_action 把装配输出构造为 I-219 的 ChannelAction，导数身份按需求表分列：拍动通道分列拍动角速度与拍动角加速度，扭转通道分列扭转角速度，折翼与尾舵通道导数非必需。"
+  }
+ },
+ "criteria_mapping_note": "原六条判据不勾选、不标通过；以下为先行实现对照。",
+ "criteria_partial_coverage": {
+  "1": "先行覆盖方程、内部状态、形状权重、初值与导数，以及外部相位与规范进度的接收；周期相位与单次进度未接真实共同服务，等 I-220。",
+  "2": "先行覆盖解析、采样、示教三来源导入与归一化、起终点、形状坐标和版本的保存；旧形状导入为初始化资产，回放误差阈值 0.02 远未用作逐位复制门槛。",
+  "3": "先行覆盖解析、动态基元、保持及过渡提供者的同一采样接口；首个合作配方实际采用未做，等 I-220。",
+  "4": "先行覆盖时变中心、尺度、控制修正及相位的链式导数与统一约束输出；适配器侧不可用导数处理由 I-222 与 I-223 接续。",
+  "5": "先行覆盖单一提交、回绕不重置、冻结保持与耦合单位控制权声明；模式、停复拍、过渡、释放及复位的接续策略等 I-220 后办理。",
+  "6": "先行覆盖与 I-219 ChannelAction 的契约咬合；生产九通道出口、预览副本接续、异常与复位全套检查等 I-220 后完整施工。"
+ },
+ "checks": {
+  "checker": "tools/verify_i221_motion_primitives.py",
+  "result": "42 项全部通过，退出码零；完整序列两跑逐位一致（F10）",
+  "results_file": "logs/motion_action_i-221/verify_results.json",
+  "coverage": "F01 方程与链式导数对中心差分自洽、变频一致、回绕不重置、周期核以 2π 为周期；F02 单一提交、只读、回退拒绝、冻结保持；F03 解析/采样/示教三来源导入回放误差与元数据完整、初值速度由参考导数导入非统一零；F04 单次收敛、驱动项终点归零、一阶导数一致、缺 s̈ 二阶 None、起终点保存、参考回放达标；F05 四类提供者同接口、时变装配链式导数对差分一致、与 I-219 同一输出规则一致、缺项级联不假零、饱和与边界规则、ChannelAction 量名身份；F06 解析形状与旧公式同式、aero 尖点不可用、折翼 2.2 rad 偏移固定；F07 克隆隔离与 reset 语义；F08 非检查夹具时钟来源一律拒绝；F09 耦合单位与有限值校验；F10 两跑一致性。",
+  "fixture_note": "全部时钟样本由 check_fixture: 前缀的检查夹具构造，不含真实时钟接通声明；生产代码对来源前缀做守卫并经 F08 验证。",
+  "regression": "I-219 检查器回归 104 项全部通过；本交付未修改任何既有生产文件，默认路径行为不变。"
+ },
+ "unverified": [
+  "真实 RhythmService 接入未做：周期相位与单次规范进度的共同服务真实提供等待 I-220 修复验收，先行版本时钟仅来自检查夹具。",
+  "停复拍、事件、预览副本接续未做：相关事件与副本策略等 I-220 后按原判据五、六办理。",
+  "首个合作配方实际采用未做：cooperative_v1.json 的提供者绑定未改动，周期基元、单次过渡与保持提供者的配方接线等 I-220 后施工。",
+  "生产九通道出口与真实执行、气动消费未做：归属 I-222 与 I-223。",
+  "本检查为对象层与接口语义证据，不用于推断飞行影响。"
+ ],
+ "source_hashes": {
+  "modules/motion_action/primitives.py": "8b509c922d5d9375c8b9b77490ab1d91c2dddcc32ea4370d48da3b04b9fd7a37",
+  "modules/motion_action/trajectories.py": "5ff8f50c59743cd1e3611e83b2098108293775078411637df3a9c8df23fff820",
+  "tools/verify_i221_motion_primitives.py": "fa541864197d39aaeec282bcc5a43c776f7101cfa865e21c03fc14289662d9c3",
+  "logs/motion_action_i-221/verify_results.json": "caf8990541ab954f90ddde471ede1099de7deb77978c65b257e3519f8af3edc3"
+ },
+ "next_step": "I-220 修复验收通过后接续剩余范围；本次只提交 evidence_appended 阶段证据，不提交 pending_review、closed，不勾选整项判据。"
+}

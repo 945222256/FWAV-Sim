@@ -1,0 +1,43 @@
+{
+ "schema_version": 1,
+ "item_id": "I-218",
+ "delivery_version": "lane-workers-ui-v1",
+ "generated_at": "2026-10-14T09:36:23",
+ "run_id": "run-beth-lane-workers-ui-20261014-a1",
+ "scope": "前端多工位展示与隔离样例（真实联调与发布待 L3 lane-workers-v1 接口交付）",
+ "files": {
+  "类型与契约": [
+   "board_ui/src/console/types.ts（lane_queues 按预备契约扩展，旧字段兼容）"
+  ],
+  "组件": [
+   "board_ui/src/console/WatchView.tsx（组头执行数/上限/等待数、工位芯片、会话级工位映射、单工位旧接口兼容）",
+   "board_ui/src/console/LaneView.tsx（战情室工位行与等待原因明细）",
+   "board_ui/src/console/console.css（工位芯片样式）"
+  ],
+  "检查": [
+   "board_ui/scripts/i218_check.cjs（六样例隔离核验，独立端口 4173，不触生产）"
+  ],
+  "证据": [
+   "logs/hq_intake/beth_lane_concurrency_20261014/started_ui.json",
+   "logs/i218_check/isolated_samples_record.json（十一项断言全过）",
+   "logs/i218_check/sample2_dual_workers.png",
+   "logs/i218_check/sample4_wait_reason.png",
+   "logs/i218_check/sample6_no_session.png"
+  ]
+ },
+ "samples": {
+  "单工位旧接口": "过——排队计数加未采集标注，卡面工位未登记不编造",
+  "双工位新接口": "过——执行二比二等待一计数，两张工位卡各带工位号与完整事项号",
+  "工位退出": "过——退出工位卡消失，保留工位正常，计数一比二等待一",
+  "等待原因": "过——战情室显示工位、事项与实际准入原因",
+  "接口缺字段": "过——缺工位号如实标注未登记",
+  "无会话": "过——灰态保留，计数零执行上限二等待一，不编造正在执行",
+  "操作定向": "过——注入弹层目标为所点工位会话（不误指另一工位）"
+ },
+ "unmet": [
+  "真实联调与发布：待 L3 交付冻结版 lane-workers-v1 实际接口与真实回读（预备契约明示 provisional 不作验收证据）",
+  "判据一后端逐项一致与判据五真实双工位页面与后端两张卡一致：待真实接口上线后执行",
+  "Ciri 实际页面走查（reviewer）"
+ ],
+ "constraints_honored": "未改 lp_sync 宿主内核守门、未改 cloud_board 后端与凭证、未重启生产宿主（隔离样例用独立端口 4173 自建进程）、未动其他队未提交改动、未运行仿真"
+}

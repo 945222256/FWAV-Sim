@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="扑翼控制研究与可追溯工程协作的同行评议展示。">
+<meta name="color-scheme" content="light dark">
+<title>扑翼控制研究 · Showcase</title>
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f6f7f6,#101a22);--fg:light-dark(#20313c,#e6edf2);--sub:light-dark(#536875,#b3c5cf);--surface:light-dark(#eaf0ef,#192a35);--line:light-dark(#d4dedf,#344a57);--accent:light-dark(#8a4f2d,#efa977);--other:light-dark(#28746c,#88c9bb)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 system-ui,"Microsoft YaHei",sans-serif}main{max-width:1120px;margin:auto;padding:26px 34px 50px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--line)}a{color:var(--accent);text-underline-offset:4px}.brand{font-size:15px;font-weight:600;letter-spacing:.03em}.small{font-size:13px;color:var(--sub)}.hero{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center;padding:42px 0 32px}.eyebrow{font-size:13px;color:var(--accent);letter-spacing:.06em;margin:0 0 10px}h1{font-weight:500;line-height:1.3;font-size:clamp(29px,3.3vw,42px);margin:0 0 18px}h2{font-size:23px;font-weight:500;line-height:1.45;margin:0 0 14px}h3{font-size:18px;font-weight:500;margin:0 0 12px}p{margin:0 0 14px}figure{margin:0;background:var(--surface);padding:18px}.model{display:block;width:100%;height:245px;object-fit:cover;object-position:center}figcaption{font-size:13px;color:var(--sub);margin-top:10px}.method{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.method div{padding-left:12px;border-left:2px solid var(--accent)}.method strong{display:block;font-weight:500}.cases{display:grid;grid-template-columns:1fr 1fr;gap:36px;padding:32px 0}.case{min-width:0}details{border-top:1px solid var(--line);margin-top:20px;padding-top:14px}summary{color:var(--accent);cursor:pointer;min-height:44px}summary:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.detail{padding-top:15px}.plot{width:100%;display:block}.plot text{font:12px system-ui,sans-serif;fill:var(--fg)}.legend{font-size:13px;color:var(--sub)}.record{padding:12px 14px;background:var(--surface);margin:8px 0}.record time{display:block;font-variant-numeric:tabular-nums;color:var(--other);font-size:13px}.record span{display:block;font-size:14px}.scope{border-top:1px solid var(--line);padding-top:23px}footer{border-top:1px solid var(--line);padding-top:18px;margin-top:25px;display:flex;flex-wrap:wrap;gap:8px 24px;font-size:13px;color:var(--sub)}.evidence{font-size:13px;color:var(--sub)}[hidden]{display:none}table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}th,td{padding:6px;text-align:right;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}button{font:inherit;background:transparent;color:var(--accent);border:1px solid var(--line);border-radius:4px;padding:7px 10px;min-height:44px;margin-top:10px}button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:700px){main{padding:20px 18px 36px}.hero,.cases{grid-template-columns:1fr;gap:24px}.hero{padding-top:30px}.method{grid-template-columns:1fr 1fr}.model{height:240px}header{align-items:flex-start;flex-direction:column;gap:7px}.cases{padding-top:27px}}
+</style>
+</head>
+<body>
+<main>
+ <header><span class="brand">ISAAC FLAPPER · 研究展示</span><a class="small" href="/app">内部工作区（需登录）</a></header>
+ <section class="hero" aria-label="研究对象与当前问题">
+  <div><p class="eyebrow">研究问题 / 工程方法 / 可核对的证据</p><h1>扑翼控制研究，<br>从动作定义到实验取证。</h1><p>研究结构与作动如何产生有效气动力，并用可复现的实验与可追溯的工程流程核对结论。</p><p class="small">当前聚焦：横向恢复与转弯控制。<br>科目一尚未通过，以下材料按各自验证范围展示。</p></div>
+  <figure><img class="model" src="/showcase/assets/model.webp" alt="现行扑翼仿真构型的骨架模型转台图" width="1024" height="768"><figcaption>现行仿真构型的骨架模型。图像用于说明结构。<br>图像导出：2026-10-08；源版本：1361190。</figcaption></figure>
+ </section>
+ <section class="method" aria-label="研究方法关系">
+  <div><strong>结构与作动</strong><span class="small">定义动作含义与执行范围</span></div><div><strong>气动与辨识</strong><span class="small">说明力模型、工况与适用域</span></div><div><strong>控制与实验</strong><span class="small">同条件核对恢复与约束</span></div><div><strong>复现与复核</strong><span class="small">保留版本、证据与未解问题</span></div>
+ </section>
+ <div class="cases">
+  <article class="case"><p class="eyebrow">物理研究实例</p><h2>气动力模型怎样被交叉核对？</h2><p>将二维计算结果与现用三维旋转翼拟合逐迎角对照，说明数据差异、物理口径和模型适用范围。</p>
+   <details id="aero-evidence"><summary>查看模型对账与计算条件</summary><div class="detail"><h3>法向力系数随迎角变化</h3><div id="aero-plot" aria-label="有来源的气动对账曲线"></div><p class="legend">实线：二维定常平移计算<br>虚线：三维旋转翼现用拟合</p><p class="evidence">计算条件：代表剖面为厚度比 4% 的端圆平板；雷诺数 44800；主表采用层流不可压缩瞬态计算与定常平台时均。系数无量纲。</p><p class="evidence">两组数据对应不同物理口径。曲线差不能直接解释为同条件预测误差，也不能证明完整整机模型已经合格。该档案的“全表与对账”判据已通过。</p><p class="evidence">来源：《二维气动系数表第一步：法向力系数全表与模型现用值对账》。本页取该报告的巡航档表。</p><button type="button" id="table-toggle" aria-expanded="false" aria-controls="aero-table">查看原表数值</button><div id="aero-table" hidden></div></div></details>
+  </article>
+  <article class="case"><p class="eyebrow">工程协作实例</p><h2>一次任务怎样留下完整结果？</h2><p>选取真实专用验收案例，展示执行条件、真实派发、结果回写和重复结果处理，每一步保留原始记录。</p>
+   <details id="workflow-evidence"><summary>查看实际执行记录与范围</summary><div class="detail"><h3>专用验收案例 · 2026-10-13</h3><div class="record"><time>08:56:34</time><span>读取正式事项与依赖，核准本次执行条件。</span></div><div class="record"><time>08:56:39</time><span>向真实执行会话派发，保留回读核验。</span></div><div class="record"><time>08:57:09</time><span>收取执行会话自行提交的、与本次运行关联的结果。</span></div><div class="record"><time>08:57:14</time><span>按既有规则回写正式状态；相同结果再次递交后，关闭事件与证据数量没有增加。</span></div><p class="evidence">来源：常驻编排内核的专用验收事项正式状态回写记录。时间为北京时间。</p><p class="evidence">过程限制：结果回写后的通知与回执曾因程序缺陷需要恢复补写。该案例证明记录中的执行路径，不代表整个平台已完成全部无人值守验收。</p></div></details>
+  </article>
+ </div>
+ <section class="scope" aria-label="评议重点"><h3>评议重点</h3><p class="small">动作含义是否一致；模型适用范围是否清楚；实验能否复现；结论是否有完整证据。性能比较须保留同条件依据，未完成的飞行能力不从局部成功推断。</p></section>
+ <footer><span>展示首版 · 2026-10-14</span><span>研究状态核查：2026-10-14</span><span>页面内容按发布版本提供。</span></footer>
+</main>
+<script>
+(function(){
+ const data=[[0,0,.568],[5,.493,1.175],[10,.931,1.746],[15,1.418,2.264],[20,1.333,2.714],[25,1.921,3.080],[30,2.396,3.354],[35,2.236,3.525],[40,2.787,3.590],[45,3.004,3.545],[50,3.415,3.392],[55,3.347,3.137],[60,3.383,2.786],[65,3.448,2.351],[70,3.434,1.844],[75,3.807,1.324],[80,3.710,.788],[85,3.780,.271],[90,3.713,0]];
+ const box=document.getElementById('aero-plot'),detail=document.getElementById('aero-evidence');
+ function draw(){if(!detail.open)return;const w=Math.max(260,box.clientWidth),h=248,left=57,right=w-16,top=30,bottom=196;const max=Math.max(...data.flatMap(d=>[d[1],d[2]]))*1.09;const x=a=>left+a/90*(right-left),y=v=>bottom-v/max*(bottom-top);let ticks='';for(const a of [0,30,60,90])ticks+='<text x="'+x(a)+'" y="218" text-anchor="'+(a===90?'end':a===0?'start':'middle')+'">'+a+'°</text>';for(const v of [0,2,4])ticks+='<text x="47" y="'+(y(v)+4)+'" text-anchor="end">'+v+'</text>';const points=i=>data.map(d=>x(d[0]).toFixed(2)+','+y(d[i]).toFixed(2)).join(' ');box.innerHTML='<svg class="plot" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="来自报告原表的两组法向力系数曲线"><title>法向力系数随迎角变化</title><text x="0" y="17">法向力系数</text><path d="M'+left+' '+top+'V'+bottom+'H'+right+'" fill="none" stroke="var(--line)"/><polyline points="'+points(1)+'" fill="none" stroke="var(--other)" stroke-width="2.2"/><polyline points="'+points(2)+'" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-dasharray="6 4"/>'+ticks+'<text x="'+right+'" y="242" text-anchor="end">迎角（度）</text></svg>';}
+ detail.addEventListener('toggle',draw);window.addEventListener('resize',draw);
+ if(window.ResizeObserver)new ResizeObserver(draw).observe(box);
+ const target=document.getElementById('aero-table');target.innerHTML='<table><caption class="small">原表数值 · 系数无量纲</caption><thead><tr><th>迎角（度）</th><th>二维计算</th><th>模型拟合</th></tr></thead><tbody>'+data.map(d=>'<tr><td>'+d[0]+'</td><td>'+d[1].toFixed(3)+'</td><td>'+d[2].toFixed(3)+'</td></tr>').join('')+'</tbody></table>';
+ const toggle=document.getElementById('table-toggle');toggle.addEventListener('click',()=>{target.hidden=!target.hidden;toggle.setAttribute('aria-expanded',String(!target.hidden));toggle.textContent=target.hidden?'查看原表数值':'收起原表数值';});
+})();
+</script>
+</body>
+</html>

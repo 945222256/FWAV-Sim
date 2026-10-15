@@ -1,0 +1,364 @@
+<?xml version="1.0"?>
+<robot name="flapper_15dof">
+  <link name="body">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.012"/>
+      <inertia ixx="4.250e-05" iyy="1.250e-05" izz="5.000e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.05 0 0"/>
+      <geometry><box size="0.1 0.2 0.05"/></geometry>
+      <material name="body_mat"><color rgba="0.85 0.55 0.2 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.05 0 0"/>
+      <geometry><box size="0.1 0.2 0.05"/></geometry>
+    </collision>
+  </link>
+  <link name="shoulder_l">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="6.667e-08" iyy="6.667e-08" izz="6.667e-08"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+      <material name="shoulder_l_mat"><color rgba="0.7 0.7 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+    </collision>
+  </link>
+  <link name="twist_link_l">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="6.667e-08" iyy="6.667e-08" izz="6.667e-08"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+      <material name="twist_link_l_mat"><color rgba="0.7 0.7 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+    </collision>
+  </link>
+  <link name="upper_arm_l">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.002"/>
+      <inertia ixx="1.669e-06" iyy="4.269e-06" izz="5.933e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.08 0 0"/>
+      <geometry><box size="0.16 0.1 0.004"/></geometry>
+      <material name="upper_arm_l_mat"><color rgba="0.25 0.45 0.85 0.9"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.08 0 0"/>
+      <geometry><box size="0.16 0.1 0.004"/></geometry>
+    </collision>
+  </link>
+  <link name="forearm_l">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.0015"/>
+      <inertia ixx="8.020e-07" iyy="2.452e-06" izz="3.250e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.07 0 0"/>
+      <geometry><box size="0.14 0.08 0.004"/></geometry>
+      <material name="forearm_l_mat"><color rgba="0.25 0.45 0.85 0.9"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.07 0 0"/>
+      <geometry><box size="0.14 0.08 0.004"/></geometry>
+    </collision>
+  </link>
+  <link name="hand_l">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="2.091e-07" iyy="6.757e-07" izz="8.833e-07"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.045 0 0"/>
+      <geometry><box size="0.09 0.05 0.003"/></geometry>
+      <material name="hand_l_mat"><color rgba="0.25 0.45 0.85 0.9"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.045 0 0"/>
+      <geometry><box size="0.09 0.05 0.003"/></geometry>
+    </collision>
+  </link>
+  <link name="shoulder_r">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="6.667e-08" iyy="6.667e-08" izz="6.667e-08"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+      <material name="shoulder_r_mat"><color rgba="0.7 0.7 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+    </collision>
+  </link>
+  <link name="twist_link_r">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="6.667e-08" iyy="6.667e-08" izz="6.667e-08"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+      <material name="twist_link_r_mat"><color rgba="0.7 0.7 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+    </collision>
+  </link>
+  <link name="upper_arm_r">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.002"/>
+      <inertia ixx="1.669e-06" iyy="4.269e-06" izz="5.933e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.08 0 0"/>
+      <geometry><box size="0.16 0.1 0.004"/></geometry>
+      <material name="upper_arm_r_mat"><color rgba="0.25 0.45 0.85 0.9"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.08 0 0"/>
+      <geometry><box size="0.16 0.1 0.004"/></geometry>
+    </collision>
+  </link>
+  <link name="forearm_r">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.0015"/>
+      <inertia ixx="8.020e-07" iyy="2.452e-06" izz="3.250e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.07 0 0"/>
+      <geometry><box size="0.14 0.08 0.004"/></geometry>
+      <material name="forearm_r_mat"><color rgba="0.25 0.45 0.85 0.9"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.07 0 0"/>
+      <geometry><box size="0.14 0.08 0.004"/></geometry>
+    </collision>
+  </link>
+  <link name="hand_r">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="2.091e-07" iyy="6.757e-07" izz="8.833e-07"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.045 0 0"/>
+      <geometry><box size="0.09 0.05 0.003"/></geometry>
+      <material name="hand_r_mat"><color rgba="0.25 0.45 0.85 0.9"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.045 0 0"/>
+      <geometry><box size="0.09 0.05 0.003"/></geometry>
+    </collision>
+  </link>
+  <link name="tail_yaw_link">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="6.667e-08" iyy="6.667e-08" izz="6.667e-08"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+      <material name="tail_yaw_link_mat"><color rgba="0.7 0.7 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+    </collision>
+  </link>
+  <link name="tail_roll_link">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="6.667e-08" iyy="6.667e-08" izz="6.667e-08"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+      <material name="tail_roll_link_mat"><color rgba="0.7 0.7 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+    </collision>
+  </link>
+  <link name="tail">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.337e-07" iyy="8.337e-07" izz="9.667e-07"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.05 0 0"/>
+      <geometry><box size="0.1 0.04 0.002"/></geometry>
+      <material name="tail_mat"><color rgba="0.6 0.3 0.3 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.05 0 0"/>
+      <geometry><box size="0.1 0.04 0.002"/></geometry>
+    </collision>
+  </link>
+  <link name="neck_yaw_link">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.0005"/>
+      <inertia ixx="3.333e-08" iyy="3.333e-08" izz="3.333e-08"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+      <material name="neck_yaw_link_mat"><color rgba="0.7 0.7 0.75 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.01 0 0"/>
+      <geometry><box size="0.02 0.02 0.02"/></geometry>
+    </collision>
+  </link>
+  <link name="head">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.001"/>
+      <inertia ixx="4.167e-07" iyy="4.167e-07" izz="4.167e-07"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.025 0 0"/>
+      <geometry><box size="0.05 0.05 0.05"/></geometry>
+      <material name="head_mat"><color rgba="0.9 0.2 0.2 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0.025 0 0"/>
+      <geometry><box size="0.05 0.05 0.05"/></geometry>
+    </collision>
+  </link>
+  <joint name="wing_l_flap" type="revolute">
+    <parent link="body"/>
+    <child link="shoulder_l"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.2" upper="1.2" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_l_sweep" type="revolute">
+    <parent link="shoulder_l"/>
+    <child link="twist_link_l"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.5" upper="0.5" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_l_twist" type="revolute">
+    <parent link="twist_link_l"/>
+    <child link="upper_arm_l"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.8" upper="0.8" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_l_elbow" type="revolute">
+    <parent link="upper_arm_l"/>
+    <child link="forearm_l"/>
+    <origin xyz="0.16 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.9" upper="0.9" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_l_wrist" type="revolute">
+    <parent link="forearm_l"/>
+    <child link="hand_l"/>
+    <origin xyz="0.14 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_r_flap" type="revolute">
+    <parent link="body"/>
+    <child link="shoulder_r"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.2" upper="1.2" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_r_sweep" type="revolute">
+    <parent link="shoulder_r"/>
+    <child link="twist_link_r"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.5" upper="0.5" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_r_twist" type="revolute">
+    <parent link="twist_link_r"/>
+    <child link="upper_arm_r"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="-1 0 0"/>
+    <limit lower="-0.8" upper="0.8" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_r_elbow" type="revolute">
+    <parent link="upper_arm_r"/>
+    <child link="forearm_r"/>
+    <origin xyz="-0.16 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.9" upper="0.9" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="wing_r_wrist" type="revolute">
+    <parent link="forearm_r"/>
+    <child link="hand_r"/>
+    <origin xyz="-0.14 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="tail_pitch" type="revolute">
+    <parent link="body"/>
+    <child link="tail_yaw_link"/>
+    <origin xyz="0 -0.1 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.6" upper="0.6" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="tail_yaw" type="revolute">
+    <parent link="tail_yaw_link"/>
+    <child link="tail_roll_link"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="tail_roll" type="revolute">
+    <parent link="tail_roll_link"/>
+    <child link="tail"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.5" upper="0.5" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="neck_pitch" type="revolute">
+    <parent link="body"/>
+    <child link="neck_yaw_link"/>
+    <origin xyz="0 0.1 0.01"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.5" upper="0.5" effort="5.0" velocity="30.0"/>
+  </joint>
+  <joint name="neck_yaw" type="revolute">
+    <parent link="neck_yaw_link"/>
+    <child link="head"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.8" upper="0.8" effort="5.0" velocity="30.0"/>
+  </joint>
+</robot>

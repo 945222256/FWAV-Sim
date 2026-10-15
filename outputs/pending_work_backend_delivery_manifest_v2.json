@@ -1,0 +1,63 @@
+{
+ "schema_version": 1,
+ "item_id": "I-233",
+ "delivery_version": "pending-work-v2",
+ "reviewer": "beth",
+ "run_id": "run-beth-i233-backend-rework-v2-20261014-a1",
+ "dispatch_request_id": "kd-beth-i233-backend-rework-v2-20261014-a1",
+ "session_id": "sess_cea3e05f-93d4-436f-a4f1-25d196418268",
+ "workstation": "L3-w1",
+ "generated_at": "2026-10-15T23:55:00+08:00",
+ "supersedes": "outputs/pending_work_backend_delivery_manifest_v1.json（v1 清单、契约与样例原样保留作历史依据，未原地改写）",
+ "声明": [
+  "本清单为 I-233 返修 v2 交付：Beth 九项独立反例逐条修复，冻结原 11 项检查复跑 11/11，本轮补充扩展检查 9/9，生产来源真实只读快照与事件重建取证。作者自检不等于 Beth 独立复核或生产上线。",
+  "生产未加载：云端未部署端点、采集器未挂接（候选补丁未应用）、真实双工位接续尚无生产证据；I-234 现有成果保留，其撤回影响由 Ciri 在新版到位后复核，本项不代清、不联系其他岗位。"
+ ],
+ "nine_counterexamples": [
+  {"id": "undelivered_dependency_not_in_legacy_list", "fix": "依赖评估复用 dependency_policy.unmet_dependencies：delivery-only 未交付前置进入显式等待条件（DEP_NOT_CLEARED，related 带逐项 unmet）", "result": "复跑通过"},
+  {"id": "delivered_dependency_may_proceed_before_close", "fix": "已批准且版本/清单位匹配（pending_review 的 delivery_version 与 evidence_ptr 对上绑定）的交付先行满足，不再把未关闭等同未满足", "result": "复跑通过"},
+  {"id": "stale_error_cannot_override_current_facts", "fix": "last_error 依赖短语经 dependency_policy 当前复核：已清依赖的短语判过期（superseded_stale_reason）并按当前事实重分类", "result": "复跑通过"},
+  {"id": "missing_state_cannot_advertise_free_capacity", "fix": "kernel_state 不可读时容量 status=degraded、global.dispatchable=null、逐线 dispatchable=null，不再报全部可派", "result": "复跑通过"},
+  {"id": "external_claim_must_constrain_dispatchable_capacity", "fix": "云端认领无对账运行的线（如 L7）：occupancy_sources.cloud_claims_unreconciled 计数、dispatchable=null、degraded_reasons 保守说明；不再一边报冲突一边报空闲", "result": "复跑通过+扩展 X9 真实路径"},
+  {"id": "old_source_cannot_be_refreshed_as_current", "fix": "last_tick_at 超 48 小时即 completeness=partial、评估 validity=stale、容量降级；sample_validity 以最旧来源时刻为锚（source_anchor），重新生成不续期", "result": "复跑通过"},
+  {"id": "test_input_delivery_is_not_production_claim", "fix": "claim_confirmed 仅在非 test、已派发、云端事项 claim_session_id 与任务会话一致且状态 in_progress 时生成；不一致/来源不可读生成 result_unknown 保留未知；test 通道账本事件也排除出生产因果流", "result": "复跑通过+扩展 X6/X7/X8"},
+  {"id": "successor_causality_crosses_item_identity", "fix": "因果按工位（lane+worker_id）跨事项关联：释放→下一事项选择互为因果；同一释放后同事项只首次选择建因果（重试不建）；同事项邻接/换工位/交错不建", "result": "复跑通过+扩展 X5 矩阵"},
+  {"id": "first_sync_and_retry_must_not_silently_skip_events", "fix": "push_once 持久已确认游标、按 after_cursor 分批循环至发完（3787 条 8 批无缺漏）；失败/未知回执不推进游标；来源 next_cursor 回落报漏段；GET events 附 retention 保留窗口（window 2000、earliest_cursor_kept）使淘汰早段可检测", "result": "复跑通过+扩展 X1-X4"}
+ ],
+ "frozen_replay": {
+  "script": "logs/i233_pending_work_v2_20261014/replay/review_checks.py（Beth 原脚本逐字节复制品，未改期望未删失败；原目录材料未触碰）",
+  "result": "logs/i233_pending_work_v2_20261014/replay/review.json（11/11；以独立 PW_EVENTS_DIR 运行，避免跨复跑游标残留）",
+  "note": "首轮复跑曾因沿用生产侧 push_state 游标出现 10/11，清理误留的 lp_sync/pending_work_data/push_state.json（本模块数据目录内测试残留）并隔离游标目录后 11/11；该残留文件系复跑实验产生，非生产数据"
+ },
+ "extended_checks": {
+  "script": "logs/i233_pending_work_v2_20261014/extended_checks.py",
+  "result": "logs/i233_pending_work_v2_20261014/extended_check_results.json（9/9）",
+  "coverage": "3787 条分批完整上行 8 批无缺漏、全量后只发增量、断连不推进游标重试补齐、来源截断漏段、跨事项因果矩阵（含重试/换工位/交错不串接）、认领事实三路径（匹配确认/不一致未知/来源不可读未知）、云端认领容量保守真实路径"
+ },
+ "contract": {
+  "path": "organization/contracts/pending_work_v2/",
+  "files": ["README.md（v2 字段语义与七条修订冻结）", "snapshot_sample.json（生产真实只读快照）", "events_sample.json（生产真实事件重建节选）"],
+  "v1_history": "organization/contracts/pending_work_v1/ 与 v1 清单原样保留"
+ },
+ "real_readback": {
+  "snapshot": "logs/i233_pending_work_v2_20261014/real_snapshot_production_readonly_v2.json（pw-20261014T224854-63702198b144：待领 10、等待条件 7、待编排 2、待核对 1+28 分列；容量 11/2 且 global.dispatchable=null 因 L7 云端认领未对账保守降级；source_anchor 最旧来源 3.7 秒）",
+  "events": "logs/i233_pending_work_v2_20261014/real_events_production_readonly_v2.json（真实账本+状态重建 4023 事件、无漏段；claim 事实过滤后生产因果流）"
+ },
+ "candidate_hookup": {
+  "patch": "logs/i233_pending_work_v2_20261014/candidate_orchestrator_dispatch_detail.patch（12 行，仅 lp_sync/orchestrator_kernel.py：dispatch_submitted 台账 detail 补 item_id 与 lane，使生产因果事件自带事项与线身份，无需事后状态反查；双配置应用检查通过，未应用）",
+  "note": "现有生产者已有 worker_id 与 run 记录；本挂接仅补齐选择事件的 item/lane 事实记录，不为动效编造任何数据"
+ },
+ "source_and_load_identity": "logs/i233_pending_work_v2_20261014/source_hashes.json（五文件：两个本项模块、api_console 挂接、orchestrator 基线、dependency_policy 只读依赖）",
+ "production_chain": "生产者：云端事项（/api/agent/snapshot）、内核 state/ledger/lane_workers、工位注册表→消费者：本模块只读构建→（部署后）采集器周期上行→云端只读端点→Ciri 前端第二阶段。当前生产链止于本地只读构建（端点未部署、采集器未挂接）",
+ "deploy_rollback": {
+  "deploy": "1) Beth 复核通过后部署 cloud_board（含 pending_work 端点与 retention 字段）；2) 应用 candidate_console_collector_hookup.patch（v1 清单内）使采集器周期上行快照与事件；3) 按需应用本清单 candidate_orchestrator_dispatch_detail.patch 丰富生产因果事实；4) 部署后按真实只读回读核对快照身份、事件游标与保留窗口",
+  "rollback": "回退采集器两行调用与补丁文件；云端端点只读可保留；push_state/pending_work_data 为本模块自有数据目录，删除即回到首同步全量上行，无调度状态需要回滚"
+ },
+ "unmet": [
+  "生产云端未部署端点、采集器未挂接（两份候选补丁未应用）、生产真实接口回读未验",
+  "真实双工位释放接续尚无生产证据（隔离与真实账本重建已验规则；生产事件待加载后产生）",
+  "内核 last_error 生产者在准入路径的结构化原因版本（本轮以复核+降级语义替代；生产者侧结构化改造属共享文件变更，仅候选挂接补事实字段）",
+  "I-234 前端绑定新版联调与 Ciri 复核未开始；I-205/I-178/I-218 各候选与 I-227 成果未受影响，仍待 Beth 维护决策",
+  "Beth 独立复核后办理验收；原七条判据未勾选，事项未自行关闭"
+ ]
+}

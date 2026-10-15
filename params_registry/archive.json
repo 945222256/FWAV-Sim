@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "archive": [
+    {
+      "param": "base_link.inertia.ixx",
+      "value": 0.012,
+      "unit": "kg*m^2",
+      "valid_period": "2026-09-15 至 2026-09-20",
+      "source": "URDF 声明值（700g/2.3m 构型时代遗留）",
+      "retired_reason": "质量从 0.700kg 切换至 0.215kg，加载器按质量比覆写",
+      "replaced_by": "4.765e-3（运行时覆写值）",
+      "retired_at": "2026-09-20",
+      "note": "该值仍残留在两份 URDF 文件中未清理，导致 9 月 29 日仍被当作悬案引用"
+    },
+    {
+      "param": "vehicle.inertia.ixx.claimed",
+      "value": 0.0074,
+      "unit": "kg*m^2",
+      "valid_period": "2026-09-27 单次提交",
+      "source": "提交 dad8883 信息中的'真值 7.4e-3'表述",
+      "retired_reason": "与直读表及终账引用区间均不一致，属未经登记的一次性声明",
+      "replaced_by": "待几何法重算值",
+      "retired_at": "2026-09-30",
+      "note": "作为'口径必须入库'的反面教材保留"
+    },
+    {
+      "param": "link.base_link",
+      "value": {
+        "mass": 0.135,
+        "ixx": 0.004765,
+        "iyy": 0.004765,
+        "izz": 0.007147
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "加载器 _unify_mass 运行时覆写值，docs/INERTIA_TABLE_215g.md PhysX 直读确认",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[8.138065986323531e-05, 0.001496857541821561, 0.0014951231180178053]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.flapconn_L",
+      "value": {
+        "mass": 0.006,
+        "ixx": 1.2e-05,
+        "iyy": 1.2e-05,
+        "izz": 1.2e-05
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[1.4540000000000002e-06, 8.540000000000001e-07, 7.08e-07]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.flapconn_R",
+      "value": {
+        "mass": 0.006,
+        "ixx": 1.2e-05,
+        "iyy": 1.2e-05,
+        "izz": 1.2e-05
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[1.4540000000000002e-06, 8.540000000000001e-07, 7.08e-07]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.innerwing_L",
+      "value": {
+        "mass": 0.012,
+        "ixx": 0.00012,
+        "iyy": 6e-05,
+        "izz": 0.00012
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[3.2416e-05, 4.481600000000001e-05, 7.720000000000002e-05]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.innerwing_R",
+      "value": {
+        "mass": 0.012,
+        "ixx": 0.00012,
+        "iyy": 6e-05,
+        "izz": 0.00012
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[3.2416e-05, 4.481600000000001e-05, 7.720000000000002e-05]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.outerwing_L",
+      "value": {
+        "mass": 0.009,
+        "ixx": 6e-05,
+        "iyy": 3e-05,
+        "izz": 6e-05
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[1.920675e-05, 1.0806749999999998e-05, 2.9999999999999997e-05]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.outerwing_R",
+      "value": {
+        "mass": 0.009,
+        "ixx": 6e-05,
+        "iyy": 3e-05,
+        "izz": 6e-05
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[1.920675e-05, 1.0806749999999998e-05, 2.9999999999999997e-05]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.tail_base",
+      "value": {
+        "mass": 0.01,
+        "ixx": 1e-05,
+        "iyy": 1e-05,
+        "izz": 1e-05
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[8.08374213836478e-06, 1.343756289308176e-05, 5.614732704402515e-06]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.tailpanel_L",
+      "value": {
+        "mass": 0.008,
+        "ixx": 8e-06,
+        "iyy": 8e-06,
+        "izz": 8e-06
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[6.222000000000001e-06, 5.4059999999999996e-06, 1.1615999999999999e-05]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "link.tailpanel_R",
+      "value": {
+        "mass": 0.008,
+        "ixx": 8e-06,
+        "iyy": 8e-06,
+        "izz": 8e-06
+      },
+      "unit": "kg, kg*m^2",
+      "valid_period": "2026-09-20 至 2026-09-30",
+      "source": "MASS_TABLE 实测质量 + 质量比缩放惯量，docs/INERTIA_TABLE_215g.md",
+      "retired_reason": "几何法重算替换旧质量比缩放值",
+      "replaced_by": "[6.222000000000001e-06, 5.4059999999999996e-06, 1.1615999999999999e-05]",
+      "retired_at": "2026-09-30"
+    },
+    {
+      "param": "aero.tail.area",
+      "value": "0.015",
+      "unit": "m²",
+      "valid_period": "2026-09-30 至 2026-10-06",
+      "source": "config/sim_config.py:397 TailAeroConfig.AREA；docs/params_migration_map.md 主表",
+      "retired_reason": "I-095 构型变更，最小够用值",
+      "replaced_by": "0.0225",
+      "retired_at": "2026-10-06"
+    },
+    {
+      "param": "aero.tail.panel_y",
+      "value": "0.15",
+      "unit": "m",
+      "valid_period": "2026-09-30 至 2026-10-06",
+      "source": "config/sim_config.py:399 TailAeroConfig.PANEL_Y；docs/params_migration_map.md 主表；来源待考附表三第3行",
+      "retired_reason": "I-095 构型变更，最小够用值",
+      "replaced_by": "0.224",
+      "retired_at": "2026-10-06"
+    },
+    {
+      "param": "aero.tail.area",
+      "value": "0.015",
+      "unit": "m²",
+      "valid_period": "2026-09-30 至 2026-10-07",
+      "source": "config/sim_config.py:397 TailAeroConfig.AREA；docs/params_migration_map.md 主表",
+      "retired_reason": "登记库主表滞后补同步：I-095 已改 sim_config 并在归档库留替换记录，但主表仍挂旧值 0.015，本次按退役流程把主表旧值补记入档并写入现行值",
+      "replaced_by": "0.0225",
+      "retired_at": "2026-10-07"
+    },
+    {
+      "param": "aero.tail.panel_y",
+      "value": "0.15",
+      "unit": "m",
+      "valid_period": "2026-09-30 至 2026-10-07",
+      "source": "config/sim_config.py:399 TailAeroConfig.PANEL_Y；docs/params_migration_map.md 主表；来源待考附表三第3行",
+      "retired_reason": "登记库主表滞后补同步：I-095 已改 sim_config 并在归档库留替换记录，但主表仍挂旧值 0.15，本次按退役流程把主表旧值补记入档并写入现行值",
+      "replaced_by": "0.224",
+      "retired_at": "2026-10-07"
+    },
+    {
+      "param": "aero.rho_air",
+      "value": "1.225",
+      "unit": "kg/m³",
+      "valid_period": "2026-09-30 至 2026-10-08",
+      "source": "config/sim_config.py:292 AeroModelConfig.RHO_AIR；docs/params_migration_map.md 主表",
+      "retired_reason": "传导机制验证运行，数值不变",
+      "replaced_by": "1.225",
+      "retired_at": "2026-10-08"
+    }
+  ]
+}

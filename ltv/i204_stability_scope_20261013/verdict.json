@@ -1,0 +1,220 @@
+{
+ "item": "I-204",
+ "revision": "v3 第三版修订，对应 Doro 2026-10-13 第二版复验决定一、三、四",
+ "session": "sess_0d49b7dd-70de-4141-b478-b94ad2d2097a",
+ "deliverable": "spec.md v2 七节，counterexamples.py 数值反例样例",
+ "rework_map": [
+  {
+   "decision": "二版决定一",
+   "section": "第一节 v3：角速度原始世界系与分析体轴分列并保留旋转依据，dfreq 单位改赫兹，复现标准锁与物理锁定分列更正，I-102 十九态含控制器状态清单入表"
+  },
+  {
+   "decision": "二版决定二",
+   "section": "第三节 v3：返回映射导数矩阵式 DP=Dphi+f(P)grad(t_r)转置，维度与横截条件与切空间投影，链式法则错误撤销，可核查例子数值差分对照"
+  },
+  {
+   "decision": "二版决定三",
+   "section": "第四节 v3：真实径向方程含半径因子，适用域限正半径有界区域，原点不收敛声明，局部收敛率 2kA²，真实参考核核验非单位幅值与原点"
+  },
+  {
+   "decision": "二版决定四",
+   "section": "第四节 v3：同一连续对象按 exp(A·dt) 同源衔接，每秒与每步权重分列，双步长趋近验证"
+  },
+  {
+   "decision": "二版决定五",
+   "section": "第三节与第六节 v3：存活集非已证不变集声明，事件时刻一阶近似与有界误差区分"
+  },
+  {
+   "decision": "二版决定六",
+   "section": "第四节 v3：查重按 Anni 完整历史来源表更新，三件李雅普诺夫相关资产各限对象"
+  }
+ ],
+ "key_decisions": [
+  "角速度原始量为世界系，分析体轴量须显式转换并保留依据",
+  "dfreq 单位为赫兹不是弧度每秒",
+  "复现标准锁不锁定机体位置姿态，物理锁定仅以 physical_constraints 为准",
+  "返回映射导数为固定时间雅可比加返回点速度向量与返回时刻梯度的外积，横截条件不为零",
+  "外驱固定时间映射须驱动周期独立于被扰动状态",
+  "真实径向方程含半径因子，候选导数含半径，原点不收敛到目标圆，适用域限正半径有界区域",
+  "局部收敛率为二 kappa 乘幅值平方，真实参考核实测二点零零零八对二",
+  "离散口径由连续对象按矩阵指数同源衔接，离散解随步长缩小趋近连续解",
+  "段谱半径乘积非一般上界，上界限于同一诱导范数，体积增长限行列式口径",
+  "有限拍存活集为数值刻画非已证不变集，事件时刻影响区分一阶近似与有界误差",
+  "查重按 Anni 完整来源表更新：三件李雅普诺夫相关资产各限对象"
+ ],
+ "checks": [
+  {
+   "check": "数值反例复算 composite_radius",
+   "pass": true,
+   "detail": "{\"segment_radius_product\": 0.010000000000000002, \"composite_radius\": 100.01999900019996, \"same_induced_norm_bound_2\": 100.01999900019996, \"determinant_identity_residual\": 2.1087732254843061e-16, \"assert_pass\": true}"
+  },
+  {
+   "check": "数值反例复算 scalar_jump",
+   "pass": true,
+   "detail": "{\"segment_eigmod_product\": 2.0, \"composite_radius\": 1.0, \"assert_pass\": true}"
+  },
+  {
+   "check": "数值反例复算 lyapunov_candidate",
+   "pass": true,
+   "detail": "{\"solution_P\": -0.5, \"equation_residual\": 0.0, \"P_positive_definite\": false, \"A_hurwitz\": false, \"assert_pass\": true}"
+  },
+  {
+   "check": "数值反例复算 hopf_real_kernel",
+   "pass": true,
+   "detail": "{\"A\": 0.5, \"kappa\": 4.0, \"origin_stays_zero\": true, \"positive_radii_converged\": true, \"measured_log_slope\": -2.000784183948178, \"measured_convergence_rate\": 2.000784183948178, \"true_rate_2kA2\": 2.0, \"vdot_formula_matches"
+  },
+  {
+   "check": "数值反例复算 discrete_from_continuous",
+   "pass": true,
+   "detail": "{\"continuous_A\": -0.5, \"continuous_P\": 1.0, \"continuous_residual\": 0.0, \"step_runs\": [{\"dt\": 0.1, \"Phi\": 0.951229424500714, \"P_d\": 1.0508331944775056, \"residual\": -2.7755575615628914e-17, \"P_d_minus_P_c\": 0.0508331944775"
+  },
+  {
+   "check": "数值反例复算 return_map_derivative",
+   "pass": true,
+   "detail": "{\"DP_matrix\": [[0.0018674427317079893, 0.0], [0.0, 0.0]], \"numeric_first_row\": [0.0018693131043079345, 0.0], \"analytic_first_row\": [0.0018674427317079893, 0.0], \"row_max_abs_diff\": 1.8703725999452084e-06, \"transversality"
+  },
+  {
+   "check": "控制器返回含 wavegen_freq 键",
+   "pass": true,
+   "detail": "modules/flight_controller.py 1323 至 1331 行"
+  },
+  {
+   "check": "生产关节驱动读 freq 键",
+   "pass": true,
+   "detail": "modules/wing_actuation.py 83 行附近"
+  },
+  {
+   "check": "气动侧左右差动注入在案",
+   "pass": true,
+   "detail": "modules/wing_actuation.py 差动注入段 96 至 107 行"
+  },
+  {
+   "check": "两翼相位为分别积分状态在案",
+   "pass": true,
+   "detail": "modules/aero/kinematics.py 相位积分状态注释"
+  },
+  {
+   "check": "S6 周期矩阵只含被控对象声明",
+   "pass": true,
+   "detail": "airworthiness/steps.py 519 至 521 行"
+  },
+  {
+   "check": "半拍保证删除声明在文",
+   "pass": true,
+   "detail": "v2 第六节载明删除，跨行归并后检索"
+  },
+  {
+   "check": "目标不变集写未定义待核而非空集",
+   "pass": true,
+   "detail": "v2 第一节按返修要求改写"
+  },
+  {
+   "check": "全机左右相位恒等表述撤销",
+   "pass": true,
+   "detail": "v2 第五节按返修要求撤销"
+  },
+  {
+   "check": "角速度世界系契约声明在文",
+   "pass": true,
+   "detail": "第一节 S1 转动行按二版决定一更正"
+  },
+  {
+   "check": "dfreq 单位赫兹声明在文",
+   "pass": true,
+   "detail": "第一节 S4 行按二版决定一更正"
+  },
+  {
+   "check": "复现标准锁与物理锁定分列更正在文",
+   "pass": true,
+   "detail": "第一节约束表按二版决定一更正"
+  },
+  {
+   "check": "未声明即未锁错误措辞已移除",
+   "pass": true,
+   "detail": "第三版复核决定指出的条件缺失转已确认表述删除"
+  },
+  {
+   "check": "锁定判定三例文书对照在文",
+   "pass": true,
+   "detail": "缺字段缺失、信息不足未知、生效来源证实未锁三例按第三版复核决定补齐"
+  },
+  {
+   "check": "返回映射矩阵式与横截条件在文",
+   "pass": true,
+   "detail": "第三节按二版决定二更正"
+  },
+  {
+   "check": "发生器候选修正声明在文",
+   "pass": true,
+   "detail": "第四节按二版决定三与探针读数更正，跨行归并后检索"
+  },
+  {
+   "check": "离散同源衔接声明在文",
+   "pass": true,
+   "detail": "第四节按二版决定四更正"
+  },
+  {
+   "check": "存活集与一阶近似声明在文",
+   "pass": true,
+   "detail": "第三节与第六节按二版决定五更正"
+  },
+  {
+   "check": "查重按完整来源表更新在文",
+   "pass": true,
+   "detail": "第四节按二版决定六更新"
+  },
+  {
+   "check": "未找到断言附检索范围",
+   "pass": true,
+   "detail": "第四节与第六节各附查重范围声明"
+  },
+  {
+   "check": "冻结或生产文件未改动 hybrid_flight_spec.json",
+   "pass": true,
+   "detail": "git diff 为空即未改"
+  },
+  {
+   "check": "冻结或生产文件未改动 hss_spec.json",
+   "pass": true,
+   "detail": "git diff 为空即未改"
+  },
+  {
+   "check": "冻结或生产文件未改动 wavegen_prereg_20261009.md",
+   "pass": true,
+   "detail": "git diff 为空即未改"
+  },
+  {
+   "check": "冻结或生产文件未改动 i172_wavegen_prereg.md",
+   "pass": true,
+   "detail": "git diff 为空即未改"
+  },
+  {
+   "check": "冻结或生产文件未改动 wing_actuation.py",
+   "pass": true,
+   "detail": "git diff 为空即未改"
+  },
+  {
+   "check": "冻结或生产文件未改动 sim_config.py",
+   "pass": true,
+   "detail": "git diff 为空即未改"
+  },
+  {
+   "check": "控制器工作区改动为 I-138 在案预算实现而非本项改动",
+   "pass": true,
+   "detail": "工作区既有改动含 ALT_BUDGET 键属 I-138 待领地确认件，不含发生器相关改动"
+  },
+  {
+   "check": "规格文书语言检查",
+   "pass": true,
+   "detail": "无违规"
+  },
+  {
+   "check": "零新增在环运行",
+   "pass": true,
+   "detail": "目录仅含 ['build_verdict.py', 'counterexamples.py', 'spec.md', 'verdict.json']，缓存目录除外"
+  }
+ ],
+ "counterexamples_sha256": "51df07cd6cd1a5f574dfc1c5de19beab240947205591d8b53478f515f1379a33",
+ "verdict_pass": true,
+ "verdict_meaning": "verdict_pass 仅表示本项 v2 文书主张与来源机器核验、数值反例复算、语言检查与冻结生产文件未改全部成立，不构成任何模型、发生器或全机的稳定性通过结论；本项不自行关闭，候 Doro 复核"
+}

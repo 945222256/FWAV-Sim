@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "purpose": "岗位操作指南的隔离演练样例。所有编号、会话和证据均为测试值，不直接投递生产服务。真实操作另存请求并替换已核实的值，保留授权、回执和回读。",
+  "examples": {
+    "submit": {
+      "method": "post", "path": "/api/intake/submit",
+      "body": {
+        "title": "隔离演练文档引用检查",
+        "goal_context": "为目标 G-003 验证隔离环境中的文档检查办理流程。",
+        "owner": "HQ演练人员",
+        "close_criterion": "隔离样例文档的引用检查通过且输出结果清单。",
+        "criteria": ["样例文档全部本地引用解析成功。"],
+        "note": "【机主说明】本例仅在隔离环境验证文档检查的登记流程，由演练人员提交样例并核对审理结果。引用全部解析成功且结果留存后才可申请完成。此例不涉及真实任务、生产服务或实际经理消息，依据为岗位公共操作指南的隔离验证要求。",
+        "submitted_by": "HQ演练人员"
+      }
+    },
+    "approve": {
+      "method": "post", "path": "/api/intake/decide",
+      "body": {
+        "entry_id": "P-901", "action": "approve", "lane": "HQ",
+        "reason": "本例只在隔离环境批准演练文档检查，目标、判据和责任范围已经明确。公共组织文档由 HQ 维护，关键词建议不替代实际领地，因此归 HQ。演练人员须保留审理回执并回读正式事项和判据，不把测试批准用于生产环境。"
+      }
+    },
+    "reject": {
+      "method": "post", "path": "/api/intake/decide",
+      "body": {"entry_id": "P-901", "action": "reject", "reason": "本例在隔离环境保留驳回记录。待审材料的授权范围尚不明确，不能据此进入正式施工。由演练人员修订范围和依据后另行提交，原记录与拒绝原因保留，不删除历史，也不对生产待审记录执行测试操作。"}
+    },
+    "merge": {
+      "method": "post", "path": "/api/intake/decide",
+      "body": {"entry_id": "P-901", "action": "merge", "merge_into": "I-901", "reason": "本例只在隔离环境记录合并决定，待审问题与目标事项覆盖同一项文档检查。演练人员核对目标判据及合并记录，再通过证据入口保存需要保留的材料。合并接口本身不迁移判据正文，不把记录了合并解释为内容已经全部写入。"}
+    },
+    "assign": {
+      "method": "post", "path": "/api/dispatch/assign",
+      "body": {"item_id": "I-901", "lane": "HQ", "owner": "HQ演练人员"}
+    },
+    "claim": {
+      "method": "post", "path": "/api/dispatch/claim",
+      "body": {"item_id": "I-901", "worker": "HQ演练人员", "session_id": "isolated-guide-session", "lease_hours": 4}
+    },
+    "append_evidence": {
+      "method": "post", "path": "/api/ledger/append_evidence",
+      "body": {"item_id": "I-901", "evidence": "隔离样例 evidence.txt：文档引用解析成功。"}
+    },
+    "attach": {
+      "method": "post", "path": "/api/ledger/attach",
+      "body": {"item_id": "I-901", "evidence": ["隔离样例 evidence.txt：引用检查结果。", "隔离样例 result.json：解析成功。"]}
+    },
+    "set_criterion": {
+      "method": "post", "path": "/api/ledger/set_criterion",
+      "body": {"item_id": "I-901", "index": 0, "verified": true, "evidence": "隔离样例 result.json：全部引用解析成功。", "actor": "HQ演练人员"}
+    },
+    "close": {
+      "method": "post", "path": "/api/ledger/close",
+      "body": {
+        "item_id": "I-901", "closer": "HQ演练人员", "conclusion": "判据通过",
+        "evidence": ["机主说明：本例只在隔离环境完成样例事项。演练人员按原判据检查样例文档全部引用，解析结果已经保存并逐项对照。验证通过的原因是引用和结果清单均可复查，下一步回读关闭记录，不将本例作为真实事项的完成证据。", "隔离样例 result.json：全部引用解析成功。"],
+        "criterion_check": [{"判据": "样例文档全部本地引用解析成功。", "结果": "过", "数值出处": "隔离样例 result.json：本地引用清单全部解析成功。"}]
+      }
+    },
+    "block": {
+      "method": "post", "path": "/api/ledger/block",
+      "body": {
+        "item_id": "I-901", "reason": "隔离样例所需输入文档尚未提供，引用检查无法完成。",
+        "blocker_type": "缺外部输入", "needs": "机主确认并提供演练所需输入文档。", "reporter": "HQ演练人员",
+        "evidence": ["机主说明：本例在隔离环境申报输入缺失。演练人员已经读取现有样例并保留检查结果，但所需输入文档不存在，因此不能继续验证完整引用。下一步由机主提供演练输入后再审理恢复，本例不改变任何生产事项状态。", "隔离样例 missing_input.txt：输入文档缺失记录。"]
+      }
+    },
+    "unblock": {
+      "method": "post", "path": "/api/ledger/unblock",
+      "body": {"item_id": "I-901", "decision": "隔离演练所需输入已经补齐，原缺失记录与补交来源均已保存。由有权审理者决定恢复该样例事项到未认领状态，演练人员重新核对依赖后认领并继续检查。本例只验证恢复流程，不代表真实任务已经解除阻塞。", "decider": "HQ演练人员"}
+    },
+    "dispatch_file": {
+      "schema_version": 1, "request_id": "guide-isolated-dispatch", "op": "dispatch_new",
+      "title": "隔离派发格式验证", "message": "只用于验证请求格式，不创建真实会话或发送真实消息。",
+      "lane": "HQ", "item_id": "I-901", "kind": "test", "verify": true,
+      "max_attempts": 1, "retry_delay_s": 15
+    }
+  }
+}

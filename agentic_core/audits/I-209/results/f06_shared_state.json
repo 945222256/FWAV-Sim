@@ -1,0 +1,163 @@
+{
+ "probe": "F06 驱动依赖主程序隐含共享状态",
+ "entry": "modules/wing_actuation.py:31 （_G = sys.modules.get('main_sim') or sys.modules['__main__']）",
+ "shared_table": [
+  {
+   "var": "_WING_TGT_CACHE",
+   "writer": [
+    "modules/wing_actuation.py:236（每步写）"
+   ],
+   "reader": [
+    "main_sim.py:837（示波器外发）",
+    "main_sim.py:1231（ctrl_scope）"
+   ],
+   "init": "main_sim.py:1333 模块层 = None",
+   "reset": "无（跨实验不重置）"
+  },
+  {
+   "var": "_DA_CACHE",
+   "writer": [
+    "modules/wing_actuation.py:133"
+   ],
+   "reader": [
+    "modules/flight_recorder.py:161"
+   ],
+   "init": "无模块层定义（记录器 _G.get 缺省 0.0）",
+   "reset": "无"
+  },
+  {
+   "var": "_FOLD_T_CACHE",
+   "writer": [
+    "modules/wing_actuation.py:134"
+   ],
+   "reader": [
+    "modules/flight_recorder.py:206"
+   ],
+   "init": "同上缺省 0.0",
+   "reset": "无"
+  },
+  {
+   "var": "_CTRL_MODE_CACHE",
+   "writer": [
+    "modules/wing_actuation.py:80,86,136"
+   ],
+   "reader": [
+    "modules/flight_recorder.py:208"
+   ],
+   "init": "缺省 -1",
+   "reset": "无"
+  },
+  {
+   "var": "_WING_STATE_CACHE",
+   "writer": [
+    "modules/wing_actuation.py:163-171"
+   ],
+   "reader": [
+    "modules/flight_recorder.py:214-218"
+   ],
+   "init": "缺省 None",
+   "reset": "无"
+  },
+  {
+   "var": "_DP_STATE",
+   "writer": [
+    "main_sim.py:1780（模块层初始化）",
+    "main_sim.py:1864（_apply_tether_and_dp 每步整体重绑定）"
+   ],
+   "reader": [
+    "modules/wing_actuation.py:84（直接下标访问）",
+    "main_sim.py:1388-1390（遥测）"
+   ],
+   "init": "main_sim.py:1780",
+   "reset": "每步重绑定（governed）"
+  },
+  {
+   "var": "_SIDE_PULSE_ON/_T/_DVY/_DONE",
+   "writer": [
+    "modules/sim_env_bridge.py:491-494（main() 桥接段）",
+    "modules/wing_actuation.py:191（_DONE 置 True）"
+   ],
+   "reader": [
+    "modules/wing_actuation.py:187-202"
+   ],
+   "init": "桥接段",
+   "reset": "_DONE 仅桥接段复位；跨实验不自动复位"
+  },
+  {
+   "var": "_FW_IID_ULP",
+   "writer": [
+    "main_sim.py:706（main() 装订）",
+    "modules/wing_actuation.py:235（触发后置 None）"
+   ],
+   "reader": [
+    "modules/wing_actuation.py:223-235"
+   ],
+   "init": "无（_G.get）",
+   "reset": "触发一次后置 None；main() 重跑重新装订"
+  },
+  {
+   "var": "（模块级）_DRIVE_N",
+   "writer": [
+    "modules/wing_actuation.py:242（自增）"
+   ],
+   "reader": [
+    "modules/wing_actuation.py:243（诊断节奏）"
+   ],
+   "init": "模块层 = 0",
+   "reset": "无任何重置接口"
+  }
+ ],
+ "scenario_script_startup": {
+  "evidence": "main_sim.py 以 __main__ 运行：模块自身即 __main__，wing_actuation 在 main_sim.py:126 导入时 sys.modules 无 'main_sim' 条目，_G 绑定 __main__ （即 main_sim 命名空间）——绑定式与导入顺序以源码 核对（main_sim.py:126 为顶层导入；Isaac SimulationApp 先于其创建）",
+  "binding_correct_in_production": true
+ },
+ "scenario_missing_dp": {
+  "mode": "missing_dp",
+  "host_seeded": false,
+  "returned": "None",
+  "joint_writes": 0,
+  "tail_writes": 0,
+  "logs": [
+   {
+    "level": "WARNING",
+    "msg": "拍动驱动异常: '_DP_STATE'"
+   }
+  ],
+  "note": "宿主未定义 _DP_STATE；自动/手动均为 None 时驱动读到该键"
+ },
+ "scenario_order_divergence": {
+  "mode": "order_divergence",
+  "wing_actuation_bound_to_runner_main": true,
+  "flight_recorder_bound_to_fake_main_sim": true,
+  "driver_wrote_into_runner": true,
+  "recorder_sees": null,
+  "fake_main_sim_sees": null,
+  "joint_writes": 2,
+  "logs": [],
+  "note": "驱动与记录器各绑不同命名空间，回放列读到缺省值"
+ },
+ "scenario_two_experiments": {
+  "exp1_pulse_fired": 1,
+  "exp1_side_pulse_done_flag": true,
+  "caches_after_exp1_present": true,
+  "exp2_early_step_kept_exp1_caches": true,
+  "exp2_pulse_fired_without_rearm": 0,
+  "exp2_diag_line_written_on_its_first_step": 0,
+  "drive_n_continuity": {
+   "after_exp1": 1,
+   "after_exp2_first_step": 2,
+   "note": "实验二首步 _DRIVE_N=2，2%120≠1，诊断行不写——新实验的节奏被上一实验的计数拖走"
+  },
+  "note": "生产主程序 main() 重跑会经 sim_env_bridge 重新武装 _DONE=False；不走 main() 桥接的复用路径则残留"
+ },
+ "refactor_impact_estimate": {
+  "改为显式参数/状态对象需触碰": [
+   "modules/wing_actuation.py（_G 引用 14 处，改参数传递）",
+   "main_sim.py:1216 调用点（传状态对象）",
+   "modules/flight_recorder.py:161-218（5 类缓存读取改接口）",
+   "modules/sim_env_bridge.py:491-494（脉冲配置写入改接口）",
+   "main_sim.py:706（ULP 装订改接口）"
+  ],
+  "估计规模": "约 6 个文件、30~40 行签名与取值改动；行为等价可由本审计探针（F01/F02/F04 脚本）作回归基线"
+ }
+}

@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-13",
+  "probe": "l8_realign_probe",
+  "simulator_used": false,
+  "wing_root_edge_L": {
+    "asset_file": "wing_left.obj",
+    "open_boundary_vertices_total": 1955,
+    "root_band_vertices_y_abs_below_0p06": 446,
+    "mech_y_min_m": 0.012807377785694699,
+    "mech_y_max_m": 0.0612742577856947,
+    "mech_x_min_m": -0.020380563545454936,
+    "mech_x_max_m": 0.13364295645454508,
+    "mech_z_min_m": -0.004304114911989187,
+    "mech_z_max_m": 0.017625485088010817,
+    "centroid_mech_xyz_m": [
+      0.07469688685813251,
+      0.0362122324942149,
+      0.005005085267383018
+    ],
+    "note": "root band = open-boundary vertices with |y|<0.06 in mechanism frame under the CURRENT manifest transform"
+  },
+  "wing_root_edge_R": {
+    "asset_file": "wing_right.obj",
+    "open_boundary_vertices_total": 1955,
+    "root_band_vertices_y_abs_below_0p06": 418,
+    "mech_y_min_m": -0.06269518221430531,
+    "mech_y_max_m": -0.015543182214305302,
+    "mech_x_min_m": -0.020380563545454936,
+    "mech_x_max_m": 0.13364295645454508,
+    "mech_z_min_m": -0.004304114911989187,
+    "mech_z_max_m": 0.017625485088010817,
+    "centroid_mech_xyz_m": [
+      0.0749515576028704,
+      -0.03739992862578855,
+      0.0047439283415993344
+    ],
+    "note": "root band = open-boundary vertices with |y|<0.06 in mechanism frame under the CURRENT manifest transform"
+  },
+  "wing_bounds_L": {
+    "x_min": -0.020380563545454936,
+    "x_max": 0.13364295645454508,
+    "y_min": 0.012807377785694699,
+    "y_max": 0.3154162577856947,
+    "z_min": -0.004304114911989187,
+    "z_max": 0.09161772508801082
+  },
+  "wing_bounds_R": {
+    "x_min": -0.020380563545454936,
+    "x_max": 0.13364295645454508,
+    "y_min": -0.31815206221430536,
+    "y_max": -0.015543182214305302,
+    "z_min": -0.004304114911989187,
+    "z_max": 0.09161772508801082
+  },
+  "body_bounds_mech": {
+    "x_min": -0.14949416354545497,
+    "x_max": 0.2187719164545451,
+    "y_min": -0.049727262214305304,
+    "y_max": 0.0626266577856947,
+    "z_min": -0.029231394911989186,
+    "z_max": 0.022471165088010822
+  },
+  "tail_fan_bounds_mech": {
+    "x_min": -0.22362024354545498,
+    "x_max": -0.06673904354545496,
+    "y_min": -0.08916638221430531,
+    "y_max": 0.0869536177856947,
+    "z_min": -0.013783794911989186,
+    "z_max": 0.06922612508801082,
+    "open_boundary_vertices": 2179,
+    "open_boundary_edges": 2194
+  },
+  "tail_fan_forward_band_q90": {
+    "x_threshold_m": -0.08460472354545495,
+    "vertices": 529,
+    "y_min": -0.022684862214305303,
+    "y_max": 0.020274977785694703,
+    "z_min": -0.013783794911989186,
+    "z_max": 0.03023444508801082,
+    "z_median": -0.0025798749119891815,
+    "y_median": -0.001734142214305301
+  },
+  "tail_fan_forward_band_q95": {
+    "x_threshold_m": -0.07886528354545494,
+    "vertices": 265,
+    "y_min": -0.0171851022143053,
+    "y_max": 0.0134709777856947,
+    "z_min": -0.013103954911989183,
+    "z_max": 0.020039645088010823,
+    "z_median": -0.0018860349119891838,
+    "y_median": -0.0014395822143053012
+  },
+  "tail_fan_forward_band_q98": {
+    "x_threshold_m": -0.07542721954545495,
+    "vertices": 106,
+    "y_min": -0.014753582214305304,
+    "y_max": 0.0121415377856947,
+    "z_min": -0.012282434911989184,
+    "z_max": 0.010083405088010818,
+    "z_median": -0.0021156349119891837,
+    "y_median": -0.002224142214305301
+  }
+}

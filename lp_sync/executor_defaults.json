@@ -1,0 +1,6 @@
+{
+  "model": {"providerId": "zai-api", "modelId": "GLM-5.3", "options": {"reasoningLevel": "max"}},
+  "verified_at": "2026-10-13T19:03:00+08:00",
+  "source_session": "sess_bd527dd6-7e9f-4a89-acb0-1b1d04628ce4",
+  "source": "read-only session/read of original paused L3: settings.model.current GLM-5.3 with reasoningLevel max; receipt logs/hq_intake/beth_orchestrator_completion_20261013/model_selection_readback.json; inheritance, no model migration"
+}

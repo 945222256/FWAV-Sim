@@ -1,0 +1,53 @@
+{
+ "schema_version": 1,
+ "item_id": "I-227",
+ "delivery_version": "session-observability-v3",
+ "reviewer": "beth",
+ "run_id": "run-beth-i227-integrate-v3-20261015-a1",
+ "dispatch_request_id": "kd-beth-i227-integrate-v3-20261015-a1",
+ "session_id": "sess_cea3e05f-93d4-436f-a4f1-25d196418268",
+ "workstation": "L3-w1",
+ "generated_at": "2026-10-15T09:05:00+08:00",
+ "inherits": [
+  "v1（outputs/session_observability_delivery_manifest_v1.json）与 v2（outputs/session_observability_delivery_manifest_v2.json）全部清单与历史原样保留",
+  "v2 四项返修成果全部有效并经 Beth 复核确认（logs/hq_intake/beth_i227_review_20261015/review_decision.json 原四反例四项 pass）"
+ ],
+ "minimal_diff": {
+  "changed": ["lp_sync/session_truth.py（唯一改动文件：合入完整在途工具识别候选补丁）"],
+  "added": ["lp_sync/i227_inflight_complete_test.py（本项新增隔离检查）"],
+  "untouched": ["lp_sync/session_history.py（哈希与候选基线一致，未修改）", "lp_sync/console_collector.py", "lp_sync/host_service.py", "生产历史索引（只读取证，SHA256 173281afa5a4bc83… 前后未变）", "Beth 复核材料与 i227_candidate 全部原文"],
+  "merge_verification": {
+   "pre_merge_session_truth_sha256": "16fe7dce352a6454e3e342b0d899e62b2f36a989bbdbc8b54687b77d2c9472ed（与候选基线完全一致，无并发改动，非盲覆盖）",
+   "post_merge_session_truth_sha256": "df3fe56aeb1989cad04b2f53c4a000d9d1898e8dd5b61dc3a9de3ea64d0ec5a4（与受审候选 src 逐字节一致；git apply 引入的 69 行 CRLF 已归一为 LF 后达成全等）",
+   "patch": "logs/i227_inflight_v3_20261015/merged_candidate.patch（SHA256 1cff946b… 与候选 candidate.patch 一致，仅涉及 session_truth.py）"
+  }
+ },
+ "fix_summary": "在途判定与展示条数分离：新增 query_in_flight_tools 按 session 等值过滤查询完整非终态工具全集（无 LIMIT 截断，LIKE 预筛同时接受紧凑与带空格 JSON 排版，损坏 JSON 跳过并计数）；classify 在途判定与 in_flight_total 使用全集，展示列表上限 5 条仅截展示；近期完成工具行仅作摘要（TOOL_SUMMARY_ROWS=25 只影响展示与最近活动）。三十、一百条较新完成不再掩盖较早运行中工具；窗口常量（九十秒、三十分钟、采样有效期、停止保留）全部未改；只读查询、无心跳路径。长工具标注按全集最旧在途计算；停止确认、活动冲突、来源失联、历史合并等 v2 正确行为未触及。",
+ "checks": {
+  "inflight_complete": {
+   "script": "lp_sync/i227_inflight_complete_test.py",
+   "results": "logs/i227_inflight_v3_20261015/inflight_complete_results.json",
+   "matrix": "基线（合入前 v2 副本 logs/i227_inflight_v3_20261015/baseline/session_truth_v2.py）10 项中 5 项失败如实保留（inflight_before_30_completed、inflight_before_100_completed、spaced_json_inflight、multiple_inflight_beyond_window、bad_json_compat，与 Beth 复核失败清单一致）；合入后源码 10/10 通过；历史项 2/2 通过（原反例三、四经环境变量全重定向的 session_history 私有夹具验证）",
+   "coverage": "30/100 条后续完成、六在途超窗口（计数 6 展示 5 最旧入选长工具 300 秒）、紧凑与带空格 JSON、损坏行（不崩溃不误计、真实在途仍识别）、全部完成、无工具、缺失会话源、原四反例"
+  },
+  "rework_44_rerun": {
+   "script": "logs/i227_inflight_v3_20261015/rework44/i227_rework_test_v3_copy.py（i227_rework_test.py 的私有副本，仅重定向输出路径；原脚本与 logs/i227_rework_20261014/ 原结果未改动）",
+   "results": "logs/i227_inflight_v3_20261015/rework44/rework_acceptance_results.json",
+   "result": "44/44 通过（Beth 四反例复现、返修新增 11 项、原 28 项复跑，全部在 v3 合入源码上）"
+  },
+  "real_readonly_smoke": "合入后 collect_once 对真实会话库只读采样正常（L1 工位真实 125 秒长工具正确识别，in_flight_total=1 展示 1）；未重启任何服务，生产 sync_agent 仍运行其当前逻辑",
+  "environment": "夹具、状态目录、索引目录全部重定向至 logs/i227_inflight_v3_20261015/；未启动常驻查询服务、未发布页面、未做生产故障演练"
+ },
+ "production_status": {
+  "current": "生产 sync_agent 未重启，采集逻辑加载状态不变；生产历史索引未重建（只读）；查询服务未启动",
+  "load_steps": "1) Beth 复核通过后重启 sync_agent 加载新采集逻辑（install_runtime_tasks.ps1 既有机制）；2) 按 v2 清单生产加载步骤重建核实口径历史索引；3) 按需启动 session_history_server.py",
+  "rollback": "回退目标为 logs/i227_inflight_v3_20261015/baseline/session_truth_v2.py（合入前逐字节副本，SHA256 16fe7dce…）：复制回 lp_sync/session_truth.py 并按需重启 sync_agent；v3 仅改此一文件"
+ },
+ "unmet": [
+  "生产采集器未重启未加载新逻辑，云端卡片在启用前仍按旧口径显示",
+  "生产历史索引未按核实口径重建",
+  "历史索引查询服务未随生产启动",
+  "board_ui 前端展示新增字段与历史页属 I-228（L5）范围",
+  "Beth 对本 v3 交付独立复核后办理验收；原六条判据未勾选"
+ ]
+}

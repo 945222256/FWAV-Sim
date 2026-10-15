@@ -1,0 +1,62 @@
+{
+ "wing_l_flap": {
+  "amp": 0.9,
+  "phase": 0.0
+ },
+ "wing_l_sweep": {
+  "amp": 0.15,
+  "phase": 1.5
+ },
+ "wing_l_twist": {
+  "amp": 0.45,
+  "phase": 1.5707963267948966
+ },
+ "wing_l_elbow": {
+  "amp": 0.35,
+  "phase": 1.0471975511965976
+ },
+ "wing_l_wrist": {
+  "amp": 0.25,
+  "phase": 1.2566370614359172
+ },
+ "wing_r_flap": {
+  "amp": 0.9,
+  "phase": 0.0
+ },
+ "wing_r_sweep": {
+  "amp": 0.15,
+  "phase": 1.5
+ },
+ "wing_r_twist": {
+  "amp": 0.45,
+  "phase": 1.5707963267948966
+ },
+ "wing_r_elbow": {
+  "amp": 0.35,
+  "phase": 1.0471975511965976
+ },
+ "wing_r_wrist": {
+  "amp": 0.25,
+  "phase": 1.2566370614359172
+ },
+ "tail_pitch": {
+  "amp": 0.1,
+  "phase": 3.141592653589793
+ },
+ "tail_yaw": {
+  "amp": 0.08,
+  "phase": 1.5707963267948966
+ },
+ "tail_roll": {
+  "amp": 0.0,
+  "phase": 0.0
+ },
+ "neck_pitch": {
+  "amp": 0.05,
+  "phase": 3.141592653589793
+ },
+ "neck_yaw": {
+  "amp": 0.1,
+  "phase": 1.5707963267948966
+ }
+}

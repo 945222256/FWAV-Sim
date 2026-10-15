@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目看板</title>
+<style>
+:root { --bg:#111418; --card:#1a1f26; --line:#2a313a; --fg:#d7dde4; --dim:#8a94a0; }
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--fg); font:14px/1.6 "Microsoft YaHei",sans-serif; padding:16px; }
+h1 { font-size:18px; margin-bottom:4px; }
+.sub { color:var(--dim); font-size:12px; margin-bottom:14px; }
+.stats span { display:inline-block; background:var(--card); border:1px solid var(--line);
+  border-radius:6px; padding:2px 10px; margin:0 6px 6px 0; font-size:12px; }
+.lanes { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
+.lane { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; }
+.lane h2 { font-size:14px; color:var(--dim); border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:8px; }
+.item { border:1px solid var(--line); border-radius:6px; padding:8px; margin-bottom:8px; }
+.item .id { font-weight:bold; }
+.item .status { float:right; font-size:11px; padding:1px 8px; border-radius:10px; }
+.st-open { background:#233041; } .st-in_progress { background:#1f3a2a; }
+.st-blocked { background:#3a2020; }
+.item .meta { color:var(--dim); font-size:12px; }
+section { margin-top:16px; }
+section h2 { font-size:14px; color:var(--dim); margin-bottom:8px; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+td, th { border:1px solid var(--line); padding:4px 8px; text-align:left; }
+th { color:var(--dim); font-weight:normal; }
+#ev td:last-child { color:var(--dim); }
+</style>
+</head>
+<body>
+<h1>项目看板</h1>
+<div class="sub" id="sub">加载中</div>
+<div class="stats" id="stats"></div>
+<div class="lanes" id="lanes"></div>
+<section>
+<h2>待审队列</h2>
+<table id="inbox"><tr><th>编号</th><th>标题</th><th>提交人</th><th>状态</th></tr></table>
+</section>
+<section>
+<h2>事件流（最近六十条）</h2>
+<table id="ev"><tr><th>时间</th><th>动作</th><th>事项</th><th>说明</th></tr></table>
+</section>
+<script>
+const STATUS = {open:"待认领", in_progress:"进行中", blocked:"卡住"};
+async function load() {
+  const s = await (await fetch("/api/state")).json();
+  document.getElementById("sub").textContent =
+    "数据生成于 " + s.generated_at + "；只读看板，写操作走 registry 命令行工具";
+  document.getElementById("stats").innerHTML =
+    "<span>未关闭 " + s.totals.open + "</span><span>已关闭 " + s.totals.closed + "</span>";
+  document.getElementById("lanes").innerHTML = s.board.map(l => {
+    const cards = l.items.map(i =>
+      "<div class='item'><span class='status st-" + i.status + "'>" +
+      (STATUS[i.status] || i.status) + "</span><span class='id'>" + i.id +
+      "</span> " + i.title +
+      "<div class='meta'>认领 " + i.claimed_by + "</div></div>").join("");
+    return "<div class='lane'><h2>" + l.lane + "（" + l.items.length + "）</h2>" +
+      (cards || "<div class='meta'>（空）</div>") + "</div>";
+  }).join("");
+  const ib = document.getElementById("inbox");
+  s.inbox.forEach(q => { ib.insertAdjacentHTML("beforeend",
+    "<tr><td>" + q.qid + "</td><td>" + q.title + "</td><td>" +
+    q.submitted_by + "</td><td>" + q.review + "</td></tr>"); });
+  if (s.inbox.length === 0) ib.insertAdjacentHTML("beforeend",
+    "<tr><td colspan=4>（空）</td></tr>");
+  const ev = document.getElementById("ev");
+  s.events.reverse().forEach(e => { ev.insertAdjacentHTML("beforeend",
+    "<tr><td>" + e.ts + "</td><td>" + e.action_word + "</td><td>" +
+    (e.item_id || "") + "</td><td>" + (e.detail || "") + "</td></tr>"); });
+  if (s.events.length === 0) ev.insertAdjacentHTML("beforeend",
+    "<tr><td colspan=4>（空）</td></tr>");
+}
+load(); setInterval(load, 15000);
+</script>
+</body>
+</html>

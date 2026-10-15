@@ -1,0 +1,58 @@
+{
+ "schema_version": 1,
+ "item_id": "I-234",
+ "delivery_version": "pending-work-ui-v1",
+ "run_id": "run-ciri-i234-pending-work-ui-20261014-a1-a1",
+ "dispatch_request_id": "kd-ciri-i234-pending-work-ui-20261014-a1-a1",
+ "session_id": "sess_e2438b4f-44de-4800-b87f-e98fea01e441",
+ "workstation": "L5-w1",
+ "reviewer": "ciri",
+ "generated_at": "2026-10-15T22:50:00",
+ "scope": "board_ui 待领工作区前端：全局常驻摘要、十线待领区与未分配独立入口、任务/会话两类形态、四类原因追问、容量如实呈现与真实事件驱动的分阶段接续呈现；消费冻结契约 pending-work-v1",
+ "consumed_backend": {
+  "delivery": "I-233 pending-work-v1（outputs/pending_work_backend_delivery_manifest_v1.json，23/23，Beth 审核）",
+  "contract": "organization/contracts/pending_work_v1/（字段语义冻结+真实样例）",
+  "endpoints": "GET /api/console/pending_work、GET /api/console/pending_work/events?after_cursor=N（cloud_board/api_console.py 只读端点）",
+  "real_data_ingested": "快照=I-233 交付的真实生产只读快照（pw-20261014T220205-cb699f196a35，待领 13）原样上行隔离云真实端点并同端点回读一致；事件=生产账本与状态真实重建 8026 条（事件持久化重定向本项私有目录，生产数据面零写）",
+  "version_drift_disclosed": "工作树中 lp_sync/pending_work.py 已演进 pending-work-v2（未提交、无 v2 总清单，属他人在途改动）；本交付按登记依赖固定消费 v1，未混用 v2 产物；依赖若改指 v2 须重新核对字段与联调"
+ },
+ "files": {
+  "新增（pending_work/i234 前缀集中）": [
+   "board_ui/src/console/pending_work_types.ts（契约类型与四类/七类事件标签）",
+   "board_ui/src/console/pending_work_hooks.ts（快照轮询+事件游标增量：首载建基线不回放、event_id 去重、断线沿游标续读、过期/失败如实标注）",
+   "board_ui/src/console/PendingWorkSummary.tsx（全局摘要：总量/四类/未分配入口/容量（reserved=null 明示未设置）/采样与完整性标注/展开明细与筛选）",
+   "board_ui/src/console/PendingTaskBlock.tsx（任务块：事项号/标题/类别/一句原因；点击与键盘展开原因码、关联依赖、恢复条件、评估时刻与评估器、入队与重试明细、调度依据）",
+   "board_ui/scripts/i234_check.cjs（隔离核验 30 项）、i234_real_proxy.cjs、i234_real_check.cjs、i234_real_run.py（真实联调三件）"
+  ],
+  "共享文件必要接入（依据）": [
+   "board_ui/src/console/WatchView.tsx（顶部挂全局摘要、每线执行区前渲染待领块与组头待领数、未分配独立区（不伪装第十一线）、会话卡一行已核实接续标注——判据一/二/四要求的位置与联动）",
+   "board_ui/src/console/console.css（pw-* 样式段与窄屏收缩；ws-grid 列宽 min(340px,100%) 与组头换行——判据六 320px 无横向溢出所需的最小改动）"
+  ],
+  "未触碰": "I-218/I-228 组件语义与灰态/历史/单卡操作（回归通过）；云端、宿主、编排准入；lp_sync 生产源码（含在途 v2 文件）；board_ui/src/console/overview_data.ts 他人改动"
+ },
+ "criteria_vs_evidence": [
+  {"criterion": 1, "state": "隔离 30 项中 6 项 + 真实 5 项过：总量/四类/各线/未分配与快照逐项一致；展开明细按事项号零重复零遗漏；I-905 两次派发请求只计一项且请求层可追；未入队事项可追到且明示静态评估；真实快照 13 项与页面逐项一致"},
+  {"criterion": 2, "state": "过：十线常驻；待领块位于执行会话区前（DOM 顺序核对）；任务块/上下文会话块/灰态历史三形态可分辨；三空忙场景（L3 有执行且等待、L7 有待领且空闲、L2 无会话无历史）与来源逐项一致"},
+  {"criterion": 3, "state": "过：四类各至少一例；点击与键盘（聚焦+Enter，aria-expanded）均可展开原因码、关联依赖及状态、恢复条件、评估时刻/评估器/出处；长标题长原因可展开；过期（真实快照过期横幅）与接口失败（停端点后明确报错）不显示成零或就绪；自由文字仅按后端给定的原因码与 provenance 呈现，未入队明示未经内核实际准入"},
+  {"criterion": 4, "state": "过（隔离）：释放→选择→认领确认→实际运行按事件回读分阶段呈现（终态=实际运行），指向同一事项与同一完整会话号；另一工位运行事件独立标注；重复事件第二次投放被 event_id 去重（不重播、不误改待领数）；普通刷新重建基线不回放；原会话上下文读数保持 41.5%；减少动态效果时原因文字完整可读；认领后待领数按快照权威 10→9"},
+  {"criterion": 5, "state": "过：预留 reserved=null 显示未设置（非零）；容量只取快照 capacity（上限 11/占用 2/可派 9 与真实快照一致）；页面额度与近五分钟活跃独立口径只引用不混算；完整历史入口、灰态会话、单卡注入完整会话身份回归通过"},
+  {"criterion": 6, "state": "过：320/736/1440 视口无横向溢出（overflow=0），摘要、明细与原因可达；关键原因不依赖悬停或颜色（文字+码+出处）；构建与回归通过"},
+  {"criterion": 7, "state": "本清单即单一总清单；被消费后端版本、真实联调逐项对照、九张截图与未验项在档；Ciri 按原判据终审"}
+ ],
+ "verification_runs": [
+  {"name": "隔离核验（契约形态夹具+时间线事件）", "path": "logs/i234_pending_work_ui_20261015/isolated_check_record.json", "result": "30/30"},
+  {"name": "真实联调（隔离云真实端点+真实生产快照/事件+生产只读实况）", "path": "logs/i234_pending_work_ui_20261015/real_check_record.json", "result": "12/12；同端点回读一致；零非 GET 触生产"},
+  {"name": "构建检查", "path": "board_ui/dist（tsc -b 无错、vite build 通过）", "result": "通过"}
+ ],
+ "screenshots": [
+  "c1_summary_detail.png、c2_scenarios.png、c3_reason_detail.png、c4_staged_running.png、c5_capacity_regression.png、c6_viewport_320.png（隔离）",
+  "real_summary.png、real_reason_detail.png、real_watch_full.png（真实联调；目录 logs/i234_pending_work_ui_20261015/）"
+ ],
+ "unmet": [
+  "生产启用未做（归 Beth）：生产云端部署 pending_work 端点、采集侧上行挂接（I-233 候选补丁）、同源路由——完成前生产页面无真实待领数据，本交付真实联调为隔离云真实端点+真实生产来源数据",
+  "真实接续动效的生产实证：需生产启用后出现真实释放-接续事件流；隔离已验四阶段与去重/不回放语义",
+  "后端 v2 演进（工作树在途、无清单）如成为正式版本，须重新核对本前端字段消费并重跑联调",
+  "Ciri 按原七条判据终审与走查（pending_review，不自关不勾整项）"
+ ],
+ "constraints_honored": "只做本项前端与必要检查；未改云端/宿主/编排准入；未重启生产服务、未自行发布；新文件 pending_work/i234 前缀集中，共享文件接入在本清单列明依据；I-218/I-228 未提交基线复用未覆盖；自建进程（隔离云 9465、代理 4192/4193）全部回收，生产零写（只读 GET）"
+}

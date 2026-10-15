@@ -1,0 +1,276 @@
+/* lab/lab.css — 参数实验室样式（I-130 阶段一）。
+ * 视觉语言执行设计方案三稿（四稿一字不改沿用）：
+ * 暖纸画布、陶土唯一强调、数据语义色四档、全扁平零投影、
+ * 一像素暖墨黑百分之八边框、八与十二像素圆角、三栈字体、
+ * 动效仅抽屉二百毫秒与选项卡一百五十毫秒（透明度与位移）。 */
+
+.lab {
+  --lab-canvas: #f0eee6;
+  --lab-card: #faf9f5;
+  --lab-ink: #141413;
+  --lab-dim: #5e5d59;
+  --lab-accent: #d97757;
+  --lab-accent-hover: #c6613f;
+  --lab-accent-text: #b4551f;
+  --lab-done: #1f7a5c;
+  --lab-partial: #a06a12;
+  --lab-missing: #c4402f;
+  --lab-stale: #3d5a80;
+  --lab-line: rgba(20, 20, 19, 0.08);
+  --lab-serif: "Source Serif 4", Georgia, "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --lab-sans: "Avenir Next", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --lab-mono: "JetBrains Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+
+  min-height: 100vh;
+  background: var(--lab-canvas);
+  color: var(--lab-ink);
+  font: 16px/1.6 var(--lab-sans);
+  position: relative;
+}
+
+.lab *, .lab *::before, .lab *::after { box-sizing: border-box; }
+
+.lab button { font-family: inherit; cursor: pointer; }
+
+/* ── 顶栏与机型选项卡 ─────────────────────────────────────────── */
+.lab-top {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+  padding: 20px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid var(--lab-line);
+  background: var(--lab-canvas);
+}
+.lab-title { font-family: var(--lab-serif); font-size: 30px; line-height: 1.15; }
+.lab-title small {
+  display: block; font-family: var(--lab-sans); font-size: 12px;
+  color: var(--lab-dim); letter-spacing: 0.08em; margin-top: 4px;
+}
+.lab-top .spacer { flex: 1; }
+.lab-top-meta { font-size: 12px; color: var(--lab-dim); }
+
+.lab-tabs { display: flex; gap: 8px; }
+.lab-tab {
+  position: relative;
+  background: transparent; color: var(--lab-ink);
+  border: 1px solid var(--lab-line); border-radius: 8px;
+  padding: 10px 18px; font-size: 16px;
+  transition: opacity 150ms ease-out;
+}
+.lab-tab.active { background: var(--lab-card); border-color: rgba(20, 20, 19, 0.25); }
+.lab-tab.locked { color: var(--lab-dim); border-style: dashed; cursor: not-allowed; }
+.lab-tab.locked .lab-tab-hint {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 5;
+  width: 300px; padding: 10px 12px; border-radius: 12px;
+  background: var(--lab-card); border: 1px solid var(--lab-line);
+  font-size: 12px; line-height: 1.6; color: var(--lab-dim); text-align: left;
+}
+.lab-tab.locked:hover .lab-tab-hint, .lab-tab.locked:focus-visible .lab-tab-hint { display: block; }
+
+/* ── 按钮体系 ─────────────────────────────────────────────────── */
+.lab-btn {
+  background: var(--lab-accent); color: #ffffff;
+  border: none; border-radius: 8px;
+  font-size: 19px; font-weight: 700; padding: 10px 22px;
+}
+.lab-btn:hover { background: var(--lab-accent-hover); }
+.lab-btn-minor {
+  background: transparent; color: var(--lab-ink);
+  border: 1px solid var(--lab-line); font-size: 12px; font-weight: 400; padding: 6px 14px;
+}
+.lab-btn-minor:hover { border-color: rgba(20, 20, 19, 0.3); }
+
+.lab :focus-visible { outline: 2px solid var(--lab-accent); outline-offset: 2px; }
+
+/* ── 区骨架：通栏发丝线、百二十像素级间留白 ───────────────────── */
+.lab-zone { padding: 0 clamp(16px, 4vw, 48px) 120px; }
+.lab-zone + .lab-zone { border-top: 1px solid var(--lab-line); padding-top: 120px; }
+.lab-zone-core { padding-top: 8px; }
+
+.lab-zone-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+.lab-zone-no { font-size: 12px; letter-spacing: 0.2em; color: var(--lab-dim); }
+.lab-zone-head h2 { font-family: var(--lab-serif); font-size: 30px; line-height: 1.2; }
+.lab-zone-lead { max-width: 720px; font-size: 16px; color: var(--lab-dim); }
+.lab-zone-levels { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.lab-zone-level {
+  font-size: 12px; color: var(--lab-dim);
+  border: 1px solid var(--lab-line); border-radius: 8px; padding: 4px 10px;
+  background: var(--lab-card);
+}
+.lab-zone-level small { margin-left: 6px; }
+
+/* ── 核心区 ───────────────────────────────────────────────────── */
+.lab-hero { padding: 40px 0 24px; }
+.lab-hero h1 {
+  font-family: var(--lab-serif); font-size: 80px; line-height: 1.05;
+  letter-spacing: -0.02em; max-width: 720px;
+}
+.lab-hero-tag { max-width: 720px; color: var(--lab-dim); font-size: 16px; margin-top: 12px; }
+
+.lab-core-grid {
+  display: grid; grid-template-columns: minmax(280px, 1fr) minmax(420px, 1.5fr) minmax(280px, 1fr);
+  gap: 32px; align-items: start;
+}
+.lab-core-col {
+  max-height: 76vh; overflow-y: auto; padding-right: 8px;
+  border-right: 1px solid var(--lab-line);
+}
+.lab-core-col:last-child { border-right: none; padding-right: 0; padding-left: 8px; }
+.lab-core-more { font-size: 12px; color: var(--lab-dim); margin-top: 12px; }
+
+.lab-stage { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.lab-stage img { width: 100%; height: auto; display: block; user-select: none; }
+.lab-stage-empty {
+  aspect-ratio: 4 / 3; display: grid; place-items: center;
+  border: 1px dashed var(--lab-line); border-radius: 8px; color: var(--lab-dim); font-size: 12px;
+}
+.lab-stage-caption {
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+  font-size: 12px; color: var(--lab-dim);
+}
+
+/* ── 参数卡 ───────────────────────────────────────────────────── */
+.lab-level { margin-bottom: 40px; }
+.lab-level h3 {
+  font-size: 12px; letter-spacing: 0.12em; color: var(--lab-dim);
+  font-weight: 600; margin-bottom: 12px;
+}
+.lab-level h3 small { margin-left: 8px; font-weight: 400; letter-spacing: 0; }
+.lab-level-note { max-width: 720px; font-size: 12px; color: var(--lab-dim); }
+
+.lab-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
+}
+.lab-grid-compact { grid-template-columns: 1fr; }
+
+.lab-card {
+  display: flex; flex-direction: column; gap: 8px;
+  background: var(--lab-card); color: var(--lab-ink);
+  border: 1px solid var(--lab-line); border-radius: 8px;
+  padding: 14px 16px; text-align: left; font: inherit;
+}
+.lab-card:hover { border-color: rgba(20, 20, 19, 0.28); }
+.lab-card-ph { border-style: dashed; cursor: default; }
+
+.lab-card-head { display: flex; align-items: baseline; gap: 8px; }
+.lab-card-key {
+  font-size: 12px; color: var(--lab-dim);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%;
+}
+.lab-card-value {
+  margin-left: auto;
+  font-family: var(--lab-mono); font-variant-numeric: tabular-nums;
+  font-size: 15px; text-align: right; white-space: nowrap;
+}
+.lab-card-unit { color: var(--lab-dim); font-size: 12px; }
+.lab-card-explain { font-size: 14px; line-height: 1.5; }
+.lab-card-sub {
+  display: flex; flex-wrap: wrap; gap: 4px 14px;
+  font-size: 12px; color: var(--lab-dim);
+}
+
+.lab-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block; flex-shrink: 0; align-self: center;
+}
+.lab-dot-blank { background: transparent; border: 1.5px solid var(--lab-dim); }
+
+/* ── 控制区分组与配比 ─────────────────────────────────────────── */
+.lab-loop { margin-bottom: 32px; }
+.lab-loop-head {
+  display: flex; align-items: baseline; gap: 16px; margin-bottom: 10px;
+  font-size: 12px; color: var(--lab-dim); letter-spacing: 0.08em;
+}
+.lab-loop-ratio {
+  font-family: var(--lab-mono); font-variant-numeric: tabular-nums;
+  color: var(--lab-ink); letter-spacing: 0;
+  border: 1px solid var(--lab-line); border-radius: 8px; padding: 2px 10px;
+  background: var(--lab-card);
+}
+
+/* ── 详情抽屉（浮层，十二像素圆角，二百毫秒滑入） ─────────────── */
+.lab-drawer-mask {
+  position: fixed; inset: 0; z-index: 40;
+  background: rgba(20, 20, 19, 0.25);
+}
+.lab-drawer {
+  position: absolute; top: 0; right: 0; height: 100%;
+  width: min(560px, 94vw);
+  background: var(--lab-card); border-left: 1px solid var(--lab-line);
+  border-radius: 12px 0 0 12px;
+  display: flex; flex-direction: column;
+  transition: transform 200ms ease-out, opacity 200ms ease-out;
+}
+.lab-drawer-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  padding: 20px 24px; border-bottom: 1px solid var(--lab-line);
+}
+.lab-drawer-key { font-size: 12px; color: var(--lab-dim); letter-spacing: 0.06em; }
+.lab-drawer-value {
+  font-family: var(--lab-mono); font-variant-numeric: tabular-nums;
+  font-size: 28px; margin-top: 6px;
+}
+.lab-drawer-body { padding: 20px 24px 40px; overflow-y: auto; }
+.lab-drawer-line { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.lab-drawer-meta { color: var(--lab-dim); font-size: 12px; }
+
+.lab-teach, .lab-src { margin-top: 28px; }
+.lab-teach h4, .lab-src h4 {
+  font-size: 12px; letter-spacing: 0.12em; color: var(--lab-dim);
+  margin: 20px 0 6px; font-weight: 600;
+}
+.lab-teach p, .lab-src p {
+  font-size: 15px; line-height: 1.7; max-width: 720px;
+}
+.lab-downstream, .lab-history { margin: 6px 0 0 0; padding-left: 18px; }
+.lab-downstream li { font-family: var(--lab-mono); font-size: 13px; }
+.lab-history li {
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+  font-size: 13px; margin-bottom: 6px;
+}
+.lab-hist-val { font-family: var(--lab-mono); font-variant-numeric: tabular-nums; }
+.lab-hist-period { color: var(--lab-dim); }
+.lab-hist-reason { color: var(--lab-dim); flex-basis: 100%; }
+
+.lab-src dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin-top: 8px; }
+.lab-src dt { font-size: 12px; color: var(--lab-dim); }
+.lab-src dd { font-size: 14px; }
+
+/* ── 级联轨道（发丝线风格，不引入彩色） ───────────────────────── */
+.lab-rail {
+  position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 4px; z-index: 30;
+}
+.lab-rail-tick {
+  display: flex; align-items: center; gap: 8px;
+  background: transparent; border: 1px solid transparent; border-radius: 8px;
+  padding: 6px 10px; color: var(--lab-dim); font-size: 12px;
+}
+.lab-rail-tick .lab-rail-no {
+  width: 20px; height: 20px; display: grid; place-items: center;
+  border: 1px solid var(--lab-line); border-radius: 50%;
+  font-family: var(--lab-mono); font-size: 11px;
+}
+.lab-rail-tick.active { color: var(--lab-ink); border-color: var(--lab-line); background: var(--lab-card); }
+.lab-rail-tick.active .lab-rail-no { background: var(--lab-ink); color: var(--lab-card); border-color: var(--lab-ink); }
+
+/* ── 页脚与错误态 ─────────────────────────────────────────────── */
+.lab-foot {
+  display: flex; flex-wrap: wrap; gap: 8px 32px;
+  padding: 32px clamp(16px, 4vw, 48px) 64px;
+  border-top: 1px solid var(--lab-line);
+  font-size: 12px; color: var(--lab-dim);
+}
+.lab-error {
+  max-width: 720px; margin: 0 auto; padding: 96px 24px;
+  display: flex; flex-direction: column; gap: 16px; align-items: flex-start;
+}
+.lab-error h1 { font-family: var(--lab-serif); font-size: 30px; }
+.lab-error p { color: var(--lab-dim); }
+
+/* ── 窄屏保底：单列 ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .lab-core-grid { grid-template-columns: 1fr; }
+  .lab-core-col { max-height: none; overflow: visible; border-right: none; padding: 0; }
+  .lab-hero h1 { font-size: 40px; }
+  .lab-rail { display: none; }
+  .lab-grid { grid-template-columns: 1fr; }
+}

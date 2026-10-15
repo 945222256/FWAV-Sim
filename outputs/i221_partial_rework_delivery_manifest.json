@@ -1,0 +1,77 @@
+{
+ "schema_version": 1,
+ "delivery_version": "rework-v1",
+ "item_id": "I-221",
+ "title": "周期与单次动态运动基元及共同轨迹提供者——先行范围返修阶段补充清单",
+ "scope": "partial_start_rework",
+ "scope_note": "本次为已批准先行范围内的返修，不是整项待验收；三条 partial_start、原 I-220 硬依赖与全部六条判据保留；不接真实时钟、不启动物理仿真、不修改 rhythm.py、runtime.py、kinematics.py、控制器、气动或原冻结配置。",
+ "delivered_at": "2026-10-15T11:39:11",
+ "run_id": "run-beth-i221-partial-rework-20261015-a1",
+ "dispatch_request_id": "kd-beth-i221-partial-rework-20261015-a1",
+ "worker_id": "L4-w1",
+ "reviewer": "fil",
+ "previous_delivery": {
+  "manifest": "outputs/motion_action_i-221_delivery_manifest.json",
+  "run_id": "run-kt-kula-i221-rhythm-20261014-a1",
+  "note": "原先行交付与其 42 项验证记录保留为历史引用，本清单不覆盖原证据文件"
+ },
+ "rework_basis": [
+  "docs/I-221_Fil先行接口复核_20261015.md",
+  "logs/fil_i221_partial_review_20261015/independent_results.json",
+  "logs/fil_i221_partial_review_20261015/reproduce.py"
+ ],
+ "fixes": {
+  "F01_分裂波形接缝导数身份": {
+   "what": "解析提供者区分分段内部与实际接缝：非对称 split 的分裂接缝与整数拍回绕接缝处，两侧 dph/dτ 不相等，一阶与二阶导数均判 event_boundary_unavailable 并在说明中保留两侧速率数值与原因；对称 split 两侧速率相等时导数按实际连续性判可用，不机械把所有拍边判无效；分段内部保持解析可用。ShapeSample 新增 first_order_status 与 second_order_status 显式身份，装配输出新增 velocity_status 与 acceleration_status 并保留形状原有边界说明（不覆盖），build_channel_action 按显式身份填写量名状态，不由值是否为空猜测。",
+   "evidence": "R01 五项：接缝两处一阶二阶判事件边界、段内可用、对称 split 连续判可用、身份与原因经装配保留到通道动作、Fil 单边差分复现两侧确实不等。Fil 反例重跑 split_seam_0.75 与 split_seam_1.0 的 marks_derivative_unavailable 均为真，通道身份均为 event_boundary_unavailable。"
+  },
+  "F02_单次终点后进度重复预算": {
+   "what": "DiscretePrimitive 分别保存已提交的外部规范进度 p_ext 与驱动函数求值所用的截断进度 p_drive（不超过 1）。进度增量一律取外部进度差，状态按该增量推进，形状驱动在截断进度上求值；外部进度超过 1 后超出部分按外部差推进收敛段，不再把已处理部分重复计入预算。PrimitiveSample 新增 canonical_drive_value 字段。",
+   "evidence": "R02 四项：连续 1.0/1.1/1.2 对照闭式 z=1-(1+2p)exp(-2p) 最大误差 1.193e-04（Fil 阈值 0.006，修复前 0.0409）；分步与直达都落在闭式附近且互相接近；外部进度 1.2 与驱动截断进度 1.0 分离；终点前后均匀细步长上导数与实际增量一致（最大偏差 3.2e-07）。Fil 反例重跑 conforms 为真。"
+  },
+  "F03_明确零值与未支持状态身份": {
+   "what": "ShapeSample 的 presence 四状态（value、zero、unsupported、missing）经装配与通道构造逐级保留：明确零形状为有效输出，按同一装配公式与中心、尺度及控制修合成最终目标，装配结果分别记录输入形状状态与最终目标身份；未支持与缺失分别保留各自身份不合并；普通数值零与既有保持提供者行为不变。装配输出新增 presence 与 shape_presence 字段。",
+   "evidence": "R03 四项：四状态完整链路逐级保留（Fil 反例构造方式）；明确零形状与 center=0.2、scale=0.5、control=0.1 合成目标 0.3 而非直接零；普通数值零与保持提供者零不回归；未支持与缺失不互相合并。Fil 反例重跑 presence 四链路 preserved 均为真。"
+  }
+ },
+ "checks": {
+  "checker": "tools/verify_i221_motion_primitives.py",
+  "result": "55 项全部通过（原 F01—F10 四十二项保留不动，新增 R01—R03 十三项返修检查），退出码零",
+  "results_file": "logs/i221_partial_rework_20261015/verify_results.json",
+  "original_results_untouched": "logs/motion_action_i-221/verify_results.json 散列与原交付一致（caf89905…），未被本次运行覆盖",
+  "fil_repro_rerun": {
+   "script": "logs/i221_partial_rework_20261015/fil_repro/reproduce_rerun.py",
+   "note": "Fil reproduce.py 逐字复用，仅输出目录改到本返修目录；对照基准 source_start.json 为 Fil 起始快照原文复制",
+   "results": "logs/i221_partial_rework_20261015/fil_repro/independent_results.json",
+   "outcome": "三项反例全部反转：接缝 marked_derivative_unavailable 为真、闭式对照 conforms 为真（误差 1.193e-04）、presence 四链路 preserved 为真；时钟守卫拒绝真实服务名保持；原交付验证记录散列不变，三个源文件散列按预期变化（返修修改）"
+  },
+  "regression": "I-219 检查器回归 104 项全部通过；rhythm.py、runtime.py、kinematics.py、控制器、气动与原冻结配置未修改"
+ },
+ "unverified": [
+  "I-220 硬依赖未清：真实 RhythmService 接入、停复拍/事件/预览副本接续及完整合作配方验收等待 I-220 正式结载后办理（Fil 已另出 I-220 返修复核通过意见，正式判据登记与结载按原流程办理）",
+  "本返修只覆盖 Fil 指出的三项先行实现缺陷；原六条判据整项验收未做，不勾选、不关闭事项",
+  "生产九通道出口与真实执行、气动消费未做：归属 I-222 与 I-223"
+ ],
+ "source_hashes": {
+  "before_v1": {
+   "modules/motion_action/primitives.py": "8b509c922d5d9375c8b9b77490ab1d91c2dddcc32ea4370d48da3b04b9fd7a37",
+   "modules/motion_action/trajectories.py": "5ff8f50c59743cd1e3611e83b2098108293775078411637df3a9c8df23fff820",
+   "tools/verify_i221_motion_primitives.py": "fa541864197d39aaeec282bcc5a43c776f7101cfa865e21c03fc14289662d9c3"
+  },
+  "after_rework": {
+   "modules/motion_action/primitives.py": "1105f2ecaef7e2a46c2d9e248e2aa6ef1cc2053849e796ed180b220208bff322",
+   "modules/motion_action/trajectories.py": "82c315c995d37a04f7978a85d826c6ee8e38d162b3ea9a251d5d1ff2a0db35fa",
+   "tools/verify_i221_motion_primitives.py": "914f35a9dc1c4358ae38bb703bd3201717d643607c3980b5cb8214b069516587"
+  }
+ },
+ "files_touched": [
+  "modules/motion_action/primitives.py",
+  "modules/motion_action/trajectories.py",
+  "tools/verify_i221_motion_primitives.py",
+  "logs/i221_partial_rework_20261015/started.json",
+  "logs/i221_partial_rework_20261015/verify_results.json",
+  "logs/i221_partial_rework_20261015/fil_repro/",
+  "outputs/i221_partial_rework_delivery_manifest.json"
+ ],
+ "next_step": "本次只提交 evidence_appended 阶段证据并按内核规则释放本轮执行认领；不提交 pending_review、closed，不勾选整项判据，不宣称真实时钟或合作配方已接通；I-220 正式结载后按原批准范围接续。"
+}

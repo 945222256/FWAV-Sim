@@ -1,0 +1,74 @@
+{
+ "schema_version": 1,
+ "delivery_version": "stage-supplement-v1",
+ "item_id": "I-210",
+ "title": "I-210 阶段补证：真实发生器六档与默认隔离全记录对照",
+ "delivered_at": "2026-10-15T09:14:11",
+ "run_id": "run-kt-anni-i210-stage-evidence-20261015-a1",
+ "base_commit_at_delivery_start": "9cc76021bdf984f80d26fba2171c31801bce935b",
+ "reviewer": "doro",
+ "basis": {
+  "stage_review": "logs/hq_intake/doro_resume_20261014/i210_stage_review_latest.json",
+  "measurement_rules": "logs/hq_intake/20261014_mainline_recovery/i210_measurement_rules_v1.json",
+  "existing_checker_scope": "原 13 项（A—M）全部保留复跑通过"
+ },
+ "evidence_dir": "logs/i210_stage_supplement_20261015/",
+ "method": {
+  "real_chain": "真实 FlightController.update（内含 Hopf 生产发生器，输出 wavegen_freq）→ 真实 select_effective_freq → 真实 _drive_wing_joints（先 evaluate 后 set_frequency）→ 真实 WingKinematics 与气动消费者（关节接口与气动回调两个外部边界桩，与原套件同法）。不人工重写生成器、不用人工正弦或手工 wavegen_freq 注入。",
+  "input_state": "人工隔离配平状态（z=3m、单位四元数、vx=3.95m/s、其余零），固定全部六档，名义频率收敛于 1.8Hz（FREQ_HOVER，与规则的共同名义参考拍频口径一致）；仅作输入边界登记，不代表实测飞行，不用于整机结论。",
+  "windows": "暖机 360 步（3 秒，斜坡与发生器幅值收敛）后记录 600 步（5 秒），dt=1/120，时基为步号驱动的单调受控时钟。"
+ },
+ "cases": {
+  "R0": "默认关闭（WAVEGEN_ON=F, DRIVE=F, B1=0）：全程 nominal 源，与旧路径逐位兼容。",
+  "R1": "发生器开驱动关（ON=T, DRIVE=F, B1=0.2）：负控制，发生器计算存在但驱动不采用，全程 nominal 源。",
+  "R2": "开启零调制（ON=T, DRIVE=T, B1=0）：全程 wavegen 源，与默认分列核验。",
+  "R3": "正调制 B1=+0.2；R4 负调制 B1=-0.2（最小有效频率 1.5Hz 为正，无负频率替代）；R5 减半调制 B1=+0.1（600 步互异值，名义全程不变，无 2Hz 改 1Hz 替代）。B3=0、dfreq=0 全档固定。"
+ },
+ "new_checks": {
+  "N": "六档链完整：各 600 步原值、共同名义输入逐位一致、实际频率全部有限正值。",
+  "P": "R1 对 R3 只改驱动开关：原始发生器序列逐位相同，R1 走名义、R3 实际采用发生器输出，目标幅差 0.6187 对 0.6189（链条效应显式）。",
+  "Q": "B1 组经真实发生器形成互异有效频率序列；R4 最小 1.5Hz>0（负调制不是负频率）；R5 名义全程一致（减半不是改名义）。",
+  "S": "时点次序：本步设置下一步 evaluate 消费（R3/R4/R5 各 600 步逐一核对），时基单调步号驱动，目标相位连续有界。",
+  "T": "限幅与速率来源：开启档全部 wavegen 源（界 [1.0, 3.5] 内无限幅无回退）；名义斜坡 FREQ_SLEW 在控制器内、发生器速率由振荡动力学与限幅界共同约束、选择函数无第二级斜坡（来源登记于 chain_summary）。",
+  "U": "断开消费者故障：窗口 61 步全部检出不消费（故障检查必须失败，61/61），恢复后逐步实际采用。",
+  "V": "默认关闭与开启零调制各双跑：同输入序列完整原始记录逐字节一致（R0 250504 字节×2、R2 293743 字节×2，字节数与步数登记，非仅哈希）。",
+  "W": "关态沿旧实现来源核：含 wavegen 键（None）与不含键的全序列指令、关节目标、力模型输入 600 步逐位一致（旧源码只读，身份散列登记）。",
+  "X": "默认关闭与开启零调制分列：R0 全程 nominal 源、R2 全程 wavegen 源，瞬态差异显式（最大 1.18e-06 Hz），不以近似相等合并。"
+ },
+ "records_per_step": [
+  "step",
+  "t_s",
+  "nominal_freq",
+  "wavegen_raw（发生器原始输出）",
+  "effective_freq",
+  "source（nominal/wavegen/wavegen_clamped/fallback_invalid）",
+  "wk_freq_consumed_by_eval（本步 evaluate 实际消费的前次设置值）",
+  "wk_freq_after_set",
+  "aero_collective",
+  "aero_wing_L/R（dfreq=0 时与集体一致）",
+  "flap_target_L/R（float64 原值）",
+  "dfreq"
+ ],
+ "precision": "全部为真实生产原值（float64 全精度 JSON 原值），无舍入 CSV；1e-12Hz 级读回可直接由记录复算。",
+ "regression": "原 13 项（A—M）复跑全过；22 项两跑结果一致。",
+ "unmet": [
+  "正式完整默认双跑缺基准身份与物理运行资格：本轮隔离双跑不代替规定完整基准（HQ 正与 Doro 核对既定基准范围；物理运行一律保留待 I-186 验收及执行条件核准）",
+  "新物理取证未开展（实际关节角速度、气动输入、六分量作用量），原第五条与最终关闭本轮不办理",
+  "平均拍频跟随（0.05Hz 预算）与完整周期窗口规则需要物理实测窗口，本轮隔离链只有目标与频率原值，无实测关节轨迹",
+  "人工隔离配平状态非实测飞行：所有数值不用于实际关节、力矩或整机稳定结论",
+  "mock_backend 逐位行为仍为结构性佐证（M 项既有口径），未在真实 Isaac 回调中验证"
+ ],
+ "source_hashes": {
+  "tools/i210_hopf_check.py": "dcc43c8dd10e1c82aa68d48f37a8aaf51452cec55ced4bb54d1b6ed1bfc92503",
+  "logs/i210_stage_supplement_20261015/case_R0_records.json": "cf4e3e71f7b3bb987b594c5d4556232c370cfd67b1384f41ed73e68db433dab6",
+  "logs/i210_stage_supplement_20261015/case_R1_records.json": "545ba6a5606724411200e5995e8d229a20002bd48635772316575553e1f41b44",
+  "logs/i210_stage_supplement_20261015/case_R2_records.json": "2a0d14c21dbe0f8c77c418a35320005696ce55db08462469f9bf6217b8c23c23",
+  "logs/i210_stage_supplement_20261015/case_R3_records.json": "4a8a9f6ef2c24453957a18e10d0d8a5722d7d76c02a60e7b3f57c4a7de8a849e",
+  "logs/i210_stage_supplement_20261015/case_R3_fault_records.json": "d215c892c836745649a7e9b9af1a0b5e048fc6c254a593bdd77798028e3837fe",
+  "logs/i210_stage_supplement_20261015/case_R4_records.json": "99d467ea2023d1ae5a33f90d4455c76bb43cbd49c3a55d65fa5764fc4b40fd15",
+  "logs/i210_stage_supplement_20261015/case_R5_records.json": "5d4aba829c3ca2cd9bc5c48faeff3342d6d4c914b583ea89b5292dd2a207d4bd",
+  "logs/i210_stage_supplement_20261015/chain_summary.json": "f4bdac3799dbf72df7486d64bb7a7ef5dd308c291ac50da2914b7020953474ea",
+  "logs/i210_stage_supplement_20261015/oldpath_R0_reference.json": "a02d57054b2e849cb5bc34d908706f096f5f8e57abeaa8022edf872505e6f8f4"
+ },
+ "boundaries": "只写 tools/i210_hopf_check.py、logs/i210_stage_supplement_20261015/ 与本清单；未改生产控制器、配置、气动公式或翼驱动逻辑；未启动物理仿真或实际翼驱动；旧源码只读取；他人改动与历史未触碰。"
+}

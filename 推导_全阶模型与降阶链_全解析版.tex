@@ -1,0 +1,825 @@
+% !TeX program = xelatex
+% 全阶模型与降阶链状态空间方程全解析推导（全解析版 V1.0）
+% 由《推导_全阶模型与降阶链_全解析版.md》逐节转换；章节编号 0--9 与公式编号 (章-序) 与原文一致。
+\documentclass[11pt,a4paper]{ctexart}
+
+\usepackage{amsmath,amssymb,bm}
+\usepackage{geometry}
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist{itemsep=2pt, topsep=4pt}
+
+\usepackage{xcolor}
+\usepackage[colorlinks=true, linkcolor=blue!55!black, citecolor=darkgray,
+            urlcolor=blue!55!black, bookmarks=true, bookmarksnumbered=true,
+            unicode=true]{hyperref}
+
+% 章节号自 0 起，公式编号保持原文 (章-序) 形式
+\setcounter{secnumdepth}{3}
+\numberwithin{equation}{section}
+\renewcommand{\theequation}{\thesection-\arabic{equation}}
+
+\widowpenalty=10000
+\clubpenalty=10000
+\emergencystretch=3em
+\relpenalty=10000
+\binoppenalty=10000
+\allowdisplaybreaks
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\atan}{\operatorname{atan2}}
+
+\hypersetup{
+  pdftitle={全阶模型与降阶链状态空间方程全解析推导（全解析版 V1.0）},
+  pdfauthor={Z.ai},
+  pdfsubject={扑翼飞行器气动降阶链数学推导},
+  pdfkeywords={纳维-斯托克斯方程, 降阶链, 叶素理论, 准定常截断, 状态空间方程}
+}
+
+\begin{document}
+
+% ======================== 标题区 ========================
+\begin{center}
+  {\LARGE\heiti 全阶模型与降阶链状态空间方程全解析推导}\\[0.6em]
+  {\large（全解析版 V1.0）}\\[1.2em]
+  {\large 2026 年 9 月 23 日}
+\end{center}
+
+\vspace{0.5em}
+
+\noindent\textbf{编制日期：}2026 年 9 月 23 日。
+
+\medskip
+
+\noindent\textbf{编制性质：}本文件是用户提供的陈述《全阶模型与降阶链（本题核心）》《假设清单与截断的对应关系》《回补与控制收束》三节（以下合称“原陈述”）的全解析数学版。原陈述给出降阶链的四次压缩与假设对应的文字结论；本文件把从纳维-斯托克斯方程到零状态力律、再到被控对象状态空间方程的每一个数学步骤全部展开。任何一个等号均可逐项复核：每一个等号或为定义、或为前式的直接代入、或为标注了依据的定理引用，不存在“整理得”“同理”“显然”式的省略。
+
+\medskip
+
+\noindent\textbf{文件关系：}本文件与《推导\_状态空间方程\_全解析版.md》的关系：该文件推导纵向通道状态方程与特征结构，是本降阶链终点的下游消费者；本文件推导气动执行通道侧的压缩过程。两文件的记号互相兼容（机体系 $x$ 轴向前、$z$ 轴向下、空气密度 $\rho = 1.225\ \mathrm{kg/m^3}$、质量 $m = 0.215\ \mathrm{kg}$）。
+
+\medskip
+
+\noindent\textbf{阅读方式：}读者只需具备矢量微积分、矢量叉乘、定积分与一阶常微分方程四项工具。每一章只依赖前面章节已经建立的结果。
+
+\medskip
+
+\noindent\textbf{验证声明：}本文件为符号解析推导，不含新的数值运算链。文中出现的数值共六类，每一处均标注出处：标准大气属性（空气密度、运动粘度）、重力加速度、机体质量、配平前向速度、法向力系数拟合常数、台架与在环对比三数。符号等式的可核性依据各节内标注。
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+{\small\tableofcontents}
+
+\clearpage
+
+% ======================== 第 0 章 ========================
+\setcounter{section}{-1}
+\section{符号与前提总表}\label{sec:intro}
+
+\subsection{坐标系}
+
+\begin{itemize}
+  \item 世界系：原点取起飞点，三轴按右手系取向，$z$ 轴竖直向上。重力沿世界系 $z$ 轴负方向，重力大小为 $m \cdot g$，其中 $g = 9.81\ \mathrm{m/s^2}$（出处：标准重力加速度）。
+  \item 机体系：原点取飞行器质心，$x$ 轴沿机身轴线向前，$z$ 轴垂直于机身轴线向下，$y$ 轴按右手系指向右机翼。该约定与《推导\_状态空间方程\_全解析版.md》第 0.1 节一致。
+  \item 挥舞轴系：挥舞角 $\phi$ 描述机翼绕挥舞轴的转角。挥舞轴单位矢量记为 $\hat{\bm{e}}_f$。拍动平面定义为与挥舞轴垂直且包含翼展方向的平面。$\hat{\bm{e}}_1$ 与 $\hat{\bm{e}}_2$ 为拍动平面内一对正交单位矢量，且 $(\hat{\bm{e}}_1, \hat{\bm{e}}_2, \hat{\bm{e}}_f)$ 构成右手系。翼展方向单位矢量在拍动平面内随挥舞角变化：
+  \begin{equation}
+    \hat{\bm{y}}_w(\phi) = \cos\phi \cdot \hat{\bm{e}}_1 + \sin\phi \cdot \hat{\bm{e}}_2 \label{eq:0-1}
+  \end{equation}
+  式~\eqref{eq:0-1} 的验证：$\hat{\bm{y}}_w$ 与 $\hat{\bm{e}}_f$ 的标量积为零，因此翼展方向始终位于拍动平面内；$\|\hat{\bm{y}}_w\|^2 = \cos^2\phi + \sin^2\phi = 1$，因此 $\hat{\bm{y}}_w$ 为单位矢量。两式均成立，故式~\eqref{eq:0-1} 自洽。
+  \item 截面系：在每个展向站位 $y$ 处，翼面俯仰角 $\theta_w$ 描述弦线绕翼展方向相对于拍动平面内运动方向的偏转。截面弦向单位矢量与截面法向单位矢量定义为
+  \begin{equation}
+    \hat{\bm{x}}_c(\phi, \theta_w) = \cos\theta_w \cdot \hat{\bm{e}}_t(\phi) + \sin\theta_w \cdot \hat{\bm{n}}, \qquad
+    \hat{\bm{z}}_c(\phi, \theta_w) = -\sin\theta_w \cdot \hat{\bm{e}}_t(\phi) + \cos\theta_w \cdot \hat{\bm{n}}, \label{eq:0-2}
+  \end{equation}
+  其中 $\hat{\bm{e}}_t(\phi) = \partial\hat{\bm{y}}_w / \partial\phi = -\sin\phi \cdot \hat{\bm{e}}_1 + \cos\phi \cdot \hat{\bm{e}}_2$ 为拍动平面内垂直于翼展方向的单位矢量（验证：$\partial\hat{\bm{y}}_w/\partial\phi$ 逐分量求导得该式；$\hat{\bm{e}}_t$ 与 $\hat{\bm{y}}_w$ 的标量积为 $-\cos\phi\sin\phi + \sin\phi\cos\phi = 0$；$\|\hat{\bm{e}}_t\| = 1$），$\hat{\bm{n}} = \hat{\bm{e}}_f$ 或 $\hat{\bm{e}}_f$ 的反向，取使 $(\hat{\bm{x}}_c, \hat{\bm{y}}_w, \hat{\bm{z}}_c)$ 与 $(\hat{\bm{e}}_t, \hat{\bm{y}}_w, \hat{\bm{n}})$ 同为右手系的那个方向。$\hat{\bm{x}}_c$ 指向翼面前缘一侧。
+\end{itemize}
+
+\subsection{翼面运动量}
+
+\begin{itemize}
+  \item 挥舞角 $\phi(t)$（单位 rad）；挥舞角速率 $\dot{\phi}(t) = \mathrm{d}\phi/\mathrm{d}t$（单位 rad/s）；翼面俯仰角 $\theta_w(t)$（单位 rad）；翼面俯仰角速率 $\dot{\theta}_w(t)$（单位 rad/s）。
+  \item 拍动频率 $f$（单位 Hz）；拍动角频率 $\omega_f = 2\pi f$（单位 rad/s）；拍动周期 $T = 1/f = 2\pi/\omega_f$（单位 s）。
+  \item 周期拍动的规范形式：$\phi(t) = \Phi\sin(\omega_f t)$，其中 $\Phi$ 为拍动幅值（单位 rad）。该形式给出挥舞角速率峰值 $\dot{\phi}_{\max} = \Phi\omega_f$（验证：$\dot{\phi} = \Phi\omega_f\cos(\omega_f t)$，余弦最大值为 1）。
+  \item 半展长 $b$（单位 m）：从翼根铰链到翼尖的展向长度。展向坐标 $y \in [0, b]$。
+  \item 弦长分布 $c(y)$（单位 m）：站位 $y$ 处的翼面弦长。机翼平面面积 $S = \int_0^b c(y)\,\mathrm{d}y$（单位 $\mathrm{m^2}$）。展弦比（aspect ratio）定义为 $\Lambda = b^2/S$（无量纲）。
+\end{itemize}
+
+\subsection{流体量}
+
+\begin{itemize}
+  \item 空气密度 $\rho = 1.225\ \mathrm{kg/m^3}$（出处：标准大气海平面属性，《推导\_状态空间方程\_全解析版.md》第 0.1 节采用同值）。
+  \item 空气运动粘度 $\nu \approx 1.5\times10^{-5}\ \mathrm{m^2/s}$（出处：标准大气常温属性【文献】）。
+  \item 雷诺数（Reynolds number）$Re = V_{\text{eff}} \cdot c/\nu$（无量纲），其中 $V_{\text{eff}}$ 为截面有效速度。
+  \item 缩减频率（reduced frequency）$k = \omega c/(2V_{\text{eff}})$（无量纲），其中 $\omega$ 为截面振荡角频率。该量的完整推导见第 3.4 节。
+\end{itemize}
+
+\subsection{本机常量与采用值}
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{@{} l l l X @{}}
+    \toprule
+    量 & 符号 & 数值 & 出处 \\
+    \midrule
+    机体质量 & $m$ & $0.215\ \mathrm{kg}$ & 《推导\_状态空间方程\_全解析版.md》第 0.3 节 \\
+    配平前向速度 & $u^*$ & $4.5\ \mathrm{m/s}$ & 同上 \\
+    重力加速度 & $g$ & $9.81\ \mathrm{m/s^2}$ & 标准值 \\
+    空气密度 & $\rho$ & $1.225\ \mathrm{kg/m^3}$ & 标准大气属性 \\
+    法向力系数律 & $C_N(\alpha)$ & $3.59\sin(2\alpha + 9.1^\circ)$ & 《推导\_状态空间方程\_全解析版.md》第 5 章第 3 步（Sane--Dickinson 型实验拟合的项目采用值） \\
+    半展长、弦长分布、拍动幅值、拍频 & $b$、$c(y)$、$\Phi$、$f$ & 待代入 & 见附录 C 数值代入清单 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{标注分级}
+
+本文件沿用既有文档族的分级标注并新增一类：【文献】表示取自经典教科书或论文结果，正文给出结果与出处、不重复原始证明；【实测】表示取自本项目台架或在环落盘数据；【估计】表示由量纲分析或量级推算得到；【定义】表示该等号建立符号的定义；【代入】表示该等号把前式直接代入后式。凡未标注的等号，均为初等代数变形，读者可逐项复核。
+
+\subsection{原陈述与本章的对应表}
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{@{} >{\raggedright\arraybackslash}p{9.2cm} X @{}}
+    \toprule
+    原陈述的命题 & 本文件的对应节 \\
+    \midrule
+    全阶模型由纳维-斯托克斯方程描述，状态维数为无穷，翼面运动周期时变使流场不存在定常解 & 第 1 章 \\
+    第一次压缩：展向分解（平行截断），截掉诱导下洗与展向流动，误差方向为高估升力，回补路径为升力线理论或叶素-动量理论 & 第 2 章 \\
+    第二次压缩：时间截断（准定常截断），判据为缩减频率，扑翼判据不满足，回补方式为 Sane 与 Dickinson 的经验系数闭合 & 第 3 章 \\
+    第三次压缩：截面律闭合，模型由解方程降为查系数 & 第 4 章 \\
+    第四次压缩：展向数值积分，连续积分化为 O(N) 次代数求值 & 第 5 章 \\
+    降阶链终点为零状态、纯代数、对输入解析可微、单次求值微秒量级的力律；执行通道模型从无穷维动态压缩为静态非线性映射 & 第 5 章与第 6 章 \\
+    假设清单与截断的对应关系 & 第 7 章 \\
+    回补与控制收束（模型内回补、环内吸收、辨识只进调度律的架构裁定、台架与飞行实测对比） & 第 8 章 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ======================== 第 1 章 ========================
+\section{全阶模型：方程、边界条件与状态空间（原陈述第二段第一句的数学版）}\label{sec:full}
+
+\subsection{流体控制方程}
+
+全阶模型的被绕流对象为运动翼面。流体假设为不可压缩牛顿流体。流场速度矢量记为 $\bm{u}(\bm{x}, t) = (u_x, u_y, u_z)$，压力记为 $p$，运动粘度 $\nu = \mu/\rho$（$\mu$ 为动力粘度）。流体所占据的区域记为 $\Omega(t) \subset \R^3$，该区域随翼面运动而变化。控制方程为纳维-斯托克斯方程（Navier--Stokes equations）与不可压缩连续性方程：
+\begin{equation}
+  \frac{\partial\bm{u}}{\partial t} + (\bm{u}\cdot\nabla)\bm{u}
+  = -\frac{1}{\rho}\nabla p + \nu\nabla^2\bm{u}, \label{eq:1-1}
+\end{equation}
+\begin{equation}
+  \nabla\cdot\bm{u} = 0. \label{eq:1-2}
+\end{equation}
+
+其中 $\nabla^2$ 为拉普拉斯算子，$\nabla\cdot$ 为散度算子。式~\eqref{eq:1-1} 的每一项依次为：非定常项 $\partial\bm{u}/\partial t$、对流项 $(\bm{u}\cdot\nabla)\bm{u}$、压力梯度项 $-(1/\rho)\nabla p$、粘性扩散项 $\nu\nabla^2\bm{u}$。
+
+\subsection{运动边界与翼面固连系下的方程形式}
+
+翼面表面记为 $S_w(t)$。翼面上的边界条件为无滑移条件：流体速度等于翼面表面点的速度。为了把运动边界化为固定边界，本节采用任意拉格朗日-欧拉（Arbitrary Lagrangian--Eulerian，ALE）表述：取翼面固连的参考域 $\hat{\Omega}$，映射 $\chi\colon \hat{\Omega} \to \Omega(t)$ 随翼面刚性运动；网格速度定义为 $\bm{w}(\bm{x}, t) = (\partial\chi/\partial t)\circ\chi^{-1}$（$\bm{x}$ 处坐标点的速度）。在翼面固连系下观察速度的时间导数记为 $\partial\bm{u}/\partial t|_\chi$。惯性系导数与固连系导数的关系为
+\begin{equation}
+  \left(\frac{\partial\bm{u}}{\partial t}\right)_{\text{惯性}}
+  = \left.\frac{\partial\bm{u}}{\partial t}\right|_\chi + (\bm{w}\cdot\nabla)\bm{u}. \label{eq:1-3}
+\end{equation}
+
+式~\eqref{eq:1-3} 为旋转与变形坐标系中矢量导数的标准关系在纯平动变形坐标下的形式【文献】。把式~\eqref{eq:1-3} 代入式~\eqref{eq:1-1}，得到翼面固连系下的控制方程：
+\begin{equation}
+  \left.\frac{\partial\bm{u}}{\partial t}\right|_\chi + [(\bm{u} - \bm{w})\cdot\nabla]\bm{u}
+  = -\frac{1}{\rho}\nabla p + \nu\nabla^2\bm{u}, \qquad \nabla\cdot\bm{u} = 0. \label{eq:1-4}
+\end{equation}
+
+参考域 $\hat{\Omega}$ 不随时间变化，因此式~\eqref{eq:1-4} 的求解区域固定。边界条件化为：
+
+\begin{itemize}
+  \item 翼面边界 $\hat{S}_w$ 上：网格与翼面一起运动，$\bm{w}$ 等于翼面速度；无滑移条件给出 $\bm{u} - \bm{w} = 0$，即流体相对于翼面的速度为零。
+  \item 远场边界：流体速度趋于来流速度。在翼面固连系中，来流等于世界系来流速度减去翼面固连系的牵连运动速度。翼面固连系的牵连运动由机体运动（速度 $\bm{v}_B$、角速度 $\bm{\Omega}_B$）与翼面运动（$\phi(t)$、$\theta_w(t)$）合成；由于 $\phi(t)$ 与 $\theta_w(t)$ 以周期 $T$ 变化，远场边界数据是时间的周期函数。
+\end{itemize}
+
+\subsection{翼面运动学输入}
+
+翼面表面点的速度由三部分合成：机体平动、机体转动、翼面相对机体的拍动与俯仰。站位 $y$ 处翼面截面参考点（取四分之一弦点）在机体系中的位置矢量记为 $\bm{r}(y, t)$。该点速度的构成如下：
+
+\begin{itemize}
+  \item 机体平动贡献：$\bm{v}_B$（机体系下质心速度）。
+  \item 机体转动贡献：$\bm{\Omega}_B \times \bm{r}(y, t)$。
+  \item 拍动贡献：翼面绕挥舞轴转动，站位 $y$ 的截面沿 $\hat{\bm{e}}_t(\phi)$ 方向移动，速度大小为 $\dot{\phi}(t)\cdot y$（验证：截面点位置沿 $\hat{\bm{y}}_w(\phi)$ 方向距挥舞轴 $y$ 米，$\partial/\partial t\,[y\,\hat{\bm{y}}_w(\phi)] = y\dot{\phi}\,\partial\hat{\bm{y}}_w/\partial\phi = y\dot{\phi}\,\hat{\bm{e}}_t(\phi)$，其中第二步用了式~\eqref{eq:0-2} 下方的 $\hat{\bm{e}}_t$ 定义）。
+\end{itemize}
+
+因此截面参考点在机体系中的速度为
+\begin{equation}
+  \bm{v}_{pt}(y, t) = \bm{v}_B + \bm{\Omega}_B \times \bm{r}(y, t) + \dot{\phi}(t)\cdot y\cdot\hat{\bm{e}}_t(\phi(t)). \label{eq:1-5}
+\end{equation}
+
+翼面俯仰角 $\theta_w(t)$ 不改变四分之一弦点的位置（俯仰轴取过该点沿翼展方向），只改变截面弦线与法线的方向，即只改变式~\eqref{eq:0-2} 中 $\hat{\bm{x}}_c$ 与 $\hat{\bm{z}}_c$ 的取向。
+
+\subsection{气动载荷的返回通道：应力积分}
+
+流体作用在翼面上的力通过表面应力积分获得。应力张量（Cauchy 应力张量）为
+\begin{equation}
+  \bm{\sigma}(\bm{u}, p) = -p\,\bm{I} + \mu\bigl(\nabla\bm{u} + (\nabla\bm{u})^{\top}\bigr), \label{eq:1-6}
+\end{equation}
+其中 $\bm{I}$ 为单位张量，$(\nabla\bm{u})^{\top}$ 为速度梯度张量的转置。符号约定：$\bm{n}_w$ 取翼面表面上由翼面固体指向流体的单位法向。根据柯西应力原理（材料体积边界上的应力矢量等于应力张量与边界外法向的乘积），流体体积在 $\hat{S}_w$ 处的外法向为 $-\bm{n}_w$，翼面作用于流体的应力矢量等于 $\bm{\sigma}\cdot(-\bm{n}_w)$；由牛顿第三定律，流体作用于翼面的应力矢量等于 $\bm{\sigma}\cdot\bm{n}_w$。对整个翼面表面积分，得到
+\begin{equation}
+  \bm{F}_{\text{aero}}(t) = \iint_{S_w(t)} \bm{\sigma}(\bm{u}, p)\cdot\bm{n}_w\,\mathrm{d}S, \label{eq:1-7}
+\end{equation}
+\begin{equation}
+  \bm{M}_{\text{aero}}(t) = \iint_{S_w(t)} [\bm{x} - \bm{x}_{\text{ref}}] \times [\bm{\sigma}(\bm{u}, p)\cdot\bm{n}_w]\,\mathrm{d}S. \label{eq:1-8}
+\end{equation}
+
+式~\eqref{eq:1-7} 与式~\eqref{eq:1-8} 为全阶模型的载荷输出通道：流场解通过应力张量进入刚体动力学。
+
+\subsection{刚体六自由度方程}
+
+机体视作刚体。机体系下的平动与转动动力学方程为牛顿-欧拉方程：
+\begin{equation}
+  m\,(\dot{\bm{v}}_B + \bm{\Omega}_B \times \bm{v}_B) = \bm{R}^{\top}\bm{F}_{g,W} + \bm{F}_{\text{aero}}, \label{eq:1-9}
+\end{equation}
+\begin{equation}
+  \bm{J}\dot{\bm{\Omega}}_B + \bm{\Omega}_B \times (\bm{J}\bm{\Omega}_B) = \bm{M}_{\text{aero}}. \label{eq:1-10}
+\end{equation}
+
+其中 $\bm{R}$ 为机体系到世界系的旋转矩阵，$\bm{F}_{g,W} = (0, 0, -mg)^{\top}$ 为世界系下的重力，$\bm{J}$ 为机体系下的惯量张量。运动学方程为
+\begin{equation}
+  \dot{\bm{p}}_W = \bm{R}\bm{v}_B, \qquad \dot{\bm{R}} = \bm{R}\,[\bm{\Omega}_B]_\times, \label{eq:1-11}
+\end{equation}
+其中 $\bm{p}_W$ 为质心的世界系位置，$[\bm{\Omega}_B]_\times$ 为角速度的反对称矩阵。式~\eqref{eq:1-9} 至式~\eqref{eq:1-11} 的推导（《推导\_状态空间方程\_全解析版.md》第 1 章）在纵向平面内展开；本章保留完整六自由度形式。式~\eqref{eq:1-9} 与式~\eqref{eq:1-10} 中的 $\bm{F}_{\text{aero}}$ 与 $\bm{M}_{\text{aero}}$ 由式~\eqref{eq:1-7} 与式~\eqref{eq:1-8} 给出，而式~\eqref{eq:1-7} 与式~\eqref{eq:1-8} 中的流场 $\bm{u}$ 又以式~\eqref{eq:1-5} 的翼面速度为边界条件：全阶模型是流体与刚体双向耦合的系统。
+
+\subsection{状态空间与“状态维数为无穷”的严格陈述}
+
+定义系统状态为完全决定系统未来演化所需的全部当前信息。对式~\eqref{eq:1-4}，未来演化由当前速度场 $\bm{u}(\cdot, t)$ 与边界数据完全决定；压力 $p$ 不构成状态，压力在每个瞬时由连续性约束确定：对式~\eqref{eq:1-4} 两端取散度并利用 $\nabla\cdot\bm{u} = 0$，得到压力的泊松方程
+\begin{equation}
+  \nabla^2 p = -\rho\,\nabla\cdot\bigl([(\bm{u} - \bm{w})\cdot\nabla]\bm{u}\bigr), \label{eq:1-12}
+\end{equation}
+该方程与诺伊曼型边界条件构成瞬时可解的边值问题【文献：不可压流体求解的标准消去手续】。因此流场状态空间为
+\begin{equation}
+  \mathcal{H} = \bigl\{\, \bm{u} \in L^2(\hat{\Omega})^3 \ :\ \nabla\cdot\bm{u} = 0\ \text{（分布意义下）},\ \bm{u}\ \text{满足翼面边界条件} \,\bigr\}. \label{eq:1-13}
+\end{equation}
+
+状态维数为无穷的论证：式~\eqref{eq:1-13} 的空间 $\mathcal{H}$ 为无穷维可分希尔伯特空间。证明要点为斯托克斯算子谱性质：线化算子 $-\nu\nabla^2$ 在散度自由、翼面齐次边界条件的函数空间上的特征值问题
+\begin{equation}
+  -\nu\nabla^2\bm{\varphi} + \nabla\pi = \lambda\bm{\varphi}, \qquad
+  \nabla\cdot\bm{\varphi} = 0, \qquad
+  \bm{\varphi}\big|_{\hat{S}_w} = 0 \label{eq:1-14}
+\end{equation}
+具有可数无穷多个特征值 $0 < \lambda_1 \le \lambda_2 \le \cdots$ 且 $\lambda_j \to \infty$【文献：斯托克斯算子谱理论】。任意有限维坐标组 $(a_1, \ldots, a_n)$ 只能张成前 $n$ 个特征函数的线性组合；由于特征函数族构成完备正交基且个数无穷，任何有限维坐标都不能完备表示 $\mathcal{H}$ 中的任意元素。因此以偏微分方程解空间为状态的模型，其状态维数为无穷。原陈述“状态维数为无穷（偏微分方程的解空间）”的数学依据即此。
+
+全阶模型的总状态空间为刚体有限维状态与流场无穷维状态的直和：
+\begin{equation}
+  \mathcal{X}_0
+  = \R^3\text{（位置）} \oplus SO(3)\text{（姿态）} \oplus \R^3\text{（速度）} \oplus \R^3\text{（角速度）} \oplus \mathcal{H}\text{（流场）}. \label{eq:1-15}
+\end{equation}
+
+其中 $SO(3)$ 为三维旋转群，流形维数为三。总状态中有限维部分维数为十二，无穷维部分承担其余全部自由度。
+
+\subsection{“不存在定常解”的论证}
+
+原陈述断言“翼面运动周期时变使流场不存在定常解”。该断言的形式化与证明如下。定常解定义为不依赖时间的解：$\bm{u}(\bm{x})$ 与 $p(\bm{x})$ 在翼面固连系中不随 $t$ 变化。翼面固连系中方程~\eqref{eq:1-4} 的远场边界数据为 $\bm{U}_\infty(t) = $ 来流 $-$ 牵连速度。定常解必须满足两个条件：方程中 $\partial\bm{u}/\partial t|_\chi = 0$，且解在每一个时刻都满足远场边界条件，即 $\bm{u}(\bm{x})$ 在远场等于 $\bm{U}_\infty(t)$ 对全部 $t$ 成立。若 $\bm{U}_\infty(t)$ 随 $t$ 变化，则同一个不依赖时间的场 $\bm{u}(\bm{x})$ 不可能在两个不同时刻分别等于两个不同的远场矢量值。拍动运动 $\phi(t) = \Phi\sin(\omega_f t)$ 在 $\Phi \ne 0$、$\omega_f \ne 0$ 时使牵连速度成为幅值非零的周期函数，因此 $\bm{U}_\infty(t)$ 非常数。由上述矛盾可知定常解不存在。周期边界数据下，解的渐近形态（在吸引子存在的前提下）为以 $T$ 为周期的周期解或更复杂的非定常吸引子，两种形态均依赖时间【文献：非自治动力系统周期强迫的标准结论】。
+
+\subsection{全阶模型用于实时控制的不可行性量级}
+
+直接数值模拟（Direct Numerical Simulation，DNS）要求网格分辨全部粘性尺度。均匀各向同性湍流的经典标度分析给出网格点数随雷诺数按 $Re^{9/4}$ 至 $Re^3$ 的幂律增长【文献：湍流直接数值模拟标度律】。本机翼面雷诺数量级估计：取 $V_{\text{eff}} \sim 5\ \mathrm{m/s}$、$c \sim 0.1\ \mathrm{m}$（几何量为附录 C 待代入量，此处仅作量级），$Re = V_{\text{eff}} \cdot c/\nu \approx 5\times0.1/(1.5\times10^{-5}) \approx 3\times10^{4}$【估计】。按 $Re^{9/4}$ 标度，网格量级为 $(3\times10^{4})^{2.25} = 3^{2.25}\times10^{9} \approx 1.2\times10^{10}$【代入：$3^{2.25} \approx 11.8$】。每一个时间步需要对式~\eqref{eq:1-4} 求解非线性抛物型问题并求解式~\eqref{eq:1-12} 的泊松问题。控制回路的采样频率为数十至数百赫兹量级，每一采样间隔内完成上述求解在现有计算硬件上不可实现。该量级论证构成“工程上不可能把该模型直接用于实时控制”的数学依据。降阶链因此必要。
+
+% ======================== 第 2 章 ========================
+\section{第一次压缩：展向分解（平行截断）（原陈述第三段的数学版）}\label{sec:strip}
+
+\subsection{截面运动学：有效速度与有效迎角}
+
+定义站位 $y$ 处的空气相对于截面的速度：
+\begin{equation}
+  \bm{q}(y, t) = \bm{v}_{\text{air},B}(t) - \bm{v}_{pt}(y, t), \label{eq:2-1}
+\end{equation}
+其中 $\bm{v}_{\text{air},B} = \bm{R}^{\top}\bm{v}_{\text{wind},W}$ 为机体系下的风速（无风时为零矢量），$\bm{v}_{pt}$ 由式~\eqref{eq:1-5} 给出【定义】。截面有效速度与有效迎角定义为
+\begin{equation}
+  V_{\text{eff}}(y, t) = \|\bm{q}(y, t)\|, \label{eq:2-2}
+\end{equation}
+\begin{equation}
+  \alpha_{\text{eff}}(y, t) = \atan\bigl(-\bm{w}\cdot\hat{\bm{z}}_c,\ \bm{w}\cdot\hat{\bm{x}}_c\bigr), \qquad
+  \bm{w} = -\bm{q} = \bm{v}_{pt} - \bm{v}_{\text{air},B}. \label{eq:2-3}
+\end{equation}
+
+其中 $\atan$ 为双辐角函数，$\hat{\bm{x}}_c$ 与 $\hat{\bm{z}}_c$ 由式~\eqref{eq:0-2} 给出。式~\eqref{eq:2-3} 的符号约定验证（悬停中段）：无风、机体速度与角速度为零时，$\bm{w} = \dot{\phi}\,y\,\hat{\bm{e}}_t$。逐项计算两个内积：$\bm{w}\cdot\hat{\bm{z}}_c = \dot{\phi}\,y\,(\hat{\bm{e}}_t\cdot\hat{\bm{z}}_c) = \dot{\phi}\,y\,(-\sin\theta_w)$，$\bm{w}\cdot\hat{\bm{x}}_c = \dot{\phi}\,y\cos\theta_w$（依据：式~\eqref{eq:0-2} 的分量展开）。代入式~\eqref{eq:2-3}：
+\begin{equation}
+  \alpha_{\text{eff}} = \atan\bigl(\dot{\phi}\,y\sin\theta_w,\ \dot{\phi}\,y\cos\theta_w\bigr)
+  = \atan(\sin\theta_w,\ \cos\theta_w) = \theta_w \qquad (\dot{\phi}\,y > 0). \label{eq:2-4}
+\end{equation}
+
+即悬停拍动中段的有效迎角等于翼面俯仰角，有效速度 $V_{\text{eff}} = \dot{\phi}\,y$。该结论与经典叶素模型的悬停公式一致。拍动折返点处 $\dot{\phi}$ 过零，$\bm{w}$ 过零，式~\eqref{eq:2-3} 的辐角退化；力方向的指向由截面系（式~\eqref{eq:0-2}）随翼面一同旋转确定，因此代数力律在全拍动周期内保持单值。
+
+\subsection{截断算子的定义：代入与逐项删除}
+
+展向分解的数学操作为：假设速度场与压力场在截面局部只依赖弦向坐标 $x_c$ 与法向坐标 $z_c$，展向坐标 $y$ 从流动的自变量降级为截面的参数。形式化表述为代入以下形式的解：
+\begin{equation}
+  \bm{u} = \bigl(u_x(x_c, z_c;\, y, t),\ u_y,\ u_z(x_c, z_c;\, y, t)\bigr), \label{eq:2-5}
+\end{equation}
+并令 $u_y \equiv 0$、$\partial u_x/\partial y = 0$、$\partial u_z/\partial y = 0$、$\partial p/\partial y = 0$。
+
+把式~\eqref{eq:2-5} 代入三维方程（式~\eqref{eq:1-4} 在翼面固连截面坐标下的逐分量形式），逐项清点每个算子的变化：
+
+\begin{itemize}
+  \item 对流项 $(\bm{u} - \bm{w})\cdot\nabla = (u_x - w_x)\,\partial/\partial x_c + (u_y - w_y)\,\partial/\partial y + (u_z - w_z)\,\partial/\partial z_c$。代入 $u_y = 0$ 与 $\partial/\partial y$（作用于 $u_x$、$u_z$、$p$）为零，对流项退化为 $(u_x - w_x)\,\partial/\partial x_c + (u_z - w_z)\,\partial/\partial z_c$。
+  \item 粘性项 $\nabla^2 = \partial^2/\partial x_c^2 + \partial^2/\partial y^2 + \partial^2/\partial z_c^2$。令 $\partial^2/\partial y^2$ 项为零，粘性项退化为 $\partial^2/\partial x_c^2 + \partial^2/\partial z_c^2$。
+  \item 连续性 $\partial u_x/\partial x_c + \partial u_y/\partial y + \partial u_z/\partial z_c = 0$。令 $u_y = 0$，连续性退化为 $\partial u_x/\partial x_c + \partial u_z/\partial z_c = 0$。
+  \item 展向动量方程（$y$ 分量）整式被删除。
+\end{itemize}
+
+删除后的方程组为二维纳维-斯托克斯问题：
+\begin{subequations}\label{eq:2-6}
+\begin{align}
+  \frac{\partial u_x}{\partial t} + \Bigl[(u_x - w_x)\frac{\partial}{\partial x_c} + (u_z - w_z)\frac{\partial}{\partial z_c}\Bigr] u_x
+  &= -\frac{1}{\rho}\frac{\partial p}{\partial x_c} + \nu\Bigl(\frac{\partial^2}{\partial x_c^2} + \frac{\partial^2}{\partial z_c^2}\Bigr) u_x, \label{eq:2-6a}\\
+  \frac{\partial u_z}{\partial t} + \Bigl[(u_x - w_x)\frac{\partial}{\partial x_c} + (u_z - w_z)\frac{\partial}{\partial z_c}\Bigr] u_z
+  &= -\frac{1}{\rho}\frac{\partial p}{\partial z_c} + \nu\Bigl(\frac{\partial^2}{\partial x_c^2} + \frac{\partial^2}{\partial z_c^2}\Bigr) u_z, \label{eq:2-6b}\\
+  \frac{\partial u_x}{\partial x_c} + \frac{\partial u_z}{\partial z_c} &= 0. \label{eq:2-6c}
+\end{align}
+\end{subequations}
+
+方程组~\eqref{eq:2-6} 对每一个站位 $y \in [0, b]$ 各自成立；相邻站位的方程组之间不存在任何耦合项。三维偏微分方程问题化为 $N$ 个（站位离散后）并行的二维偏微分方程问题。原陈述“在每个截面上令展向导数为零”的数学实现即式~\eqref{eq:2-5} 至式~\eqref{eq:2-6}。
+
+\subsection{被截项的显式清点}
+
+截断的残差定义为真实三维流场代入式~\eqref{eq:2-5} 形式后、式~\eqref{eq:2-6} 相对式~\eqref{eq:1-4} 所缺失的项。逐项清点如下：
+
+\begin{itemize}
+  \item 展向对流项 $u_y\,\partial(u_x, u_z)/\partial y$：真实流动中翼尖涡系驱动的展向流动使 $u_y \ne 0$ 且展向梯度非零，该项被置零。
+  \item 展向粘性扩散项 $\nu\,\partial^2(u_x, u_z)/\partial y^2$：被置零。
+  \item 展向压力梯度 $\partial p/\partial y$ 与整个展向动量方程：被删除。
+  \item 展向连续性分量 $\partial u_y/\partial y$：被置零。
+  \item 诱导下洗：站位 $y_0$ 处的流动除了局部二维成分外，还承受全翼展向环量分布 $\Gamma(y)$ 的变化所拖出的自由涡系产生的诱导速度。该诱导速度是三维效应的核心载体，其数学形式见第 2.4 节。条带模型中每个截面的环量被当作孤立二维翼型的环量，站位间的环量梯度不产生任何反馈。
+\end{itemize}
+
+\subsection{诱导下洗的数学形式（被截项的定量表达）}
+
+附着环量沿展向变化时，开尔文环量守恒定理要求变化的环量以自由涡的形式进入尾迹【文献：开尔文环量定理】。尾迹自由涡系在站位 $y_0$ 处产生的诱导速度由毕奥-萨伐尔定律（Biot--Savart law）的展向分布形式给出。对沿展向摆放、方向沿来流的拖曳涡线系，站位 $y_0$ 处的诱导下洗速度为
+\begin{equation}
+  w_i(y_0) = -\frac{1}{4\pi}\oint_{-b}^{b} \frac{\,\mathrm{d}\Gamma/\mathrm{d}\eta\,}{y_0 - \eta}\,\mathrm{d}\eta. \label{eq:2-7}
+\end{equation}
+
+符号约定：$w_i$ 以竖直向下（负升力方向）为正；$\Gamma(\eta)$ 为站位 $\eta$ 的附着环量；积分为沿展向的主值积分【文献：普朗特升力线理论】。真实流动的有效迎角为几何迎角减去诱导迎角：
+\begin{equation}
+  \alpha_{\text{true}}(y_0) = \alpha_{\text{geo}}(y_0) - \arctan\bigl(w_i(y_0)/V_\infty\bigr). \label{eq:2-8}
+\end{equation}
+
+条带模型取 $w_i \equiv 0$，即 $\alpha_{\text{model}} = \alpha_{\text{geo}}$。由式~\eqref{eq:2-8}，$\alpha_{\text{model}} = \alpha_{\text{true}} + \alpha_i$，其中 $\alpha_i = \arctan(w_i/V_\infty) > 0$（下洗为正时）。法向力系数在单调区间内满足 $\mathrm{d}C_N/\mathrm{d}\alpha > 0$（单调区间的证明见第 2.5 节末段），因此条带模型给出的法向力大于真实值。原陈述“误差方向为高估升力”的证明即此。
+
+\subsection{椭圆环量分布下的升力线斜率修正（误差方向的定量形式）}
+
+本节完整推导有限翼展修正公式，作为第 2.4 节结论的定量补充。设环量分布为椭圆分布：
+\begin{equation}
+  \Gamma(y) = \Gamma_0\sqrt{1 - (2y/b)^2}, \qquad y \in [-b/2,\, b/2]. \label{eq:2-9}
+\end{equation}
+
+（本节沿用对称双翼展坐标，翼展 $-b/2$ 至 $b/2$；与单翼坐标 $y \in [0, b]$ 的关系为平移，不影响推导。）椭圆分布代入式~\eqref{eq:2-7} 的积分结果为常数下洗【文献：普朗特升力线理论的经典结果】：
+\begin{equation}
+  w_i = \frac{\Gamma_0}{2b}, \qquad \text{与 } y_0 \text{ 无关}. \label{eq:2-10}
+\end{equation}
+
+以下给出式~\eqref{eq:2-10} 的量纲与极限核对并推导升力线斜率修正。总升力等于环量密度的库塔-儒可夫斯基积分：
+\begin{equation}
+  L = \rho V_\infty \int_{-b/2}^{b/2} \Gamma(y)\,\mathrm{d}y = \rho V_\infty \Gamma_0 \cdot \frac{\pi b}{4}, \label{eq:2-11}
+\end{equation}
+其中积分 $\int_{-b/2}^{b/2} \sqrt{1 - (2y/b)^2}\,\mathrm{d}y = \pi b/4$（换元 $2y/b = \sin\vartheta$ 后化为 $\int\cos^2\vartheta\,\mathrm{d}\vartheta$ 的标准积分）。由式~\eqref{eq:2-10} 解出 $\Gamma_0 = 2bw_i$ 并代入式~\eqref{eq:2-11}：
+\begin{equation}
+  L = \rho V_\infty \cdot 2bw_i \cdot \frac{\pi b}{4} = \rho V_\infty w_i \cdot \frac{\pi b^2}{2}. \label{eq:2-12}
+\end{equation}
+
+升力系数按定义 $C_L = L/( \tfrac{1}{2}\rho V_\infty^2 S )$ 展开，其中 $S = b^2/\Lambda$（依据：展弦比定义 $\Lambda = b^2/S$ 移项）。把式~\eqref{eq:2-12} 代入：
+\begin{equation}
+  C_L = \frac{\rho V_\infty w_i \,\pi b^2/2}{\tfrac{1}{2}\rho V_\infty^2\, b^2/\Lambda}
+  = \pi\Lambda\frac{w_i}{V_\infty} = \pi\Lambda\,\alpha_i, \label{eq:2-13}
+\end{equation}
+其中最后一步用了小角度近似 $\alpha_i \approx w_i/V_\infty$（诱导迎角定义，式~\eqref{eq:2-8}）。式~\eqref{eq:2-13} 移项给出
+\begin{equation}
+  \alpha_i = \frac{C_L}{\pi\Lambda}. \label{eq:2-14}
+\end{equation}
+
+二维截面升力线斜率为 $a_0$（薄翼理论值 $a_0 = 2\pi$【文献：薄翼理论】），有效迎角满足 $C_L = a_0(\alpha_{\text{geo}} - \alpha_i)$。把式~\eqref{eq:2-14} 代入：
+\begin{equation}
+  C_L = a_0\Bigl(\alpha_{\text{geo}} - \frac{C_L}{\pi\Lambda}\Bigr). \label{eq:2-15}
+\end{equation}
+
+式~\eqref{eq:2-15} 移项合并 $C_L$ 项：$C_L\,(1 + a_0/(\pi\Lambda)) = a_0\alpha_{\text{geo}}$，解出
+\begin{equation}
+  C_L = \frac{a_0}{1 + a_0/(\pi\Lambda)}\,\alpha_{\text{geo}}, \qquad \text{即}\ \ a_{3D} = \frac{a_0}{1 + a_0/(\pi\Lambda)}. \label{eq:2-16}
+\end{equation}
+
+式~\eqref{eq:2-16} 的含义：条带模型（相当于 $\Lambda \to \infty$）给出斜率 $a_0$；真实有限翼展的斜率为 $a_{3D} < a_0$（分母大于一）。高估的比例为 $a_0/a_{3D} - 1 = a_0/(\pi\Lambda)$，与展弦比成反比。该式是“误差方向为高估升力”的定量形式。
+
+法向力系数单调区间的证明（本节末段承诺的证明）：本机采用律 {\relpenalty=100\binoppenalty=100 $C_N(\alpha) = 3.59\sin(2\alpha + 9.1^\circ)$}。求导得 $\mathrm{d}C_N/\mathrm{d}\alpha = 3.59 \times 2\cos(2\alpha + 9.1^\circ) = 7.18\cos(2\alpha + 9.1^\circ)$。$\cos(2\alpha + 9.1^\circ) > 0$ 的条件为 $2\alpha + 9.1^\circ < 90^\circ$，即 $\alpha < 40.45^\circ$。因此 $C_N$ 在区间 $[0^\circ, 40.45^\circ)$ 内严格单调增；该区间覆盖工程迎角使用范围，第 2.4 节的误差方向论证在此区间内成立。
+
+\subsection{第一次压缩后状态空间的变化}
+
+第一次压缩之前，流场状态空间 $\mathcal{H}$ 为三维区域上的函数空间（式~\eqref{eq:1-13}）。第一次压缩之后，状态空间化为展向坐标上取值、每个取值处为一个二维流场状态的空间：离散化为 $N$ 个站位后，状态空间化为 $N$ 个二维状态空间的直和：
+\begin{equation}
+  \mathcal{H}_1 = \underbrace{\,\mathcal{H}_{2D} \oplus \mathcal{H}_{2D} \oplus \cdots \oplus \mathcal{H}_{2D}\,}_{N\ \text{项}}. \label{eq:2-17}
+\end{equation}
+
+$\mathcal{H}_{2D}$ 为二维截面问题的散度自由速度场空间，仍为无穷维。第一次压缩没有把无穷维化为有限维；第一次压缩把函数空间的定义域维数从三维降为二维，把一个三维问题化为 $N$ 个并行二维问题。刚体状态（十二维）不变。
+
+\subsection{回补路径一：升力线理论（固定翼侧）}
+
+升力线理论的数学结构为联立截面律与下洗积分的积分-微分方程组。截面律给出环量与有效迎角的关系（库塔-儒可夫斯基定理与截面升力线斜率）：
+\begin{equation}
+  \Gamma(y) = \tfrac{1}{2} V_\infty\, c(y)\, a_0\, \alpha_{\text{eff}}(y). \label{eq:2-18}
+\end{equation}
+
+下洗关系由式~\eqref{eq:2-7} 与式~\eqref{eq:2-8} 给出：
+\begin{equation}
+  \alpha_{\text{eff}}(y) = \alpha_{\text{geo}}(y) - \frac{1}{4\pi V_\infty}\oint \frac{\,\mathrm{d}\Gamma/\mathrm{d}\eta\,}{y - \eta}\,\mathrm{d}\eta. \label{eq:2-19}
+\end{equation}
+
+式~\eqref{eq:2-18} 与式~\eqref{eq:2-19} 构成关于未知函数 $\Gamma(y)$ 的积分-微分方程【文献：普朗特升力线方程】。数值求解的标准途径为把 $\Gamma(y)$ 展开为格拉厄特正弦级数 $\Gamma(y) = 4bV_\infty \sum_{n=1}^{M} A_n\sin(n\vartheta)$，$y = (b/2)\cos\vartheta$，截断至 $M$ 项后化为 $M$ 维线性方程组【文献】。求解输出为下洗分布 $w_i(y)$，回补方式为把条带模型的迎角替换为 $\alpha_{\text{geo}} - w_i/V_\infty$。
+
+\subsection{回补路径二：叶素-动量理论（旋翼与扑翼侧）}
+
+叶素-动量理论（Blade Element Momentum Theory，BEMT）的数学结构为逐环带的动量平衡与叶素力律的联立。取展向环带 $[y, y + \mathrm{d}y]$。该环带的动量平衡：流过环带的空气质量流率 $\mathrm{d}\dot{m} = \rho\,(2\pi y\,\mathrm{d}y)\,(V + v_i)$，其中 $V$ 为轴向来流速度（悬停时 $V = 0$），$v_i$ 为该环带的诱导速度；气流经 rotor 盘面后轴向速度增量为 $2v_i$（动量理论的经典假设：远尾迹诱导速度为盘面值的两倍【文献：旋翼动量理论】）。环带拉力的动量表达式为
+\begin{equation}
+  \mathrm{d}T = \mathrm{d}\dot{m}\,(2v_i) = 4\pi\rho\, y\,(V + v_i)\, v_i\,\mathrm{d}y. \label{eq:2-20}
+\end{equation}
+
+同一环带的叶素表达式为截面力律沿环带弧长的求和（叶素数记为 $B$，每叶的当地有效速度平方为 $W^2 = (\bar{\Omega}y)^2 + (V + v_i)^2$，$\bar{\Omega}y$ 为切向速度，此处 $\bar{\Omega}$ 为等效旋转角速度、对扑翼取拍动等效值 $\dot{\phi}$）：
+\begin{equation}
+  \mathrm{d}T_{be} = \tfrac{1}{2}\rho W^2\, B\, c(y)\, C_N(\alpha_{\text{eff}})\,\mathrm{d}y. \label{eq:2-21}
+\end{equation}
+
+令式~\eqref{eq:2-20} 与式~\eqref{eq:2-21} 相等，得到关于 $v_i$ 的二次方程。整理：$4\pi\rho\, y\,(V + v_i)\, v_i\,\mathrm{d}y = \mathrm{d}T_{be}$ 给出 $(V + v_i)v_i = \mathrm{d}T_{be}/(4\pi\rho\, y\,\mathrm{d}y)$，即
+\begin{equation}
+  v_i^2 + Vv_i - K(y) = 0, \qquad K(y) = \frac{\mathrm{d}T_{be}}{4\pi\rho\, y\,\mathrm{d}y}. \label{eq:2-22}
+\end{equation}
+
+二次方程求根公式取正根（诱导速度非负）：
+\begin{equation}
+  v_i(y) = \frac{-V + \sqrt{V^2 + 4K(y)}}{2}. \label{eq:2-23}
+\end{equation}
+
+悬停（$V = 0$）时式~\eqref{eq:2-23} 退化为 $v_i = \sqrt{K}$。数值求解采用不动点迭代：以 $v_i^{(0)} = 0$ 起步，第 $m+1$ 步用 $v_i^{(m)}$ 计算式~\eqref{eq:2-21} 的 $W$ 与 $\alpha_{\text{eff}}$，再由式~\eqref{eq:2-23} 解出 $v_i^{(m+1)}$\nobreak；迭代至 $|v_i^{(m+1)} - v_i^{(m)}|$ 小于给定容差。迭代格式收敛性的充分条件为映射的压缩性，工程上通常以欠松弛因子保证【文献：BEMT 数值方法】。
+
+适用性限定：动量理论的环带平衡假设以多叶环带平均为前提；扑翼每侧仅一叶，$B = 1$ 时环带假设形式上仍被工程使用，但该处为回补路径中假设最强的一环。回补输出为诱导速度分布 $v_i(y)$，回补方式为把条带模型的有效速度与迎角按式~\eqref{eq:2-2}、式~\eqref{eq:2-3} 用加入诱导速度后的相对气流重新计算。
+
+% ======================== 第 3 章 ========================
+\section{第二次压缩：时间截断（准定常截断）（原陈述第四段的数学版）}\label{sec:quasi}
+
+\subsection{定常截面解算子的定义}
+
+二维截面问题（式~\eqref{eq:2-6}）本身仍为非定常问题。定义定常截面解算子 $S$：对给定的一对参数 $(V, \alpha)$，$S$ 输出以下二维定常边值问题的解 $(\bm{u}_s, p_s)$：
+\begin{equation}
+\begin{split}
+  (\bm{u}_s\cdot\nabla)\bm{u}_s &= -\frac{1}{\rho}\nabla p_s + \nu\nabla^2\bm{u}_s, \qquad
+  \nabla\cdot\bm{u}_s = 0, \qquad \bm{u}_s\big|_{\text{翼型周线}} = 0,\\
+  \bm{u}_s &\to \text{远场均匀流（大小 } V \text{、方向按迎角 } \alpha \text{ 相对弦线）}\quad \text{当 } \|\bm{x}\| \to \infty.
+\end{split}
+\label{eq:3-1}
+\end{equation}
+
+式~\eqref{eq:3-1} 中全部项不含时间导数；解 $(\bm{u}_s, p_s)$ 只依赖参数对 $(V, \alpha)$ 与翼型形状。
+
+\subsection{准定常替换的形式定义与被删除项}
+
+准定常截断定义为以下替换：截面非定常解 $\bm{u}(x_c, z_c, t)$ 被替换为按瞬时参数值求值的定常解族
+\begin{equation}
+  \bm{u}(x_c, z_c, t) := \bm{u}_s\bigl(x_c, z_c;\ V_{\text{eff}}(t),\ \alpha_{\text{eff}}(t)\bigr). \label{eq:3-2}
+\end{equation}
+
+替换后，式~\eqref{eq:2-6} 中的时间导数项 $\partial u_x/\partial t|_\chi$ 与 $\partial u_z/\partial t|_\chi$ 被删除。被删除项的物理载体为流动记忆：截面流场携带涡量历史，当前时刻的涡量场（含尾迹涡量与前缘分离涡量）由过去全部时刻的运动决定。式~\eqref{eq:3-2} 的替换把流场的初始条件与历史全部丢弃，只保留“该瞬时速度与迎角所对应的定常解”。截面力律从动态系统（状态为涡量场的截面问题）降为静态映射（输入为 $(V_{\text{eff}}, \alpha_{\text{eff}})$，输出为力）。
+
+\subsection{合法性判据的推导：缩减频率}
+
+截面运动的特征时间尺度为 $t_m = 2\pi/\omega$（一个运动周期），流动对流通过半弦长的特征时间为 $t_c = (c/2)/V_{\text{eff}}$（流体以速度 $V_{\text{eff}}$ 流过半弦长 $c/2$ 所需时间）。两个时间尺度之比定义为缩减频率：
+\begin{equation}
+  k = \frac{\omega c}{2V_{\text{eff}}} = \frac{2\pi\, t_c}{t_m}. \label{eq:3-3}
+\end{equation}
+
+推导：$\omega c/(2V_{\text{eff}}) = \omega t_c = (2\pi/t_m)\, t_c = 2\pi t_c/t_m$【代入】。判据的含义：$k \ll 1$ 时，流动在对流通过半弦的时间内来不及感知运动变化，截面每时刻的流场与定常解偏差为小量；$k$ 与一同量级时，运动变化与对流同快，定常解不构成合理近似。原陈述“缩减频率 $k = \omega c/(2V)$（截面运动时间尺度与对流时间尺度之比）”即式~\eqref{eq:3-3}。
+
+\subsection{扑翼的缩减频率：悬停下的几何比形式}
+
+扑翼悬停拍动中，截面速度由式~\eqref{eq:2-4} 的中段公式 $V_{\text{eff}} = \dot{\phi}\,y$ 给出。以正弦拍动 $\phi = \Phi\sin(\omega_f t)$ 的中段峰值 $\dot{\phi}_{\max} = \Phi\omega_f$ 代入式~\eqref{eq:3-3}：
+\begin{equation}
+  k_{\text{peak}}(y) = \frac{\omega_f c}{2\Phi\omega_f y} = \frac{c(y)}{2\Phi y}. \label{eq:3-4}
+\end{equation}
+
+式~\eqref{eq:3-4} 的推导仅为代入与约去 $\omega_f$【代入】。结论：悬停拍动的缩减频率峰值是一个纯几何比（弦长对拍动幅值与展向站位乘积之比），与拍动频率无关。取典型量级 $c/b \sim 0.3$、$\Phi \sim 1\ \mathrm{rad}$（约 $57^\circ$）、中段站位 $y = b/2$，得 $k_{\text{peak}}(b/2) \approx 0.3\, b/(2 \times 1 \times b/2) = 0.3$【估计：几何量为附录 C 待代入量】。翼根附近 $y$ 减小时 $k$ 增大；拍动折返点附近 $\dot{\phi} \to 0$ 使 $V_{\text{eff}} \to 0$、$k$ 发散（该邻域内准定常近似局部最弱，但该邻域内速度与力元的贡献同时趋零，对周期平均力的贡献小）。前飞时式~\eqref{eq:2-1} 中来流分量加入 $V_{\text{eff}}$，式~\eqref{eq:3-3} 的分母增大，$k$ 相对悬停下降。综合以上，扑翼工作包线内的 $k$ 处于 $0.1$ 至 $1$ 以上的区间，即处于一的数量级。原陈述“扑翼的缩减频率处于一的数量级，纯时间截断在扑翼上不合法”的数学依据为式~\eqref{eq:3-4} 与上述区间估计。
+
+\subsection{被丢弃项的线性定量面：Theodorsen 函数与 Wagner 函数}
+
+线化小扰动理论给出时间截断所丢弃内容的精确频域表达。对二维薄翼的简谐振动（弦长 $c = 2b$，$b$ 为半弦长），环量升力的频域解为
+\begin{equation}
+  L_c = 2\pi\rho V b\, C(k)\, w_{3/4}, \label{eq:3-5}
+\end{equation}
+其中 $w_{3/4}$ 为四分之三弦点处的下洗速度（翼面运动引起），$C(k)$ 为 Theodorsen 函数：
+\begin{equation}
+  C(k) = \frac{H_1^{(1)}(k)}{H_1^{(1)}(k) + \mathrm{i}H_0^{(1)}(k)}, \label{eq:3-6}
+\end{equation}
+$H_0^{(1)}$ 与 $H_1^{(1)}$ 为第一类汉克尔函数【文献：Theodorsen 1935 年二维非定常薄翼理论】。式~\eqref{eq:3-5} 的定常极限核对：$k \to 0$ 时 $C(k) \to 1$【文献：汉克尔函数小宗量渐近】，式~\eqref{eq:3-5} 化为 $L = 2\pi\rho V b\, w_{3/4}$；定常薄翼升力为 $L = \tfrac{1}{2}\rho V^2 c \cdot 2\pi\alpha$ 且 $\alpha = w_{3/4}/V$（四分之三弦点下洗等于定常有效迎角乘速度【文献：薄翼理论的四分之三弦定理】），代入得 $L = \tfrac{1}{2}\rho V^2 c\, 2\pi\,(w_{3/4}/V) = \pi\rho V c\, w_{3/4} = 2\pi\rho V b\, w_{3/4}$，与式~\eqref{eq:3-5} 的定常极限一致。该核对确认式~\eqref{eq:3-5} 的系数无笔误。$C(k)$ 的另一个严格极限为 $k \to \infty$ 时 $C(k) \to 1/2$【文献：汉克尔函数大宗量渐近】：高频振动的环量升力幅值降至定常值的一半。$k$ 处于一的数量级时，$C(k)$ 为复数且 $|C(k)|$ 显著小于一并伴随相位滞后（具体值由式~\eqref{eq:3-6} 数值确定，本文不代填）。因此纯时间截断（相当于强制 $C \equiv 1$）在 $k = O(1)$ 时同时引入幅值误差与相位误差。
+
+时域对应的量为 Wagner 函数 $\Phi(\tau)$（$\tau = Vt/b$ 为无量纲对流时间）：迎角单位阶跃后的环量升力响应为 $L(\tau) = L_{ss}\,\Phi(\tau)$，其中严格极限值为 $\Phi(0^+) = 1/2$ 与 $\Phi(\infty) = 1$【文献：Wagner 1925 年阶跃响应解】。升力在数个对流时间 $\tau \sim 10$ 内逐步建立至定常值。准定常截断等价于强制 $\Phi \equiv 1$，即丢弃全部建立过程。
+
+非环量部分：截面在法向加速时推动流体做功，经典势流理论给出翼面法向平移的表观质量为每单位展长 $m_{AM} = \rho\pi b^2$【文献：平板势流表观质量】；相应的表观质量力为 $m_{AM}$ 乘以截面法向加速度。该力项依赖加速度，时间截断把该力项一并丢弃。
+
+\subsection{非线性非定常增升：定常解与真实拍动的差异}
+
+线化理论（第 3.5 节）只覆盖小扰动范围。大迎角下存在更强的非线性非定常效应：拍动翼面前缘形成的分离涡（前缘涡，Leading-Edge Vortex，LEV）在拍动过程中保持附着于翼面上表面，使吸力峰维持、法向力远超定常失速值；翼面在拍动末端的快速俯仰产生旋转环流力；两翼拍动起始阶段的贴合与剥开产生相互作用力。这些效应的定性机理与实验证据由 Sane 与 Dickinson 系列工作给出【文献：Sane 与 Dickinson 载于 Journal of Experimental Biology 的扑翼气动力系列论文（2001 年与 2002 年），实验方法为模型果蝇翼在真实旋转拍动运动下的测力】。定常二维翼型在迎角约 $10^\circ$ 至 $15^\circ$ 发生失速（升力线斜率骤降）【文献：二维翼型静态失速常识值】；真实拍动运动下测得的法向力系数的近似线性区间延伸至约四十五度（出处：原陈述引述的 Sane--Dickinson 拟合结果；该结果的机理为前缘涡延迟失速）。因此，若在时间截断之后直接沿用静态风洞的二维定常翼型系数，模型将严重欠预计拍动中的法向力；欠预计的部分即被时间截断丢弃的非定常增升。原陈述“欠预计的非定常增升（前缘涡失速延迟、旋转环流）被丢弃”的数学定位即本节。
+
+\subsection{回补：经验系数闭合的数学含义}
+
+经验系数闭合的数学陈述：不修改力律的函数形式（静态映射），而把系数曲线的形状由“定常翼型实验”换为“真实拍动运动下的测力实验”。设截面系数律的参数化形式为
+\begin{equation}
+  C_N(\alpha) = A\sin(2\alpha + \beta) + C_0, \label{eq:3-7}
+\end{equation}
+其中 $A$、$\beta$、$C_0$ 为拟合常数。Sane 与 Dickinson 在真实拍动运动（旋转翼台）下测得法向与切向力关于迎角的曲线并按上述正弦型形式拟合【文献：同第 3.6 节】。本项目的采用值为 $C_N(\alpha) = 3.59\sin(2\alpha + 9.1^\circ)$（出处：《推导\_状态空间方程\_全解析版.md》第 5 章；即 $A = 3.59$、$\beta = 9.1^\circ$、$C_0 = 0$ 的取法）。该闭合的严格含义为：对实验覆盖的运动学包线（频率、幅值、雷诺数区间内的拍动族），周期平均的截面力被系数曲线的形状吸收；由于测量在固定运动族上进行，包线外（不同缩减频率或不同雷诺数）的外推无保证。正弦型形式与“线性区间至约四十五度”陈述的对应：式~\eqref{eq:3-7} 的斜率为 $2A\cos(2\alpha + \beta)$，在 $\alpha = 0$ 处为 $2A\cos\beta$（$\beta = 9.1^\circ$ 时 $\cos\beta \approx 0.987$，斜率近峰值），斜率随 $\alpha$ 增大而下降，在 $2\alpha + \beta = 90^\circ$（$A = 3.59$、$\beta = 9.1^\circ$ 对应 $\alpha = 40.45^\circ$）处降为零；实验拟合表明工程意义上的线性近似区间延伸至约四十五度（出处：Sane--Dickinson 拟合结果的引述），与斜率缓降的函数形态一致。
+
+\subsection{经典分解中其余两项的地位}
+
+Sane 与 Dickinson 的修订准定常模型把拍动瞬时力分解为三项：平移项（由系数曲线 $C_N(\alpha)$、$C_T(\alpha)$ 承担）、旋转项与表观质量项【文献：同第 3.6 节】。旋转项的量纲一致形式为每单位展长 $F_{\text{rot}} = C_{\text{rot}}\,\rho\, V_{\text{eff}}\, c^2\,\dot{\theta}_w$（$C_{\text{rot}}$ 为实验拟合常数，量纲核对：$\mathrm{kg/m^3 \times m/s \times m^2 \times 1/s}$ $=$ $\mathrm{kg/(m\,s^2)}$ $=$ $\mathrm{N/m}$，即每单位展长的力，量纲自洽）；表观质量项为每单位展长 $\rho\pi (c/2)^2$ 乘以截面法向加速度（即第 3.5 节末段的 $m_{AM}$ 形式）。本项目的力律变元只含速度类与迎角类量，不含加速度项与俯仰角速率项（依据：2026 年 9 月 20 日力律估算公式审计确立的力律结构）。该取舍的含义为：旋转项与表观质量项未被单独建模，其中可被周期平均吸收的部分进入系数曲线的实验来源，不能被吸收的部分留作截断残余（残余的归宿见第 8 章）。
+
+\subsection{第二次压缩后状态空间的变化}
+
+第二次压缩之前，每个站位的状态为二维非定常流场（无穷维状态空间 $\mathcal{H}_{2D}$ 的元素，含全部涡量历史）。第二次压缩执行式~\eqref{eq:3-2} 的替换后，流场状态被瞬时运动学参数完全确定：给定 $(V_{\text{eff}}(t), \alpha_{\text{eff}}(t))$，解由算子 $S$ 唯一给出（在定常解可解的参数范围内）。因此第二次压缩不是把无穷维状态离散化为有限维，而是把流场自由度整体消去：流场从状态变量降级为输出变量。该消去在数学上是奇异摄动的刚性极限形式（对流时间趋零等效于 $k \to 0$ 的形式极限）；第 3.4 节已经论证扑翼的 $k$ 为一的数量级，因此该消去在扑翼上不是数学极限成立，而是以经验系数回补为条件的工程妥协。压缩后系统状态只剩下刚体十二维状态（加上若建模的驱动器状态）。
+
+% ======================== 第 4 章 ========================
+\section{第三次压缩：截面律闭合（原陈述第五段的数学版）}\label{sec:closure}
+
+\subsection{闭合的形式}
+
+经前两次压缩，每个截面问题为“二维定常翼型在给定 $(V_{\text{eff}}, \alpha_{\text{eff}})$ 下的力”。第三次压缩把该问题的求解方式从“求解式~\eqref{eq:3-1} 的非线性椭圆边值问题”替换为“代入实验系数曲线的代数求值”。闭合后的截面力元为
+\begin{equation}
+  \mathrm{d}F_N = \tfrac{1}{2}\rho\, V_{\text{eff}}^2\, c(y)\, C_N(\alpha_{\text{eff}})\,\mathrm{d}y, \label{eq:4-1}
+\end{equation}
+\begin{equation}
+  \mathrm{d}F_T = \tfrac{1}{2}\rho\, V_{\text{eff}}^2\, c(y)\, C_T(\alpha_{\text{eff}})\,\mathrm{d}y. \label{eq:4-2}
+\end{equation}
+
+其中 $\mathrm{d}F_N$ 沿截面法向 $\hat{\bm{z}}_c$、$\mathrm{d}F_T$ 沿弦向 $\hat{\bm{x}}_c$ 的反向（阻力方向）【定义】。式~\eqref{eq:4-1} 与式~\eqref{eq:4-2} 的量纲核对：$\mathrm{kg/m^3 \times (m/s)^2 \times m \times m = kg\, m/s^2 = N}$，与力元量纲一致。系数 $C_N$ 由式~\eqref{eq:3-7} 型曲线给出（本项目采用值见第 3.7 节），系数 $C_T$ 存在同类实验拟合曲线（出处：Sane--Dickinson 系列；本项目的采用值记录于力律源码与《推导\_状态空间方程\_全解析版.md》第 5 章，本文不重复数值）。模型由“解方程”降为“查系数”。
+
+\subsection{计算量对比的量级}
+
+定常截面求解（式~\eqref{eq:3-1}）在离散化后的规模：二维截面流域离散为量级 $10^3$ 至 $10^4$ 个自由度，每次求解需若干次牛顿迭代，每次迭代求解一个稀疏线性方程组【估计：标准计算流体力学离散规模】。系数闭合（式~\eqref{eq:4-1} 与式~\eqref{eq:4-2}）每截面的计算量为一次三角函数求值与常数乘加，量级为 $10^1$ 次浮点运算。两者的比值为五个量级以上【估计】。原陈述“计算量下降数个量级”的量级依据即此。
+
+\subsection{有效性域与外推风险}
+
+系数曲线携带其实验来源的有效性域，包含四个维度：雷诺数区间（实验模型翼的工作雷诺数范围）、马赫数区间（实验为不可压缩流动，模型应用于低马赫数）、迎角区间（拟合数据的覆盖范围，含线性区间至约四十五度的陈述）、运动学包线（实验拍动的缩减频率与幅值范围）。区间内的应用由实验直接支撑；区间外的外推（式~\eqref{eq:3-7} 的正弦形式外推至实验未覆盖的迎角、或雷诺数显著偏离实验值时沿用同一组 $A$、$\beta$、$C_0$）的偏差方向未知。原陈述“区间外推存在风险”与“误差方向为区间外推的未知偏差”的数学表述即此。
+
+\subsection{解析可微性}
+
+式~\eqref{eq:3-7} 型系数曲线为解析函数（正弦函数与常数的组合）；式~\eqref{eq:4-1} 与式~\eqref{eq:4-2} 对变元 $(V_{\text{eff}}, \alpha_{\text{eff}}, c)$ 为解析函数的组合（多项式乘正弦）。因此闭合后的截面力律在系数曲线有效区间内对输入解析可微。该性质的技术后果：力律对状态与输入的偏导数存在且连续，线性化（第 6.4 节）与基于梯度的辨识在数学上可用。
+
+% ======================== 第 5 章 ========================
+\section{第四次压缩：展向数值积分（原陈述第六段的数学版）}\label{sec:integ}
+
+\subsection{总力、对翼根铰链力矩与驱动负载的积分式}
+
+把 $N$ 个站位的力元沿展向求和得到总气动力：
+\begin{equation}
+  \bm{F}_{\text{aero}}(t) = \int_0^b \Bigl[\,\frac{\mathrm{d}F_N}{\mathrm{d}y}\,\hat{\bm{z}}_c(\phi, \theta_w) + \frac{\mathrm{d}F_T}{\mathrm{d}y}\,\bigl(-\hat{\bm{x}}_c(\phi, \theta_w)\bigr)\Bigr]\mathrm{d}y. \label{eq:5-1}
+\end{equation}
+
+对翼根铰链的铰链力矩（力臂为站位矢量）：
+\begin{equation}
+  \bm{M}_{\text{root}}(t) = \int_0^b \bm{r}(y, t) \times \Bigl[\,\frac{\mathrm{d}F_N}{\mathrm{d}y}\,\hat{\bm{z}}_c + \frac{\mathrm{d}F_T}{\mathrm{d}y}\,\bigl(-\hat{\bm{x}}_c\bigr)\Bigr]\mathrm{d}y. \label{eq:5-2}
+\end{equation}
+
+挥舞轴方向的驱动负载力矩为式~\eqref{eq:5-2} 在挥舞轴方向 $\hat{\bm{e}}_f$ 上的投影：
+\begin{equation}
+  \tau_{\text{drive}}(t) = \hat{\bm{e}}_f \cdot \bm{M}_{\text{root}}(t)
+  = \int_0^b \hat{\bm{e}}_f \cdot \Bigl[\,\bm{r} \times \frac{\mathrm{d}\bm{F}}{\mathrm{d}y}\,\Bigr]\mathrm{d}y. \label{eq:5-3}
+\end{equation}
+
+驱动功率为 $P_{\text{drive}} = \tau_{\text{drive}}\,\dot{\phi}$。式~\eqref{eq:5-3} 的量纲核对：$\mathrm{N\, m}$ 乘无量纲投影为 $\mathrm{N\, m}$，与力矩量纲一致。
+
+\subsection{数值求积}
+
+连续积分（式~\eqref{eq:5-1} 至式~\eqref{eq:5-3}）用复合求积公式离散。取站位 $y_k = (k - \tfrac{1}{2})\Delta y$（中点法则，$k = 1, \ldots, N$，$\Delta y = b/N$），求积公式为
+\begin{equation}
+  \int_0^b g(y)\,\mathrm{d}y = \sum_{k=1}^{N} g(y_k)\,\Delta y + O(\Delta y^2). \label{eq:5-4}
+\end{equation}
+
+误差阶的依据为复合中点法则的误差定理：被积函数二阶连续可导时误差上界为 $(b/24)$ $\max|g''|\,\Delta y^2$【文献：数值求积误差定理】。被积函数的光滑性由第 4.4 节的解析可微性保证（翼根与翼尖端的端点效应使二阶导数局部增大，工程处理为端点加密站位，此处不展开）。
+
+\subsection{求值量级}
+
+每次求值的总计算量为 $N$ 个截面各一次式~\eqref{eq:4-1} 与式~\eqref{eq:4-2} 型的代数求值、再作 $O(N)$ 次累加。取 $N = 10$ 至 $50$，总浮点运算量为 $10^3$ 量级【估计】。现代处理器每浮点运算耗时为纳秒量级，单次求值为数十微秒量级【估计】。原陈述“单次求值为微秒量级”的构成即此。
+
+\subsection{降阶链终点的性质清单}
+
+降阶链的终点为一个映射
+\begin{equation}
+  \bm{f}\colon (\bm{x}, \bm{u}, t) \mapsto \bigl(\bm{F}_{\text{aero}},\ \bm{M}_{\text{root}},\ \tau_{\text{drive}}\bigr), \label{eq:5-5}
+\end{equation}
+该映射具有四条性质，逐条对应原陈述的终点描述：
+
+\begin{itemize}
+  \item 零状态：映射~\eqref{eq:5-5} 不含任何流场状态或其它内部动态状态；任何时刻的输出只由该时刻的输入决定。
+  \item 纯代数：映射~\eqref{eq:5-5} 的计算只含代数运算与三角函数求值，不含微分方程求解。
+  \item 对输入解析可微：依据为第 4.4 节。
+  \item 单次求值微秒量级：依据为第 5.3 节。
+\end{itemize}
+
+以控制语言陈述：被控对象的执行通道模型从无穷维动态（式~\eqref{eq:1-15} 的 $\mathcal{H}$ 部分）压缩为静态非线性映射（式~\eqref{eq:5-5}）。
+
+% ======================== 第 6 章 ========================
+\section{降阶链终点接入刚体：被控对象状态空间方程的完成（“状态空间方程的推导”的终点站）}\label{sec:assembly}
+
+\subsection{状态方程的组装}
+
+把式~\eqref{eq:5-1} 的 $\bm{F}_{\text{aero}}$ 与式~\eqref{eq:5-2} 的 $\bm{M}_{\text{root}}$ 代入式~\eqref{eq:1-9} 至式~\eqref{eq:1-11}，得到封闭的状态方程。状态向量取
+\begin{equation}
+  \bm{x} = [\,\bm{p}_W;\ \bm{v}_B;\ \Theta;\ \bm{\Omega}_B\,] \in \R^{12}, \label{eq:6-1}
+\end{equation}
+其中 $\Theta$ 为姿态的三个坐标（横滚角、俯仰角、偏航角的最小坐标表示，局部有效）。状态方程为
+\begin{equation}
+  \dot{\bm{x}} = \bm{f}(\bm{x}, \bm{u}, t), \label{eq:6-2}
+\end{equation}
+$\bm{f}$ 的四个分块依次为 $\dot{\bm{p}}_W = \bm{R}\bm{v}_B$（式~\eqref{eq:1-11} 第一式）、姿态运动学（式~\eqref{eq:1-11} 第二式的最小坐标形式）、$m(\dot{\bm{v}}_B + \bm{\Omega}_B \times \bm{v}_B) = \bm{R}^{\top}\bm{F}_{g,W} + \bm{F}_{\text{aero}}(\bm{x}, \bm{u})$（式~\eqref{eq:1-9} 代入式~\eqref{eq:5-1}）、$\bm{J}\dot{\bm{\Omega}}_B + \bm{\Omega}_B \times \bm{J}\bm{\Omega}_B = \bm{M}_{\text{aero}}(\bm{x}, \bm{u})$（式~\eqref{eq:1-10} 代入式~\eqref{eq:5-2}）。输入 $\bm{u}$ 为挥舞指令通道（挥舞幅值、频率、对称差动与翼面俯仰指令；若驱动器动态被建模，则 $\bm{u}$ 先进入驱动器状态方程，驱动器输出再进入 $(V_{\text{eff}}, \alpha_{\text{eff}})$ 的计算，见第 6.5 节）。式~\eqref{eq:6-2} 的右端显式依赖 $t$ 的途径为 $\phi(t)$ 与 $\theta_w(t)$ 的周期时变。
+
+\subsection{右端对状态与输入的依赖路径}
+
+$\bm{f}$ 的气动部分对状态的依赖全部经过运动学中间变量。依赖路径为：状态 $(\bm{v}_B, \bm{\Omega}_B, \bm{R})$ 经式~\eqref{eq:1-5} 决定每个站位的 $\bm{w}(y, t)$；$\bm{w}$ 经式~\eqref{eq:2-2} 与式~\eqref{eq:2-3} 决定 $(V_{\text{eff}}, \alpha_{\text{eff}})$；$(V_{\text{eff}}, \alpha_{\text{eff}})$ 经式~\eqref{eq:4-1} 与式~\eqref{eq:4-2} 决定力元；力元经式~\eqref{eq:5-1} 至式~\eqref{eq:5-3} 决定 $(\bm{F}_{\text{aero}}, \bm{M}_{\text{root}}, \tau_{\text{drive}})$。输入 $\bm{u}$ 经驱动与翼面运动学改变 $\phi(t)$ 与 $\theta_w(t)$，进入同一路径。整条路径只含解析运算，因此第 4.4 节的解析可微性沿路径传递到 $\bm{f}$ 的气动部分。
+
+\subsection{周期时变性与平均化：从拍动尺度到姿态尺度}
+
+式~\eqref{eq:6-2} 的右端以拍动周期 $T$ 为周期：$\bm{f}(\bm{x}, \bm{u}, t + T) = \bm{f}(\bm{x}, \bm{u}, t)$（依据：$\phi(t)$ 与 $\theta_w(t)$ 的周期性沿第 6.2 节路径传递）。系统的两个时间尺度为：拍动角频率 $\omega_f$（量级为每秒数十弧度）与刚体姿态模态角频率 $\omega_{\text{att}}$（量级为每秒数弧度）。两者的比值 $\varepsilon = \omega_{\text{att}}/\omega_f$。一阶平均定理（first-order averaging theorem）的陈述：对 $\varepsilon$ 小参数系统 $\dot{\bm{x}} = \varepsilon\,\bm{g}(\bm{x}, t) + \bm{f}_{\text{fast}}$（$\bm{f}_{\text{fast}}$ 以 $T$ 为周期且周期平均为零）定义平均系统 $\dot{\bar{\bm{x}}} = \bar{\bm{g}}(\bar{\bm{x}})$，$\bar{\bm{g}} = \tfrac{1}{T}\int_0^T \bm{g}\,\mathrm{d}t$，则在 $[0, 1/\varepsilon]$ 时间尺度上 $\|\bm{x}(t) - \bar{\bm{x}}(t)\| = O(\varepsilon)$【文献：平均法标准定理，例如奇异摄动与平均法教科书】。工程应用形式：把式~\eqref{eq:6-2} 的气动项替换为周期平均力
+\begin{equation}
+  \bar{\bm{F}}_{\text{aero}}(\bm{x}, \bm{u}) = \frac{1}{T}\int_0^T \bm{F}_{\text{aero}}(\bm{x}, \bm{u}, t)\,\mathrm{d}t, \label{eq:6-3}
+\end{equation}
+得到平均系统 $\dot{\bm{x}} = \bar{\bm{f}}(\bm{x}, \bm{u})$（右端不再显含 $t$）。平均化的合法性条件为 $\varepsilon \ll 1$；扑翼的拍频与姿态模态频率的间隔通常满足一个数量级左右【估计】。线性摄动的对应理论为弗洛凯特理论（Floquet theory）：对 $\delta\dot{\bm{x}} = A(t)\,\delta\bm{x}$，$A(t)$ 以 $T$ 为周期，基本解矩阵 $\Psi(t)$ 满足 $\Psi(0) = I$，单值子矩阵 $\mathcal{M} = \Psi(T)$ 的特征值（弗洛凯特乘子）决定扰动增长衰减；单值子与等效常值矩阵 $\mathcal{R}$ 满足 $\exp(\mathcal{R}\, T) = \mathcal{M}$，一阶近似下 $\mathcal{R} \approx \tfrac{1}{T}\int_0^T A(t)\,\mathrm{d}t + O(\dot{S}\, T)$【文献：弗洛凯特理论】。平均化把“拍动尺度的周期系统”化为“姿态尺度的定常系统”，后者才是控制器设计的对象。
+
+\subsection{配平点与线性化：A 矩阵元素的链式分解}
+
+在配平点 $(\bm{x}^*, \bm{u}^*)$（右端 $\bar{\bm{f}}(\bm{x}^*, \bm{u}^*) = 0$）处作一阶泰勒展开，得到线性化状态方程
+\begin{equation}
+  \delta\dot{\bm{x}} = A\,\delta\bm{x} + B\,\delta\bm{u}, \qquad
+  A = \left.\frac{\partial\bar{\bm{f}}}{\partial\bm{x}}\right|_{*}, \qquad
+  B = \left.\frac{\partial\bar{\bm{f}}}{\partial\bm{u}}\right|_{*}. \label{eq:6-4}
+\end{equation}
+
+矩阵 $A$ 的气动元素的结构由第 6.2 节的依赖路径经链式法则给出。以对机体速度分量的偏导为例（以 $X$ 分量为例，其余分量同构）：
+\begin{equation}
+  \frac{\partial X}{\partial\bm{v}_B} = \sum_k \Delta y_k \Bigl[\, \frac{\partial X_k}{\partial\alpha_{\text{eff}}}\,\frac{\partial\alpha_{\text{eff}}}{\partial\bm{v}_B}
+  + \frac{\partial X_k}{\partial V_{\text{eff}}}\,\frac{\partial V_{\text{eff}}}{\partial\bm{v}_B} \Bigr]. \label{eq:6-5}
+\end{equation}
+
+推导：$X_k = X\bigl(y_k, V_{\text{eff}}(\bm{v}_B), \alpha_{\text{eff}}(\bm{v}_B)\bigr)$ 为站位 $y_k$ 的力元对 $X$ 的贡献，$X$ 为 $(V_{\text{eff}}, \alpha_{\text{eff}})$ 的函数（式~\eqref{eq:4-1}、式~\eqref{eq:4-2}）、$(V_{\text{eff}}, \alpha_{\text{eff}})$ 为 $\bm{v}_B$ 的函数（式~\eqref{eq:2-2}、式~\eqref{eq:2-3} 经式~\eqref{eq:1-5}），多元复合函数求导的链式法则给出式~\eqref{eq:6-5}【文献：多元复合函数链式法则】。两个内层偏导中，$\partial\alpha_{\text{eff}}/\partial\bm{v}_B$ 与 $\partial V_{\text{eff}}/\partial\bm{v}_B$ 只依赖几何与运动学定义（可显式求出），$\partial X_k/\partial\alpha_{\text{eff}}$ 含系数曲线斜率 $\mathrm{d}C_N/\mathrm{d}\alpha$（第 2.5 节已给出其解析式 $7.18\cos(2\alpha + 9.1^\circ)$）。式~\eqref{eq:6-5} 的结构即“力律解析可微使线性化可用”的具体展开。《推导\_状态空间方程\_全解析版.md》第 5 章与第 6 章在纵向四维状态 $(u, w, \theta, q)$ 上执行了同一链式分解的数值实例；该文件是本节下游的具体化。
+
+\subsection{状态维数的最终清点}
+
+被控对象状态空间方程（式~\eqref{eq:6-2}）的状态构成清单：刚体状态十二个（位置三、速度三、姿态三、角速度三）；气动状态零个（第 3.9 节）；驱动器状态视是否建模驱动动态而定：若驱动通道以二阶惯量-刚度-阻尼形式 $J_d\ddot{\phi} + D\dot{\phi} + K(\phi - \phi_{\text{cmd}}) = \tau$ 建模（$J_d$、$D$、$K$ 为驱动参数），则每通道增加两个状态；若驱动视为理想随动，则不增加状态。全阶模型（式~\eqref{eq:1-15}）与降阶链终点（式~\eqref{eq:6-2}）的状态数对比为：无穷加十二对零加十二（加可选驱动状态）。原陈述“从无穷维动态压缩为静态非线性映射”指的是气动执行通道部分；刚体十二维状态从未被压缩，被压缩的只有执行通道。
+
+% ======================== 第 7 章 ========================
+\section{假设清单与截断的对应关系（原陈述第三节的数学版）}\label{sec:assumptions}
+
+\subsection{假设一：条带独立}
+
+假设一的陈述：各截面气动特性互不影响、无展向流动。该假设对应的数学操作为第 2.2 节的截断算子（式~\eqref{eq:2-5} 至式~\eqref{eq:2-6}）。该假设的判据为平面形状沿展向变化缓慢（$\mathrm{d}c/\mathrm{d}y$ 与弦长尺度之比为小量）且展弦比不太小（$\Lambda$ 不接近一；式~\eqref{eq:2-16} 的修正量 $a_0/(\pi\Lambda)$ 在 $\Lambda$ 大时为小量）。误差方向为高估升力（第 2.4 节与第 2.5 节的证明）。回补路径为升力线理论（第 2.7 节）或叶素-动量理论（第 2.8 节）。
+
+\subsection{假设二：准定常}
+
+假设二的陈述：瞬时力只依赖瞬时运动学。该假设对应的数学操作为第 3.2 节的替换（式~\eqref{eq:3-2}）。判据为缩减频率远小于一（式~\eqref{eq:3-3}；扑翼上的实际值为一的数量级，第 3.4 节，判据不满足）。判据不满足时的依赖为经验系数回补（第 3.7 节）。误差方向为欠预计非定常增升（第 3.6 节；回补后残余方向由系数曲线与真实运动的匹配度决定）。
+
+\subsection{假设三：二维截面律成立}
+
+假设三的陈述：截面力服从二维翼型规律。该假设对应的数学操作为第 4.1 节的闭合（式~\eqref{eq:4-1} 与式~\eqref{eq:4-2}）。判据为低马赫数（不可压假设成立）与截面尺度上的雷诺数落在系数实验区间内（第 4.3 节）。误差方向为区间外推的未知偏差（第 4.3 节）。
+
+\subsection{假设四（追加）：翼面几何以刚性平面形状表示}
+
+该假设的陈述：翼面形变动力学不进入力律。数学操作为把翼面几何固定为刚性平面形状（弦长分布 $c(y)$ 与扭角分布为常值函数），翼面弹性自由度不出现在式~\eqref{eq:6-1} 的状态中。该假设的后果：气动力与翼面形变之间的双向耦合（气弹效应）整体被排除；形变的定常分量可经“指定的有效形变”以修改 $c(y)$ 与几何迎角分布的方式进入力律，形变的动态分量与力律的耦合留作截断残余。
+
+\subsection{汇总表}
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabularx}{\textwidth}{@{} >{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.3cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X @{}}
+    \toprule
+    假设 & 数学操作 & 被删项 & 判据表达式 & 误差方向 & 回补算子 \\
+    \midrule
+    假设一（条带独立） & 式~\eqref{eq:2-5} 至式~\eqref{eq:2-6} 的展向导数置零 & 展向对流、展向粘性、展向压力梯度、诱导下洗 & $\mathrm{d}c/\mathrm{d}y \cdot c^{-1} \ll 1$ 且 $a_0/(\pi\Lambda)$ 为小量 & 高估升力（式~\eqref{eq:2-16}） & 升力线方程（式~\eqref{eq:2-18}、式~\eqref{eq:2-19}）或 BEMT 迭代（式~\eqref{eq:2-22}、式~\eqref{eq:2-23}） \\
+    假设二（准定常） & 式~\eqref{eq:3-2} 的定常解替换 & 时间导数项、涡量历史、尾迹与前缘涡、表观质量 & $k = \omega c/(2V_{\text{eff}}) \ll 1$；扑翼实际 $k = O(1)$ & 欠预计非定常增升（回补后残余由匹配度决定） & 经验系数闭合（式~\eqref{eq:3-7}，Sane--Dickinson 实验来源） \\
+    假设三（二维截面律） & 式~\eqref{eq:4-1}、式~\eqref{eq:4-2} 的系数代入 & 定常边值问题的求解细节 & 马赫数低；$Re = V_{\text{eff}} c/\nu$ 落在实验区间 & 区间外推偏差未知 & 无模型内回补；以控制环鲁棒性吸收 \\
+    假设四（刚性翼面） & 几何自由度冻结 & 气弹耦合 & 形变量相对弦长为小量 & 视形变与相位而定 & 指定有效形变修正 $c(y)$ 与扭角 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% ======================== 第 8 章 ========================
+\section{回补与控制收束（原陈述第四节的数学版）}\label{sec:backfill}
+
+\subsection{模型内回补的数学结构：迭代求解与状态增广的区分}
+
+被截断项的第一种归宿是模型内回补。回补不改变力律的零状态性质的条件需要精确陈述。以 BEMT 为例（第 2.8 节）：诱导速度 $v_i$ 由不动点迭代求出，迭代在每一次求值内部完成并收敛到定值；映射 $(\bm{x}, \bm{u}) \mapsto (\bm{F}, \bm{M})$ 仍是静态映射，状态数为零。与之相对的另一种实现为把诱导动态写为微分方程（例如描述尾迹发展的离散涡模型的状态方程），该实现增加状态，不属于零状态回补。原陈述“模型精度提升但仍是零状态映射”的数学条件即：回补量以代数方程（或收敛的迭代）联系于瞬时运动学，而不以微分方程联系于历史。系数闭合（第 3.7 节）天然满足该条件：系数曲线为代数函数。
+
+\subsection{控制环内吸收的第一种形式：不确定性}
+
+截断残余进入控制问题的第一种形式为不确定性。真实力与模型力之差记为
+\begin{equation}
+  \Delta\bm{F}(\bm{x}, \bm{u}, t) = \bm{F}_{\text{true}}(\bm{x}, \bm{u}, t) - \hat{\bm{F}}(\bm{x}, \bm{u}), \label{eq:8-1}
+\end{equation}
+其中 $\hat{\bm{F}}$ 为降阶链终点给出的力律（式~\eqref{eq:5-5}）。$\Delta\bm{F}$ 对状态的作用经雅可比进入线性化模型：$\delta\dot{\bm{x}} = (A + \Delta A)\,\delta\bm{x} + B\,\delta\bm{u} + \bm{d}(t)$，其中 $\Delta A$ 为 $(\partial\Delta\bm{F}/\partial\,\delta\bm{x})$ 的贡献合入 $A$ 的摄动，$\bm{d}(t)$ 为 $\Delta\bm{F}$ 中与状态无关的分量。下洗缺失导致的有效增益偏差属于 $\Delta A$ 型：条带模型高估升力（第 2.4 节）等效于真实对象的升力通道增益低于模型增益，即乘性偏差。辨识与增益调度的作用为把 $\Delta A$ 参数化为调度变量 $\rho$ 的函数：$A(\rho)$ 与 $K(\rho)$，$\rho$ 取自可测量（配平迎角、前飞速度、拍频档位）；控制器按 $\rho$ 查表取增益，使增益偏差在调度网格内被覆盖。
+
+\subsection{控制环内吸收的第二种形式：扰动与姿态环带宽}
+
+截断残余的周期分量进入控制问题的第二种形式为扰动 $\bm{d}(t)$，周期为拍动周期 $T$ 的整数分之一（非定常脉动的基频与谐波）。设姿态环的开环传递函数为 $L(\mathrm{j}\omega) = P(\mathrm{j}\omega)\, C(\mathrm{j}\omega)$。扰动从对象输入端注入时，闭环对扰动的响应由补灵敏度函数（complementary sensitivity function）给出：
+\begin{equation}
+  T(\mathrm{j}\omega) = \frac{L(\mathrm{j}\omega)}{1 + L(\mathrm{j}\omega)}. \label{eq:8-2}
+\end{equation}
+
+推导：对象输入端注入扰动 $\bm{d}$ 时，闭环各量满足 $\bm{y} = P\,\bigl(C\,(\bm{r} - \bm{y}) + \bm{d}\bigr)$\nobreak。移项合并 $\bm{y}$ 项得 $\bm{y}\,(1 + PC) = PC\,\bm{r} + P\,\bm{d}$\nobreak，解出
+\begin{equation}
+  \bm{y} = \frac{PC}{1 + PC}\,\bm{r} + \frac{P}{1 + PC}\,\bm{d}. \label{eq:8-3}
+\end{equation}
+
+式~\eqref{eq:8-3} 中扰动项的传递函数为 $P/(1 + PC)$。两种等价写法逐项核对：其一为 $P/(1 + PC) = \bigl[PC/(1 + PC)\bigr]\cdot(1/C)$（右端乘开为 $P/(1 + PC)$，与左端相等【代入】）；其二为以灵敏度函数 $S(\mathrm{j}\omega) = 1/(1 + L(\mathrm{j}\omega))$ 表示时 $P/(1 + PC) = S \cdot P$（分母 $1 + PC$ 即 $1 + L$【代入】）。在频率高于环路带宽的频段（$|L(\mathrm{j}\omega)| \ll 1$），$S(\mathrm{j}\omega) = 1/(1 + L) \approx 1$，$S\, P$ 的抑制来自对象 $P$ 自身的低通特性（刚体惯性对高频力扰动的积分平滑）；若 $|L(\mathrm{j}\omega)|$ 在扰动频段仍大，则 $S \approx 1/L$ 提供附加抑制。姿态环带宽设计的实际裁定为：带宽显著低于拍动频率，使控制器不对拍频脉动做出反应（避免激励执行通道与噪声放大），拍频分量的抑制由对象惯性的低通特性承担。原陈述“由姿态环带宽抑制”的操作含义为该带宽裁定，而非环路在拍频处提供增益。
+
+\subsection{架构裁定的数学含义：辨识只进调度律，不进力律系数}
+
+本项目的一项架构裁定为：辨识结果只进入控制器调度律，不进入力律系数。该裁定的数学表述：力律系数向量 $\hat{C} = (A, \beta, C_0, \ldots)$（式~\eqref{eq:3-7} 的项目采用值）冻结为常值；系统辨识的输出限定为控制器增益对调度变量的映射 $K(\rho)$；截断残余 $\Delta\bm{F}$（式~\eqref{eq:8-1}）不被用于在线修改 $\hat{\bm{F}}$ 的内部参数。该裁定的后果为：模型侧的失配不减少（$\Delta\bm{F}$ 不衰减），全部失配由控制环的鲁棒性承受。鲁棒稳定性的充分条件由小增益定理给出：闭环在摄动 $\Delta$ 下的稳定性得到保证的条件为
+\begin{equation}
+  \sup_{\omega}\ \bar{\sigma}\bigl(T(\mathrm{j}\omega)\bigr)\cdot\bar{\sigma}\bigl(\Delta(\mathrm{j}\omega)\bigr) < 1, \label{eq:8-4}
+\end{equation}
+其中 $\bar{\sigma}$ 为最大奇异值【文献：鲁棒控制小增益定理】。式~\eqref{eq:8-4} 给出设计余量的定量形式：补灵敏度函数的峰值与失配的范数乘积小于一。台架与飞行的实测对比给出 $\Delta$ 的实测量级（第 8.5 节），该量级代入式~\eqref{eq:8-4} 即检验余量是否充分。
+
+\subsection{失配的实测量级}
+
+本项目 C 工作令的在环摆幅比复验给出该不确定性的实测量级：台架 D1.0 档位的摆幅比为 1.161，在环巡航状态的摆幅比为 1.053，两者的相对偏差为 $(1.053 - 1.161)/1.161 = -0.093$，即偏差 $-9.3\%$；台架波形与在环波形的相关系数为 0.968（出处：C 工作令在环摆幅比复验记录，2026 年 9 月 21 日至 22 日）。该三数的含义：执行通道模型（力律加驱动）在台架与在环两个工况间的输出量级偏差为百分之十以内；相关系数 0.968 对应的残差功率占比为 $1 - 0.968^2 = 1 - 0.937 = 0.063$，即约百分之六【代入】。该量级即式~\eqref{eq:8-4} 中 $\Delta$ 的实测量级输入。
+
+% ======================== 第 9 章 ========================
+\section{全链一览与数值代入清单}\label{sec:summary}
+
+\subsection{五级模型的汇总表}
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{@{} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}X @{}}
+    \toprule
+    级 & 状态空间 & 方程类型 & 状态维数 & 单步求值量级 \\
+    \midrule
+    $M_0$ 全阶（式~\eqref{eq:1-15}） & 刚体 $\oplus$ 三维流场 & 三维非定常纳维-斯托克斯加刚体耦合 & 无穷加十二 & 网格 $10^{10}$ 量级、每步非线性抛物求解【估计】 \\
+    $M_1$ 展向分解（式~\eqref{eq:2-17}） & 刚体 $\oplus$ $N$ 个二维流场 & $N$ 个并行二维非定常纳维-斯托克斯 & 每站位无穷、合计无穷 & 较 $M_0$ 降一维网格量级【估计】 \\
+    $M_2$ 时间截断（第 3.9 节） & 刚体（流场被消去） & 刚体常微分方程加定常截面边值问题 & 十二 & 每截面一次定常椭圆求解 \\
+    $M_3$ 截面律闭合（第 4 章） & 刚体 & 刚体常微分方程加系数代数律 & 十二 & 每截面 $10^1$ 次浮点运算 \\
+    $M_4$ 展向积分（第 5 章） & 刚体（加可选驱动状态） & 刚体常微分方程加静态力律 & 十二（加可选驱动） & 全翼 $10^3$ 次浮点运算、微秒量级【估计】 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+$M_4$ 与 $M_3$ 在状态维数上相同；两级的差别为力律输出的求和方式（连续积分对离散求和）。原陈述把四次压缩计为展向分解、时间截断、截面律闭合、展向数值积分，与本表 $M_1$ 至 $M_4$ 一一对应。
+
+\subsection{数值代入清单（附录 C 的正文化）}
+
+把本文件的解析式用于本机数值核对时，需要代入的量及其来源如下。已确认的量：机体质量 $m = 0.215\ \mathrm{kg}$（出处：第 0.4 节表）；配平前向速度 $u^* = 4.5\ \mathrm{m/s}$（同）；空气密度与运动粘度（第 0.3 节）；法向力系数律常数 $A = 3.59$、$\beta = 9.1^\circ$（第 3.7 节）。待读入的量：半展长 $b$、弦长分布 $c(y)$（或根弦与梢弦）、拍动幅值 $\Phi$、拍动频率 $f$、驱动参数（若建模驱动状态），来源为机翼的 URDF 模型文件与仿真配置文件。代入后的核对项：式~\eqref{eq:3-4} 的各站位缩减频率 $k_{\text{peak}}(y)$（确认扑翼判据不满足的定量范围）；式~\eqref{eq:2-16} 的展弦比修正量 $a_0/(\pi\Lambda)$（确认高估量级）；雷诺数 $Re = V_{\text{eff}} c/\nu$ 与系数实验区间的比对（确认假设三的判据）。本文件不在几何量未读入的情况下代填任何数值。
+
+% ======================== 附录 ========================
+\appendix
+
+\section{符号总表}
+
+\begin{longtable}{@{} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{6.4cm} >{\raggedright\arraybackslash}p{3.2cm} @{}}
+\toprule
+符号 & 含义 & 首次定义处 \\
+\midrule
+\endfirsthead
+\toprule
+符号 & 含义 & 首次定义处 \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\bm{u}$、$p$ & 流场速度矢量与压力 & 第 1.1 节 \\
+$\nu$、$\mu$ & 空气运动粘度与动力粘度 & 第 1.1 节 \\
+$\Omega(t)$、$S_w(t)$ & 流体区域与翼面表面 & 第 1.1 节 \\
+$\bm{w}$ & ALE 网格速度 & 第 1.2 节 \\
+$\bm{\sigma}$ & 柯西应力张量 & 第 1.4 节 \\
+$\bm{n}_w$ & 翼面指向流体的法向 & 第 1.4 节 \\
+$\bm{v}_B$、$\bm{\Omega}_B$、$\bm{R}$、$\bm{p}_W$ & 机体速度、角速度、姿态矩阵、质心位置 & 第 1.5 节 \\
+$\mathcal{H}$ & 散度自由速度场状态空间 & 第 1.6 节 \\
+$\phi$、$\theta_w$、$\Phi$、$f$、$\omega_f$、$T$ & 挥舞角、翼面俯仰角、拍动幅值、拍频、拍动角频率、拍动周期 & 第 0.2 节 \\
+$\hat{\bm{e}}_f$、$\hat{\bm{e}}_1$、$\hat{\bm{e}}_2$、$\hat{\bm{y}}_w$、$\hat{\bm{e}}_t$ & 挥舞轴与拍动平面基矢、翼展方向、拍动切向 & 第 0.1 节 \\
+$\hat{\bm{x}}_c$、$\hat{\bm{z}}_c$ & 截面弦向与法向单位矢量 & 第 0.1 节 \\
+$y$、$b$、$c(y)$、$S$、$\Lambda$ & 展向坐标、半展长、弦长分布、机翼面积、展弦比 & 第 0.2 节 \\
+$\bm{q}$、$\bm{w}$、$V_{\text{eff}}$、$\alpha_{\text{eff}}$ & 截面相对气流速度、翼面相对空气速度、有效速度、有效迎角 & 第 2.1 节 \\
+$\Gamma(y)$、$w_i$ & 附着环量分布与诱导下洗 & 第 2.4 节 \\
+$k$ & 缩减频率 & 第 0.3 节，推导于第 3.3 节 \\
+$S$（算子） & 定常截面解算子 & 第 3.1 节 \\
+$C(k)$、$\Phi(\tau)$ & Theodorsen 函数与 Wagner 函数 & 第 3.5 节 \\
+$C_N(\alpha)$、$C_T(\alpha)$ & 法向与切向力系数实验律 & 第 3.7 节、第 4.1 节 \\
+$A$、$\beta$、$C_0$ & 系数律拟合常数 & 第 3.7 节 \\
+$\bm{x}$、$\bm{u}$、$\bm{f}$ & 状态向量、输入向量、状态方程右端 & 第 6.1 节 \\
+$A$、$B$ & 线性化状态矩阵与输入矩阵 & 第 6.4 节 \\
+$L$、$S$、$T$ & 开环传递函数、灵敏度函数、补灵敏度函数 & 第 8.3 节 \\
+$\Delta\bm{F}$、$\Delta A$、$\bm{d}$ & 截断残余力、增益摄动、周期扰动 & 第 8.2 节 \\
+\end{longtable}
+
+\noindent 符号重用声明：$S$ 在式~\eqref{eq:2-18} 语境中兼作机翼面积、在第 3.1 节作定常解算子、在第 8.3 节作灵敏度函数；三处含义由上下文区分，且机翼面积仅出现于第 2.5 节与第 2.8 节的展开式中。
+
+\section{与既有文档族的接口}
+
+本文件在文档族中的位置：本文件推导气动执行通道侧的降阶链（全阶模型至静态力律至被控对象状态方程的一般形式）；《推导\_状态空间方程\_全解析版.md》推导纵向通道的具体状态方程、特征多项式与模态结构，该文件第 5 章的气动导数换算正是本文件式~\eqref{eq:6-5} 链式分解在纵向四维状态上的数值执行；《推导\_状态空间方程\_运算版.md》给出该纵向推导的结论矩阵与数值出处速查。三个文件的分工：本文回答“力律为何是静态映射与状态方程如何组装”，纵向版回答“组装后的纵向矩阵长什么样”，运算版回答“矩阵里的数从哪里来”。
+
+\section{与正文第 9.2 节的分工声明}
+
+第 9.2 节已把数值代入清单正文化；本附录不再重复。待读入几何量（半展长、弦长分布、拍动幅值、拍频）在 URDF 模型文件与仿真配置文件中的具体键名，以力律源码与配置文件的当前版本为准；本文件不代填具体键名与数值。
+
+\end{document}

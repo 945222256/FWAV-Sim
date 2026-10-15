@@ -1,0 +1,24 @@
+/* tokens.css — 全站共享设计令牌（参数实验室三稿钉固值，控制台同站同源继承）。
+ * 单一来源纪律：色值与字体栈改这里，不散落各组件。 */
+:root {
+  --tk-canvas: #f0eee6;
+  --tk-card: #faf9f5;
+  --tk-ink: #141413;
+  --tk-dim: #5e5d59;
+  --tk-accent: #d97757;
+  --tk-accent-hover: #c6613f;
+  --tk-accent-text: #b4551f;
+  --tk-done: #1f7a5c;
+  --tk-partial: #a06a12;
+  --tk-missing: #c4402f;
+  --tk-stale: #3d5a80;
+  --tk-line: rgba(20, 20, 19, 0.08);
+  /* 衍生透明色登记（I-136 评审第八节，全站仅此两档）：
+   * 抽屉蒙层一档（--tk-drawer-mask），各页滑入抽屉共用；
+   * 悬停边框一档即上面 --tk-line 的边框用途，悬停态统一改用
+   * --tk-dim 实色边框，不再另设透明色。 */
+  --tk-drawer-mask: rgba(20, 20, 19, 0.25);
+  --tk-serif: "Source Serif 4", Georgia, "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --tk-sans: "Avenir Next", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --tk-mono: "JetBrains Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "经理标准联络",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sender", "to", "purpose", "summary", "action", "authorization"],
+  "allOf": [
+    {"if": {"properties": {"purpose": {"const": "机主信息移交"}}}, "then": {"properties": {"action": {"const": "无需操作，无需回复。"}}}},
+    {"if": {"properties": {"purpose": {"const": "执行任务"}}}, "then": {"properties": {"action": {"not": {"pattern": "^(?:(?:请|你|先|目前|暂时|继续|仅需|只需|保持|原地|麻烦|您)[，,、\\s]*)*(?:等待|等候|等到|等通知|等交付|等二队|待命|暂候|稍后|届时|无需|不必|不用|仅供|知悉|收悉|收到|确认收悉|确认收到)|^(?:(?:二队|三队|施工队|对方|材料|修复|任务).{0,6})?(?:交付|完成|提交|就绪|准备好|结束)后|^(?:请)?(?:在)?(?:收到|拿到|获取|取得).{0,20}(?:后|之后|以后)|(?:交付|完成|通知|提交|就绪|准备好|结束)后(?:，|,)?(?:请)?(?:再|由你)|(?:等|待).{0,24}(?:后再|后请|再由|再复|再验)|^(?:请)?(?:回复|答复|回答|告知).{0,8}(?:收到|收悉|知悉)"}, "description": "必须现在可执行；等待、待命、收悉及常见等待交付后再办的表达会被拒绝。"}}}}
+  ],
+  "properties": {
+    "sender": {"type": "string", "minLength": 1, "maxLength": 32, "description": "你当前岗位的固定人员标识，例如 elsa；从已确认岗位取得，不冒称他人。"},
+    "to": {"type": "string", "minLength": 1, "maxLength": 32, "description": "收件人姓名或固定人员标识，例如 Doro 或 doro；工具后台查通讯录，无须查会话列表。"},
+    "purpose": {"type": "string", "enum": ["执行任务", "机主信息移交"], "description": "仅两种用途：执行任务须给出现在可做的具体动作；机主信息移交须有机主明确要求向该人转交该信息的原话。普通报进度不发送。"},
+    "item_id": {"type": ["string", "null"], "pattern": "^I-[0-9]+$", "maxLength": 16, "description": "关联正式事项编号；普通联络可以不填。"},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 80, "description": "80字以内，直接写发生了什么或需要解决的具体问题；不用版本号替代解释。"},
+    "action": {"type": "string", "minLength": 1, "maxLength": 80, "description": "执行任务：写现在可做的具体动作，不能是等待、待命、收到或知悉；尚缺材料由负责方就绪后另行交接。机主信息移交固定填：无需操作，无需回复。"},
+    "details": {"type": "string", "maxLength": 100, "description": "可选必要补充，100字以内；摘要、动作、补充合计不超过240字。"},
+    "evidence": {"type": "array", "maxItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 160}, "description": "最多两个项目相对文件路径或 https 链接，只放入口，不贴审计日志。"},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["basis"], "properties": {
+      "basis": {"type": "string", "minLength": 1, "maxLength": 240, "description": "已存在的机主对对象和动作的明确授权出处。机主信息移交须引用机主明确要求把该信息交给该人的原话，不能用一般岗位授权代替；程序不能认证原话真伪。不重复索取已有授权。"},
+      "source_thread_id": {"type": "string", "pattern": "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$", "description": "可选授权来源 Codex 会话号；只入后台审计，不进入消息正文。"}
+    }},
+    "request_id": {"type": "string", "minLength": 8, "maxLength": 100, "pattern": "^[a-zA-Z0-9_.:-]+$", "description": "可选稳定请求号。同号不重复投递；未填时按本条内容和授权依据生成，同一意图自动去重。"}
+  }
+}

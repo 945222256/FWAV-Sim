@@ -1,0 +1,406 @@
+/* lab/lab.css — 参数实验室样式（I-136 第二版）。
+ * 令牌纪律：全部色值与字体栈引用 tokens.css 的 --tk-* 令牌，本文件
+ * 零十六进制色值；衍生透明色仅两处并在 tokens.css 注释登记（抽屉
+ * 蒙层一处、悬停边框一档）。动效清单四条：抽屉二百毫秒、选项卡与
+ * 芯片一百五十毫秒、点跳闪烁六百毫秒一次性两拍；属性只用透明度、
+ * 位移与颜色。全扁平零投影。 */
+
+.lab {
+  min-height: 100vh;
+  background: var(--tk-canvas);
+  color: var(--tk-ink);
+  font: 16px/1.6 var(--tk-sans);
+  position: relative;
+}
+
+.lab *, .lab *::before, .lab *::after { box-sizing: border-box; }
+.lab button { font-family: inherit; cursor: pointer; }
+
+/* 锚点滚动留白：粘性索引带高度加八像素（评审第七节风险二）。 */
+.lab [id^="lab-"] { scroll-margin-top: 72px; }
+
+/* ── 顶栏与机型选项卡（沿用阶段一） ─────────────────────────────── */
+.lab-top {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+  padding: 20px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid var(--tk-line);
+  background: var(--tk-canvas);
+}
+.lab-title { font-family: var(--tk-serif); font-size: 26px; line-height: 1.2; }
+.lab-title small { display: block; font-family: var(--tk-sans); font-size: 12px; color: var(--tk-dim); margin-top: 2px; }
+.lab-top .spacer { flex: 1; }
+.lab-top-meta { font-size: 12px; color: var(--tk-dim); }
+
+.lab-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.lab-tab {
+  border: 1px solid var(--tk-line); background: transparent; color: var(--tk-ink);
+  padding: 8px 14px; font-size: 13px; border-radius: 8px;
+  transition: border-color 150ms, color 150ms, opacity 150ms;
+}
+.lab-tab.active { background: var(--tk-card); border-color: var(--tk-dim); }
+.lab-tab.locked { opacity: 0.55; cursor: not-allowed; position: relative; }
+.lab-tab-hint {
+  display: none; position: absolute; left: 0; top: calc(100% + 6px);
+  width: 300px; text-align: left; font-size: 12px; line-height: 1.5;
+  color: var(--tk-dim); background: var(--tk-card); border: 1px solid var(--tk-line);
+  padding: 8px 10px; border-radius: 8px; z-index: 30;
+}
+.lab-tab.locked:hover .lab-tab-hint { display: block; }
+
+.lab-btn {
+  border: none; border-radius: 8px; padding: 8px 16px;
+  background: var(--tk-accent); color: var(--tk-card);
+  font-size: 14px; font-weight: 600;
+  transition: background 150ms;
+}
+.lab-btn:hover { background: var(--tk-accent-hover); }
+.lab-btn-minor {
+  background: transparent; color: var(--tk-ink);
+  border: 1px solid var(--tk-dim);
+}
+.lab-btn-minor:hover { background: transparent; border-color: var(--tk-ink); }
+
+/* ── 粘性意义索引带（评审第一节：只放域级芯片，高度不超五十六像素） ── */
+.lab-indexband {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px clamp(16px, 4vw, 48px);
+  background: var(--tk-canvas);
+  border-bottom: 1px solid var(--tk-line);
+  overflow-x: auto; scrollbar-width: none;
+}
+.lab-indexband::-webkit-scrollbar { display: none; }
+.lab-band-chip {
+  flex: none; display: inline-flex; align-items: baseline; gap: 6px;
+  border: 1px solid var(--tk-line); background: transparent; color: var(--tk-dim);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px;
+  transition: border-color 150ms, color 150ms, background 150ms;
+}
+.lab-band-chip small { font-size: 11px; }
+.lab-band-chip.active {
+  color: var(--tk-ink); background: var(--tk-card);
+  border-color: var(--tk-dim); font-weight: 600;
+}
+
+/* ── 首屏导语（评审第五节首屏底线：压缩为单行） ─────────────────── */
+.lab-hero { padding: 18px clamp(16px, 4vw, 48px) 4px; }
+.lab-hero h1 { font-family: var(--tk-serif); font-size: 30px; letter-spacing: -0.01em; margin: 0; display: inline; }
+.lab-hero-tag { display: inline; color: var(--tk-dim); margin-left: 14px; font-size: 13px; }
+.lab-hero p { margin: 0; }
+
+/* ── 公式墙（评审第二节：卡高上限一百四十像素，桌面两列） ────────── */
+.lab-fxwall { padding: 16px clamp(16px, 4vw, 48px) 8px; }
+.lab-sec-head h2 { font-family: var(--tk-serif); font-size: 24px; margin: 0 0 4px; }
+.lab-sec-lead { color: var(--tk-dim); max-width: 720px; margin: 0 0 10px; font-size: 13px; }
+.lab-fxgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.lab-fxcard {
+  background: var(--tk-card); border: 1px solid var(--tk-line); border-radius: 12px;
+  padding: 10px 14px; max-height: 140px; overflow: hidden;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.lab-fxcard h3 { margin: 0; font-size: 13px; font-family: var(--tk-serif); }
+.lab-fx-text { font-family: var(--tk-serif); font-size: 18px; line-height: 1.6; }
+.lab-fx-sym, .lab-fx-sym-plain {
+  font-family: var(--tk-mono); font-size: 15px;
+  background: none; border: none; padding: 0 1px;
+}
+.lab-fx-sym {
+  color: var(--tk-accent-text);
+  border-bottom: 1px dashed var(--tk-accent);
+  transition: border-color 150ms, color 150ms;
+  min-height: 1em;
+}
+.lab-fx-sym:hover { border-bottom-style: solid; color: var(--tk-accent-text); }
+.lab-fx-note {
+  margin: 0; font-size: 11.5px; color: var(--tk-dim); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.lab-fx-src { margin: 0; font-size: 11px; color: var(--tk-dim); font-family: var(--tk-mono); }
+.lab-fx-inline { font-family: var(--tk-mono); font-size: 13px; }
+
+/* ── 域区（域头含族芯片，不粘性） ───────────────────────────────── */
+.lab-domain { padding: 14px clamp(16px, 4vw, 48px) 6px; }
+.lab-dom-no { font-family: var(--tk-mono); font-size: 11px; color: var(--tk-dim); }
+.lab-dom-head h2 { font-family: var(--tk-serif); font-size: 22px; margin: 2px 0 4px; }
+.lab-dom-head h2 small { font-size: 13px; color: var(--tk-dim); font-family: var(--tk-sans); margin-left: 8px; }
+.lab-dom-lead { color: var(--tk-dim); max-width: 720px; margin: 0 0 8px; font-size: 13.5px; }
+.lab-fam-chips { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 0 0 8px; }
+.lab-chip-group { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+.lab-chip-groupname { font-size: 12px; color: var(--tk-dim); margin-right: 2px; }
+.lab-chip {
+  border: 1px solid var(--tk-line); background: transparent; color: var(--tk-ink);
+  border-radius: 999px; padding: 3px 10px; font-size: 12px;
+  transition: border-color 150ms, background 150ms;
+}
+.lab-chip small { color: var(--tk-dim); font-size: 11px; margin-left: 4px; }
+.lab-chip:hover { background: var(--tk-card); border-color: var(--tk-dim); }
+
+/* ── 族块 ───────────────────────────────────────────────────────── */
+.lab-family { margin: 10px 0 18px; }
+.lab-family-head { display: flex; gap: 20px; align-items: flex-start; }
+.lab-family-text { flex: 1; min-width: 240px; }
+.lab-family-head h3 { font-family: var(--tk-serif); font-size: 20px; margin: 0 0 4px; }
+.lab-family-head h3 small { font-size: 12px; color: var(--tk-dim); font-family: var(--tk-sans); margin-left: 8px; }
+.lab-family-tag {
+  font-size: 11px; font-family: var(--tk-sans); color: var(--tk-dim);
+  border: 1px solid var(--tk-line); border-radius: 6px; padding: 1px 6px; margin-left: 8px;
+}
+.lab-family-src { display: block; font-size: 11px; color: var(--tk-dim); margin-top: 2px; }
+.lab-family-lead { color: var(--tk-dim); margin: 0; max-width: 640px; }
+
+/* 三维转台：族头局部插图（评审第五节：宽度下限二百八十像素）。 */
+.lab-stage { margin: 0; flex: none; width: 280px; }
+.lab-stage img { width: 100%; height: auto; display: block; border: 1px solid var(--tk-line); border-radius: 8px; }
+.lab-stage-caption {
+  display: flex; flex-wrap: wrap; gap: 4px 10px;
+  font-size: 10px; color: var(--tk-dim); margin-top: 4px;
+}
+.lab-stage-empty {
+  width: 280px; height: 210px; border: 1px dashed var(--tk-line); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--tk-dim); font-size: 12px;
+}
+
+/* ── 参数卡 ─────────────────────────────────────────────────────── */
+.lab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 10px; }
+.lab-grid-compact { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+.lab-card {
+  display: flex; flex-direction: column; gap: 4px; text-align: left;
+  background: var(--tk-card); color: var(--tk-ink);
+  border: 1px solid var(--tk-line); border-radius: 12px; padding: 10px 12px;
+}
+.lab-card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.lab-card-short { font-size: 15px; font-weight: 700; }
+.lab-lvtag {
+  flex: none; font-size: 10px; color: var(--tk-dim);
+  border: 1px solid var(--tk-line); border-radius: 6px; padding: 0 5px;
+}
+.lab-lvtag.tentative { border-style: dashed; }
+.lab-card-key { font-family: var(--tk-mono); font-size: 12px; color: var(--tk-dim); word-break: break-all; }
+.lab-card-valuerow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.lab-card-value { font-family: var(--tk-mono); font-size: 16px; font-weight: 600;
+  min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.lab-card-unit { font-size: 12px; color: var(--tk-dim); font-weight: 400; }
+.lab-card-fxmark { font-size: 11px; color: var(--tk-accent-text); border: 1px solid var(--tk-line); border-radius: 6px; padding: 0 5px; }
+.lab-card-explain { font-size: 12.5px; color: var(--tk-dim); line-height: 1.5; }
+.lab-card-sub { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--tk-dim); }
+
+/* I-232：用途与三槽复核独立陈列；六轴筛选沿用现有芯片样式。 */
+.lab-sem-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.lab-sem-tag {
+  font-size: 11px; border: 1px solid var(--tk-line); border-radius: 6px;
+  padding: 1px 6px; color: var(--tk-dim); overflow-wrap: anywhere;
+}
+.lab-usage-current { color: var(--tk-ink); }
+.lab-usage-undetermined, .lab-sem-gap { color: var(--tk-partial); }
+.lab-sem-gap { font-size: 12px; overflow-wrap: anywhere; }
+.lab-card-short, .lab-sem-detail { overflow-wrap: anywhere; min-width: 0; }
+.lab-sem-detail { padding-bottom: 12px; border-bottom: 1px solid var(--tk-line); font-size: 12px; }
+.lab-sem-detail p { margin: 8px 0; }
+.lab-sem-detail ul { padding-left: 18px; }
+.lab-sem-raw { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 11px; }
+.lab-filters { margin: 12px clamp(16px, 4vw, 48px) 24px; padding: 14px;
+  border: 1px solid var(--tk-line); border-radius: 8px; }
+.lab-filter-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: 14px; }
+.lab-filter-note { color: var(--tk-dim); font-size: 12px; margin: 8px 0; }
+.lab-filter-axis { display: flex; flex-wrap: wrap; gap: 6px; border: 0; padding: 6px 0; margin: 0; min-width: 0; }
+.lab-filter-axis legend { font-size: 12px; color: var(--tk-dim); }
+.lab-filter-axis .lab-chip { white-space: normal; overflow-wrap: anywhere; text-align: left; max-width: 100%; }
+.lab-filter-axis .lab-chip[aria-pressed="true"] { background: var(--tk-card); border-color: var(--tk-ink); }
+.lab-filter-facets { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 8px 16px; }
+.lab-filter-facet { min-width: 0; font-size: 13px; }
+.lab-filter-facet summary { cursor: pointer; }
+.lab-filter-states { margin: 8px 0 12px; }
+.lab-filter-statuses { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 8px 12px; margin-top: 8px; }
+.lab-filter-statuses label { display: flex; flex-direction: column; min-width: 0; gap: 3px; font-size: 12px; }
+.lab-filter-statuses select { font: inherit; width: 100%; min-width: 0; color: var(--tk-ink);
+  background: var(--tk-canvas); border: 1px solid var(--tk-line); border-radius: 6px; padding: 5px; }
+/* 预留子类占位卡：独立类，不计数进参数卡（判据卡数等于键数）。 */
+.lab-card-ph {
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--tk-card); color: var(--tk-ink);
+  border: 1px dashed var(--tk-line); border-radius: 12px; padding: 10px 12px;
+  opacity: 0.8;
+}
+.lab-card-ph .lab-card-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.lab-card-ph .lab-card-short { font-size: 15px; font-weight: 700; }
+.lab-card-ph .lab-card-explain { font-size: 12.5px; color: var(--tk-dim); line-height: 1.5; }
+
+.lab-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+  flex: none; vertical-align: middle;
+}
+.lab-dot-blank { background: transparent; border: 1.5px solid var(--tk-dim); }
+
+/* 控制环路分组（阶段一沿用）。 */
+.lab-loop { margin: 12px 0; }
+.lab-loop-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.lab-loop-name { font-family: var(--tk-serif); font-size: 15px; }
+.lab-loop-ratio { font-family: var(--tk-mono); font-size: 12px; color: var(--tk-dim); }
+
+/* ── 详情抽屉（沿用阶段一；新增公式与链条两块） ──────────────────── */
+.lab-drawer-mask {
+  position: fixed; inset: 0; z-index: 50;
+  background: var(--tk-drawer-mask);
+  display: flex; justify-content: flex-end;
+  animation: lab-mask-in 200ms;
+}
+@keyframes lab-mask-in { from { opacity: 0; } to { opacity: 1; } }
+.lab-drawer {
+  width: min(420px, 92vw); height: 100%; overflow-y: auto;
+  background: var(--tk-card); border-left: 1px solid var(--tk-line);
+  padding: 18px 20px 40px;
+  animation: lab-drawer-in 200ms;
+}
+@keyframes lab-drawer-in { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+.lab-drawer-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; border-bottom: 1px solid var(--tk-line); padding-bottom: 10px; }
+.lab-drawer-short { font-family: var(--tk-serif); font-size: 20px; font-weight: 700; }
+.lab-drawer-key { font-family: var(--tk-mono); font-size: 12px; color: var(--tk-dim); word-break: break-all; }
+.lab-drawer-value { font-family: var(--tk-mono); font-size: 17px; margin-top: 4px; }
+.lab-drawer-line { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+.lab-drawer-meta { font-size: 12px; color: var(--tk-dim); }
+.lab-drawer-body h4 { font-family: var(--tk-serif); font-size: 14px; margin: 16px 0 4px; }
+.lab-teach p, .lab-src p { font-size: 13.5px; line-height: 1.7; margin: 0; }
+.lab-empty { color: var(--tk-dim); font-size: 13px; }
+.lab-drawer-fx { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.lab-drawer-fx button {
+  background: none; border: 1px solid var(--tk-line); border-radius: 8px;
+  padding: 6px 10px; font-size: 13px; text-align: left; color: var(--tk-ink);
+  transition: border-color 150ms;
+}
+.lab-drawer-fx button:hover { border-color: var(--tk-dim); }
+.lab-downstream { margin: 4px 0 0; padding-left: 18px; font-family: var(--tk-mono); font-size: 12px; }
+.lab-chain { list-style: none; margin: 0; padding: 0; }
+.lab-chain-nested { padding-left: 18px; border-left: 1px solid var(--tk-line); margin-left: 4px; }
+.lab-chain li { margin: 4px 0; }
+.lab-chain-key {
+  background: none; border: none; padding: 0;
+  font-family: var(--tk-mono); font-size: 12.5px; color: var(--tk-accent-text);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.lab-src dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 8px 0 0; }
+.lab-src dt { font-size: 12px; color: var(--tk-dim); }
+.lab-src dd { margin: 0; font-size: 12.5px; }
+.lab-history { list-style: none; margin: 0; padding: 0; }
+.lab-history li { display: flex; gap: 10px; font-size: 12.5px; padding: 4px 0; border-bottom: 1px solid var(--tk-line); }
+.lab-hist-val { font-family: var(--tk-mono); flex: none; }
+.lab-hist-period { color: var(--tk-dim); flex: none; }
+.lab-hist-reason { color: var(--tk-dim); }
+
+/* ── 点跳闪烁（一次性两拍，六百毫秒，不循环） ────────────────────── */
+.lab-flash { animation: lab-flash-once 600ms; }
+@keyframes lab-flash-once {
+  0% { opacity: 1; } 25% { opacity: 0.25; } 50% { opacity: 1; }
+  75% { opacity: 0.25; } 100% { opacity: 1; }
+}
+
+/* ── 页脚与右侧轨道（沿用阶段一形态，刻度为域级） ────────────────── */
+.lab-foot {
+  display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  padding: 28px clamp(16px, 4vw, 48px) 40px; border-top: 1px solid var(--tk-line);
+  color: var(--tk-dim); font-size: 12px;
+}
+.lab-rail {
+  position: fixed; right: 10px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 4px; z-index: 15;
+}
+.lab-rail-tick {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--tk-card); border: 1px solid var(--tk-line); border-radius: 8px;
+  padding: 3px 8px; font-size: 11px; color: var(--tk-dim);
+  transition: border-color 150ms, color 150ms;
+}
+.lab-rail-tick.active { color: var(--tk-ink); border-color: var(--tk-dim); }
+.lab-rail-no {
+  font-family: var(--tk-mono); width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid var(--tk-dim); display: inline-flex; align-items: center; justify-content: center;
+  font-size: 10px;
+}
+.lab-rail-name { display: none; }
+.lab-rail-tick:hover .lab-rail-name, .lab-rail-tick.active .lab-rail-name { display: inline; }
+
+.lab-error {
+  max-width: 560px; margin: 15vh auto; text-align: center;
+  display: flex; flex-direction: column; gap: 12px; align-items: center;
+}
+.lab-error h1 { font-family: var(--tk-serif); }
+
+/* ── 响应式（评审第一节：七百六十八像素断点） ───────────────────── */
+@media (max-width: 768px) {
+  .lab-indexband { padding: 6px 12px; }
+  .lab-band-chip { font-size: 12px; padding: 4px 10px; }
+  .lab-fxgrid { grid-template-columns: 1fr; }
+  .lab-family-head { flex-direction: column; }
+  .lab-stage, .lab-stage-empty { width: 100%; }
+  .lab-stage img { max-height: 40vh; object-fit: contain; }
+  .lab-rail { display: none; }
+  .lab-hero h1 { font-size: 30px; }
+}
+
+/* ── I-202：七百克候选动作预览 ─────────────────────────────────── */
+.eaglex { display: flex; flex-direction: column; gap: 24px; padding: 8px 0 32px; }
+.eaglex-banner {
+  background: var(--tk-card); border: 1px solid var(--tk-line);
+  border-left: 3px solid var(--tk-accent);
+  border-radius: 8px; padding: 14px 18px; font-size: 14px; line-height: 1.8;
+}
+.eaglex-banner b { color: var(--tk-accent-text); }
+.eaglex-player {
+  display: grid; grid-template-columns: minmax(280px, 560px) 1fr; gap: 24px;
+  align-items: start;
+}
+.eaglex-stage {
+  background: var(--tk-card); border: 1px solid var(--tk-line);
+  border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+}
+.eaglex-frame { width: 100%; height: auto; border-radius: 6px; display: block; }
+.eaglex-stage-meta { font-size: 12px; color: var(--tk-dim); }
+.eaglex-empty { color: var(--tk-dim); font-size: 13px; padding: 40px 0; text-align: center; }
+.eaglex-controls { display: flex; flex-direction: column; gap: 16px; }
+.eaglex-segs { display: flex; flex-wrap: wrap; gap: 8px; }
+.eaglex-seg {
+  background: var(--tk-card); color: var(--tk-ink);
+  border: 1px solid var(--tk-line); border-radius: 8px;
+  padding: 8px 14px; font: inherit; font-size: 14px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: border-color 150ms ease-out;
+}
+.eaglex-seg small { font-size: 11px; color: var(--tk-dim); }
+.eaglex-seg.active { border-color: var(--tk-accent); color: var(--tk-accent-text); }
+.eaglex-ctl-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.eaglex-frame-count { font-size: 12px; color: var(--tk-dim); }
+.eaglex-geo { background: var(--tk-card); border: 1px solid var(--tk-line);
+  border-radius: 8px; padding: 16px 20px; max-width: 100%; overflow-x: auto; }
+.eaglex-table { min-width: 560px; }
+.eaglex-geo h3 { font-size: 15px; margin: 0 0 12px; }
+.eaglex-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.eaglex-table th, .eaglex-table td {
+  border: 1px solid var(--tk-line); padding: 5px 8px; text-align: left;
+  font-family: var(--tk-mono); font-variant-numeric: tabular-nums;
+}
+.eaglex-table th { font-family: var(--tk-sans); color: var(--tk-dim); font-weight: 600; }
+.eaglex-table-sm { font-size: 11.5px; }
+.eaglex-details { margin-top: 14px; }
+.eaglex-details summary { cursor: pointer; font-size: 13px; color: var(--tk-accent-text); }
+.eaglex-chord-scroll { max-height: 320px; overflow-y: auto; margin-top: 8px; }
+.eaglex-plain { list-style: none; margin: 8px 0; padding: 0; font-size: 12.5px; }
+.eaglex-plain li { padding: 4px 0; border-top: 1px dashed var(--tk-line); word-break: break-all; }
+.eaglex-src-link {
+  background: transparent; border: 1px solid var(--tk-line); border-radius: 6px;
+  color: var(--tk-dim); font: inherit; font-size: 11px; padding: 0 8px;
+  margin-right: 8px; cursor: pointer;
+}
+.eaglex-src-link:hover { color: var(--tk-accent-text); border-color: var(--tk-accent); }
+.eaglex-note { font-size: 12px; color: var(--tk-dim); }
+@media (max-width: 900px) { .eaglex-player { grid-template-columns: 1fr; } }
+
+/* ── I-202 复工：动画第二版视频区 ─────────────────────────────── */
+.eaglex-v2 { background: var(--tk-card); border: 1px solid var(--tk-line);
+  border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+.eaglex-v2 h3 { font-size: 15px; margin: 0; }
+.eaglex-v2-stage { display: flex; flex-direction: column; gap: 8px;
+  max-width: 560px; }
+.eaglex-video { width: 100%; border-radius: 6px; background: var(--tk-canvas); }
+.eaglex-v2-notes { font-size: 12.5px; color: var(--tk-dim); display: flex;
+  flex-direction: column; gap: 4px; }
+.eaglex-v2-notes p { margin: 0; }

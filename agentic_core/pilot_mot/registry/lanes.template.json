@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "_说明": "路线表模板：新项目实例化时复制为 lanes.json 并填写。HQ 指挥部路线必留；施工路线按项目工作分组自定编号与条数；keywords 供待审归位规则匹配；exclusive_paths 是本路独占领地（目录或文件前缀）；shared_paths 是全队共享区。",
+  "shared_paths": ["tools/", "logs/"],
+  "lanes": {
+    "HQ": {
+      "name": "指挥部",
+      "mission": "计划、规则、裁决、派发与目标管理",
+      "keywords": ["计划", "规则", "裁决", "派发"],
+      "exclusive_paths": [],
+      "may_change_parameters": false,
+      "may_refactor": false
+    },
+    "L1": {
+      "name": "<路线名>",
+      "mission": "<一句话使命>",
+      "keywords": ["<归位关键词>"],
+      "exclusive_paths": ["<本路独占目录/>"],
+      "may_change_parameters": false,
+      "may_refactor": false
+    },
+    "L2": {
+      "name": "<路线名>",
+      "mission": "<一句话使命>",
+      "keywords": ["<归位关键词>"],
+      "exclusive_paths": ["<本路独占目录/>"],
+      "may_change_parameters": false,
+      "may_refactor": false
+    }
+  }
+}

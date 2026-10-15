@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "item_id": "I-186",
+  "title": "记录仪与实验管线保存实际条件和结构化判据结果——L1 返修 v5 交付（真实生产采集与逐项事实有效性）",
+  "delivery_version": "L1返修v5",
+  "run_id": "run-kt-anni-i186-runtime-facts-20261015-a1",
+  "dispatch_request_id": "kd-kt-anni-i186-runtime-facts-20261015-a1",
+  "session_id": "sess_8cc259a6-4227-42b2-ab12-9521d185e226",
+  "workstation": "L1-w1",
+  "delivered_at": "2026-10-15T11:20:00+08:00",
+  "baseline": {
+    "source_commit": "9cc7602",
+    "review_basis": [
+      "logs/hq_intake/doro_resume_20261014/I-186_当前核验结果.md 当前节（六反例：空位置、空控制参数、无理由不适用、null位置空来源、字符串扰动真值、机体全锁）",
+      "logs/hq_intake/doro_resume_20261014/i186_l1_v4_review_current/review.json（十一项五项符合）"
+    ],
+    "preserved": "清单绑定、计时、逐值核验、身份与数据绑定、去规范代填、错模型/缺见证/非零风阻断及原八十六项控制全部保留"
+  },
+  "production_points_inventory": {
+    "path": "logs/i186_l1_runtime_facts_20261015/生产点清单与接线方案.md",
+    "content": "十四条事实逐条列出真实生产点（文件/函数）、实际对象或事件、采集时点、同 run 身份、已接/未接状态，并逐条对照批准清单字段契约与批准比较；已接十条为实际执行进程或构包实读，仿真侧四条事件事实生产点位于未交接文件（接线方案已列，待授权）",
+    "honest_boundary": "runtime_object 级事实采集未接通（main_sim.py、sim_env_bridge.py、flight_controller.py 未在交接清单内，本队未改动）；最小接线方案与待授权写路径已交 HQ。现行见证为 producer_declared（生产进程自述，接口级来源），不冒充实测、不以接口样例申请整项验收"
+  },
+  "two_fixes": [
+    {
+      "fix": "一：必要事实按具体字段核结构、数值类型/形状/有限性、单位/坐标、同次运行实际来源和时点",
+      "status": "已修并实际验证",
+      "implementation": "_fact_field_problems 按批准字段契约逐项校验：三分量有限向量（位置/速度/来流）、四元数或欧拉姿态表示、来源非空、严格布尔真值（字符串 true/false 非法不被默认吞掉）、有界不适用声明（事件 none 与空参数须范围+理由+实际来源）、none/unknown/null 字样不算值；空对象、全 null 向量、空来源、空控制参数点名进 invalid_facts 并阻断，不因外层存在放行。",
+      "evidence": ["Y1 空位置（Doro 原输入形态）阻断", "Y2 空控制参数阻断", "Y3 无理由不适用事件阻断", "Y4 null 位置加空来源阻断", "Y5 字符串扰动真值阻断", "Y8 合法非空正控制通过", "Y9 假不适用阻断与合法有界不适用有效"]
+    },
+    {
+      "fix": "二：完整比较批准范围（六自由度、钉放/复位事件、来流扰动、模型、控制器）并全链一致",
+      "status": "已修并实际验证",
+      "implementation": "场景比较新增 body_free_dofs（六个机体平移/转动自由度逐项严格布尔核对，全锁或任一锁定均 divergent，真值保留）与 pin_release_event（具名事件在档为来源；none 有理由记 no_actual_source——结构诊断样例可明确缺物理事件但不能成为悬停运行通过，适用性 unknown 阻断）两条目；同一实现复用于构包、总判定、结果卡与核验；不从标准或配置推断动作已执行，不强制 CSV 首行等于初态；复现锁与物理约束分列。",
+      "evidence": ["Y6 机体全锁（Doro 原输入形态）divergent 阻断", "Y7 六自由度逐一锁定逐项阻断", "Y10 事件 none 带理由：事实有效但不作悬停运行通过", "生产链样例与正向样例（包卡核验一致）"]
+    }
+  ],
+  "verification": {
+    "selfcheck_cases": 96,
+    "selfcheck_two_runs": "96/96 两跑一致（logs/i186_l1_runtime_facts_20261015/selfcheck_run1_output.txt 与 selfcheck_run2_output.txt，实测 196.0 与 194 秒）",
+    "registered_executor": "tools/checks/executor.py run tools/checks/i186_selfcheck.py --timeout 600 通过（194 秒，退出码零；Doro 240 秒超时记录为 v3 时期套件，耗时挂点已列施工记录第五节）",
+    "fast_bench": "bench_runner --fast BENCH PASS",
+    "regression": "原八十六项控制全部保留复测通过；六个 Doro 反例逐个在原始输入上重跑（改变原始见证事实，不预填 required_missing）",
+    "production_samples": {
+      "chain": "logs/i186_l1_runtime_facts_20261015/production_chain_v5/（必要 complete、无效空、见证在档、默认模型如实 divergent 阻断、核验一致）",
+      "positive": "logs/i186_l1_runtime_facts_20261015/approved_capture_positive/（sane_dickinson 实际应用：判定 pass、必要 complete、场景 match、核验过）"
+    }
+  },
+  "real_counterexamples_rerun": [
+    "missing_actual_position（Y1）",
+    "empty_controller_parameters（Y2）",
+    "unreasoned_not_applicable_events（Y3）",
+    "invalid_actual_position（Y4）",
+    "wind_truthy_string（Y5）",
+    "physical_dofs_locked（Y6）"
+  ],
+  "unmet": [
+    "Doro 独立复核未完成：本交付为 pending_review，不自行关闭",
+    "runtime_object 级事实采集未接通：main_sim.py（起飞锁定-释放序列约 883-940 行与来流应用处）、sim_env_bridge.py（build_env_bridge 初始化）、flight_controller.py（初始化与复位）不在交接清单内，最小接线方案与待授权写路径已交 HQ（生产点清单与接线方案.md 第三节）；授权前仿真侧事件事实均为 producer_declared 自述，不以接口样例申请整项验收",
+    "python 结构链在隔离规则下生效读数为仓库默认 sane_dickinson_3d（未获本场景批准），生产链样例如实阻断；真实 isaac 运行的场景适用须待授权接线后的实际运行对象见证",
+    "其他科目必要清单与语义定义未获批准，仍未知待审；翼拍相位只限制对应结论，不猜 vphz",
+    "I-210 实际取证与 I-187 前置继续保留"
+  ],
+  "territory_note": "静态领地检查偏差维持既有处置；本轮改动在已交接文件（evidence_pack、scene_witness、i186_selfcheck）与 logs/i186_l1_runtime_facts_20261015/、outputs/ 清单内，未改全局 lanes.json、未动三个未交接仿真文件与他线改动。",
+  "reviewer": "doro",
+  "construction_record": "logs/I-186_施工记录_20261015_L1返修v5.md",
+  "files_changed": [
+    "modules/evidence_pack.py",
+    "modules/experiment_pipeline/scene_witness.py",
+    "tools/checks/i186_selfcheck.py",
+    "logs/I-186_施工记录_20261015_L1返修v5.md",
+    "logs/i186_l1_runtime_facts_20261015/"
+  ]
+}

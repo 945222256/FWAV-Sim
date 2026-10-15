@@ -1,0 +1,54 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      F ield           | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\      O peration       | Version:  v2506                                 |
+|   \\    /   A nd          | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+// fluid initially at rest in the wing-hold frame
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    wing
+    {
+        type            movingWallVelocity;
+        value           uniform (0 0 0);
+    }
+    AMI1
+    {
+        type            cyclicAMI;
+    }
+    AMI2
+    {
+        type            cyclicAMI;
+    }
+    farfield
+    {
+        // oscillating far-field flow of the wing-hold frame: the table
+        // is rewritten per phase case by the driver (uniformFixedValue
+        // accepts a Function1 table; Dirichlet both directions)
+        type            uniformFixedValue;
+        uniformValue    table
+        (
+            (0.0 (0 0 0))
+        );
+    }
+    frontAndBack
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

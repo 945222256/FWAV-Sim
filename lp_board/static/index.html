@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>LP 数字化看板</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{
+  --bg:#0d1117;--panel:#161b22;--card:#1c2330;--line:#2d3644;
+  --text:#e6edf3;--dim:#8b949e;--blue:#58a6ff;--green:#3fb950;
+  --yellow:#d29922;--red:#f85149;--purple:#bc8cff;--cyan:#39c5cf;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:14px/1.6 "Microsoft YaHei",system-ui,sans-serif;padding:14px}
+h2{font-size:15px;margin:18px 0 8px;color:var(--blue);letter-spacing:1px}
+h2 .sub{font-weight:normal;color:var(--dim);font-size:12px;margin-left:8px}
+button{background:#21262d;color:var(--text);border:1px solid var(--line);border-radius:6px;
+  padding:4px 10px;cursor:pointer;font-size:12px}
+button:hover{border-color:var(--blue)}
+button.primary{background:#1f6feb;border-color:#1f6feb}
+button.danger{background:#7d2a28;border-color:#a94442}
+button.ok{background:#1a4721;border-color:#2ea043}
+input,textarea,select{background:#0d1117;color:var(--text);border:1px solid var(--line);
+  border-radius:6px;padding:5px 8px;font-size:13px;font-family:inherit}
+input,textarea{width:100%}
+textarea{resize:vertical;min-height:56px}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.top .title{font-size:18px;font-weight:bold}
+.top .title small{color:var(--dim);font-weight:normal;font-size:12px;margin-left:6px}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;border:1px solid var(--line);background:#21262d}
+.badge b{font-size:15px}
+.badge.warn{border-color:var(--yellow);color:var(--yellow)}
+.badge.bad{border-color:var(--red);color:var(--red)}
+.badge.good{border-color:var(--green);color:var(--green)}
+.spacer{flex:1}
+.who{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim)}
+.who input{width:110px}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.st-open .status-dot{background:var(--blue)}
+.st-blocked .status-dot{background:var(--red)}
+.st-in_progress .status-dot{background:var(--yellow)}
+.st-closed .status-dot{background:var(--green)}
+.owner-zone{margin-top:12px;border:1px solid var(--yellow);border-radius:10px;
+  background:linear-gradient(180deg,#1d1a10,#161b22);padding:12px}
+.owner-zone h2{margin-top:0;color:var(--yellow)}
+.owner-card{background:var(--card);border:1px solid #4b3f1a;border-radius:8px;padding:12px;margin-bottom:10px}
+.owner-card .head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.owner-card .iid{color:var(--yellow);font-weight:bold;font-size:16px}
+.owner-card .crit{color:var(--dim);font-size:12px;margin:6px 0}
+.owner-card .replies{margin:6px 0;padding-left:10px;border-left:2px solid var(--line)}
+.reply-row{font-size:12px;color:var(--dim);margin:3px 0}
+.reply-row b{color:var(--green)}
+.reply-box{display:flex;gap:8px;margin-top:8px}
+.reply-box textarea{flex:1}
+.lanes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
+@media(max-width:1100px){.lanes{grid-template-columns:repeat(2,1fr)}}
+.lane{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;min-height:120px}
+.lane .lane-head{border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:8px}
+.lane .lane-head .lid{font-weight:bold;color:var(--purple);font-size:15px}
+.lane .lane-head .lname{margin-left:8px}
+.lane .lane-head .mission{color:var(--dim);font-size:11px}
+.item-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px;cursor:pointer}
+.item-card:hover{border-color:var(--blue)}
+.item-card .row1{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.item-card .iid{font-weight:bold;color:var(--blue)}
+.item-card .lease{font-size:11px;color:var(--dim)}
+.item-card .lease.hot{color:var(--red)}
+.item-card .title{margin:4px 0;font-size:13px}
+.item-card .meta{font-size:11px;color:var(--dim)}
+.item-card .blocked-tag{color:var(--red);font-size:11px}
+.progress-wrap{margin-top:6px}
+.progress-bar{height:8px;background:#0d1117;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.progress-bar>div{height:100%;background:linear-gradient(90deg,#1f6feb,#39c5cf)}
+.progress-label{font-size:11px;color:var(--dim);margin-top:2px}
+.progress-label.undefined{color:var(--yellow)}
+.inbox-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px}
+.inbox-card.decided{opacity:.62}
+.inbox-card .pid{color:var(--cyan);font-weight:bold}
+.lint-rule{display:flex;gap:8px;font-size:12px;margin:2px 0;align-items:baseline}
+.lint-rule .verdict{padding:0 8px;border-radius:10px;font-size:11px;flex-shrink:0}
+.verdict.pass{background:#1a4721;color:var(--green)}
+.verdict.warn{background:#4b3f1a;color:var(--yellow)}
+.verdict.fail{background:#7d2a28;color:var(--red)}
+.decide-box{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px;font-size:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+.form-row{margin-bottom:8px}
+.form-row label{display:block;font-size:12px;color:var(--dim);margin-bottom:3px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{color:var(--dim);background:#161b22}
+.evt{display:flex;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line);font-size:12px}
+.evt .ts{color:var(--dim);flex-shrink:0;width:150px}
+.evt .act{flex-shrink:0;width:130px;font-weight:bold}
+.evt .detail{color:var(--text);word-break:break-all}
+.modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;z-index:50;overflow-y:auto;padding:40px 10px}
+.modal-mask.show{display:block}
+.modal{max-width:860px;margin:0 auto;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:18px}
+.modal h3{color:var(--blue);margin-bottom:10px}
+.modal .close-x{float:right;cursor:pointer;color:var(--dim);font-size:18px}
+.ops{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.op-row{display:flex;gap:6px;margin-top:6px;align-items:center}
+.op-row input{flex:1}
+.op-row select{width:auto}
+.muted{color:var(--dim);font-size:12px}
+.ok-toast{position:fixed;right:16px;bottom:16px;background:#1a4721;border:1px solid #2ea043;
+  color:var(--green);padding:10px 16px;border-radius:8px;display:none;z-index:99;max-width:70%}
+.err-toast{position:fixed;right:16px;bottom:16px;background:#7d2a28;border:1px solid #a94442;
+  color:var(--red);padding:10px 16px;border-radius:8px;display:none;z-index:99;max-width:70%}
+.evidence-list{margin:4px 0 4px 0;padding-left:16px;font-size:12px;color:var(--dim)}
+.crit-line{font-size:12px;margin:2px 0}
+.crit-line.done{color:var(--green)}
+.crit-line.done .tick{cursor:pointer;color:var(--green)}
+.tick{cursor:pointer;color:var(--dim)}
+.tabs{display:flex;gap:6px;margin:14px 0 8px;flex-wrap:wrap}
+.tabs button.active{border-color:var(--blue);color:var(--blue)}
+/* 手机断点：与云端版保持一致。 */
+@media(max-width:640px){
+  body{padding:8px}
+  .top{padding:8px 10px;gap:6px}
+  .top .title{font-size:15px;width:100%;order:-1}
+  .top .title small{display:inline;margin-left:4px}
+  .badge{padding:1px 8px;font-size:11px}
+  .who{width:100%;justify-content:flex-end}
+  .lanes{grid-template-columns:1fr;gap:8px}
+  .owner-card .reply-box{flex-direction:column}
+  .reply-box textarea{min-height:48px}
+  .item-card{padding:12px}
+  .item-card .title{font-size:14px}
+  .modal-mask{padding:0}
+  .modal{border-radius:0;margin:0;max-width:none;min-height:100vh;padding:12px}
+  .modal .close-x{font-size:24px;padding:6px 10px}
+  button{padding:8px 14px}
+  .tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+  .tabs button{flex-shrink:0}
+  table{display:block;overflow-x:auto}
+  .decide-box{flex-direction:column;align-items:stretch;gap:6px}
+  .decide-box select{width:100%}
+  .evt{flex-wrap:wrap}
+  .evt .ts{width:auto}
+  .evt .act{width:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="title">LP 数字化看板<small>决策台 · 数据实时读取账本文件</small></div>
+  <span class="badge">事项总数 <b id="s-total">–</b></span>
+  <span class="badge">在办 <b id="s-open">–</b></span>
+  <span class="badge warn">阻塞 <b id="s-blocked">–</b></span>
+  <span class="badge">施工中 <b id="s-inprog">–</b></span>
+  <span class="badge good">已关闭 <b id="s-closed">–</b></span>
+  <span class="badge warn">待审 <b id="s-inbox">–</b></span>
+  <span class="badge bad" id="s-audit-wrap" style="display:none">审计缺证据 <b id="s-audit"></b></span>
+  <span class="badge">参数在册 <b id="s-params">–</b></span>
+  <span class="spacer"></span>
+  <span class="muted" id="gen-at"></span>
+  <div class="who">当前身份 <input id="who" value="机主"></div>
+</div>
+
+<!-- FR-3 机主拍板区 -->
+<div class="owner-zone" id="owner-zone">
+  <h2>需机主拍板</h2>
+  <div id="owner-list"><div class="muted">当前没有等待机主的事项。</div></div>
+</div>
+
+<!-- FR-1 泳道任务板 -->
+<h2>泳道任务板<span class="sub">点击卡片看完整履历与操作</span></h2>
+<div class="lanes" id="lanes"></div>
+
+<!-- FR-6/FR-7 待审队列 -->
+<h2>待审队列<span class="sub">新事项先过四条审理规则，批准后进入正式清单</span></h2>
+<div class="grid2">
+  <div>
+    <div id="inbox-list"><div class="muted">待审队列为空。</div></div>
+    <div class="panel" style="margin-top:10px">
+      <b style="color:var(--cyan)">已审理留痕</b>
+      <div id="inbox-decided" style="margin-top:6px"></div>
+    </div>
+  </div>
+  <div class="panel">
+    <b style="color:var(--cyan)">登记新事项（自动入待审队列）</b>
+    <div class="form-row" style="margin-top:8px"><label>标题</label><input id="in-title" placeholder="一句话说清问题"></div>
+    <div class="form-row"><label>打勾判据（可判真伪的陈述）</label><textarea id="in-crit"></textarea></div>
+    <div class="form-row"><label>判据子项（每行一条，进度条按子项计算）</label><textarea id="in-subcrit" placeholder="子项一&#10;子项二"></textarea></div>
+    <div class="grid2">
+      <div class="form-row"><label>建议负责人</label><input id="in-owner" value="待指派"></div>
+      <div class="form-row"><label>申报人</label><input id="in-by" placeholder="模型或会话名"></div>
+    </div>
+    <div class="form-row"><label>备注</label><input id="in-note"></div>
+    <button class="primary" onclick="submitIntake()">提交待审</button>
+  </div>
+</div>
+
+<!-- FR-4 agent 申报 + FR-8 时间线 + 参数概览 -->
+<div class="tabs">
+  <button id="tab-report" class="active" onclick="switchTab('report')">施工申报</button>
+  <button id="tab-params" onclick="switchTab('params')">参数登记库</button>
+  <button id="tab-closed" onclick="switchTab('closed')">已关闭事项</button>
+  <button id="tab-events" onclick="switchTab('events')">全局事件流</button>
+</div>
+<div id="pane-report" class="panel">
+  <b>施工 agent 申报（追加进总账 reports 字段，只追加不修改）</b>
+  <div class="grid2" style="margin-top:8px">
+    <div>
+      <div class="form-row"><label>模型名称</label><input id="rp-model"></div>
+      <div class="form-row"><label>模型版本</label><input id="rp-ver"></div>
+      <div class="form-row"><label>解释器版本</label><input id="rp-py"></div>
+    </div>
+    <div>
+      <div class="form-row"><label>操作系统</label><input id="rp-os"></div>
+      <div class="form-row"><label>工作目录</label><input id="rp-cwd"></div>
+      <div class="grid2">
+        <div class="form-row"><label>认领事项编号</label><input id="rp-item" placeholder="I-000"></div>
+        <div class="form-row"><label>工作日志指针</label><input id="rp-log" placeholder="logs/…"></div>
+      </div>
+    </div>
+  </div>
+  <button class="primary" onclick="submitReport()">提交申报</button>
+  <div style="margin-top:12px"><b class="muted">最近申报</b><div id="report-list" style="margin-top:6px"></div></div>
+</div>
+<div id="pane-params" class="panel" style="display:none"></div>
+<div id="pane-closed" class="panel" style="display:none"></div>
+<div id="pane-events" class="panel" style="display:none"></div>
+
+<!-- 事项详情模态 -->
+<div class="modal-mask" id="modal-item">
+  <div class="modal">
+    <span class="close-x" onclick="closeModal('modal-item')">✕</span>
+    <div id="item-detail"></div>
+  </div>
+</div>
+
+<div class="ok-toast" id="toast-ok"></div>
+<div class="err-toast" id="toast-err"></div>
+
+<script>
+"use strict";
+let STATE = null;
+let TIMER = null;
+let LAST_FINGERPRINT = "";
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const who = () => ($("who").value || "").trim() || "未署名";
+
+function toast(msg, ok) {
+  const el = ok ? $("toast-ok") : $("toast-err");
+  el.textContent = msg;
+  el.style.display = "block";
+  setTimeout(() => { el.style.display = "none"; }, 4000);
+}
+
+async function post(route, body) {
+  const res = await fetch(route, {
+    method: "POST",
+    headers: {"Content-Type": "application/json", "X-LP-Board": "1"},
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || "未知错误");
+  toast("操作已写入账本", true);
+  await refresh();
+  return data.result;
+}
+
+async function refresh() {
+  try {
+    const res = await fetch("/api/state");
+    STATE = await res.json();
+    const modalOpen = document.querySelector(".modal-mask.show");
+    if (modalOpen) return;             // 模态打开时冻结背景重画，避免点击目标被替换。
+    const fp = JSON.stringify([STATE.summary, STATE.lanes, STATE.unassigned,
+      STATE.owner_items, STATE.inbox, STATE.reports]);
+    if (fp === LAST_FINGERPRINT) {     // 数据未变化时不重画，DOM 保持稳定可点。
+      $("gen-at").textContent = "更新于 " + STATE.meta.generated_at;
+      return;
+    }
+    LAST_FINGERPRINT = fp;
+    render();
+  } catch (e) {
+    $("gen-at").textContent = "看板服务无响应";
+  }
+}
+
+function fmtLease(sec) {
+  if (sec == null) return "";
+  if (sec <= 0) return "租约已到期";
+  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60);
+  return "租约剩 " + (h > 0 ? h + "时" + m + "分" : m + "分");
+}
+
+function progressHtml(item) {
+  if (!item.progress) return '<div class="progress-label undefined">进度口径不适用（该事项未登记判据子项；完成与否以判据对照与关闭状态为准）</div>';
+  const pct = item.progress.total ? Math.round(100 * item.progress.verified / item.progress.total) : 0;
+  return '<div class="progress-wrap"><div class="progress-bar"><div style="width:' + pct + '%"></div></div>' +
+    '<div class="progress-label">进度 ' + item.progress.verified + '/' + item.progress.total +
+    '（已验证判据子项 ÷ 子项总数）</div></div>';
+}
+
+function itemCardHtml(item) {
+  const blocked = (item.blocked_by || []).map(b =>
+    '<div class="blocked-tag">阻塞于 ' + esc(b.id) + '（' + esc(b.status) + '）</div>').join("");
+  const lease = item.lease_left_s != null
+    ? '<span class="lease' + (item.lease_left_s < 1800 ? ' hot' : '') + '">' + fmtLease(item.lease_left_s) + '</span>' : "";
+  return '<div class="item-card st-' + esc(item.status) + '" onclick="openItem(\'' + item.id + '\')">' +
+    '<div class="row1"><span class="status-dot"></span><span class="iid">' + esc(item.id) + '</span>' +
+    '<span class="meta">' + esc(item.status) + '</span>' + lease + '</div>' +
+    '<div class="title">' + esc(item.title) + '</div>' +
+    '<div class="meta">负责人 ' + esc(item.owner || "未指派") +
+    (item.claimed_by ? ' · 认领人 ' + esc(item.claimed_by) : "") + '</div>' +
+    blocked + progressHtml(item) + '</div>';
+}
+
+function render() {
+  const s = STATE.summary;
+  $("s-total").textContent = s.total;
+  $("s-open").textContent = s.open;
+  $("s-blocked").textContent = s.blocked;
+  $("s-inprog").textContent = s.in_progress;
+  $("s-closed").textContent = s.closed;
+  $("s-inbox").textContent = s.inbox_pending;
+  $("s-params").textContent = STATE.params.count;
+  $("s-audit-wrap").style.display = s.audit_bad.length ? "" : "none";
+  $("s-audit").textContent = s.audit_bad.join(" ");
+  $("gen-at").textContent = "更新于 " + STATE.meta.generated_at;
+
+  // 机主拍板区。
+  const ownerHtml = STATE.owner_items.map(it => {
+    const replies = (it.replies || []).map(r =>
+      '<div class="reply-row"><b>' + esc(r.actor) + '</b> ' + esc(r.ts) + '：' + esc(r.text) + '</div>').join("");
+    return '<div class="owner-card"><div class="head"><span class="iid">' + esc(it.id) + '</span>' +
+      '<span>' + esc(it.title) + '</span></div>' +
+      '<div class="crit">打勾判据：' + esc(it.close_criterion) + '</div>' +
+      '<div class="crit">备注：' + esc(it.note || "无") + '</div>' +
+      '<div class="crit">证据：' + (it.evidence.length ? esc(it.evidence.join("；")) : "无") + '</div>' +
+      (replies ? '<div class="replies">' + replies + '</div>' : "") +
+      '<div class="reply-box"><textarea id="reply-' + it.id + '" placeholder="机主答复内容，写入总账留痕"></textarea>' +
+      '<button class="primary" onclick="ownerReply(\'' + it.id + '\')">答复</button>' +
+      '<button class="ok" onclick="ownerReplyClose(\'' + it.id + '\')">答复并打勾关闭</button></div></div>';
+  }).join("");
+  $("owner-list").innerHTML = ownerHtml || '<div class="muted">当前没有等待机主的事项。</div>';
+
+  // 泳道任务板。每条路线一个固定颜色，未登记路线回退默认紫。
+  const LANE_COLORS = {"L1":"#58a6ff","L2":"#3fb950","L3":"#39c5cf","L4":"#d29922",
+    "L5":"#f778ba","L6":"#f85149","L7":"#bc8cff","L8":"#8b949e","HQ":"#e6edf3"};
+  function laneColor(id){ return LANE_COLORS[id] || ""; }
+  $("lanes").innerHTML = STATE.lanes.map(l =>
+    '<div class="lane"><div class="lane-head"><span class="lid"' +
+    (laneColor(l.id) ? ' style="color:' + laneColor(l.id) + '"' : "") + '>' + esc(l.id) + '</span>' +
+    '<span class="lname">' + esc(l.name) + '</span>' +
+    '<div class="mission">' + esc(l.mission) + '</div></div>' +
+    (l.items.length ? l.items.map(itemCardHtml).join("")
+      : '<div class="muted">该路无在办事项</div>') + '</div>').join("") +
+    (STATE.unassigned.length
+      ? '<div class="lane"><div class="lane-head"><span class="lid">未派发</span>' +
+        '<div class="mission">尚无路线归属</div></div>' +
+        STATE.unassigned.map(itemCardHtml).join("") + '</div>'
+      : "");
+
+  renderInbox();
+  renderReports();
+  renderParams();
+  renderClosed();
+  renderEvents();
+}
+
+function renderInbox() {
+  const pending = STATE.inbox.filter(q => !q.decision);
+  const decided = STATE.inbox.filter(q => q.decision);
+  $("inbox-list").innerHTML = pending.length ? pending.map(q => {
+    const rules = (q.lint && q.lint.rules ? q.lint.rules : []).map(r =>
+      '<div class="lint-rule"><span class="verdict ' + r.verdict + '">' + r.verdict.toUpperCase() + '</span>' +
+      '<span><b>' + esc(r.rule) + '：</b>' + esc(r.reason) + '</span></div>').join("");
+    const dups = (q.lint && q.lint.duplicate_of || []).map(d => esc(d.id)).join("、");
+    const ruleBrief = (q.lint && q.lint.rules ? q.lint.rules : [])
+      .map(r => esc(r.rule) + (r.verdict === "pass" ? "过" : r.verdict === "warn" ? "建议" : "不过")).join("；");
+    const full = [
+      ["编号", q.id], ["标题", q.title], ["提交人", q.submitted_by || "匿名"],
+      ["提交时间", q.submitted_at], ["建议负责人", q.owner || "待指派"],
+      ["正文备注", q.note || "（无）"], ["打勾判据", q.close_criterion || "未填"],
+      ["判据子项", (q.criteria && q.criteria.length) ? q.criteria.join("；") : "未登记"],
+      ["lint 建议路线", (q.lint && q.lint.suggested_lane) || "未建议"],
+      ["重复候选", dups || "无"]
+    ].map(function (row) {
+      return '<div class="ib-field"><b>' + esc(row[0]) + '：</b>' + esc(row[1]) + '</div>';
+    }).join("");
+    return '<div class="inbox-card"><div class="row1" style="cursor:pointer" onclick="toggleInboxDetail(\'' + q.id + '\')">' +
+      '<span class="pid">' + esc(q.id) + '</span><span>' + esc(q.title) + '</span>' +
+      '<span class="muted" style="margin-left:auto;flex-shrink:0" id="ibt-' + q.id + '">展开完整字段 ▾</span></div>' +
+      '<div class="meta muted">提交人 ' + esc(q.submitted_by || "匿名") + ' · ' + esc(q.submitted_at) +
+      ' · 建议负责人 ' + esc(q.owner || "待指派") + '</div>' +
+      '<div style="margin:4px 0">正文备注：' + esc(q.note || "（无）") + '</div>' +
+      '<div class="muted" style="margin:4px 0">打勾判据：' + esc(q.close_criterion || "未填") + '</div>' +
+      '<div class="muted" style="margin:4px 0">语言检查结论：' + (ruleBrief || "未跑") + '</div>' +
+      (q.criteria && q.criteria.length ? '<div class="muted">判据子项：' + q.criteria.map(esc).join("；") + '</div>' : '<div class="muted" style="color:var(--yellow)">未登记判据子项</div>') +
+      '<div style="margin:6px 0 4px"><b class="muted">lint 审理报告（' + esc(q.lint ? q.lint.checked_at : "") + '）：</b></div>' + rules +
+      (dups ? '<div class="muted">重复候选：' + dups + '</div>' : "") +
+      '<div class="ib-detail" id="ibd-' + q.id + '" style="display:none">' +
+      '<b class="muted">完整字段：</b>' + full + '</div>' +
+
+      '<div class="decide-box">批准进入路线' +
+      '<select id="dc-lane-' + q.id + '">' +
+      '<option value="' + esc(q.lint ? q.lint.suggested_lane : "") + '">' +
+      (q.lint && q.lint.suggested_lane ? "lint 建议：" + q.lint.suggested_lane : "lint 未建议") + '</option>' +
+      '<option value="L1">L1 攻关主线</option><option value="L2">L2 架构与管线</option>' +
+      '<option value="L3">L3 数据资产</option></select>' +
+      '<button class="ok" onclick="decide(\'' + q.id + '\',\'approve\')">批准</button>' +
+      '<button class="danger" onclick="decide(\'' + q.id + '\',\'reject\')">驳回</button>' +
+      (dups ? '<button onclick="decide(\'' + q.id + '\',\'merge\')">合并到 ' + dups + '</button>' : "") +
+      '</div>' +
+      '<div class="op-row"><input id="dc-reason-' + q.id + '" placeholder="人工改判理由：路线改判或对 fail 规则放行时必填，自动留痕供规则修订"></div>' +
+      '</div>';
+  }).join("") : '<div class="muted">待审队列为空。</div>';
+
+  $("inbox-decided").innerHTML = decided.length ? decided.map(q =>
+    '<div class="evt"><span class="ts">' + esc(q.decision.at) + '</span>' +
+    '<span class="act">' + esc(q.decision.action) + '</span>' +
+    '<span class="detail">' + esc(q.id) + ' ' + esc(q.title) +
+    (q.decision.result_item ? ' → 入册为 ' + esc(q.decision.result_item) + '（' + esc(q.decision.lane) + '）' : "") +
+    (q.decision.reason ? '；理由：' + esc(q.decision.reason) : "") +
+    (q.overrides && q.overrides.length ? '；改判留痕 ' + q.overrides.length + ' 条' : "") +
+    '</span></div>').join("") : '<div class="muted">暂无已审理条目。</div>';
+}
+
+function renderReports() {
+  const list = (STATE.reports || []).slice(-20).reverse();
+  $("report-list").innerHTML = list.length ? list.map(r =>
+    '<div class="evt"><span class="ts">' + esc(r.reported_at) + '</span>' +
+    '<span class="act">' + esc(r.model) + (r.model_version ? " " + r.model_version : "") + '</span>' +
+    '<span class="detail">事项 ' + esc(r.item_id || "无") + '；py ' + esc(r.python) + '；os ' + esc(r.os) +
+    '；目录 ' + esc(r.cwd) + '；日志 ' + esc(r.log_pointer || "无") + '</span></div>').join("")
+    : '<div class="muted">暂无申报记录。</div>';
+}
+
+function renderParams() {
+  const p = STATE.params;
+  const check = p.check || {};
+  const suspectKeys = Object.keys(check.suspect || {});
+  const reviewKeys = Object.keys(check.review || {});
+  $("pane-params").innerHTML =
+    '<b>参数登记库概览（实时读取 params_registry）</b>' +
+    '<p class="muted" style="margin:6px 0">在册参数 <b>' + p.count + '</b> 个；档案区退役旧值 <b>' + p.archive + '</b> 条；' +
+    '待复核 suspect <b>' + suspectKeys.length + '</b> 个；迁移与参考复核 <b>' + reviewKeys.length + '</b> 个。</p>' +
+    (suspectKeys.length ? '<div class="muted" style="color:var(--red)">suspect 清单：' + suspectKeys.map(esc).join("、") + '</div>' : "") +
+    '<table style="margin-top:8px"><tr><th>复核键</th><th>状态</th><th>来源</th></tr>' +
+    reviewKeys.map(k => '<tr><td>' + esc(k) + '</td><td>' + esc(check.review[k].status) +
+      '</td><td>' + esc((check.review[k].source || "").slice(0, 80)) + '</td></tr>').join("") + '</table>';
+}
+
+function renderClosed() {
+  $("pane-closed").innerHTML = '<b>已关闭事项（证据与打勾人全部留痕）</b><table style="margin-top:8px"><tr>' +
+    '<th>编号</th><th>标题</th><th>开启</th><th>关闭</th><th>打勾人</th><th>证据数</th></tr>' +
+    STATE.closed_items.map(i => '<tr><td>' + esc(i.id) + '</td><td>' + esc(i.title) +
+      '</td><td>' + esc(i.opened_at) + '</td><td>' + esc(i.closed_at || "") + '</td><td>' +
+      esc(i.closed_by || "未记录") + '</td><td>' + i.evidence.length + '</td></tr>').join("") + '</table>';
+}
+
+function renderEvents() {
+  const evts = (STATE.events || []).slice().reverse().slice(0, 300);
+  $("pane-events").innerHTML = '<b>全局事件流（只追加不修改）</b>' +
+    (evts.length ? evts.map(e =>
+      '<div class="evt"><span class="ts">' + esc(e.ts) + '</span>' +
+      '<span class="act">' + esc(e.action_word) + '</span>' +
+      '<span class="detail">[' + esc(e.item_id || "-") + '] ' + esc(e.actor || "-") + '：' + esc(e.detail || "") + '</span></div>').join("")
+      : '<div class="muted" style="margin-top:6px">事件流为空，写账动作发生后此处留痕。</div>');
+}
+
+// ---------- 事项详情与时间线（FR-8） ----------
+function openItem(id) {
+  const all = [].concat(STATE.unassigned);
+  STATE.lanes.forEach(l => all.push.apply(all, l.items));
+  const item = all.find(i => i.id === id) || STATE.closed_items.find(i => i.id === id);
+  if (!item) return;
+  const evts = (STATE.events || []).filter(e => e.item_id === id);
+  const critLines = (item.criteria || []).map((c, idx) =>
+    '<div class="crit-line' + (c.verified ? ' done' : '') + '">' +
+    '<span class="tick" onclick="toggleCrit(\'' + item.id + '\',' + idx + ',' + (!c.verified) + ')">' +
+    (c.verified ? '☑' : '☐') + '</span> 子项' + (idx + 1) + '：' + esc(c.text) +
+    (c.verified ? '（验证人 ' + esc(c.verified_by || "?") + ' ' + esc(c.verified_at || "") + '；证据 ' + esc(c.evidence || "无") + '）' : '') +
+    '</div>').join("");
+  const evid = item.evidence.map(e => '<li>' + esc(e) + '</li>').join("");
+  const replies = (item.replies || []).map(r =>
+    '<div class="reply-row"><b>' + esc(r.actor) + '</b> ' + esc(r.ts) + '：' + esc(r.text) + '</div>').join("");
+  const tl = evts.length ? evts.map(e =>
+    '<div class="evt"><span class="ts">' + esc(e.ts) + '</span>' +
+    '<span class="act">' + esc(e.action_word) + '</span>' +
+    '<span class="detail">' + esc(e.actor || "-") + '：' + esc(e.detail || "") + '</span></div>').join("")
+    : '<div class="muted">事件流自看板上线起记录，此前动作以账本字段为准。</div>';
+
+  $("item-detail").innerHTML =
+    '<h3>' + esc(item.id) + ' ' + esc(item.title) + '</h3>' +
+    '<p class="muted">状态 ' + esc(item.status) + '；开启 ' + esc(item.opened_at) +
+    (item.closed_at ? '；关闭 ' + esc(item.closed_at) : '') +
+    '；负责人 ' + esc(item.owner || "未指派") +
+    (item.claimed_by ? '；当前认领人 ' + esc(item.claimed_by) + '，' + fmtLease(item.lease_left_s) : '') + '</p>' +
+    '<p style="margin:6px 0"><b>打勾判据：</b>' + esc(item.close_criterion) + '</p>' +
+    (critLines ? '<div style="margin:6px 0"><b>判据子项（点击方框勾选验证，须附证据）：</b>' + critLines + '</div>'
+      : '<div class="muted">该事项未登记判据子项，判据子项口径不适用；完成与否以判据对照与关闭状态为准。</div>') +
+    '<p><b>证据链 ' + item.evidence.length + ' 条：</b></p><ul class="evidence-list">' + (evid || "<li>无</li>") + '</ul>' +
+    (replies ? '<div class="replies"><b>机主答复：</b>' + replies + '</div>' : '') +
+    '<p class="muted" style="margin:6px 0">备注：' + esc(item.note || "无") + '</p>' +
+    '<div class="ops">' +
+    (item.status !== "closed" ?
+      '<input id="op-worker" placeholder="认领人名" value="' + esc(who()) + '">' +
+      '<button class="primary" onclick="claimItem(\'' + item.id + '\')">认领（默认租约四小时）</button>' +
+      '<button onclick="releaseItem(\'' + item.id + '\',\'' + esc(item.claimed_by || "") + '\')">释放</button>' +
+      '<button class="ok" onclick="toggleById(\'close-form\')">打勾关闭…</button>' : '') +
+    '</div>' +
+    (item.status !== "closed" ? '<div class="op-row"><input id="op-evidence" placeholder="追加证据链接或说明">' +
+      '<button onclick="addEvidence(\'' + item.id + '\')">追加证据</button></div>' : '') +
+    (item.status !== "closed" ? '<div class="op-row"><textarea id="op-reply" placeholder="机主答复（同样写入总账留痕）"></textarea>' +
+      '<button class="primary" onclick="ownerReply(\'' + item.id + '\')">答复</button></div>' : '') +
+    (item.status !== "closed" ? closeFormHtml(item) : "") +
+    '<h2 style="margin-top:14px">完整履历时间线</h2>' + tl;
+  $("modal-item").classList.add("show");
+}
+
+function closeModal(id) { $(id).classList.remove("show"); }
+/* I-122：待审卡片点击展开完整字段。 */
+function toggleInboxDetail(id) {
+  const d = $("ibd-" + id), t = $("ibt-" + id);
+  if (!d) return;
+  d.style.display = d.style.display === "none" ? "" : "none";
+  t.textContent = d.style.display === "none" ? "展开完整字段 ▾" : "收起完整字段 ▴";
+}
+
+document.querySelectorAll(".modal-mask").forEach(m =>
+  m.addEventListener("click", e => { if (e.target === m) m.classList.remove("show"); }));
+
+// ---------- 写操作（全部走服务端账本函数） ----------
+async function ownerReply(id) {
+  const text = $("reply-" + id) ? $("reply-" + id).value : ($("op-reply") || {}).value;
+  if (!text || !text.trim()) return toast("答复内容为空", false);
+  await post("/api/owner_reply", {item_id: id, text: text.trim(), actor: who()});
+  closeModal("modal-item");
+}
+async function ownerReplyClose(id) {
+  const text = $("reply-" + id) ? $("reply-" + id).value : "";
+  if (!text || !text.trim()) return toast("答复内容为空", false);
+  await post("/api/owner_reply", {item_id: id, text: text.trim(), actor: who()});
+  openItem(id);
+  toggleById("close-form");
+  toast("答复已留痕，请填结论与判据对照后执行关闭", true);
+}
+async function claimItem(id) {
+  await post("/api/claim", {item_id: id, worker: $("op-worker").value || who(), lease_hours: 4});
+  openItem(id);
+}
+async function releaseItem(id, claimedBy) {
+  const worker = claimedBy || $("op-worker").value || who();
+  await post("/api/release", {item_id: id, worker: worker});
+  openItem(id);
+}
+async function closeItem(id) {
+  const ev = ($("cf-evidence") || {}).value || "";
+  const conclusion = ($("cf-conclusion") || {}).value || "";
+  if (!ev.trim()) return toast("打勾关闭必须附至少一条证据", false);
+  if (!conclusion) return toast("必须选择结论（三选一）", false);
+  const item = findItem(id);
+  const critList = (item && item.criteria && item.criteria.length)
+    ? item.criteria.map(c => c.text) : (item ? [item.close_criterion] : []);
+  const check = [];
+  for (let i = 0; i < critList.length; i++) {
+    const res = ($("cf-res-" + i) || {}).value || "";
+    const src = ($("cf-src-" + i) || {}).value || "";
+    if (!res) return toast("第 " + (i + 1) + " 条判据未选结果", false);
+    if (!src.trim()) return toast("第 " + (i + 1) + " 条判据未填数值出处", false);
+    check.push({"判据": critList[i], "结果": res, "数值出处": src.trim()});
+  }
+  await post("/api/close", {item_id: id, evidence: [ev.trim()],
+    worker: who(), conclusion: conclusion, criterion_check: check});
+  openItem(id);
+}
+function closeFormHtml(item) {
+  const critList = (item.criteria && item.criteria.length)
+    ? item.criteria.map(c => c.text) : [item.close_criterion];
+  const rows = critList.map((t, i) =>
+    '<div class="op-row" style="flex-wrap:wrap"><span style="flex:1;min-width:200px;font-size:12px">' + esc(t) + '</span>' +
+    '<select id="cf-res-' + i + '" style="width:70px"><option value="">选</option><option>过</option><option>不过</option></select>' +
+    '<input id="cf-src-' + i + '" placeholder="数值出处（含数值与文件位置）" style="flex:1;min-width:160px"></div>').join("");
+  return '<div id="close-form" style="display:none;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px">' +
+    '<b style="font-size:12px">打勾关闭表单（结论三选一 + 判据逐条对照）</b>' +
+    '<div class="op-row"><select id="cf-conclusion" style="width:100%">' +
+    '<option value="">选择结论</option><option>判据通过</option><option>判据不通过</option><option>证据不足无法判定</option></select></div>' +
+    rows +
+    '<div class="op-row"><input id="cf-evidence" placeholder="证据链接或说明（必填）">' +
+    '<button class="ok" onclick="closeItem(\'' + item.id + '\')">执行关闭</button></div></div>';
+}
+function toggleById(id) {
+  const el = $(id);
+  if (el) el.style.display = el.style.display === "none" ? "" : "none";
+}
+function findItem(id) {
+  const all = [].concat(STATE.unassigned);
+  STATE.lanes.forEach(l => all.push.apply(all, l.items));
+  const it = all.find(i => i.id === id) || STATE.closed_items.find(i => i.id === id);
+  return it;
+}
+async function addEvidence(id) {
+  const ev = (($("op-evidence") || {}).value || "").trim();
+  if (!ev) return toast("证据为空", false);
+  await post("/api/evidence", {item_id: id, evidence: ev, actor: who()});
+  openItem(id);
+}
+async function toggleCrit(id, idx, target) {
+  if (!target) {
+    await post("/api/criterion", {item_id: id, index: idx, verified: false, evidence: "", actor: who()});
+    return openItem(id);
+  }
+  const ev = prompt("勾选验证必须附证据描述（写进账本留痕）：");
+  if (ev == null) return;
+  if (!ev.trim()) return toast("证据描述为空，取消勾选验证", false);
+  await post("/api/criterion", {item_id: id, index: idx, verified: true, evidence: ev.trim(), actor: who()});
+  openItem(id);
+}
+async function submitIntake() {
+  const criteria = $("in-subcrit").value.split("\n").map(x => x.trim()).filter(Boolean);
+  try {
+    await post("/api/intake", {
+      title: $("in-title").value, close_criterion: $("in-crit").value,
+      criteria: criteria, owner: $("in-owner").value,
+      note: $("in-note").value, submitted_by: $("in-by").value || who()});
+    ["in-title", "in-crit", "in-subcrit", "in-note"].forEach(i => $(i).value = "");
+  } catch (e) { toast(e.message, false); }
+}
+async function decide(pid, action) {
+  const lane = ($("dc-lane-" + pid) || {}).value || "";
+  const reason = ($("dc-reason-" + pid) || {}).value || "";
+  const body = {entry_id: pid, action: action, by: who(), lane: lane, reason: reason};
+  if (action === "merge") body.merge_into = prompt("合并到哪个在册事项编号：") || "";
+  try { await post("/api/intake/decide", body); } catch (e) { toast(e.message, false); }
+}
+async function submitReport() {
+  try {
+    await post("/api/report", {
+      model: $("rp-model").value, model_version: $("rp-ver").value,
+      python: $("rp-py").value, os: $("rp-os").value, cwd: $("rp-cwd").value,
+      item_id: $("rp-item").value, log_pointer: $("rp-log").value});
+    ["rp-model", "rp-ver", "rp-py", "rp-os", "rp-cwd", "rp-item", "rp-log"].forEach(i => $(i).value = "");
+  } catch (e) { toast(e.message, false); }
+}
+
+function switchTab(name) {
+  ["report", "params", "closed", "events"].forEach(t => {
+    $("pane-" + t).style.display = t === name ? "" : "none";
+    $("tab-" + t).classList.toggle("active", t === name);
+  });
+}
+
+refresh();
+TIMER = setInterval(refresh, 5000);
+</script>
+</body>
+</html>

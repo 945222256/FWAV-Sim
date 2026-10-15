@@ -1,0 +1,39 @@
+{
+  "schema": "lane-workers-v1",
+  "version": "lane-workers-v1",
+  "producer": "L3（编排内核 lp_sync/orchestrator_kernel.py refresh_queue_views）",
+  "consumers": ["L5 观察窗（I-217-UI）", "sync_agent 上行镜像", "控制台 /api/console/state"],
+  "endpoint": "GET /api/agent/lane_queues",
+  "authority": "I-217（业务线双工位并行），固定版契约；字段变更须升版本，不得原地改义",
+  "result_shape": {
+    "sampled_at": "ISO 时间字符串，镜像采样时刻",
+    "queues": {
+      "<lane>": {
+        "concurrency_limit": "整数 1 或 2；该线有效并发上限（缺省 1，L3 试点 2）",
+        "workers": "数组；每个活跃工位一个元素，元素字段：worker_id（固定工位标识 <lane>-wN）、item_id、session_id（可为 null 直到派发回执）、run_id、phase（submitted/dispatched/result_pending/uncertain/retry_wait）、request_id",
+        "active_count": "整数；等于 workers 数组长度（活跃运行数，不含等待）",
+        "waiting_count": "整数；排队等待数（order 中非活跃项）",
+        "waiting": "对象；request_id → 等待原因（含冲突准入拒绝原因、工位占满、依赖未清等真实原因）",
+        "order": "数组；该线任务请求号顺序（活跃在前时 current 为首）",
+        "current": "兼容字段；request_id 或 null。单工位（上限 1）时即唯一执行；多工位时为最早派发的活跃工位任务，仅代表该工位，不代表全线",
+        "current_item_id": "兼容字段；current 对应事项号或 null，口径同 current",
+        "queued_items": "数组；每元素 request_id、item_id、title、phase、reason",
+        "conflict": "数组；空=合法（活跃数不超上限）；非空=超限活跃 request_id 列表（异常态，需处置）"
+      }
+    }
+  },
+  "worker_registry": {
+    "file": "lp_sync/lane_workers_roster.json（环境变量 LP_LANE_WORKERS_ROSTER 可重定向）",
+    "shape": "workers.<worker_id> = {lane, session_id, item_id, run_id, phase(active|idle), executor_pid, updated_at}；工位空闲保留最后会话（履历入口），清 run_id/item_id"
+  },
+  "actions": {
+    "rule": "单卡操作必须显式指定 worker_id 或 session_id；禁止按线取第一个匹配",
+    "stop": "session_stop（宿主定向停用一个会话的驱动回合）；不作用于整线或其他工位",
+    "inject": "dispatch 带 worker_id 定向注入该工位会话"
+  },
+  "compatibility": {
+    "legacy_fields": ["current", "current_item_id", "order", "waiting", "waiting_count", "queued_items"],
+    "truth_rule": "多工位模式下 current/current_item_id 如实标注为最早活跃工位的任务（本契约 result_shape 口径），不冒充全线唯一执行",
+    "missing_workers": "无活跃工位时 workers 为空数组、active_count 为 0；不会出现编造会话或编造执行数"
+  }
+}

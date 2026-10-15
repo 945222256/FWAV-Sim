@@ -1,0 +1,49 @@
+{
+ "schema_version": 1,
+ "delivery_version": "comparator-snapshot-v1",
+ "item_id": "I-210",
+ "title": "I-210 有限返修：完整比较门禁与真实开关快照",
+ "delivered_at": "2026-10-15T22:29:30",
+ "run_id": "run-kt-anni-i210-comparator-snapshot-20261015-a1",
+ "base_commit_at_delivery_start": "8fee64c06e4bcd2272fcb5a2c76f0c0299a36229",
+ "reviewer": "doro",
+ "basis": {
+  "review": "logs/hq_intake/doro_resume_20261014/i210_baseline_rate_review_current/复核结论.md",
+  "counterexamples": "Doro 保存的额外末行与第 480 步新增指令字段两反例（review.json comparison_gate_cases；HQ 材料目录 logs/hq_intake/20261015_i210_comparator_rework/）",
+  "scope": "仅修比较门禁与开关快照；六档、隔离双跑、精确相位计数、旧源提取与 960 行数值兼容结论保留不重做；未改生产实现与物理参数、未启动物理仿真"
+ },
+ "fix1_gate": {
+  "script": "logs/i210_baseline_rate_20261015/compare_baseline.py（重写）",
+  "contract": [
+   "一、两侧声明步数合法（正整数）且各自等于真实长度——多一行少一行入口即拒（旧缺陷按声明公共范围循环）",
+   "二、两侧长度相等且步号/时基逐位置一一对应——缺步、额外步、重复、错序均拒",
+   "三、逐行完整字段集合（各自全键集，非首行交集）——任意中后位置新增/缺失字段（含行间漂移单独报告）检出",
+   "四、递归比较：嵌套字典逐键存在性/类型/值，数组核类型/长度/逐元素，布尔与数值不混同，类型改变检出；差异定位带行/步与字段路径及两侧原值",
+   "身份字段（tree/loaded_modules/config_snapshot/switch_events/steps_total 等）单独报告差异，不计动作差异也不因此忽略任何动作或采样字段；targets 为一个九分量列表字段，不计成九个独立标量",
+   "门槛区分：本工具为旧新来源不同的结构化全字段比较；同版双跑原始整档逐字节门槛由调用方直接字节比较（不把对象相等称逐字节）；无容差",
+   "失败语义：非通过判定文件加非零退出码；处理异常先删除本次输出不留旧 identical 文件"
+  ],
+  "regression": "gate_regression_summary.json：正常对照 identical 退出 0；Doro 两反例（末行多一→gate_failed 声明960真实961、480步新字段→differ 带路径与原值）与同类新增（中段少行、嵌套缺键、列表缩短、类型改变、布尔对数值）全部非通过退出 1——通用契约逻辑，无输入特判；检查器 AC 项另跑六类负例同过"
+ },
+ "fix2_snapshot": {
+  "script": "logs/i210_baseline_rate_20261015/run_chain.py（修补）",
+  "changes": "在真实开关设置后、任何恢复前实采捕获四开关值写入 config_snapshot；运行中切换逐事件登记 switch_events（步、参数、旧值、新值）；不再以运行结束后的条件表达式重建快照、不把终态涂成全程",
+  "regenerated": "old_default_v2 / new_default_v2 / new_default_v2_run2（同版双跑 898887 字节逐字节一致）与 scenario_flip_v2 / scenario_b1_v2——全部实采快照：默认档 drive=false 如实（修复误写 true），flip 起点 drive=true 加步480切换事件，b1 起点 B1=0.0 加步480切换事件",
+  "compatibility_kept": "baseline_compare_v2.json：重生成 960 行完整契约结构化比较 identical 差异 0——数值兼容结论保留；旧错误元数据文件按 archive_note.json 原样归档不改写",
+  "old_src_integrity": "old_src 全部文件与上轮提取记录摘要一致（未重新提取、未覆盖；L1 生产文件未触碰）"
+ },
+ "checks": {
+  "checker": "tools/i210_hopf_check.py",
+  "result": "28 项两跑全过：原 22 项（A—X）保留全过；Y 改用重生成产物完整契约比较；新增 V2 同版逐字节、AA 快照实采、AB 切换事件、AC 门禁七负例",
+  "regression": "bench_runner --fast 快档基准通过（BENCH PASS）",
+  "note": "原始输入与完整输出在新目录：两份 960 行原值档、双跑第二档、两个场景档、逐门禁结果档（gate_*）与汇总；比较失败定位见各 result 文件 differences/gate_problems 字段与退出码"
+ },
+ "unmet": [
+  "速率处置（无第二级斜坡）与完整物理基准仍待 HQ 另审：本轮未擅自加斜坡、限值、容差或假定已获批",
+  "开启零调制差异预算未预先固定（只报告差异的口径保留）",
+  "实际翼动作与力矩、物理双跑继续等 I-186 验收及具体条件核准",
+  "原六条不自勾，阶段不当整项通过"
+ ],
+ "source_hashes_file": "本清单交付散列另存 delivery_hashes.json 同目录",
+ "boundaries": "只写两份既有脚本、tools/i210_hopf_check.py、logs/i210_comparator_rework_20261015/ 与本清单；旧 baseline_rate 目录原数据与 old_src 未改（归档说明在案）；他人改动与 Git 历史未触碰，只新增本项提交。"
+}

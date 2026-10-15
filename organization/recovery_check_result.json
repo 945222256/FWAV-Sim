@@ -1,0 +1,104 @@
+{
+ "checked_at": "2026-10-12T17:26:01",
+ "ok": true,
+ "recovery": {
+  "posts": {
+   "anni": {
+    "person_id": "anni",
+    "card": "organization\\onboarding\\入职卡_Anni_HQ_20261010.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "beth": {
+    "person_id": "beth",
+    "card": "organization\\onboarding\\入职卡_Beth_HQ_20261011.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "ciri": {
+    "person_id": "ciri",
+    "card": "organization\\onboarding\\入职卡_Ciri_前端视觉顾问_20261008.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "doro": {
+    "person_id": "doro",
+    "card": "organization\\onboarding\\入职卡_Doro_接口一致性与独立验收_20261011.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "elsa": {
+    "person_id": "elsa",
+    "card": "organization\\onboarding\\入职卡_Elsa_知识连续性与秘书服务_20261011.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "fil": {
+    "person_id": "fil",
+    "card": "organization\\onboarding\\入职卡_Fil_代码质量与架构优化分析_20261011.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "gwen": {
+    "person_id": "gwen",
+    "card": "organization\\onboarding\\入职卡_Gwen_通信拓扑与服务质量_20261011.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "helm": {
+    "person_id": "helm",
+    "card": "organization\\onboarding\\入职卡_Helm_仿真与CFD引擎_20261012.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "iris": {
+    "person_id": "iris",
+    "card": "organization\\onboarding\\入职卡_Iris_感知压缩与轨迹规划_20261012.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "jane": {
+    "person_id": "jane",
+    "card": "organization\\onboarding\\入职卡_Jane_三维资产与构型指导_20261012.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "yulia": {
+    "person_id": "yulia",
+    "card": "organization\\onboarding\\入职卡_Yulia_组织与长期部署顾问_20261011.md",
+    "card_exists": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   },
+   "zoya": {
+    "person_id": "zoya",
+    "card": null,
+    "missing_recorded": true,
+    "boundary_doc": "organization/manager_operations.md",
+    "boundary_doc_exists": true,
+    "next_action_doc": "organization/manager_operations.md 看账与核实一节"
+   }
+  }
+ }
+}

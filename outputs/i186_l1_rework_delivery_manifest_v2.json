@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "item_id": "I-186",
+  "title": "记录仪与实验管线保存实际条件和结构化判据结果——L1 返修 v2 交付",
+  "delivery_version": "L1返修v2",
+  "run_id": "run-kt-anni-i186-l1-production-rework-v2-20261014-a1",
+  "dispatch_request_id": "kd-kt-anni-i186-l1-production-rework-v2-20261014-a1",
+  "session_id": "sess_8cc259a6-4227-42b2-ab12-9521d185e226",
+  "workstation": "L1-w1",
+  "delivered_at": "2026-10-14T22:30:00+08:00",
+  "baseline": {
+    "source_commits": ["4b52755", "34d886a"],
+    "review_basis": [
+      "logs/hq_intake/doro_resume_20261014/I-186_当前核验结果.md（2026-10-14 21:42，五组实测差距）",
+      "logs/hq_intake/doro_resume_20261014/i186_l1_review_213506/review.json（十八项检查十二项符合，六反例）",
+      "logs/hq_intake/20261014_mainline_recovery/i186_l1_rework_v2/returned_v1_delivery_manifest.json"
+    ],
+    "preserved": "整科构建保护、真实身份生成、生产嵌套分数读取、实际版本读数、比较方向单位阈值版本绑定及全部历史反例控制保留，未重做已通过项"
+  },
+  "five_gap_groups": [
+    {
+      "group": "A：实际分析输入——标准定义与本次实际数据分列，生产侧采集与消费侧阻断",
+      "status": "已修并实际验证",
+      "implementation": "bench_runner 新增 --data-file 与数据流驱动悬停判定器 judge_hover_from_stream（实测取自本次数据流：高度带存活、Frz 合计列均值升力比、四元数换算姿态带；列缺失记 no_data 不猜值），实际分析输入逐项登记标准定义（standard_definition）与本次数据（run_data）两类带哈希，不用手写清单替代；构包与核验对测量科目要求至少一项分析输入哈希属于本次运行原始输入，仅列标准阻断，外来哈希与改挂身份阻断。",
+      "evidence": ["V1 自检例（Doro 原输入形态重跑：仅列标准被阻断）", "W9 链 v2 与生产样例 v2：分析步 --data-file，双类输入登记", "生产样例 v2 归档分数 analyzed_inputs 含 run_data 条目（哈希与归档数据流一致）"]
+    },
+    {
+      "group": "B：实际执行环境——按模式、解释器及每步最终环境采集，必要条件未实际应用即拒绝或如实限制",
+      "status": "已修并实际验证",
+      "implementation": "起始采集按实际执行模式选环境组装（isaac 用 _build_child_env 含标准锁与覆盖；python 用 _python_child_env 隔离规则清空 FLAPPER_），快照与实际执行子进程同一组装；声明未应用的覆盖逐项留痕；运行器逐步记录执行子进程环境见证（解释器与该步最终 env 落 run_record steps）；必要条件核对取起始实际注入并集步骤见证，未实际应用即缺失；资格清单预期步数改取场景声明时长与生效步长（数据完整性期望），环境条件按声明且实际应用核对。",
+      "evidence": ["V4 自检例（Doro 原输入形态重跑：python 配置声明步长 0.02，快照如实记未应用与默认步长，与子进程见证一致）", "V4b（声明必要条件未实际应用：deficient 不通过）", "生产样例 v2 run_record 步骤环境见证（python.exe，env_final 仅 PYTHONUTF8）"]
+    },
+    {
+      "group": "C：批准必要清单——由批准配方及版本内容决定，来源可核，执行者不能删项或空表豁免",
+      "status": "已修并实际验证（附如实上报）",
+      "implementation": "来源引用 file 或 file#fragment 须可解析：文件存在、可读、带版本或冻结标记、片段存在；配置校验（拒绝运行）、起始采集（哈希留档）、构包与核验（重哈希比对）四检查点核同一来源；来源不存在、未批准或定义缺失按待审阻断；来源携带机器可读清单时作为配方基线，声明清单删减基线项即 deficient；空清单不豁免无条件必要项。",
+      "evidence": ["V2（Doro 原输入形态重跑：不存在来源配置拒绝且构包待审）", "V2b（无版本标记文件：未批准定义待审）", "W7 系列（可解析来源下注入与必需量核对）"],
+      "honest_report_to_hq": "当前批准配方文件 config/bench_criteria.json（冻结 2026-09-30）未携带机器可读必要清单结构（conditions/quantities 列表），故配方基线删项核对暂无对象；本队不自行新增批准定义。建议 HQ 或机主批准显式配方文件（携带版本与清单），删项核对即自动生效。默认动作：现状下声明清单按逐项口径与实际应用核对，交付样例来源引用该冻结文件的悬停科目。"
+    },
+    {
+      "group": "D：必需量定义——逐项核单位、坐标、采样时点、类别及真实生产来源，未知或错配限制资格",
+      "status": "已修并实际验证",
+      "implementation": "必需量从列名存在升级为逐项定义有效性：须在实际记录量映射中有条目且单位、坐标、采样时点、目标实测模型类别、生产来源均已知、分组非未核实；未知判 undefined 阻断不猜语义；可选量未知仍只限制对应结论。合计列 Frz/Frx/Fry 补入逐量定义表（转写自 I-183 冻结字段表气动组条目）。",
+      "evidence": ["V3（Doro 原输入形态重跑：vphz 列存在但定义与来源未知，undefined 阻断）", "W7d（必需量 z 缺失阻断）", "modules/evidence_pack.py COLUMN_META Frz/Frx/Fry 条目"]
+    },
+    {
+      "group": "E：核验完整性——按运行声明与批准科目及原结果独立重查必需判据与被测量集合，逐项绑定原结果",
+      "status": "已修并实际验证",
+      "implementation": "核验读取运行记录（哈希已核）后用同一构包逻辑重推导必需判据与被测量集合，与包逐项对应（稳定字段投影比对）；必要状态与判据声明范围同样重查；删除、增加或修改必要条目都不能维持通过；构建缺项保护与单卡篡改保护保留；无运行记录旧档保留有界兼容不做重算。",
+      "evidence": ["V5（Doro 原输入形态重跑：包与卡同时删存活判据，原结果未变，核验拒绝）", "V5b（包内改条目状态被拒）", "V5c（包卡同增伪造条目被拒）"]
+    }
+  ],
+  "original_six_criteria_response": [
+    {"criterion": "一：身份及文件内容对应", "status": "本轮补齐", "note": "身份生成与外来阻断保留；实际分析来源分列补齐（A 组）：测量科目结果须绑定本次数据，仅列标准或改挂身份阻断。"},
+    {"criterion": "二：实际条件逐项恢复，缺必要信息不能有效", "status": "本轮补齐", "note": "版本读数保留；执行环境一致性补齐（B 组）：模式感知采集、步骤见证、未应用必要条件限制资格；批准来源绑定补齐（C 组）。"},
+    {"criterion": "三：必需量逐项口径、来源及目标实测模型区别", "status": "本轮补齐", "note": "既有逐量定义与阶段不代拍相位保留；必需量定义有效性补齐（D 组）：vphz 一类未知定义阻断。"},
+    {"criterion": "四：每条科学指标、单位、比较、阈值、版本、来源、结果及状态", "status": "维持通过（当前支持范围）", "note": "Doro 本轮已确认悬停四测量条目结构对应有效；本轮未改科学判据，数据流驱动判定器同一冻结阈值来源。"},
+    {"criterion": "五：本次输入绑定，漏执行或仅程序完成不能通过", "status": "本轮补齐", "note": "构建整科漏项控制保留；仅列标准无数据阻断（A 组）与核验删项阻断（E 组）补齐。"},
+    {"criterion": "六：采集、分析、检查、卡片逐项对应，兼容恢复与回退", "status": "本轮补齐", "note": "结构接通保留；实际条件、实际分析来源与核验完整性贯通（A/B/E 组）；旧档有界兼容保留（无运行记录不做重算，不借旧口径放行新实验——新实验必要清单须可解析来源）。"}
+  ],
+  "verification": {
+    "selfcheck_cases": 67,
+    "selfcheck_two_runs": "67/67 两跑一致（logs/i186_l1_rework_v2_20261014/selfcheck_run1_output.txt 与 selfcheck_run2_output.txt）",
+    "registered_executor": "tools/checks/executor.py run tools/checks/i186_selfcheck.py --timeout 600 通过（103 秒，退出码零，记录在 logs/checks/）",
+    "fast_bench": "bench_runner --fast BENCH PASS（20261014_222039）",
+    "production_sample_v2": {
+      "path": "logs/i186_l1_rework_v2_20261014/production_sample_v2/",
+      "verdict": "pass（execution=completed，data_qualification=valid，necessary=complete，四判据条目全过，verify 过，卡片对齐）",
+      "analysis_inputs": "标准定义加本次数据流（run_data 哈希一致）",
+      "step_witnesses": "两 python 步解释器与最终 env 见证在 run_record"
+    }
+  },
+  "real_counterexamples_rerun": [
+    "分析只列标准文件未列本次数据（V1）",
+    "必要清单引用不存在来源仍接受（V2）",
+    "必需量存在但意义未知 vphz（V3）",
+    "实际执行环境与起始快照一致（V4：python 步长 0.02 声明）",
+    "包与卡同时删去必需判据仍被核验接受（V5）",
+    "交付生产样例实际分析输入来源（生产样例 v2：数据流驱动分析登记 run_data）"
+  ],
+  "unmet": [
+    "Doro 独立复核未完成：本交付为 pending_review，不自行关闭",
+    "批准配方文件未携带机器可读必要清单（已如实上报 HQ，建议批准显式配方文件；本队不自行新增批准定义）",
+    "翼拍相位仍无经核实生产来源列，拍内与周期对齐结论维持如实限制",
+    "I-210 实际取证与 I-187 前置继续保留"
+  ],
+  "territory_note": "静态领地检查偏差维持上轮处置：机主交接授权（decision_receipt）继续有效，本队不修改全局 lanes.json、不绕过检查、不宣称静态检查已通过；本轮改动均在已交接五文件（evidence_pack、bench_runner、runner、config_schema、i186_selfcheck、语义登记册沿用）与 logs/outputs 检查目录内，未新增其他领地路径。",
+  "reviewer": "doro",
+  "construction_record": "logs/I-186_施工记录_20261014_L1返修v2.md",
+  "files_changed": [
+    "modules/evidence_pack.py",
+    "modules/backend/bench_runner.py",
+    "modules/experiment_pipeline/runner.py",
+    "modules/experiment_pipeline/config_schema.py",
+    "tools/checks/i186_selfcheck.py",
+    "logs/I-186_施工记录_20261014_L1返修v2.md",
+    "logs/i186_l1_rework_v2_20261014/"
+  ]
+}

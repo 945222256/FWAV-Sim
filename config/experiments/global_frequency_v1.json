@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "recipe_id": "global_frequency_v1",
+  "item": "I-187",
+  "description": "静气逐步重置六自由度台架的全局拍频单变量实验；报告动作与作用量，不承诺效应方向或飞行能力。",
+  "variable": {
+    "name": "collective_frequency",
+    "unit": "Hz",
+    "baseline": 1.9,
+    "delta": 0.1,
+    "input_range_hz": [1.7, 2.3],
+    "allowed_linked_outputs": ["拍动、扭转与折叠的相位及角速度", "实际关节运动与跟踪误差", "气动力、力矩及其积分"]
+  },
+  "fixed": {
+    "aero_model": "sane_dickinson_3d",
+    "initial_position_world_m": [0.0, 0.0, 1.5],
+    "body_free_dofs": {"tx": false, "ty": false, "tz": false, "rx": false, "ry": false, "rz": false},
+    "wind_world_m_per_s": [0.0, 0.0, 0.0],
+    "tether_enabled": false,
+    "controller_enabled": false,
+    "tail_elevator_rad": 0.0,
+    "tail_aileron_rad": 0.0,
+    "tail_rudder_rad": 0.0
+  },
+  "sampling": {"physics_dt_s": 0.008333333333333333, "settle_s": 8.0, "measure_s": 12.0, "minimum_cycles": 10},
+  "qualification": {
+    "frequency_readback_tolerance_hz": 1e-12,
+    "tracking_error_limit_rad": null,
+    "approved_misses": {
+      "tgt": {"max": 1, "at_steps": [1], "reason": "现行主循环先求解并采样，首个目标在第一物理步后下发；只批准首步目标缺失，测量窗从第八秒之后开始。"}
+    }
+  },
+  "source_refs": [
+    "logs/I-182_十二键作用记录纠正与有效证据边界_20261012.md",
+    "modules/wing_actuation.py",
+    "modules/experiment.py",
+    "main_sim.py",
+    "config/sim_config.py",
+    "modules/sim_entry.py",
+    "logs/hq_takeover_i210_20261015/stage_decision.json",
+    "logs/hq_intake/20261014_mainline_recovery/i210_measurement_rules_v1.json"
+  ]
+}

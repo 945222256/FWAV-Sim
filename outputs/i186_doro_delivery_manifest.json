@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "item_id": "I-186",
+  "delivery_version": "doro-runtime-evidence-v1",
+  "run_id": "doro-i186-direct-20261015",
+  "executor": "Doro",
+  "session_id": "01a12a93-0efb-72a1-905c-52fb3a478a78",
+  "created_at": "2026-10-15T00:21:10.668359-07:00",
+  "source_commit": "70ca355e0158a6d94209fadcf36cf7d42d252940",
+  "source_hashes": {
+    "main_sim.py": "a99700cea0c48f1655efdd058d2b5a1692e2ace5949f8b101a2d6693df48cfc2",
+    "modules/evidence_pack.py": "069c216626c775b8c8884bc560fb1d4cb9034c07fdbdbf2ca2667248697a52f7",
+    "modules/experiment_pipeline/runtime_observer.py": "18c6ec1d0d10d2dc95e1ae7399546d3ebca5ad4dd52c4247fb8c485eb623ae49",
+    "modules/experiment_pipeline/scene_witness.py": "4e06936fe80a48feeea42eebb8d21bb4ea6358ef547a62aec9bb573e92c41ae7",
+    "tools/checks/i186_selfcheck.py": "6aa8dbe48729631b77c6736d596b62502798b89d391f043e870ec1b2c8de2a04"
+  },
+  "authorization": "机主2026-10-14要求Doro亲自施工；原批次允许Doro自行审理复核，不增加交叉审计开工条件。",
+  "review_type": "Doro实现、自检及本批授权范围内复核；不称第三方独立审计",
+  "files_changed": [
+    "logs/hq_intake/doro_resume_20261014/direct_implementation/交付说明.md",
+    "main_sim.py",
+    "modules/evidence_pack.py",
+    "modules/experiment_pipeline/runtime_observer.py",
+    "modules/experiment_pipeline/scene_witness.py",
+    "tools/checks/i186_selfcheck.py"
+  ],
+  "checks": {
+    "registered_executor": {
+      "pass": true,
+      "count": 146,
+      "duration_s": 395,
+      "evidence": "logs/hq_intake/doro_resume_20261014/direct_implementation/registered_executor_result.json"
+    },
+    "detailed_previous_pass": {
+      "count": 145,
+      "note": "最终逐量元数据检查加入前的完整逐条结果，最终版本以146项执行器结果为准",
+      "evidence": "logs/hq_intake/doro_resume_20261014/direct_implementation/selfcheck_results.json"
+    },
+    "language": true,
+    "syntax": true,
+    "source_unchanged_during_registered_check": true,
+    "original_source_lane_commit_check": true,
+    "item_lane_static_check": false,
+    "static_exception": "静态L1检查仍报L2原属文件；原文件级交接和本轮机主直接施工授权已登记，逐文件变更集合一致；未修改全局路线规则。",
+    "static_evidence": "logs/hq_intake/doro_resume_20261014/direct_implementation/static_checks.json"
+  },
+  "criterion_check": [
+    {
+      "判据": "证据包含实验、事项、基准和运行标识；不适用的标识有原因；输入、原始记录和结果之间的文件内容哈希逐项对应。",
+      "结果": "过",
+      "数值出处": "现支持入口的实验、事项、基准、运行身份及文件内容绑定由完整历史回归复验保留，未扩展到所有未来入口。 证据：logs/hq_intake/doro_resume_20261014/direct_implementation/registered_executor_result.json；selfcheck_results.json。"
+    },
+    {
+      "判据": "实际生效的源码、未提交差异、构型、模型、参数、控制器状态、物理约束及运行条件通过逐项恢复检查；必要信息缺失时资格不标有效。",
+      "结果": "过",
+      "数值出处": "新增39项检查及原107项全部通过；原始空对象、读取错误、动作失败和缺条件均不能实验通过。真实主程序分支隔离执行、实际系留消费者和真实控制器159个配置参数已取证，完整状态保存与恢复校验成立；不称实测飞行。 证据：logs/hq_intake/doro_resume_20261014/direct_implementation/registered_executor_result.json；selfcheck_results.json。"
+    },
+    {
+      "判据": "必需记录量的单位、坐标系、采样时点和来源逐项核对一致；目标动作、实际动作及模型假设值分列；拍相位缺失不以实验阶段代填。",
+      "结果": "过",
+      "数值出处": "已有CSV和原值台账定义检查复验保留；新增R39核采集状态的单位、坐标与时点，实验阶段不代拍相位。 证据：logs/hq_intake/doro_resume_20261014/direct_implementation/registered_executor_result.json；selfcheck_results.json。"
+    },
+    {
+      "判据": "每条科学判据保存指标、单位、比较规则、阈值或要求、判据版本、来源和结果；未执行、未知、缺失和不适用分别表达。",
+      "结果": "过",
+      "数值出处": "原科学字段、单位、阈值、比较方向、版本、标准来源、科目完整性、计时及逐量核验检查全部保留通过，限已支持悬停科。 证据：logs/hq_intake/doro_resume_20261014/direct_implementation/registered_executor_result.json；selfcheck_results.json。"
+    },
+    {
+      "判据": "判据输入文件内容哈希与本次运行一致；换入其他运行结果、漏执行检查或只有程序执行成功的样例不能生成实验通过。",
+      "结果": "过",
+      "数值出处": "本次完整回归继续阻断跨运行替换、分析输入缺失和伪通过；R28至R31确认采集缺口进入构包与核验。 证据：logs/hq_intake/doro_resume_20261014/direct_implementation/registered_executor_result.json；selfcheck_results.json。"
+    },
+    {
+      "判据": "同一证据包经采集、分析、检查及结果卡逐项对应；旧配置接入、异常恢复与回退样例检查通过。",
+      "结果": "过",
+      "数值出处": "R27至R31覆盖真实采集函数到构包核验的正反对照；R32至R38执行主程序原钉放及系留分支，异常回执正确且原写调用和状态相同。历史结果卡、旧配置和双产物回滚检查保留通过。 证据：logs/hq_intake/doro_resume_20261014/direct_implementation/registered_executor_result.json；selfcheck_results.json。"
+    }
+  ],
+  "evidence": [
+    "logs/hq_intake/doro_resume_20261014/direct_implementation/交付说明.md",
+    "logs/hq_intake/doro_resume_20261014/direct_implementation/controller_snapshot_check.json",
+    "logs/hq_intake/doro_resume_20261014/direct_implementation_scope.json"
+  ],
+  "limitations": [
+    "未运行新的物理仿真，本交付证明采集接口与资格门禁，不证明飞行或翼驱动性能。",
+    "已启用但尚无完整执行回执的侧滑或实验排程保持未知；其他构型和未批准科目不自动适用。",
+    "六自由度字段描述软件钉放约束，不证明无其他接触或关节约束，不证明控制权限。",
+    "I-210归Anni接续；本交付不自动授予新物理实验执行许可。"
+  ],
+  "unmet_within_supported_scope": [],
+  "official_status": "closed",
+  "official_readback_generated_at": "2026-10-15T15:22:29",
+  "formal_registration": "logs/hq_intake/doro_resume_20261014/direct_implementation/formal_registration.json"
+}

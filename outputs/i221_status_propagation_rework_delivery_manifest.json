@@ -1,0 +1,82 @@
+{
+ "schema_version": 1,
+ "delivery_version": "status-propagation-rework-v1",
+ "item_id": "I-221",
+ "title": "周期与单次动态运动基元及共同轨迹提供者——先行范围状态传播续修清单",
+ "scope": "partial_start_rework",
+ "scope_note": "本次为已批准先行范围内的续修，不是整项待验收；三条 partial_start、原 I-220 硬依赖与全部六条判据保留；不接真实时钟或合作配方，不调控制器或力律，不修改 rhythm.py、runtime.py、kinematics.py。",
+ "delivered_at": "2026-10-15T13:55:03",
+ "run_id": "run-kt-kula-i221-status-propagation-rework-20261015-a1",
+ "dispatch_request_id": "kd-kt-kula-i221-status-propagation-rework-20261015-a1",
+ "worker_id": "L4-w1",
+ "reviewer": "fil",
+ "previous_deliveries": [
+  {
+   "manifest": "outputs/motion_action_i-221_delivery_manifest.json",
+   "run_id": "run-kt-kula-i221-rhythm-20261014-a1",
+   "note": "先行首交付，42 项验证"
+  },
+  {
+   "manifest": "outputs/i221_partial_rework_delivery_manifest.json",
+   "run_id": "run-beth-i221-partial-rework-20261015-a1",
+   "note": "三项接口缺陷返修，55 项验证"
+  }
+ ],
+ "rework_basis": [
+  "docs/I-221_Fil先行返修复核_20261015.md",
+  "logs/fil_i221_partial_rework_review_20261015/source_start.json",
+  "logs/fil_i221_partial_rework_review_20261015/probe_composed_status.py",
+  "logs/fil_i221_partial_rework_review_20261015/composed_status_results.json"
+ ],
+ "source_start_verified": "四份起始散列（三份源码与原先行验证记录）与施工前生产源码逐份一致，已在 started.json 登记",
+ "fixes": {
+  "缺口一_非零最终目标误带明确零身份": {
+   "what": "装配输出与通道动作的 presence 改为描述合成后最终目标：明确零形状与非零中心、尺度及控制修合成非零目标时按普通数值身份输出，饱和后非零目标同样按普通数值身份；明确零形状经全零合成得到的实际零目标保留明确零身份；限幅截出的零不是明确写入零值，按普通数值身份；普通数值零不作明确零身份。输入形状身份继续由 shape_presence 表达。最终目标数值不清零、不掩盖。",
+   "evidence": "S01 四项：全零合成保留明确零、center=0.2+control=0.1+scale=0.5 合成 0.3 为普通数值身份且 shape_presence 为 zero、限幅 [-0.1,0.1] 后 0.1 为普通数值身份、普通数值零全零合成不作明确零身份。Fil 探针重跑 nonzero_target_marked_zero 为空。R03b 预期按契约更正（此前要求非零目标带 zero 身份的自检预期与契约相反，已更正并在检查说明中登记）。"
+  },
+  "缺口二_有数值的声明近似导数升级为普通可用": {
+   "what": "装配的 velocity_status 与 acceleration_status 在数值存在时采用形状样本声明的一阶二阶身份（精确 available 或声明近似 declared_approximation），数值存在不自动升级为普通可用；数值缺失时保留事件边界等不可用身份。通道动作量名状态取装配显式身份，声明近似导数满足求力必需量判定（derivative_available 真）。",
+   "evidence": "S02 四项：尺度 0.5 下数值 1.0→0.5、2.0→1.0 且两量身份均为 declared_approximation 经形状、装配、通道动作完整链路保留；普通精确导数正向对照保持 available；声明近似满足必需量判定；接缝事件边界与真实零行为保持。Fil 探针重跑 approximation_promoted_to_available 为假、ordinary_available_control_preserved 为真。"
+  }
+ },
+ "checks": {
+  "checker": "tools/verify_i221_motion_primitives.py",
+  "result": "63 项全部通过（原 F01—F10 四十二项与 R01—R03 十三项保留，R03b 预期按契约更正，新增 S01—S02 八项续修检查），退出码零",
+  "results_file": "logs/i221_status_propagation_rework_20261015/verify_results.json",
+  "previous_evidence_untouched": "前两轮验证记录（logs/motion_action_i-221/verify_results.json 与 logs/i221_partial_rework_20261015/verify_results.json）均未被本轮运行覆盖，散列核对一致",
+  "fil_probe_rerun": {
+   "script": "logs/i221_status_propagation_rework_20261015/fil_repro/probe_rerun.py",
+   "note": "Fil probe_composed_status.py 逐字复用，仅输出目录改到本轮续修目录",
+   "results": "logs/i221_status_propagation_rework_20261015/fil_repro/composed_status_results.json",
+   "outcome": "三项 findings 全部反转：nonzero_target_marked_zero 为空、approximation_promoted_to_available 为假、ordinary_available_control_preserved 为真"
+  },
+  "regression": "I-219 检查器回归 104 项全部通过；接缝不可用导数、单次终点预算、基础四状态等前两轮已修复行为全部保留（R01—R03 原样通过）"
+ },
+ "unverified": [
+  "I-220 硬依赖未清：Fil 已注明 I-220 由原二队接续原第四、六条补证，较早的限定实现质量通过意见不等于依赖已清；真实 RhythmService 接入、停复拍/事件/预览副本接续及完整合作配方验收等待 I-220 正式验收及原准入流程",
+  "本轮只修复状态传播两处缺口；原六条判据整项验收未做，不勾选、不关闭事项",
+  "执行适配器尚未落实，本轮未测量接口身份是否造成实际关节目标差异，不将接口修复写成飞行结果；生产九通道出口与真实执行、气动消费归属 I-222 与 I-223"
+ ],
+ "source_hashes": {
+  "before_this_round": {
+   "modules/motion_action/primitives.py": "1105f2ecaef7e2a46c2d9e248e2aa6ef1cc2053849e796ed180b220208bff322",
+   "modules/motion_action/trajectories.py": "82c315c995d37a04f7978a85d826c6ee8e38d162b3ea9a251d5d1ff2a0db35fa",
+   "tools/verify_i221_motion_primitives.py": "914f35a9dc1c4358ae38bb703bd3201717d643607c3980b5cb8214b069516587"
+  },
+  "after_this_round": {
+   "modules/motion_action/primitives.py": "1105f2ecaef7e2a46c2d9e248e2aa6ef1cc2053849e796ed180b220208bff322",
+   "modules/motion_action/trajectories.py": "0c5cca4f96c57cceae4b1980a8a75dc6ebdb2482bc9cdfd4e4d4a8d0db97c69f",
+   "tools/verify_i221_motion_primitives.py": "b2fba0e872193916b0f4d8d9e6ca3db4ece3e3d85ef3c03726ee359427591053"
+  },
+  "note": "本轮未修改 primitives.py（两处缺口均在 trajectories.py 与检查器）"
+ },
+ "files_touched": [
+  "modules/motion_action/trajectories.py",
+  "tools/verify_i221_motion_primitives.py",
+  "logs/i221_status_propagation_rework_20261015/started.json",
+  "logs/i221_status_propagation_rework_20261015/verify_results.json",
+  "logs/i221_status_propagation_rework_20261015/fil_repro/",
+  "outputs/i221_status_propagation_rework_delivery_manifest.json"
+ ],
+ "next_step": "本次只提交 evidence_appended 阶段证据；不提交 pending_review、closed，不勾选整项判据，不宣称真实时钟或合作配方已接通；I-220 正式验收后按原批准范围接续。"
+}

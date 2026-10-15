@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android_shell/app/src/main/AndroidManifest.xml — I-064 薄壳
+     路由表与 android_shell/deeplink_contract.json 五路由逐条对应：
+     home / item/{id} / lanes / graph / line/{id}。
+     两个入口形式：
+       1. flapperboard:// 自定义 scheme（无需域名资产校验，第三方
+          助手可直接调起，MainActivity 负责映射为 https 应用链接）；
+       2. https App Links（autoVerify，需服务器布 .well-known/
+          assetlinks.json，模板在 android_shell/deploy/）。
+     本壳不含任何网络请求代码，静态检索判据由 tools/verify_i064.py 执行。 -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- I-075 判据四配套：WebView 兜底渲染需要本权限。壳自身仍不发起
+         任何账本写请求，数据接口调用仍全部发生在云端页面内。 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Android 11+ 包可见性：CustomTabs 能力探针与 TWA 提供方选择
+         需要显式声明可见意图，否则 getPackageName 恒空导致误走兜底。 -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/Theme.LpBoard">
+
+        <!-- WebView 兜底渲染活动：设备无 TWA/CustomTabs 浏览器时由
+             MainActivity 直接转入本活动，黑屏根因（2026-10-05 logcat
+             定性：TWAProviderPicker 无提供方 + TwaLauncher.launch 抛错）
+             的修复执行体。 -->
+        <activity
+            android:name=".BoardWebViewActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- TWA 启动活动：设备具备 TWA/CustomTabs 浏览器时由 MainActivity
+             路由进入，不能与路由活动合一（super.onCreate 契约禁止
+             分流后不调父类）。 -->
+        <activity
+            android:name=".TwaLaunchActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask">
+
+            <!-- 入口零：桌面图标与安装器"打开"键的依据（缺它则装完无图标且
+                 无法打开，2026-10-05 机主实测踩坑后补） -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- 入口一：自定义 scheme，五路由全前缀 -->
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="flapperboard" />
+            </intent-filter>
+
+            <!-- 入口二：https App Links，应用基路径前缀 -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                      android:host="personal.karmicsword.com"
+                      android:pathPrefix="/app/" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.customtabs.trusted.DEFAULT_URL"
+                android:value="https://personal.karmicsword.com/app/" />
+            <meta-data
+                android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+                android:resource="@color/status_bar" />
+            <meta-data
+                android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
+                android:resource="@color/status_bar" />
+        </activity>
+    </application>
+</manifest>
